@@ -1,0 +1,136 @@
+{
+  "filters": [
+    {
+      "name": "Program Code",
+      "type": "string"
+    },
+    {
+      "name": "Program Description",
+      "type": "string"
+    },
+    {
+      "name": "Model Code",
+      "type": "string"
+    },    
+    {
+      "name": "Barcode",
+      "type": "string"
+    },
+    {
+      "name": "Shift",
+      "type": "number",
+      "values": [1, 2]
+    },
+    {
+      "name": "Result",
+      "type": "string",
+      "values": ["All", "Fail","Pass", "Interrupted","", "Warning", "Repair", "ByPass", "NFF"]
+    },
+    {
+      "name": "Line",
+      "type": "number",
+      "values": [1, 2]
+    },
+    {
+      "name": "Unit Type",
+      "type": "number",
+      "values": [1, 2, 3, 4]
+    },
+    {
+      "name": "Units",
+      "type": "number",
+      "values": [1, 2]
+    },
+    {
+      "name": "Data Inizio",
+      "type": "date",
+      "Format": "yyyy/MM/dd HH:mm:ss"    
+    },
+    {
+      "name": "Data Fine",
+      "type": "date",
+      "Format": "yyyy/MM/dd HH:mm:ss"    
+    },
+    {
+      "name": "Defect",
+      "type": "string"    
+    },
+    {
+      "name": "Fail Function",
+      "type": "string"    
+    }  
+  ],
+  "columns": [
+    {
+      "name": "Model Code",
+      "with": 0
+    },
+    {
+      "name": "DummyCode",
+      "with": 0
+    },
+    {
+      "name": "Program Code",
+      "with": 0
+    },
+    {
+      "name": "Program Description",
+      "with": 0
+    },
+    {
+      "name": "Date",
+      "with": 0
+    },
+    {
+      "name": "Unit",
+      "with": 0
+    },
+    {
+      "name": "Line",
+      "with": 0
+    },
+    {
+      "name": "Shift",
+      "with": 0
+    },
+    {
+      "name": "Result",
+      "with": 0
+    },
+    {
+      "name": "Unit Type",
+      "with": 0
+    },
+    {
+      "name": "Abort Code",
+      "with": 0
+    },
+    {
+      "name": "Repair",
+      "with": 0
+    },
+    {
+      "name": "VIB",
+      "with": 0
+    }   
+  ],
+  "query": {
+    "base": "SELECT Tab_Headers.* ,Tab_RepairResults.* FROM Tab_Headers INNER JOIN Tab_Tests ON Tab_Headers.ID_Result = Tab_Tests.ID_Result LEFT JOIN Tab_RepairResults ON(Tab_Headers.ID_Result = Tab_RepairResults.ID_Res) WHERE ",
+    "conditions": [
+      { "filter": "Data Inizio", "sql": "AND Data >= @DataInizio" },
+      { "filter": "Data Fine", "sql": "AND Data <= @DataFine" },      
+      { "filter": "Model Code", "sql": "AND ModelCode = @ModelCode" },
+      { "filter": "DummyCode", "sql": "AND SerialNumber = @SerialNumber" },
+      { "filter": "Line", "sql": "AND LineID = @LineID" },
+      { "filter": "Unit Type", "sql": "AND UnitTypeID = @UnitTypeID" },
+      { "filter": "Unit", "sql": "AND UnitID = @UnitID" },
+      { "filter": "Shift", "sql": "AND Shift = @Shift" },
+      { "filter": "Abort Code", "sql": "AND AbortCode = @AbortCode" },
+      { "filter": "Program Code", "sql": "AND ProgramCode = @ProgramCode" },
+      { "filter": "Program Description", "sql": "AND ProgramDescription = @ProgramDescription" },
+      { "filter": "Defect", "sql": "AND Tab_Tests.Defects = @Defects" },
+      { "filter": "Fail Function", "sql": "AND Tab_Tests.FunctionCode = @FunctionCode" }
+
+    ]
+  }
+}
