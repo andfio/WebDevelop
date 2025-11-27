@@ -1,29 +1,39 @@
 #logo {
-    display: flex;
-    padding: 5px;
+    display: block;
+    padding: 10px 5px 0px 5px; /* top | right | bottom | left */
+}
+
+#logo-left {
+    display: inline-flex;
+}
+
+#logo-right {
+    display: inline-flex;
+    margin-left: 80%;
 }
 
 #labelnome {
     font-family: Arial, Helvetica, sans-serif;
-    font-size: 14px;
+    font-size: 18px;
     color: brown;
+    padding-right: 3px;
 }
 
 #labeltype {
     font-family: Arial, Helvetica, sans-serif;
-    font-size: 14px;
-    color: rgba(245, 245, 245, 0.493);
+    font-size: 18px;
+    color: rgba(0, 0, 0, 0.712);
 }
 
 #labelversion, #labelauthors {
     font-family: Arial, Helvetica, sans-serif;
-    font-size: 10px;
+    font-size: 12px;
     color: black;
+    padding-right: 5px;
 }
 
 .filter {
     display: flex;
-    padding: 5px;
 }
 
 .search-box {
@@ -32,27 +42,75 @@
   padding: 10px;             /* spazio interno al box */
   background-color: #fff;       /* sfondo bianco */
   box-shadow: 0 2px 4px rgba(0,0,0,0.1); /* ombra leggera */
-  display: block;                
+  display: block;
+  margin-top: 15px;                
 }
 
 .field {
     display: inline-flex;
-    padding: 0;
+    padding-right: 15px;
 }
 
+.field label {
+    padding-right: 4px;
+    color: black;
+    font-weight: bold;
+}
+
+.field input[type="text"] {
+    border: none;                /* rimuove tutti i bordi */
+    border-bottom: 2px solid #333;  /* lascia solo la linea sotto */
+    outline: none;               /* rimuove il bordo blu del focus */
+    background-color: transparent;
+    height: 20px;
+    width: 200px;
+    font-size: 16px;
+}
+
+.field input[type="text"]:focus {
+    border-bottom-color: #4a90e2;
+    box-shadow: 0 1px 0 #4a90e2;
+}
 
 #textboxinput {
     display: inline-flex;
-    padding: 0;
+    padding: 4px 5px 25px 5px; /* top | right | bottom | left */
 }
 
 #comboboxinput {
     display: inline-flex;
-    padding: 0;
+    padding: 4px 5px 15px 5px; /* top | right | bottom | left */
 }
 
-.select {
+.selectbox label {
     font-family: Arial, Helvetica, sans-serif;
-    font-size: 12px;
+    font-size: 16px;
+    font-weight: bold;
     color: black;
+    padding-right: 5px;
+}
+
+.selectbox {
+    padding-right: 10px;
+}
+
+select {
+    padding: 8px 32px 8px 12px;
+    border: 1px solid #777;
+    border-radius: 6px;
+    background-color: white;
+    font-size: 14px;
+
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+
+    background-image: url("data:image/svg+xml;utf8,<svg fill='black' height='14' width='14' viewBox='0 0 24 24' xmlns='http://www.w3.org/2000/svg'><path d='M7 10l5 5 5-5z'/></svg>");
+    background-repeat: no-repeat;
+    background-position: right 8px center;
+
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 16px;
+    color: black;
+    width: 200px;
 }

@@ -1,8 +1,12 @@
   <div id="logo">
+    <div id="logo-left">
       <label id="labelnome">Loccioni</label>
       <label id="labeltype">Analisys</label>
+    </div>
+    <div id="logo-right">
       <label id="labelversion">Analisys v.1.0.0</label>
       <label id="labelauthors">a.fiorentini</label>
+    </div>
   </div>
 
   <div class="filters">
@@ -12,38 +16,38 @@
       <div id="textboxinput">
 
         <div class="field">  
-        <label id="lblprogrcode">Program Code</label>
+        <label id="lblprogrcode">Program Code :</label>
         <input id="textprogrcode" type="text" placeholder="Program Code">
         </div>
 
         <div class="field">  
-        <label id="lblprogrdescr">Program Description</label>
+        <label id="lblprogrdescr">Program Description :</label>
         <input id="textprogrdescr" type="text" placeholder="Program Description">
         </div>
 
         <div class="field">  
-        <label id="lblprogrdescr">Program Description</label>
-        <input id="textprogrdescr" type="text" placeholder="Program Description">
+        <label id="lblmodelcode">Model Code :</label>
+        <input id="textmodelcode" type="text" placeholder="Model Code">
         </div>
         
         <div class="field">  
-        <label id="lblprogrdescr">Program Description</label>
-        <input id="textprogrdescr" type="text" placeholder="Program Description">
+        <label id="lblDummyCode">DummyCode :</label>
+        <input id="textDummyCode" type="text" placeholder="DummyCode">
         </div>
         
       </div>
 
       <div id="comboboxinput">
 
-        <div class="select">
-          <label id="lblshiftselect">Lines</label>
+        <div class="selectbox">
+          <label id="lblshiftselect">Shift :</label>
           <select id="shiftselectbox">
           <option value="0-All">All</option>
             @for (item of filters; track $index) {
-              @if (item.name === "shift") {
+              @if (item.name === "Shift") {
                 @if(item.type ==="number") {
                   @for (value of item.values; track $index) {
-                    <option value { value }> {{value}} </option>
+                    <option [value]="value"> {{value}} </option>
                   }
                 }
               }
@@ -51,15 +55,15 @@
           </select>
         </div>        
 
-        <div class="select">
-          <label id="lbllineselect">Lines</label>
+        <div class="selectbox">
+          <label id="lbllineselect">Lines :</label>
           <select id="lineselectbox">
             <option value="0-All">All</option>
             @for (item of filters; track $index) {
               @if (item.name === "Line") {
                 @if(item.type ==="string") {
                   @for (value of item.values; track $index) {
-                    <option value { value }> {{value}} </option>
+                    <option [value]="value"> {{value}} </option>
                   }
                 }
               }
@@ -67,15 +71,15 @@
           </select>
         </div>
 
-        <div class="select">
-          <label id="lblutselect">Lines</label>
+        <div class="selectbox">
+          <label id="lblutselect">Unit Type :</label>
           <select id="utselectbox">
             <option value="0-All">All</option>
             @for (item of filters; track $index) {
               @if (item.name === "Unit Type") {
                 @if(item.type ==="string") {
                   @for (value of item.values; track $index) {
-                    <option value { value }> {{value}} </option>
+                    <option [value]="value"> {{value}} </option>
                   }
                 }
               }
@@ -83,15 +87,15 @@
           </select>
         </div>
 
-        <div class="select">
-          <label id="lblunselect">Lines</label>
+        <div class="selectbox">
+          <label id="lblunselect">Unit :</label>
           <select id="unselectbox">
             <option value="0-All">All</option>
             @for (item of filters; track $index) {
               @if (item.name === "Units") {
                 @if(item.type ==="string") {
                   @for (value of item.values; track $index) {
-                    <option value { value }> {{value}} </option>
+                    <option [value]="value"> {{value}} </option>
                   }
                 }
               }
@@ -99,15 +103,15 @@
           </select>
         </div> 
         
-        <div class="select">
-          <label id="lblresselect">Lines</label>
+        <div class="selectbox">
+          <label id="lblresselect">Result :</label>
           <select id="resselectbox">
             <option value="0-All">All</option>
             @for (item of filters; track $index) {
               @if (item.name === "Result") {
-                @if(item.type ==="number") {
+                @if(item.type ==="string") {
                   @for (value of item.values; track $index) {
-                    <option value { value }> {{value}} </option>
+                    <option [value]="value"> {{value}} </option>
                   }
                 }
               }
