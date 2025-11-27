@@ -115,7 +115,9 @@
     }   
   ],
   "query": {
-    "base": "SELECT Tab_Headers.* ,Tab_RepairResults.* FROM Tab_Headers INNER JOIN Tab_Tests ON Tab_Headers.ID_Result = Tab_Tests.ID_Result LEFT JOIN Tab_RepairResults ON(Tab_Headers.ID_Result = Tab_RepairResults.ID_Res) WHERE ",
+    "select": "SELECT Tab_Headers.ModelCode, SerialNumber, DummyCode, ProgramCode, ProgramDescription, UnitID, UnitTypeID, LineID, Shift, AbortCode, defects, Tab_RepairResults.RepairResult ",
+    "from": "FROM Tab_Headers INNER JOIN Tab_Tests ON Tab_Headers.ID_Result = Tab_Tests.ID_Result LEFT JOIN Tab_RepairResults ON(Tab_Headers.ID_Result = Tab_RepairResults.ID_Res) ",
+    "where": "WHERE ",
     "conditions": [
       { "filter": "Data Inizio", "sql": "AND Data >= @DataInizio" },
       { "filter": "Data Fine", "sql": "AND Data <= @DataFine" },      
@@ -130,7 +132,6 @@
       { "filter": "Program Description", "sql": "AND ProgramDescription = @ProgramDescription" },
       { "filter": "Defect", "sql": "AND Tab_Tests.Defects = @Defects" },
       { "filter": "Fail Function", "sql": "AND Tab_Tests.FunctionCode = @FunctionCode" }
-
     ]
   }
 }
