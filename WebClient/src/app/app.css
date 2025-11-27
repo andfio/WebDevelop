@@ -1,0 +1,58 @@
+#logo {
+    display: flex;
+    padding: 5px;
+}
+
+#labelnome {
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 14px;
+    color: brown;
+}
+
+#labeltype {
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 14px;
+    color: rgba(245, 245, 245, 0.493);
+}
+
+#labelversion, #labelauthors {
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 10px;
+    color: black;
+}
+
+.filter {
+    display: flex;
+    padding: 5px;
+}
+
+.search-box {
+  border: 1px solid #aaa;       /* bordo sottile grigio */
+  border-radius: 6px;             /* angoli arrotondati */
+  padding: 10px;             /* spazio interno al box */
+  background-color: #fff;       /* sfondo bianco */
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1); /* ombra leggera */
+  display: block;                
+}
+
+.field {
+    display: inline-flex;
+    padding: 0;
+}
+
+
+#textboxinput {
+    display: inline-flex;
+    padding: 0;
+}
+
+#comboboxinput {
+    display: inline-flex;
+    padding: 0;
+}
+
+.select {
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 12px;
+    color: black;
+}
