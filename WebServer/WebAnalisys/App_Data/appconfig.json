@@ -1,0 +1,137 @@
+{
+  "filters": [
+    {
+      "name": "Program Code",
+      "type": "string"
+    },
+    {
+      "name": "Program Description",
+      "type": "string"
+    },
+    {
+      "name": "Model Code",
+      "type": "string"
+    },    
+    {
+      "name": "DummyCode",
+      "type": "string"
+    },
+    {
+      "name": "Shift",
+      "type": "number",
+      "values": [1, 2]
+    },
+    {
+      "name": "Result",
+      "type": "string",
+      "values": ["0-Fail","1-Pass", "2-Interrupted", "4-Warning", "5-Repair", "6-ByPass", "7-NFF"]
+    },
+    {
+      "name": "Line",
+      "type": "string",
+      "values": ["1-Line AL1", "2-Line AL2"]
+    },
+    {
+      "name": "Unit Type",
+      "type": "string",
+      "values": ["1-Start", "2-Functional", "3-Door Open", "4-Visual"]
+    },
+    {
+      "name": "Units",
+      "type": "string",
+      "values": ["1-Unit test 1", "2-Unit Test 2"]
+    },
+    {
+      "name": "Start Date",
+      "type": "date",
+      "Format": "yyyy/MM/dd HH:mm:ss"    
+    },
+    {
+      "name": "End Date",
+      "type": "date",
+      "Format": "yyyy/MM/dd HH:mm:ss"    
+    },
+    {
+      "name": "Defect",
+      "type": "string"    
+    },
+    {
+      "name": "Fail Function",
+      "type": "string"    
+    }  
+  ],
+  "columns": [
+    {
+      "name": "Model Code",
+      "width": "100px"
+    },
+    {
+      "name": "DummyCode",
+      "width": "250px"
+    },
+    {
+      "name": "Program Code",
+      "width": "50px"
+    },
+    {
+      "name": "Program Description",
+      "width": "100px"
+    },
+    {
+      "name": "Date",
+      "width": "50px"
+    },
+    {
+      "name": "Unit",
+      "width": "20px"
+    },
+    {
+      "name": "Line",
+      "width": "20px"
+    },
+    {
+      "name": "Shift",
+      "width": "20px"
+    },
+    {
+      "name": "Result",
+      "width": "40px"
+    },
+    {
+      "name": "Unit Type",
+      "width": "20px"
+    },
+    {
+      "name": "Abort Code",
+      "width": "100px"
+    },
+    {
+      "name": "Repair",
+      "width": "50px"
+    },
+    {
+      "name": "VIB",
+      "width": "100px"
+    }   
+  ],
+  "query": {
+    "select": "SELECT Tab_Headers.ModelCode, SerialNumber, DummyCode, ProgramCode, ProgramDescription, UnitID, UnitTypeID, LineID, Shift, AbortCode, defects, Tab_RepairResults.RepairResult ",
+    "from": "FROM Tab_Headers INNER JOIN Tab_Tests ON Tab_Headers.ID_Result = Tab_Tests.ID_Result LEFT JOIN Tab_RepairResults ON(Tab_Headers.ID_Result = Tab_RepairResults.ID_Res) ",
+    "where": "WHERE ",
+    "conditions": [
+      { "filter": "Data Inizio", "sql": "AND Data >= @DataInizio" },
+      { "filter": "Data Fine", "sql": "AND Data <= @DataFine" },      
+      { "filter": "Model Code", "sql": "AND ModelCode = @ModelCode" },
+      { "filter": "DummyCode", "sql": "AND SerialNumber = @SerialNumber" },
+      { "filter": "Line", "sql": "AND LineID = @LineID" },
+      { "filter": "Unit Type", "sql": "AND UnitTypeID = @UnitTypeID" },
+      { "filter": "Unit", "sql": "AND UnitID = @UnitID" },
+      { "filter": "Shift", "sql": "AND Shift = @Shift" },
+      { "filter": "Abort Code", "sql": "AND AbortCode = @AbortCode" },
+      { "filter": "Program Code", "sql": "AND ProgramCode = @ProgramCode" },
+      { "filter": "Program Description", "sql": "AND ProgramDescription = @ProgramDescription" },
+      { "filter": "Defect", "sql": "AND Tab_Tests.Defects = @Defects" },
+      { "filter": "Fail Function", "sql": "AND Tab_Tests.FunctionCode = @FunctionCode" }
+    ]
+  }
+}
