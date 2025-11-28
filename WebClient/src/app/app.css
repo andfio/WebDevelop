@@ -47,13 +47,15 @@
 }
 
 .field {
-    display: inline-flex;
+    display: inline-grid;
     padding-right: 15px;
 }
 
 .field label {
     padding-right: 4px;
     color: black;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 16px;
     font-weight: bold;
 }
 
@@ -63,7 +65,7 @@
     outline: none;               /* rimuove il bordo blu del focus */
     background-color: transparent;
     height: 20px;
-    width: 200px;
+    width: 210px;
     font-size: 16px;
 }
 
@@ -74,12 +76,12 @@
 
 #textboxinput {
     display: inline-flex;
-    padding: 4px 5px 25px 5px; /* top | right | bottom | left */
+    padding: 4px 5px 15px 15px; /* top | right | bottom | left */
 }
 
 #comboboxinput {
     display: inline-flex;
-    padding: 4px 5px 15px 5px; /* top | right | bottom | left */
+    padding: 4px 5px 15px 15px; /* top | right | bottom | left */
 }
 
 .selectbox label {
@@ -88,10 +90,12 @@
     font-weight: bold;
     color: black;
     padding-right: 5px;
+    padding-bottom: 4px;
 }
 
 .selectbox {
-    padding-right: 10px;
+    display: inline-grid;
+    padding-right: 15px;
 }
 
 select {
@@ -99,7 +103,6 @@ select {
     border: 1px solid #777;
     border-radius: 6px;
     background-color: white;
-    font-size: 14px;
 
     appearance: none;
     -webkit-appearance: none;
@@ -110,7 +113,105 @@ select {
     background-position: right 8px center;
 
     font-family: Arial, Helvetica, sans-serif;
-    font-size: 16px;
+    font-size: 14px;
     color: black;
+    width: 214px;
+}
+
+.fieldDate {
+    display: inline-grid;
+    padding-right: 15px;
+}
+
+.fieldDate label {
+    padding-right: 4px;
+    padding-bottom: 6px;
+    color: black;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 16px;
+    font-weight: bold;
+}
+
+.fieldDate input[type="datetime-local"] {
+    border: none;                /* rimuove tutti i bordi */
+    border-bottom: 2px solid #333;  /* lascia solo la linea sotto */
+    outline: none;               /* rimuove il bordo blu del focus */
+    background-color: transparent;
+    height: 20px;
     width: 200px;
+    font-size: 16px;
+}
+
+.fieldDate input[type="datetime-local"]:focus {
+    border-bottom-color: #4a90e2;
+    box-shadow: 0 1px 0 #4a90e2;
+}
+ 
+#textboxdate {
+    display: flex;
+    padding: 4px 5px 15px 15px; /* top | right | bottom | left */
+    align-items: flex-end;   /* allinea in basso */
+    width: 100%;
+}
+
+#dategroup {
+    display: flex;
+    gap: 5px;               /* spazio tra i due datepicker */
+}
+
+#buttonbox {
+    margin-left: auto;       /* spinge il bottone tutto a destra */
+    margin-right: 50px;
+    display: flex;
+    align-items: flex-end;  
+    gap: 10px; 
+}   
+
+.btn-search {
+    padding: 8px 16px;
+    background-color: #4a90e2;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    font-size: 14px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    transition: background-color .2s ease;
+}
+
+.btn-search:hover {
+    background-color: #357bc8;
+}
+
+.btn-search:active {
+    background-color: #2d6cad;
+}
+
+.btn-search .icon {
+    width: 18px;
+    height: 18px;
+}
+
+.btn-graph {
+    padding: 8px 16px;
+    background-color: #4a90e2;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    font-size: 14px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    transition: background-color .2s ease;
+}
+
+.btn-graph:hover {
+    background-color: #357bc8;
+}
+
+.btn-graph:active {
+    background-color: #2d6cad;
 }

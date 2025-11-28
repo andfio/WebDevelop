@@ -1,9 +1,11 @@
 import { Component } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { AppConfig, structQuery } from './app.config.json';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-root',
+  imports: [FormsModule],
   templateUrl: './app.html',
   styleUrls: ['./app.css']
 })
@@ -27,5 +29,7 @@ export class AppComponent {
       }
     });
   }
+
+  DateFormat: string = new Date().toISOString().slice(0,16);
 
 }

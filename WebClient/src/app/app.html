@@ -16,24 +16,34 @@
       <div id="textboxinput">
 
         <div class="field">  
+        <label id="lblDummyCode">DummyCode :</label>
+        <input #textDummyCode type="text" placeholder="">
+        </div>        
+
+        <div class="field">  
+        <label id="lblmodelcode">Model Code :</label>
+        <input #textmodelcode type="text" placeholder="">
+        </div>
+
+        <div class="field">  
         <label id="lblprogrcode">Program Code :</label>
-        <input id="textprogrcode" type="text" placeholder="Program Code">
+        <input id="textprogrcode" type="text" placeholder="">
         </div>
 
         <div class="field">  
         <label id="lblprogrdescr">Program Description :</label>
-        <input id="textprogrdescr" type="text" placeholder="Program Description">
+        <input id="textprogrdescr" type="text" placeholder="">
         </div>
 
         <div class="field">  
-        <label id="lblmodelcode">Model Code :</label>
-        <input id="textmodelcode" type="text" placeholder="Model Code">
+        <label id="lbldefects">Defect :</label>
+        <input id="textdefects" type="text" placeholder="">
         </div>
         
         <div class="field">  
-        <label id="lblDummyCode">DummyCode :</label>
-        <input id="textDummyCode" type="text" placeholder="DummyCode">
-        </div>
+        <label id="lblfailfunction">Fail Function :</label>
+        <input id="textfailfunction" type="text" placeholder="">
+        </div>        
         
       </div>
 
@@ -118,6 +128,27 @@
             }
           </select>
         </div>         
+
+      </div>
+
+      <div id="textboxdate">
+
+          <div id="dategroup">
+              <div class="fieldDate">  
+                <label id="lbldatestart">Start Date :</label>
+                <input id="txtdatestart" type="datetime-local" [(ngModel)]="DateFormat">
+              </div>
+
+              <div class="fieldDate">  
+                <label id="lbldateend">End Date :</label>
+                <input id="txtdateend" type="datetime-local" [(ngModel)]="DateFormat">
+              </div>
+          </div>
+
+          <div id="buttonbox">
+            <button class="btn-search">🔍 Search</button>
+            <button class="btn-graph">📊 Graph</button>
+          </div>
 
       </div>
 
