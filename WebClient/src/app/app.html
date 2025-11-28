@@ -17,32 +17,32 @@
 
         <div class="field">  
         <label id="lblDummyCode">DummyCode :</label>
-        <input #textDummyCode type="text" placeholder="">
+        <input type="text" placeholder="*" [(ngModel)]="filterValues['DummyCode']" >
         </div>        
 
         <div class="field">  
         <label id="lblmodelcode">Model Code :</label>
-        <input #textmodelcode type="text" placeholder="">
+        <input type="text" placeholder="*" [(ngModel)]="filterValues['Model Code']">
         </div>
 
         <div class="field">  
         <label id="lblprogrcode">Program Code :</label>
-        <input id="textprogrcode" type="text" placeholder="">
+        <input type="text" placeholder="*" [(ngModel)]="filterValues['Program Code']" >
         </div>
 
         <div class="field">  
         <label id="lblprogrdescr">Program Description :</label>
-        <input id="textprogrdescr" type="text" placeholder="">
+        <input type="text" placeholder="*" [(ngModel)]="filterValues['Program Description']" >
         </div>
 
         <div class="field">  
         <label id="lbldefects">Defect :</label>
-        <input id="textdefects" type="text" placeholder="">
+        <input type="text" placeholder="*" [(ngModel)]="filterValues['Defect']">
         </div>
         
         <div class="field">  
         <label id="lblfailfunction">Fail Function :</label>
-        <input id="textfailfunction" type="text" placeholder="">
+        <input type="text" placeholder="*" [(ngModel)]="filterValues['Fail Function']">
         </div>        
         
       </div>
@@ -51,7 +51,7 @@
 
         <div class="selectbox">
           <label id="lblshiftselect">Shift :</label>
-          <select id="shiftselectbox">
+          <select [(ngModel)]="filterValues['Shift']">
           <option value="0-All">All</option>
             @for (item of filters; track $index) {
               @if (item.name === "Shift") {
@@ -67,7 +67,7 @@
 
         <div class="selectbox">
           <label id="lbllineselect">Lines :</label>
-          <select id="lineselectbox">
+          <select [(ngModel)]="filterValues['Line']">
             <option value="0-All">All</option>
             @for (item of filters; track $index) {
               @if (item.name === "Line") {
@@ -83,7 +83,7 @@
 
         <div class="selectbox">
           <label id="lblutselect">Unit Type :</label>
-          <select id="utselectbox">
+          <select [(ngModel)]="filterValues['Unit Type']">
             <option value="0-All">All</option>
             @for (item of filters; track $index) {
               @if (item.name === "Unit Type") {
@@ -99,7 +99,7 @@
 
         <div class="selectbox">
           <label id="lblunselect">Unit :</label>
-          <select id="unselectbox">
+          <select [(ngModel)]="filterValues['Unit']">
             <option value="0-All">All</option>
             @for (item of filters; track $index) {
               @if (item.name === "Units") {
@@ -115,7 +115,7 @@
         
         <div class="selectbox">
           <label id="lblresselect">Result :</label>
-          <select id="resselectbox">
+          <select [(ngModel)]="filterValues['Result']">
             <option value="0-All">All</option>
             @for (item of filters; track $index) {
               @if (item.name === "Result") {
@@ -136,22 +136,35 @@
           <div id="dategroup">
               <div class="fieldDate">  
                 <label id="lbldatestart">Start Date :</label>
-                <input id="txtdatestart" type="datetime-local" [(ngModel)]="DateFormat">
+                <input id="txtdatestart" type="datetime-local" [(ngModel)]="DateFormat" [(ngModel)]="filterValues['Start Date']">
               </div>
 
               <div class="fieldDate">  
                 <label id="lbldateend">End Date :</label>
-                <input id="txtdateend" type="datetime-local" [(ngModel)]="DateFormat">
+                <input id="txtdateend" type="datetime-local" [(ngModel)]="DateFormat" [(ngModel)]="filterValues['End Date']">
               </div>
           </div>
 
           <div id="buttonbox">
-            <button class="btn-search">🔍 Search</button>
             <button class="btn-graph">📊 Graph</button>
+            <button class="btn-search" (click)="submit()">🔍 Search</button>
           </div>
 
       </div>
 
     </div>
  
+  </div>
+
+  <div class="table-wrapper">
+
+    <table class="styled-table">
+      <thead id="columnsbox">
+        @for (item of columns; track $index) {
+          <th scope="col"> {{ item.name }}  </th>
+        }
+      </thead>
+      
+    </table>
+
   </div>

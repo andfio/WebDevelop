@@ -215,3 +215,66 @@ select {
 .btn-graph:active {
     background-color: #2d6cad;
 }
+
+/* Tabella visualizzazione dati */
+
+.styled-table {
+  width: 100%;
+  border-collapse: collapse;
+  table-layout: auto;   /* <-- le celle si adattano al contenuto */
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 14px;
+  margin-top: 20px;
+  background-color: white;
+  border-radius: 6px;
+  overflow: hidden; /* per bordi arrotondati */
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+}
+
+/* Intestazione */
+.styled-table thead {
+  background-color: #4a90e2;       /* blu moderno */
+  color: white;
+}
+
+.styled-table th {
+  padding: 10px;
+  text-align: left;
+  font-size: 15px;
+  font-weight: bold;
+  border-bottom: 2px solid #357bc8;
+}
+
+/* Righe */
+.styled-table td {
+  padding: 10px;
+  border-bottom: 1px solid #ddd;
+}
+
+/* Righe alternate */
+.styled-table tbody tr:nth-child(even) {
+  background-color: #f5f8fd;
+}
+
+/* Hover */
+.styled-table tbody tr:hover {
+  background-color: #e7f1ff;
+  cursor: pointer;
+}
+
+/* Ultima riga: togli il bordo */
+.styled-table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.table-wrapper {
+    width: 100%;
+    overflow-x: auto;    /* permette scroll orizzontale */
+    overflow-y: auto;  /* nessuna scroll verticale */
+    display: block;
+    margin-top: 10px;
+
+    /* opzionale: barra di scorrimento più elegante */
+    scrollbar-color: #4a90e2 #e3e3e3; 
+    scrollbar-width: thin;
+}

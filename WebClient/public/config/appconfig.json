@@ -13,7 +13,7 @@
       "type": "string"
     },    
     {
-      "name": "Barcode",
+      "name": "DummyCode",
       "type": "string"
     },
     {
@@ -42,12 +42,12 @@
       "values": ["1-Unit test 1", "2-Unit Test 2"]
     },
     {
-      "name": "Data Inizio",
+      "name": "Start Date",
       "type": "date",
       "Format": "yyyy/MM/dd HH:mm:ss"    
     },
     {
-      "name": "Data Fine",
+      "name": "End Date",
       "type": "date",
       "Format": "yyyy/MM/dd HH:mm:ss"    
     },
@@ -63,55 +63,55 @@
   "columns": [
     {
       "name": "Model Code",
-      "with": 0
+      "width": "100px"
     },
     {
       "name": "DummyCode",
-      "with": 0
+      "width": "250px"
     },
     {
       "name": "Program Code",
-      "with": 0
+      "width": "50px"
     },
     {
       "name": "Program Description",
-      "with": 0
+      "width": "100px"
     },
     {
       "name": "Date",
-      "with": 0
+      "width": "50px"
     },
     {
       "name": "Unit",
-      "with": 0
+      "width": "20px"
     },
     {
       "name": "Line",
-      "with": 0
+      "width": "20px"
     },
     {
       "name": "Shift",
-      "with": 0
+      "width": "20px"
     },
     {
       "name": "Result",
-      "with": 0
+      "width": "40px"
     },
     {
       "name": "Unit Type",
-      "with": 0
+      "width": "20px"
     },
     {
       "name": "Abort Code",
-      "with": 0
+      "width": "100px"
     },
     {
       "name": "Repair",
-      "with": 0
+      "width": "50px"
     },
     {
       "name": "VIB",
-      "with": 0
+      "width": "100px"
     }   
   ],
   "query": {

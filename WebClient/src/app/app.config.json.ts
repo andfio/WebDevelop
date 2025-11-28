@@ -1,12 +1,12 @@
-export interface configFilters {
+export interface Filters {
     name: string;
     type: string;
     values?: string[] | number[]
     format?: string;
 }
-export interface configColumns {
+export interface Columns {
     name: string;
-    with: number;
+    width: number;
 }
 export interface queryfilters {
     filters: string;
@@ -19,7 +19,10 @@ export interface structQuery {
     conditions: queryfilters[];
 }
 export interface AppConfig {
-    filters: configFilters[];
-    columns: configColumns[];
+    filters: Filters[];
+    columns: Columns[];
     query: structQuery;
+}
+export interface filterValues {
+  [key: string]: string | number | null;
 }
