@@ -136,21 +136,41 @@
       "field": "Descr"
     },
     {
+      "name": "Test Result",
+      "field": "Result"
+    },
+    {
       "name": "@DescrDetails1, @DescrDetails2, @DescrDetails3, @DescrDetails4, @DescrDetails5, @DescrDetails6, @DescrDetails7, @DescrDetails8, @DescrDetails9, @DescrDetails10, @DescrDetails11, @DescrDetails12, @DescrDetails13, @DescrDetails14, @DescrDetails15",
       "field": "Params",
       "numparams": 0
     },
     {
-      "name": "Model Code",
-      "field": "ModelCode"
+      "name": "@DescrMisure",
+      "field": "ComDescr"
     },
     {
-      "name": "Model Code",
-      "field": "ModelCode"
+      "name": "Min.",
+      "field": "MinSet"
     },
     {
-      "name": "Model Code",
-      "field": "ModelCode"
+      "name": "Value",
+      "field": "AnalogueValue"
+    },
+    {
+      "name": "Max.",
+      "field": "MaxSet"
+    },
+    {
+      "name": "Name",
+      "field": "StoreName"
+    },
+    {
+      "name": "Limit(Min.)",
+      "field": "MinLimit"
+    },
+    {
+      "name": "Limit(Max.)",
+      "field": "MaxLimit"
     }
   ],
   "query": {
