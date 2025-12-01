@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web.Http;
+using System.Web.Http.Cors;
 
 namespace WebAnalisys
 {
@@ -9,9 +10,10 @@ namespace WebAnalisys
     {
         public static void Register(HttpConfiguration config)
         {
-            // Servizi e configurazione dell'API Web
+            var cors = new EnableCorsAttribute("*", "*", "*");
+            config.EnableCors(cors);
 
-            // Route dell'API Web
+            // Web API routes
             config.MapHttpAttributeRoutes();
 
             config.Routes.MapHttpRoute(

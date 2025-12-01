@@ -9,7 +9,8 @@ using Newtonsoft.Json.Linq;
 using System.Data.SqlClient;
 
 
-namespace WebAnalisys.Models
+
+namespace WebAnalisys.Controllers
 {
     public class QueryController : ApiController
     {
@@ -23,11 +24,6 @@ namespace WebAnalisys.Models
         public string Get(int id)
         {
             return "value";
-        }
-
-        // POST api/<controller>
-        public void Post([FromBody]string value)
-        {
         }
 
         // PUT api/<controller>/5
@@ -58,51 +54,76 @@ namespace WebAnalisys.Models
         [HttpPost]
         public IHttpActionResult Post([FromBody] QueryPayload payload)
         {
-            if (payload == null)
-                return BadRequest("Payload non valido.");
-
-            var filters = payload.Filters;
-            var queryDef = payload.Query;
-
-            // Costruisce la query SQL
-            string sql = queryDef.Select + " " +
-                         queryDef.From + " " +
-                         queryDef.Where;
-
-            foreach (var cond in queryDef.Conditions)
-            {
-                if (filters.ContainsKey(cond.Filter))
-                {
-                    sql += " " + cond.Sql;
-                }
-            }
-
             var result = new List<Dictionary<string, object>>();
-
-            using (var conn = new SqlConnection("Integrated Security=SSPI;Persist Security Info=False;Initial Catalog=DBResults_FDG_AL6_GV640A;Data Source=10.130.176.56\\SQLEXPRESS"))
-            using (var cmd = new SqlCommand(sql, conn))
+            
+            try
             {
-                // Parametri SQL
-                foreach (var f in filters)
+                if (payload == null)
+                    return BadRequest("Payload non valido.");
+
+                var filters = payload.Filters;
+                var queryDef = payload.Query;
+
+                // Costruisce la query SQL
+                string sql = queryDef.Select + " " +
+                             queryDef.From + " " +
+                             queryDef.Where;
+
+                foreach (var cond in queryDef.Conditions)
                 {
-                    string param = "@" + Normalize(f.Key);
-                    cmd.Parameters.AddWithValue(param, f.Value ?? DBNull.Value);
+                    if (filters.ContainsKey(cond.Filter))
+                    {
+                        sql += " " + cond.Sql;
+
+                    }
                 }
 
-                conn.Open();
-                var reader = cmd.ExecuteReader();
 
-                while (reader.Read())
+                using (var conn = new SqlConnection("Persist Security Info=False;User ID=sa;Password=Ab123456;Initial Catalog=DBResults_FDG_AL6_GV640A;Data Source=172.31.1.57\\SQLEXPRESS,1434"))
+                using (var cmd = new SqlCommand(sql, conn))
                 {
-                    var row = new Dictionary<string, object>();
+                    // Parametri SQL
+                    foreach (var f in filters)
+                    {
+                        string param = "@" + Normalize(f.Key);
+                        string value; DateTime dtvalue;
+                        if (DateTime.TryParse(f.Value.ToString(), out dtvalue) == true)
+                        {
+                            value = dtvalue.ToString("yyyy-MM-dd HH:mm");
+                        }
+                        else if (f.Value.ToString().IndexOf("-") > -1)
+                        {
+                            value = f.Value.ToString().Substring(0, f.Value.ToString().IndexOf("-"));
+                        }
+                        else
+                        {
+                            value = f.Value.ToString();
+                        }
+                        cmd.Parameters.AddWithValue(param, value);
+                    }
 
-                    for (int i = 0; i < reader.FieldCount; i++)
-                        row[reader.GetName(i)] = reader.GetValue(i);
+                    conn.Open();
+                    var reader = cmd.ExecuteReader();
 
-                    result.Add(row);
+                    while (reader.Read())
+                    {
+                        var row = new Dictionary<string, object>();
+
+                        for (int i = 0; i < reader.FieldCount; i++)
+                        {
+                            row.Add(reader.GetName(i), reader.GetValue(i));
+                        }
+                        
+                        result.Add(row);
+                    }
                 }
+            
             }
-
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+          
             return Ok(result);
         }
 

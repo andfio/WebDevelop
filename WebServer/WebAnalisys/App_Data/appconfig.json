@@ -29,17 +29,17 @@
     {
       "name": "Line",
       "type": "string",
-      "values": ["1-Line AL1", "2-Line AL2"]
+      "values": ["1-Line AL1", "2-Line AL2", "3-Line AL3","4-Line AL4","5-Line AL5", "6-Line AL6"]
     },
     {
       "name": "Unit Type",
       "type": "string",
-      "values": ["1-Start", "2-Functional", "3-Door Open", "4-Visual"]
+      "values": ["1-Programming", "3-Prefilling", "4-Start", "5-Pass Fail", "6-Functional", "7-Main", "8-Drain", "10-Visual Inspection", "11-Final", "8-Drain" ]
     },
     {
       "name": "Units",
       "type": "string",
-      "values": ["1-Unit test 1", "2-Unit Test 2"]
+      "values": ["1-Unit test 1", "2-Unit Test 2", "3-Unit Test 4", "3-Unit Test 4"]
     },
     {
       "name": "Start Date",
@@ -63,75 +63,68 @@
   "columns": [
     {
       "name": "Model Code",
-      "width": "100px"
+      "field": "ModelCode"
     },
     {
       "name": "DummyCode",
-      "width": "250px"
+      "field": "DummyCode"
     },
     {
       "name": "Program Code",
-      "width": "50px"
+      "field": "ProgramCode"
     },
     {
       "name": "Program Description",
-      "width": "100px"
+      "field": "ProgramDescription"
     },
     {
       "name": "Date",
-      "width": "50px"
+      "field": "Date_Time"
     },
     {
       "name": "Unit",
-      "width": "20px"
+      "field": "UnitID"
     },
     {
       "name": "Line",
-      "width": "20px"
+      "field": "LineID"
     },
     {
       "name": "Shift",
-      "width": "20px"
+      "field": "Shift"
     },
     {
       "name": "Result",
-      "width": "40px"
+      "field": "Result"
     },
     {
       "name": "Unit Type",
-      "width": "20px"
-    },
-    {
-      "name": "Abort Code",
-      "width": "100px"
+      "field": "UnitTypeID"
     },
     {
       "name": "Repair",
-      "width": "50px"
-    },
-    {
-      "name": "VIB",
-      "width": "100px"
-    }   
+      "field": "RepairResult"
+    }  
   ],
   "query": {
-    "select": "SELECT Tab_Headers.ModelCode, SerialNumber, DummyCode, ProgramCode, ProgramDescription, UnitID, UnitTypeID, LineID, Shift, AbortCode, defects, Tab_RepairResults.RepairResult ",
+    "select": "SELECT DISTINCT TOP 1000 Tab_Headers.ModelCode, SerialNumber, DummyCode, ProgramCode, ProgramDescription, Date_Time, UnitID, UnitTypeID, LineID, Shift, Result, Tab_RepairResults.RepairResult ",
     "from": "FROM Tab_Headers INNER JOIN Tab_Tests ON Tab_Headers.ID_Result = Tab_Tests.ID_Result LEFT JOIN Tab_RepairResults ON(Tab_Headers.ID_Result = Tab_RepairResults.ID_Res) ",
     "where": "WHERE ",
     "conditions": [
-      { "filter": "Data Inizio", "sql": "AND Data >= @DataInizio" },
-      { "filter": "Data Fine", "sql": "AND Data <= @DataFine" },      
-      { "filter": "Model Code", "sql": "AND ModelCode = @ModelCode" },
-      { "filter": "DummyCode", "sql": "AND SerialNumber = @SerialNumber" },
-      { "filter": "Line", "sql": "AND LineID = @LineID" },
-      { "filter": "Unit Type", "sql": "AND UnitTypeID = @UnitTypeID" },
-      { "filter": "Unit", "sql": "AND UnitID = @UnitID" },
-      { "filter": "Shift", "sql": "AND Shift = @Shift" },
-      { "filter": "Abort Code", "sql": "AND AbortCode = @AbortCode" },
-      { "filter": "Program Code", "sql": "AND ProgramCode = @ProgramCode" },
-      { "filter": "Program Description", "sql": "AND ProgramDescription = @ProgramDescription" },
-      { "filter": "Defect", "sql": "AND Tab_Tests.Defects = @Defects" },
-      { "filter": "Fail Function", "sql": "AND Tab_Tests.FunctionCode = @FunctionCode" }
+      { "filter": "Start Date", "sql": "Date_Time >= @StartDate" },
+      { "filter": "End Date", "sql": "AND Date_Time <= @EndDate" },      
+      { "filter": "Model Code", "sql": "AND ModelCode LIKE @ModelCode" },
+      { "filter": "DummyCode", "sql": "AND SerialNumber LIKE @DummyCode" },
+      { "filter": "Line", "sql": "AND LineID LIKE @Line" },
+      { "filter": "Unit Type", "sql": "AND UnitTypeID LIKE @UnitType" },
+      { "filter": "Unit", "sql": "AND UnitID LIKE @Unit" },
+      { "filter": "Shift", "sql": "AND Shift LIKE @Shift" },
+	    { "filter": "Result", "sql": "AND Result LIKE @Result" },
+      { "filter": "Abort Code", "sql": "AND AbortCode LIKE @AbortCode" },
+      { "filter": "Program Code", "sql": "AND ProgramCode LIKE @ProgramCode" },
+      { "filter": "Program Description", "sql": "AND ProgramDescription LIKE @ProgramDescription" },
+      { "filter": "Defect", "sql": "AND Tab_Tests.Defects LIKE @Defect" },
+      { "filter": "Fail Function", "sql": "AND Tab_Tests.FunctionCode LIKE @FailFunction" }
     ]
   }
 }

@@ -6,7 +6,7 @@ export interface Filters {
 }
 export interface Columns {
     name: string;
-    width: number;
+    field: string;
 }
 export interface queryfilters {
     filters: string;
@@ -24,5 +24,5 @@ export interface AppConfig {
     query: structQuery;
 }
 export interface filterValues {
-  [key: string]: string | number | null;
+  [key: string]: string | number | undefined;
 }

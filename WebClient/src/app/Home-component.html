@@ -1,0 +1,182 @@
+  <router-outlet></router-outlet>
+
+  <div id="logo">
+    <div id="logo-left">
+      <label id="labelnome">Loccioni</label>
+      <label id="labeltype">Analisys</label>
+    </div>
+    <div id="logo-right">
+      <label id="labelversion">Analisys v.1.0.0</label>
+      <label id="labelauthors">a.fiorentini</label>
+    </div>
+  </div>
+
+  <div class="filters">
+
+    <div class="search-box">
+
+      <div id="textboxinput">
+
+        <div class="field">  
+        <label id="lblDummyCode">DummyCode :</label>
+        <input type="text" placeholder="*" [(ngModel)]="filterValues['DummyCode']" >
+        </div>        
+
+        <div class="field">  
+        <label id="lblmodelcode">Model Code :</label>
+        <input type="text" placeholder="*" [(ngModel)]="filterValues['Model Code']">
+        </div>
+
+        <div class="field">  
+        <label id="lblprogrcode">Program Code :</label>
+        <input type="text" placeholder="*" [(ngModel)]="filterValues['Program Code']" >
+        </div>
+
+        <div class="field">  
+        <label id="lblprogrdescr">Program Description :</label>
+        <input type="text" placeholder="*" [(ngModel)]="filterValues['Program Description']" >
+        </div>
+
+        <div class="field">  
+        <label id="lbldefects">Defect :</label>
+        <input type="text" placeholder="*" [(ngModel)]="filterValues['Defect']">
+        </div>
+        
+        <div class="field">  
+        <label id="lblfailfunction">Fail Function :</label>
+        <input type="text" placeholder="*" [(ngModel)]="filterValues['Fail Function']">
+        </div>        
+        
+      </div>
+
+      <div id="comboboxinput">
+
+        <div class="selectbox">
+          <label id="lblshiftselect">Shift :</label>
+          <select [(ngModel)]="filterValues['Shift']">
+          <option value="%">All</option>
+            @for (item of filters; track $index) {
+              @if (item.name === "Shift") {
+                @if(item.type ==="number") {
+                  @for (value of item.values; track $index) {
+                    <option [value]="value"> {{value}} </option>
+                  }
+                }
+              }
+            }
+          </select>
+        </div>        
+
+        <div class="selectbox">
+          <label id="lbllineselect">Lines :</label>
+          <select [(ngModel)]="filterValues['Line']">
+            <option value="%">All</option>
+            @for (item of filters; track $index) {
+              @if (item.name === "Line") {
+                @if(item.type ==="string") {
+                  @for (value of item.values; track $index) {
+                    <option [value]="value"> {{value}} </option>
+                  }
+                }
+              }
+            }
+          </select>
+        </div>
+
+        <div class="selectbox">
+          <label id="lblutselect">Unit Type :</label>
+          <select [(ngModel)]="filterValues['Unit Type']">
+            <option value="%">All</option>
+            @for (item of filters; track $index) {
+              @if (item.name === "Unit Type") {
+                @if(item.type ==="string") {
+                  @for (value of item.values; track $index) {
+                    <option [value]="value"> {{value}} </option>
+                  }
+                }
+              }
+            }
+          </select>
+        </div>
+
+        <div class="selectbox">
+          <label id="lblunselect">Unit :</label>
+          <select [(ngModel)]="filterValues['Units']">
+            <option value="%">All</option>
+            @for (item of filters; track $index) {
+              @if (item.name === "Units") {
+                @if(item.type ==="string") {
+                  @for (value of item.values; track $index) {
+                    <option [value]="value"> {{value}} </option>
+                  }
+                }
+              }
+            }
+          </select>
+        </div> 
+        
+        <div class="selectbox">
+          <label id="lblresselect">Result :</label>
+          <select [(ngModel)]="filterValues['Result']">
+            <option value="%">All</option>
+            @for (item of filters; track $index) {
+              @if (item.name === "Result") {
+                @if(item.type ==="string") {
+                  @for (value of item.values; track $index) {
+                    <option [value]="value"> {{value}} </option>
+                  }
+                }
+              }
+            }
+          </select>
+        </div>         
+
+      </div>
+
+      <div id="textboxdate">
+
+          <div id="dategroup">
+              <div class="fieldDate">  
+                <label id="lbldatestart">Start Date :</label>
+                <input id="txtdatestart" type="datetime-local" [(ngModel)]="DateFormatFrom" >
+              </div>
+
+              <div class="fieldDate">  
+                <label id="lbldateend">End Date :</label>
+                <input id="txtdateend" type="datetime-local" [(ngModel)]="DateFormatTo">
+              </div>
+          </div>
+
+          <div id="buttonbox">
+            <button class="btn-graph">📊 Graph</button>
+            <button class="btn-search" (click)="submit()">🔍 Search</button>
+          </div>
+
+      </div>
+
+    </div>
+ 
+  </div>
+
+  <div class="table-wrapper">
+
+    <table class="styled-table">
+      <thead id="columnsbox">
+        @for (item of columns; track $index) {
+          <th scope="col"> {{ item.name }}  </th>
+        }
+      </thead>
+      <tbody>
+        @for (row of results; track $index) {
+          <tr (dblclick)="subOnDetailPage()">
+            @for (col of columns; track $index) {
+              <td>{{ row[col.field] }}</td>
+            }
+          </tr>
+        }
+      </tbody>      
+      
+    </table>
+
+  </div>
+
