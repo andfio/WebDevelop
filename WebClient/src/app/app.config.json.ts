@@ -7,6 +7,7 @@ export interface Filters {
 export interface Columns {
     name: string;
     field: string;
+    numparams?: number;
 }
 export interface queryfilters {
     filters: string;

@@ -78,8 +78,7 @@ namespace WebAnalisys.Controllers
                     }
                 }
 
-
-                using (var conn = new SqlConnection("Persist Security Info=False;User ID=sa;Password=Ab123456;Initial Catalog=DBResults_FDG_AL6_GV640A;Data Source=172.31.1.57\\SQLEXPRESS,1434"))
+                using (var conn = new SqlConnection("Persist Security Info=False;User ID=sa;Password=Ab123456;Initial Catalog=DBResults_FDG_AL6_GV640A;Data Source=172.18.81.7\\SQLEXPRESS,1434"))
                 using (var cmd = new SqlCommand(sql, conn))
                 {
                     // Parametri SQL
