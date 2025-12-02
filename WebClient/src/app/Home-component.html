@@ -163,15 +163,19 @@
     <table class="styled-table">
       <thead id="columnsbox">
         @for (item of columns; track $index) {
+          @if(item.field !== 'ID_Result') {
           <th scope="col"> {{ item.name }}  </th>
+          }
         }
       </thead>
       <tbody>
         @for (row of results; track $index) {
-          <tr (dblclick)="subOnDetailPage()">
-            @for (col of columns; track $index) {
-              <td>{{ row[col.field] }}</td>
+          <tr (dblclick)="subOnDetailPage(row)">
+          @for (col of columns; track $index) {
+            @if(col.field !== 'ID_Result') {
+              <td>{{ row[col.field] }}</td>              
             }
+          }
           </tr>
         }
       </tbody>      

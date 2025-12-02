@@ -141,7 +141,10 @@ export class HomeComponent {
     return result;
   }
   
-  subOnDetailPage() {
-    this.router.navigate(['/pagina-details']);
+  subOnDetailPage(row: any) {
+    this.router.navigate(['/pagina-details'], {
+      state: { rowData: row }   
+    });
   }
+
 }

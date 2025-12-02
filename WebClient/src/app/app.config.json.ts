@@ -7,7 +7,10 @@ export interface Filters {
 export interface Columns {
     name: string;
     field: string;
-    numparams?: number;
+}
+export interface ColumnsDetails {
+    name: string;
+    field: string;
 }
 export interface queryfilters {
     filters: string;
@@ -22,7 +25,9 @@ export interface structQuery {
 export interface AppConfig {
     filters: Filters[];
     columns: Columns[];
+    columnsdetails: ColumnsDetails[];
     query: structQuery;
+    querydetails: structQuery;
 }
 export interface filterValues {
   [key: string]: string | number | undefined;

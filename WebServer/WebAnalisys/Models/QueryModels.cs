@@ -11,6 +11,12 @@ namespace WebAnalisys.Models
         public QueryDefinition Query { get; set; }
     }
 
+    public class DetailsPayload
+    {
+        public Dictionary<string, object> Filters { get; set; }
+        public QueryDefinition Query { get; set; }
+    }
+
     public class QueryDefinition
     {
         public string Select { get; set; }

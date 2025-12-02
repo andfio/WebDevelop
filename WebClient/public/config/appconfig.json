@@ -62,6 +62,10 @@
   ],
   "columns": [
     {
+      "name": "ID_Result",
+      "field": "ID_Result"
+    },    
+    {
       "name": "Model Code",
       "field": "ModelCode"
     },
@@ -130,51 +134,10 @@
     {
       "name": "Function",
       "field": "FunctionCode"
-    },
-    {
-      "name": "Test Description",
-      "field": "Descr"
-    },
-    {
-      "name": "Test Result",
-      "field": "Result"
-    },
-    {
-      "name": "@DescrDetails1, @DescrDetails2, @DescrDetails3, @DescrDetails4, @DescrDetails5, @DescrDetails6, @DescrDetails7, @DescrDetails8, @DescrDetails9, @DescrDetails10, @DescrDetails11, @DescrDetails12, @DescrDetails13, @DescrDetails14, @DescrDetails15",
-      "field": "Params",
-      "numparams": 0
-    },
-    {
-      "name": "@DescrMisure",
-      "field": "ComDescr"
-    },
-    {
-      "name": "Min.",
-      "field": "MinSet"
-    },
-    {
-      "name": "Value",
-      "field": "AnalogueValue"
-    },
-    {
-      "name": "Max.",
-      "field": "MaxSet"
-    },
-    {
-      "name": "Name",
-      "field": "StoreName"
-    },
-    {
-      "name": "Limit(Min.)",
-      "field": "MinLimit"
-    },
-    {
-      "name": "Limit(Max.)",
-      "field": "MaxLimit"
     }
   ],
   "query": {
-    "select": "SELECT DISTINCT TOP 1000 Tab_Headers.ModelCode, SerialNumber, DummyCode, ProgramCode, ProgramDescription, Date_Time, UnitID, UnitTypeID, LineID, Shift, Result, Tab_RepairResults.RepairResult ",
+    "select": "SELECT DISTINCT TOP 1000 Tab_Headers.ID_Result, Tab_Headers.ModelCode, SerialNumber, DummyCode, ProgramCode, ProgramDescription, Date_Time, UnitID, UnitTypeID, LineID, Shift, Result, Tab_RepairResults.RepairResult ",
     "from": "FROM Tab_Headers INNER JOIN Tab_Tests ON Tab_Headers.ID_Result = Tab_Tests.ID_Result LEFT JOIN Tab_RepairResults ON(Tab_Headers.ID_Result = Tab_RepairResults.ID_Res) ",
     "where": "WHERE ",
     "conditions": [
