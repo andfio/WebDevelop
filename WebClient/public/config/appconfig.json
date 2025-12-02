@@ -137,7 +137,7 @@
     }
   ],
   "query": {
-    "select": "SELECT DISTINCT TOP 1000 Tab_Headers.ID_Result, Tab_Headers.ModelCode, SerialNumber, DummyCode, ProgramCode, ProgramDescription, Date_Time, UnitID, UnitTypeID, LineID, Shift, Result, Tab_RepairResults.RepairResult ",
+    "select": "SELECT DISTINCT Tab_Headers.ID_Result, Tab_Headers.ModelCode, SerialNumber, DummyCode, ProgramCode, ProgramDescription, Date_Time, UnitID, UnitTypeID, LineID, Shift, Result, Tab_RepairResults.RepairResult ",
     "from": "FROM Tab_Headers INNER JOIN Tab_Tests ON Tab_Headers.ID_Result = Tab_Tests.ID_Result LEFT JOIN Tab_RepairResults ON(Tab_Headers.ID_Result = Tab_RepairResults.ID_Res) ",
     "where": "WHERE ",
     "conditions": [
@@ -157,12 +157,15 @@
       { "filter": "Fail Function", "sql": "AND Tab_Tests.FunctionCode LIKE @FailFunction" }
     ]
   },
-    "querydetails": {
-    "select": "SELECT Tab_Tests.ProgressiveGroup, Tab_Tests.TestType, StartEventTime, EndEventTime, TestResult, TestDescription, FunctionCode, Tab_Test_Details.Result, Descr, Params, Tab_Measures.ProgressiveMeasure, ErrorMeasure, MinSet, MaxSet, AnalogueValue, StoreName, MinLimit, MaxLimit ",
-    "from": "FROM Tab_Tests LEFT JOIN Tab_Test_Details ON (Tab_Tests.ID_Result = Tab_Test_Details.ID_Result AND Tab_Tests.ProgressiveGroup = Tab_Test_Details.ProgressiveGroup) LEFT JOIN Tab_Measures ON (Tab_Tests.ID_Result = Tab_Measures.ID_Result AND Tab_Tests.ProgressiveGroup = Tab_Measures.ProgressiveGroup) ",
+  "querydetails": {
+    "select": "SELECT Tab_Headers.UnitTypeID, Tab_Tests.ProgressiveGroup, StartEventTime, EndEventTime, TestResult, TestDescription, FunctionCode, Tab_Tests.TestType, Tab_Test_Details.Result, Descr, Params, Tab_Measures.ProgressiveMeasure, ErrorMeasure, MinSet, MaxSet, AnalogueValue, StoreName, MinLimit, MaxLimit ",
+    "from": "FROM Tab_Headers INNER JOIN Tab_Tests ON (Tab_Headers.ID_Result = Tab_Tests.ID_Result) LEFT JOIN Tab_Test_Details ON (Tab_Tests.ID_Result = Tab_Test_Details.ID_Result AND Tab_Tests.ProgressiveGroup = Tab_Test_Details.ProgressiveGroup) LEFT JOIN Tab_Measures ON (Tab_Tests.ID_Result = Tab_Measures.ID_Result AND Tab_Tests.ProgressiveGroup = Tab_Measures.ProgressiveGroup) ",
     "where": "WHERE ",
     "conditions": [
-      { "filter": "ID", "sql": "ID_Result = @IDResult" }
+      {
+        "filter": "ID_Result",
+        "sql": "ID_Result = @IDResult"
+      }
     ]
   }
 }

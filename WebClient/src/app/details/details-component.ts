@@ -24,11 +24,13 @@ export class DetailsdataComponent {
   queryhome: AppConfig["query"] = {} as any;
   querydetails: AppConfig["querydetails"] = {} as any;
 
+  filtervalues: { [key: string]: any } = {};
   row: any;
 
   ngOnInit() {
     this.row = history.state.rowData;
     console.log("Riga ricevuta:", this.row);
+    this.filtervalues['ID_Result'] = this.row['ID_Result'];
 
     this.http.get<AppConfig>('config/appconfig.json').subscribe({
       next: (config) => {
@@ -44,8 +46,6 @@ export class DetailsdataComponent {
       }
     });
   }  
-
-  filtervalues: { [key: string]: any } = {};
 
   results: any[] = [];
   sendToBackend() {
