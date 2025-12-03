@@ -1,0 +1,97 @@
+/* Container generale */
+.tables-container {
+    margin: 20px;
+    padding: 20px;
+    border-radius: 12px;
+    background: #f8f9fa;
+    box-shadow: 0px 2px 8px rgba(0,0,0,0.15);
+    min-height: 100vh;
+    box-sizing: border-box;
+}
+
+/* LABEL ROOT FUORI DALLA TABELLA */
+/* LABEL ROOT FUORI DALLA TABELLA - ALLINEATA A SINISTRA */
+.root-label {
+    display: block;             /* Garantisce posizione su una nuova linea */
+    width: fit-content;         /* Larghezza esatta del contenuto */
+    background: #0078d4;
+    color: white;
+    font-weight: bold;
+    padding: 12px 18px;
+    border-radius: 8px;
+    margin-left: 40px;          /* Stesso margine della tabella */
+    margin-bottom: 15px;        /* Distanza dalla tabella */
+    cursor: pointer;
+    transition: 0.2s ease;
+    box-shadow: 0px 1px 4px rgba(0,0,0,0.3);
+}
+
+.root-label:hover {
+    background: #005fa3;
+}
+
+/* Wrapper della tabella (scroll configurabile) */
+.table-wrapper {
+    display: inline-block;
+    max-height: 650px;
+
+    /* SCROLLBAR VERTICALE (abilitare/disabilitare QUI) */
+    overflow-y: auto;     /* scroll verticale ATTIVO */
+    /* overflow-y: hidden;*/ /* scroll verticale DISATTIVO */
+
+    /* SCROLLBAR ORIZZONTALE (abilitare/disabilitare QUI) */
+    overflow-x: auto;   /* scroll orizzontale DISATTIVO */
+    /* overflow-x: auto; */ /* scroll orizzontale ATTIVO */
+
+    margin-left: 40px;
+    padding-right: 8px;
+}
+
+/* Tabella */
+.tablemaindetails {
+    border-collapse: separate;
+    border-spacing: 0 10px;
+    font-family: "Segoe UI", Tahoma, sans-serif;
+    width: auto;
+}
+
+/* Celle */
+.tablemaindetails td {
+    padding: 5px 7px;
+    background: white;
+    border-radius: 8px;
+    font-size: 15px;
+    color: #333;
+    vertical-align: middle;
+    box-shadow: 0px 1px 3px rgba(0,0,0,0.15);
+    white-space: nowrap;
+}
+
+/* Colonna 1: ProgressiveGroup */
+#Progress {
+    width: 40px;
+    text-align: center;
+    font-weight: 600;
+}
+
+/* Colonna 2: Icona */
+#Icon {
+    width: 40px;
+    text-align: center;
+}
+
+/* Colonna 3: TestDescription */
+#TestDescription {
+    width: 80px;          /* PERSONALIZZABILE */
+    white-space: normal;  /* permetti testo multilinea */
+}
+
+/* Hover righe */
+.tablemaindetails tr:hover td {
+    background: #e9f3ff;
+}
+
+/* Icone */
+.tablemaindetails img {
+    border-radius: 4px;
+}

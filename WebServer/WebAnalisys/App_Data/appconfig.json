@@ -110,6 +110,56 @@
       "field": "RepairResult"
     }  
   ],
+  "columnsrootdetails": [
+    {
+      "name": "Model Code",
+      "field": "ModelCode"
+    },
+    {
+      "name": "SerialNumber",
+      "field": "SerialNumber"
+    },
+    {
+      "name": "DummyCode",
+      "field": "DummyCode"
+    },
+    {
+      "name": "Result",
+      "field": "Result"
+    },
+    {
+      "name": "Date Test",
+      "field": "Date_Time"
+    },
+    {
+      "name": "Program_Code",
+      "field": "ProgramCode"
+    },
+    {
+      "name": "Program Description",
+      "field": "ProgramDescription"
+    },
+    {
+      "name": "Line",
+      "field": "LineID"
+    },
+    {
+      "name": "Unit Type",
+      "field": "UnitID"
+    },
+    {
+      "name": "User",
+      "field": "Operator"
+    },
+    {
+      "name": "Shift",
+      "field": "Shift"
+    },
+    {
+      "name": "Interruption Anomalous",
+      "field": "AbortCode"
+    }
+  ],
     "columnsdetails": [
     {
       "name": "ID",
@@ -134,6 +184,170 @@
     {
       "name": "Function",
       "field": "FunctionCode"
+    },
+    {
+      "name": "Type",
+      "field": "TestType"
+    },
+    {
+      "name": "Test Descr.",
+      "field": "TestDescr"
+    },
+    {
+      "name": "Test Result",
+      "field": "TestResult"
+    },
+    {
+      "name": "Type",
+      "field": "TestType"
+    }
+  ],
+    "columnsmeasuredetails": [
+    {
+      "name": "Min.",
+      "field": "Min"
+    },
+    {
+      "name": "Value",
+      "field": "Value"
+    },
+    {
+      "name": "Max.",
+      "field": "Max"
+    },
+    {
+      "name": "Name",
+      "field": "StoreName"
+    },
+    {
+      "name": "Limits(Min.)",
+      "field": "LimitMin"
+    },
+    {
+      "name": "Limits(Max.)",
+      "field": "LimitMax"
+    }
+  ],
+  "columnsparametersdetails": [
+    {
+      "name": "Descr1",
+      "field": "Descr1"
+    },
+    {
+      "name": "UM1",
+      "field": "UM1"
+    },
+    {
+      "name": "Value1",
+      "field": "Value1"
+    },
+    {
+      "name": "Descr2",
+      "field": "Descr2"
+    },
+    {
+      "name": "UM2",
+      "field": "UM2"
+    },
+    {
+      "name": "Value2",
+      "field": "Value2"
+    },
+    {
+      "name": "Descr3",
+      "field": "Descr3"
+    },
+    {
+      "name": "UM3",
+      "field": "UM3"
+    },
+    {
+      "name": "Value3",
+      "field": "Value3"
+    },
+    {
+      "name": "Descr4",
+      "field": "Descr4"
+    },
+    {
+      "name": "UM4",
+      "field": "UM4"
+    },
+    {
+      "name": "Value4",
+      "field": "Value4"
+    },
+    {
+      "name": "Descr5",
+      "field": "Descr5"
+    },
+    {
+      "name": "UM5",
+      "field": "UM5"
+    },
+    {
+      "name": "Value5",
+      "field": "Value5"
+    },
+    {
+      "name": "Descr6",
+      "field": "Descr6"
+    },
+    {
+      "name": "UM6",
+      "field": "UM6"
+    },
+    {
+      "name": "Value6",
+      "field": "Value6"
+    },
+    {
+      "name": "Descr7",
+      "field": "Descr7"
+    },
+    {
+      "name": "UM7",
+      "field": "UM7"
+    },
+    {
+      "name": "Value7",
+      "field": "Value7"
+    },
+    {
+      "name": "Descr8",
+      "field": "Descr8"
+    },
+    {
+      "name": "UM8",
+      "field": "UM8"
+    },
+    {
+      "name": "Value8",
+      "field": "Value8"
+    },
+    {
+      "name": "Descr9",
+      "field": "Descr9"
+    },
+    {
+      "name": "UM9",
+      "field": "UM9"
+    },
+    {
+      "name": "Value9",
+      "field": "Value9"
+    },
+    {
+      "name": "Descr10",
+      "field": "Descr10"
+    },
+    {
+      "name": "UM10",
+      "field": "UM10"
+    },
+    {
+      "name": "Value10",
+      "field": "Value10"
     }
   ],
   "query": {
@@ -159,12 +373,12 @@
   },
   "querydetails": {
     "select": "SELECT Tab_Headers.UnitTypeID, Tab_Tests.ProgressiveGroup, StartEventTime, EndEventTime, TestResult, TestDescription, FunctionCode, Tab_Tests.TestType, Tab_Test_Details.Result, Descr, Params, Tab_Measures.ProgressiveMeasure, ErrorMeasure, MinSet, MaxSet, AnalogueValue, StoreName, MinLimit, MaxLimit ",
-    "from": "FROM Tab_Headers INNER JOIN Tab_Tests ON (Tab_Headers.ID_Result = Tab_Tests.ID_Result) LEFT JOIN Tab_Test_Details ON (Tab_Tests.ID_Result = Tab_Test_Details.ID_Result AND Tab_Tests.ProgressiveGroup = Tab_Test_Details.ProgressiveGroup) LEFT JOIN Tab_Measures ON (Tab_Tests.ID_Result = Tab_Measures.ID_Result AND Tab_Tests.ProgressiveGroup = Tab_Measures.ProgressiveGroup) ",
+    "from": "FROM Tab_Headers LEFT JOIN Tab_Tests ON (Tab_Headers.ID_Result = Tab_Tests.ID_Result) LEFT JOIN Tab_Test_Details ON (Tab_Tests.ID_Result = Tab_Test_Details.ID_Result AND Tab_Tests.ProgressiveGroup = Tab_Test_Details.ProgressiveGroup) LEFT JOIN Tab_Measures ON (Tab_Tests.ID_Result = Tab_Measures.ID_Result AND Tab_Tests.ProgressiveGroup = Tab_Measures.ProgressiveGroup) ",
     "where": "WHERE ",
     "conditions": [
       {
         "filter": "ID_Result",
-        "sql": "ID_Result = @IDResult"
+        "sql": "Tab_Headers.ID_Result = @ID_Result"
       }
     ]
   }

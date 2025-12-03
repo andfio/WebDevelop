@@ -185,7 +185,7 @@ namespace WebAnalisys.Controllers
                             if (reader.GetName(i) == "TestType")
                             {
 
-                                int testType = 0;
+                                int testType = int.Parse(reader["TestType"].ToString());
 
                                 switch (testType)
                                 {
@@ -193,13 +193,13 @@ namespace WebAnalisys.Controllers
                                         row.Add("M", reader["ProgressiveMeasure"].ToString());
                                         row.Add("TestDescr", "");
                                         row.Add("UM", "");
-                                        row.Add("TestResult", reader["ErrorMeasure"].ToString());
-                                        row.Add("Min.", reader["MinSet"].ToString());
+                                        row.Add("TestRes", reader["ErrorMeasure"].ToString());
+                                        row.Add("Min", reader["MinSet"].ToString());
                                         row.Add("Value", reader["AnalogueValue"].ToString());
-                                        row.Add("Max.", reader["MaxSet"].ToString());
+                                        row.Add("Max", reader["MaxSet"].ToString());
                                         row.Add("Name", reader["StoreName"].ToString());
-                                        row.Add("Limit(Min.)", reader["MinLimit"].ToString());
-                                        row.Add("Linit(Max.)", reader["MaxLimit"].ToString());
+                                        row.Add("LimitMin", reader["MinLimit"].ToString());
+                                        row.Add("LimitMax", reader["MaxLimit"].ToString());
                                         break;
 
                                     default:
@@ -211,20 +211,20 @@ namespace WebAnalisys.Controllers
 
                                         row.Add("P", testType.ToString());
                                         row.Add("TestDescr", reader["Descr"].ToString());
-                                        row.Add("TestResult", reader["TestResult"].ToString());
-                                        for(int iPar = 0; iPar < 15; iPar++)
+                                        row.Add("TestRes", reader["TestResult"].ToString());
+                                        for(int iPar = 1; iPar <= 10; iPar++)
                                         {
                                             if (iPar < pars.Count)
                                             {
-                                                row.Add("Valore" + iPar.ToString(), pars[iPar]);
                                                 row.Add("Descr" + iPar.ToString(), "");
                                                 row.Add("UM" + iPar.ToString(), "");
+                                                row.Add("Valore" + iPar.ToString(), pars[iPar - 1]);
                                             }
                                             else
                                             {
-                                                row.Add("Valore" + iPar.ToString(), "?");
                                                 row.Add("Descr" + iPar.ToString(), "?");
                                                 row.Add("UM" + iPar.ToString(), "?");
+                                                row.Add("Valore" + iPar.ToString(), "?");
                                             }
                                         }
                                         
@@ -244,31 +244,35 @@ namespace WebAnalisys.Controllers
                     foreach (Dictionary<string, object> itemList in details)
                     {
                         var row = new Dictionary<string, object>();
-                        foreach (KeyValuePair<string, object> itemRow in itemList )
+                        foreach (var itemRow in itemList.ToList()) //foreach (KeyValuePair<string, object> itemRow in itemList )
                         {
-                           
+
                             row.Add(itemRow.Key, itemRow.Value);
 
                             if (itemRow.Key == "P" || itemRow.Key == "M")
                             {
-                                int testType = int.Parse(itemRow.Value.ToString());
                                 switch (itemRow.Key)
                                 {
                                     case "M":
-                                        sql = "SELECT Descr, UM FROM Commands";
-                                        sql = sql + "WHERE UnitType=" + row["UnitTypeID"].ToString() + " AND ComID=" + itemRow.Value.ToString() + " AND ComType= 1";
+                                        sql = "SELECT Descr, UM FROM Commands ";
+                                        sql = sql + "WHERE UnitTypeID=" + row["UnitTypeID"].ToString() + " AND ComID=" + itemRow.Value.ToString() + " AND ComType= 1";
                                         break;
 
                                     default:
-                                        sql = "SELECT CommandsInputParameters.Descr, CommandsInputParameters.UM FROM Commands INNER JOIN CommandsInputParameters ON (Commands.UnitTypeID = CommandsInputParameters AND Commands.ComID = CommandsInputParameters.ComID AND Commands.ComType = CommandsInputParameters.ComType) ";
-                                        sql = sql + "WHERE UnitType=" + row["UnitTypeID"].ToString() + " AND ComID=" + itemRow.Value.ToString();
+                                        sql = "SELECT CommandsInputParameters.Descr, CommandsInputParameters.UM FROM Commands INNER JOIN CommandsInputParameters ON (Commands.UnitTypeID = CommandsInputParameters.UnitTypeID AND Commands.ComID = CommandsInputParameters.ComID AND Commands.ComType = CommandsInputParameters.ComType) ";
+                                        sql = sql + "WHERE Commands.UnitTypeID=" + row["UnitTypeID"].ToString() + " AND Commands.ComID=" + itemRow.Value.ToString();
                                         break;
+                                }
+                                using (System.IO.StreamWriter wr = new System.IO.StreamWriter("C:\\temp\\Debug.log", false))
+                                {
+                                    wr.Write(sql);
                                 }
 
                                 using (var cmd = new SqlCommand(sql, conn))
                                 {
                                     SqlDataReader reader = cmd.ExecuteReader();
 
+                                    int iPar = 1;
                                     while (reader.Read())
                                     {
                                         switch (itemRow.Key)
@@ -279,17 +283,14 @@ namespace WebAnalisys.Controllers
                                                 break;
 
                                             default:
-                                                for (int iPar = 0; iPar < 15; iPar++)
-                                                {
-                                                    itemList["Valore" + iPar.ToString()] = reader["Descr"].ToString().Trim();
-                                                    itemList["UM" + iPar.ToString()] = reader["UM"].ToString().Trim();
-                                                }
-
+                                                itemList["Descr" + iPar.ToString()] = reader["Descr"].ToString().Trim();
+                                                itemList["UM" + iPar.ToString()] = reader["UM"].ToString().Trim();
+                                                iPar++;
                                                 break;
                                         }
 
                                     }
-
+                                    reader.Close();
                                 }
                             }
                         }

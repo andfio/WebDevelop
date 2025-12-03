@@ -8,7 +8,19 @@ export interface Columns {
     name: string;
     field: string;
 }
+export interface ColumnsRootDetails {
+    name: string;
+    field: string;
+}
 export interface ColumnsDetails {
+    name: string;
+    field: string;
+}
+export interface ColumnsMeasureDetails {
+    name: string;
+    field: string;
+}
+export interface ColumnsParametersDetails {
     name: string;
     field: string;
 }
@@ -25,7 +37,10 @@ export interface structQuery {
 export interface AppConfig {
     filters: Filters[];
     columns: Columns[];
+    columnsrootdetails: ColumnsRootDetails[];
     columnsdetails: ColumnsDetails[];
+    columnsmeasuredetails: ColumnsMeasureDetails[];
+    columnsparametersdetails: ColumnsParametersDetails[];
     query: structQuery;
     querydetails: structQuery;
 }

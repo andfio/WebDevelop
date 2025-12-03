@@ -1,24 +1,38 @@
-<h2>DETTAGLI</h2>
-<button (click)="goBack()">⬅ Torna alla Home</button>
+<!-- <h2>DETTAGLI</h2>
+<button (click)="goBack()">⬅ Torna alla Home</button> -->
 
-    <div class="tables-container">
+<div class="tables-container">
+
+    <!-- LABEL ROOT ESTERNA ALLA TABELLA -->
+    <div class="root-label" (click)="subShowRoot()">
+        {{ row['SerialNumber'] }}
+    </div>
+
+    <div class="table-wrapper">
 
         <table class="tablemaindetails">
-            
-            <thead id="header-table">
-                <th class="root"></th> <!--ci va la matricola -->
-            </thead>
             <tbody>
-                <tr>
-                    <td>
-                        <img src="img/ComplexTest.ico"
-                            width="48" height="48"
-                            style="vertical-align: middle; margin-right: 8px;">
-                    </td>
-                    <!-- <td>{{ provaComplessa }}</td> -->
-                </tr>
-            </tbody>
 
+                @for(itemRow of results; track $index)
+                {
+                    <tr>
+                        <td id="Progress">{{ itemRow['ProgressiveGroup'] }}</td>
+
+                        <td id="Icon">
+                            @switch (typeIcon[itemRow['TestType']]) {
+                                @case (1) { <img src="img/Measure.ico" width="32" height="32"> }
+                                @case (2) { <img src="img/Actionament.ico" width="32" height="32"> }
+                                @case (5) { <img src="img/SafetyTest.ico" width="32" height="32"> }
+                                @default  { <img src="img/ComplexTest.ico" width="32" height="32"> }
+                            }
+                        </td>
+
+                        <td id="TestDescription">{{ itemRow['TestDescription'] }}</td>
+                    </tr>
+                }
+
+            </tbody>
         </table>
 
     </div>
+</div>

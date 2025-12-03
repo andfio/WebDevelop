@@ -20,7 +20,10 @@ export class DetailsdataComponent {
 
   filters: AppConfig["filters"] = [];
   columnshome: AppConfig["columns"] = [];
+  columnsrootdetails: AppConfig["columnsrootdetails"] = [];
   columnsdetails: AppConfig["columnsdetails"] = [];
+  columnsmeasuredetails: AppConfig["columnsmeasuredetails"] = [];
+  columnsparametersdetails: AppConfig["columnsparametersdetails"] = [];
   queryhome: AppConfig["query"] = {} as any;
   querydetails: AppConfig["querydetails"] = {} as any;
 
@@ -37,9 +40,14 @@ export class DetailsdataComponent {
         console.log('CONFIG OK:', config);
           this.filters = config.filters;
           this.columnshome = config.columns;
+          this.columnsrootdetails = config.columnsrootdetails;
           this.columnsdetails = config.columnsdetails;
+          this.columnsmeasuredetails = config.columnsmeasuredetails;
+          this.columnsparametersdetails = config.columnsparametersdetails;
           this.queryhome = config.query;
           this.querydetails = config.querydetails;
+
+          this.sendToBackend();
       },
       error: (err) => {
         console.error('ERRORE CARICAMENTO JSON:', err);
@@ -58,15 +66,45 @@ export class DetailsdataComponent {
       next: (data: any) => {
         console.log("RISULTATO BACKEND:", data);
         this.results = data; 
+        this.subShowIcon();
       },
       error: (err) => {
         console.error("ERRORE BACKEND:", err);
       }
     });
 
-    
-    //this.filtervalues[filter.name] = undefined;        
-    
+    this.filtervalues['ID_Result'] = undefined;        
+  }
+
+  typeIcon: number[] = [];
+  subShowIcon()
+  {
+    this.results.forEach(itemSeq => {
+      this.columnsdetails.forEach(col => {
+        if (col.field == 'TestType') {
+           const icon =  itemSeq[col.field]
+           switch (icon)
+           {
+              case 1:
+                this.typeIcon[icon] = 1;
+                break;
+              case 2: 
+                this.typeIcon[icon] = 2;
+                break;
+              case 5: 
+                this.typeIcon[icon] = 5;
+                break;                
+              default: 
+                this.typeIcon[icon] = icon;
+                break;                
+           }
+        }
+      });
+    });
+  }
+
+  subShowRoot() {
+
   }
 
 }
