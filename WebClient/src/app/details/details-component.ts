@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
-import { AppConfig, filterValues} from '../app.config.json';
+import { AppConfig, filterValues, tableinfo} from '../app.config.json';
 
 @Component({
   selector: 'app-details',
@@ -103,8 +103,28 @@ export class DetailsdataComponent {
     });
   }
 
-  subShowRoot() {
+  detailsData: any[] = [];
+  tableInfo: tableinfo = {} as tableinfo;
 
+  subShowRoot() {
+    this.detailsData = [];  // pulizia
+
+    this.detailsData = [];  // pulizia
+    this.detailsData.push(
+        { description: "Matricola", value: this.row['SerialNumber'] },
+        { description: "Info", value: "Dettagli generali..." }
+    );
+
+  }
+
+  subShowTestDetails(item: any)
+  {
+    this.detailsData = []; // pulizia
+    this.detailsData.push(
+        { description: "ProgressiveGroup", value: item['ProgressiveGroup'] },
+        { description: "Tipo Test", value: item['TestType'] },
+        { description: "Descrizione Test", value: item['TestDescription'] }
+    );
   }
 
 }

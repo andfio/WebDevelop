@@ -47,3 +47,7 @@ export interface AppConfig {
 export interface filterValues {
   [key: string]: string | number | undefined;
 }
+export interface tableinfo {
+    description: string,
+    value: string
+}

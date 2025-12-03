@@ -3,36 +3,66 @@
 
 <div class="tables-container">
 
-    <!-- LABEL ROOT ESTERNA ALLA TABELLA -->
+    <!-- LABEL ROOT ESTERNA -->
     <div class="root-label" (click)="subShowRoot()">
         {{ row['SerialNumber'] }}
     </div>
 
-    <div class="table-wrapper">
+    <!-- CONTENITORE A DUE COLONNE -->
+    <div class="tables-flex">
 
-        <table class="tablemaindetails">
-            <tbody>
+        <!-- COLONNA SINISTRA -->
+        <div class="table-wrapper">
+            <table class="tablemaindetails">
+                <tbody>
 
-                @for(itemRow of results; track $index)
-                {
+                    @for(itemRow of results; track $index)
+                    {
+                        <tr>
+                            <td id="Progress" (click)="subShowTestDetails(itemRow)">
+                                {{ itemRow['ProgressiveGroup'] }}
+                            </td>
+
+                            <td id="Icon">
+                                @switch (typeIcon[itemRow['TestType']]) {
+                                    @case (1) { <img src="img/Measure.ico" width="32" height="32"> }
+                                    @case (2) { <img src="img/Actionament.ico" width="32" height="32"> }
+                                    @case (5) { <img src="img/SafetyTest.ico" width="32" height="32"> }
+                                    @default  { <img src="img/ComplexTest.ico" width="32" height="32"> }
+                                }
+                            </td>
+
+                            <td id="TestDescription">{{ itemRow['TestDescription'] }}</td>
+                        </tr>
+                    }
+
+                </tbody>
+            </table>
+        </div>
+
+        <!-- COLONNA DESTRA -->
+        <div class="details-table-wrapper">
+
+            <table class="details-table">
+                <thead>
                     <tr>
-                        <td id="Progress">{{ itemRow['ProgressiveGroup'] }}</td>
-
-                        <td id="Icon">
-                            @switch (typeIcon[itemRow['TestType']]) {
-                                @case (1) { <img src="img/Measure.ico" width="32" height="32"> }
-                                @case (2) { <img src="img/Actionament.ico" width="32" height="32"> }
-                                @case (5) { <img src="img/SafetyTest.ico" width="32" height="32"> }
-                                @default  { <img src="img/ComplexTest.ico" width="32" height="32"> }
-                            }
-                        </td>
-
-                        <td id="TestDescription">{{ itemRow['TestDescription'] }}</td>
+                        <th class="desc-col">Descrizione</th>
+                        <th class="info-col">Informazione</th>
                     </tr>
-                }
+                </thead>
 
-            </tbody>
-        </table>
+                <tbody>
+                    @for(detail of detailsData; track $index) {
+                        <tr>
+                            <td class="desc-col">{{ detail.description }}</td>
+                            <td class="info-col">{{ detail.value }}</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
 
-    </div>
+        </div>
+
+    </div> <!-- /tables-flex -->
 </div>
+

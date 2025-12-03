@@ -253,8 +253,8 @@ namespace WebAnalisys.Controllers
                             {
                                 switch (itemRow.Key)
                                 {
-                                    case "M":
-                                        sql = "SELECT Descr, UM FROM Commands ";
+                                    case "M":                                         
+                                        sql = "SELECT ComDescr, UM FROM Commands ";                                        
                                         sql = sql + "WHERE UnitTypeID=" + row["UnitTypeID"].ToString() + " AND ComID=" + itemRow.Value.ToString() + " AND ComType= 1";
                                         break;
 
@@ -268,30 +268,35 @@ namespace WebAnalisys.Controllers
                                     wr.Write(sql);
                                 }
 
-                                using (var cmd = new SqlCommand(sql, conn))
+                                if (itemRow.Value.ToString().Trim() != "")
                                 {
-                                    SqlDataReader reader = cmd.ExecuteReader();
-
-                                    int iPar = 1;
-                                    while (reader.Read())
+                                    using (var cmd = new SqlCommand(sql, conn))
                                     {
-                                        switch (itemRow.Key)
-                                        {
-                                            case "M":
-                                                itemList["TestDescr"] = reader["Descr"].ToString().Trim();
-                                                itemList["UM"] = reader["UM"].ToString().Trim();
-                                                break;
+                                        SqlDataReader reader = cmd.ExecuteReader();
 
-                                            default:
-                                                itemList["Descr" + iPar.ToString()] = reader["Descr"].ToString().Trim();
-                                                itemList["UM" + iPar.ToString()] = reader["UM"].ToString().Trim();
-                                                iPar++;
-                                                break;
+                                        int iPar = 1;
+                                        while (reader.Read())
+                                        {
+                                            switch (itemRow.Key)
+                                            {
+                                                case "M":
+                                                    itemList["TestDescr"] = reader["ComDescr"].ToString().Trim();
+                                                    itemList["UM"] = reader["UM"].ToString().Trim();
+                                                    break;
+
+                                                default:
+                                                    itemList["Descr" + iPar.ToString()] = reader["Descr"].ToString().Trim();
+                                                    itemList["UM" + iPar.ToString()] = reader["UM"].ToString().Trim();
+                                                    iPar++;
+                                                    break;
+                                            }
+
                                         }
+                                        reader.Close();
 
                                     }
-                                    reader.Close();
                                 }
+
                             }
                         }
                     }

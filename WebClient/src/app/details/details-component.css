@@ -95,3 +95,58 @@
 .tablemaindetails img {
     border-radius: 4px;
 }
+
+/* ----- LAYOUT A DUE COLONNE ----- */
+.tables-flex {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    gap: 40px;                    /* Spazio tra le due tabelle */
+}
+
+/* COLONNA DESTRA (tabella dei dettagli) */
+.details-table-wrapper {
+    flex-grow: 1;                /* Occupa tutto lo spazio restante a destra */
+    max-height: 650px;
+    overflow-y: auto;            /* Scroll verticale ABILITATO */
+    overflow-x: auto;            /* Scroll orizzontale SU RICHIESTA */
+    padding-right: 10px;
+}
+
+/* TABELLA DEI DETTAGLI */
+.details-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-family: "Segoe UI", Tahoma, sans-serif;
+}
+
+.details-table th, 
+.details-table td {
+    text-align: left;
+    padding: 10px;
+    border-bottom: 1px solid #ccc;
+    background: white;
+    font-size: 15px;
+}
+
+/* Personalizzazione larghezze colonne */
+.desc-col {
+    width: 150px;     /* Modificabile */
+}
+
+.info-col {
+    width: 300px;     /* Modificabile */
+}
+
+/* Hover */
+.details-table tr:hover td {
+    background: #eef6ff;
+}
+
+/* ----- LAYOUT A DUE COLONNE ----- */
+.tables-flex {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    gap: 40px;        /* distanza tra tabelle */
+}
