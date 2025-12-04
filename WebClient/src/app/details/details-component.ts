@@ -61,12 +61,13 @@ export class DetailsdataComponent {
       filters: this.filtervalues,
       query: this.querydetails  
     };
-
+    
     this.http.post('http://localhost:61694/api/query/details', payload).subscribe({
       next: (data: any) => {
         console.log("RISULTATO BACKEND:", data);
         this.results = data; 
         this.subShowIcon();
+        this.subShowResultState();   
       },
       error: (err) => {
         console.error("ERRORE BACKEND:", err);
@@ -101,6 +102,36 @@ export class DetailsdataComponent {
         }
       });
     });
+  }
+
+  rowColor: any[] = [];
+  subShowResultState()
+  {
+    this.results.forEach(itemSeq => {
+      this.columnsdetails.forEach(col => {
+        if (col.field == 'TestResult') {
+           const id =  itemSeq['ProgressiveGroup']
+           const res =  itemSeq['TestResult']
+           console.log(id + " " + res);
+
+           switch (res)
+           {
+              case 6: //bypass
+                this.rowColor[id] = "#00CCFF";
+                break;
+              case 0: //fail
+                this.rowColor[id] = "#FF0000";
+                break;
+              case 4: //warning
+                this.rowColor[id] = "#FFFF00";
+                break;                
+              default: 
+                this.rowColor[id] = "#FFFFFF";
+                break;                
+           }
+        }
+      });
+    });      
   }
 
   detailsData: any[] = [];

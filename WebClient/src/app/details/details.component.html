@@ -18,7 +18,7 @@
 
                     @for(itemRow of results; track $index)
                     {
-                        <tr (click)="subShowTestDetails(itemRow)">
+                        <tr [bgColor]="rowColor[itemRow['ProgressiveGroup']]" (click)="subShowTestDetails(itemRow)">
                             <td id="Progress">
                                 {{ itemRow['ProgressiveGroup'] }}
                             </td>
