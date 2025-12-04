@@ -132,7 +132,7 @@
       "field": "Date_Time"
     },
     {
-      "name": "Program_Code",
+      "name": "Program Code",
       "field": "ProgramCode"
     },
     {
@@ -145,6 +145,10 @@
     },
     {
       "name": "Unit Type",
+      "field": "UnitTypeID"
+    },
+    {
+      "name": "Unit",
       "field": "UnitID"
     },
     {
@@ -184,10 +188,6 @@
     {
       "name": "Function",
       "field": "FunctionCode"
-    },
-    {
-      "name": "Type",
-      "field": "TestType"
     },
     {
       "name": "Test Descr.",
@@ -351,7 +351,7 @@
     }
   ],
   "query": {
-    "select": "SELECT DISTINCT Tab_Headers.ID_Result, Tab_Headers.ModelCode, SerialNumber, DummyCode, ProgramCode, ProgramDescription, Date_Time, UnitID, UnitTypeID, LineID, Shift, Result, Tab_RepairResults.RepairResult ",
+    "select": "SELECT DISTINCT Tab_Headers.ID_Result, Tab_Headers.ModelCode, SerialNumber, DummyCode, ProgramCode, ProgramDescription, Date_Time, UnitID, UnitTypeID, LineID, Shift, Operator, Result, Tab_RepairResults.RepairResult ",
     "from": "FROM Tab_Headers INNER JOIN Tab_Tests ON Tab_Headers.ID_Result = Tab_Tests.ID_Result LEFT JOIN Tab_RepairResults ON(Tab_Headers.ID_Result = Tab_RepairResults.ID_Res) ",
     "where": "WHERE ",
     "conditions": [

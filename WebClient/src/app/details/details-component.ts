@@ -108,23 +108,32 @@ export class DetailsdataComponent {
 
   subShowRoot() {
     this.detailsData = [];  // pulizia
-
-    this.detailsData = [];  // pulizia
-    this.detailsData.push(
-        { description: "Matricola", value: this.row['SerialNumber'] },
-        { description: "Info", value: "Dettagli generali..." }
-    );
+    let itemCol: any;
+    
+    for (itemCol of this.columnsrootdetails) {
+        this.tableInfo.description = itemCol.name;
+        this.tableInfo.value = this.row[itemCol.field]; 
+        this.detailsData.push({ description: this.tableInfo.description, value: this.tableInfo.value });
+    }
 
   }
 
   subShowTestDetails(item: any)
   {
     this.detailsData = []; // pulizia
-    this.detailsData.push(
-        { description: "ProgressiveGroup", value: item['ProgressiveGroup'] },
-        { description: "Tipo Test", value: item['TestType'] },
-        { description: "Descrizione Test", value: item['TestDescription'] }
-    );
+    let itemCol: any;
+
+    let itemRow: any;
+    for (itemRow of this.results)
+    {
+      if (itemRow['ProgressiveGroup'] == item['ProgressiveGroup']) {
+          for (itemCol of this.columnsdetails) {
+                this.tableInfo.description = itemCol.name;
+                this.tableInfo.value = itemRow[itemCol.field]; 
+                this.detailsData.push({ description: this.tableInfo.description, value: this.tableInfo.value });
+          }  
+      }
+    }
   }
 
 }
