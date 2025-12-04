@@ -122,18 +122,59 @@ export class DetailsdataComponent {
   {
     this.detailsData = []; // pulizia
     let itemCol: any;
-
     let itemRow: any;
+    let itemMes: any;
+    let itemPar: any;
+
     for (itemRow of this.results)
     {
       if (itemRow['ProgressiveGroup'] == item['ProgressiveGroup']) {
           for (itemCol of this.columnsdetails) {
-                this.tableInfo.description = itemCol.name;
-                this.tableInfo.value = itemRow[itemCol.field]; 
-                this.detailsData.push({ description: this.tableInfo.description, value: this.tableInfo.value });
-          }  
+              if (itemCol.field !== 'TestType') {
+                  this.tableInfo.description = itemCol.name;
+                  this.tableInfo.value = itemRow[itemCol.field]; 
+                  this.detailsData.push({ description: this.tableInfo.description, value: this.tableInfo.value });
+              }
+          }
+      }
+    }
+
+    for (itemRow of this.results) {
+      if (itemRow['ProgressiveGroup'] == item['ProgressiveGroup']) {
+          for (itemCol of this.columnsdetails) {
+              if (itemCol.field == 'TestType') {
+                  switch (itemRow[itemCol.field]) {
+                    case 1:
+                      for (itemMes of this.columnsmeasuredetails) {
+                          if (itemRow[itemMes.field] == "") {
+                              this.tableInfo.description = "Trigger";
+                              this.tableInfo.value = ( itemRow['TestTimeOut'] == 1 ? "FAIL" : "PASS" );
+                              this.detailsData.push({ description: this.tableInfo.description, value: this.tableInfo.value });
+                              break;
+                          } 
+                          else
+                          {
+                              this.tableInfo.description = itemMes.name;
+                              this.tableInfo.value = itemRow[itemMes.field];
+                              this.detailsData.push({ description: this.tableInfo.description, value: this.tableInfo.value });
+                          } 
+                      }
+                      break;
+                          
+                    default:
+                      for (let iPar: number = 1; iPar <= 10; iPar++) {
+                          
+                          if (itemRow["Valore" + iPar.toString()] !== "?") {
+                            this.tableInfo.description = itemRow["Descr" + iPar.toString()];
+                            this.tableInfo.value = itemRow["Valore" + iPar.toString()] + " " + itemRow["UM" + iPar.toString()];
+                            this.detailsData.push({ description: this.tableInfo.description, value: this.tableInfo.value });
+                          }
+                      }                    
+                      break;
+                  }
+              }
+          }
       }
     }
   }
-
 }
