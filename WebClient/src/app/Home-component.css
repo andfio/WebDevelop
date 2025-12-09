@@ -252,9 +252,9 @@ select {
 }
 
 /* Righe alternate */
-.styled-table tbody tr:nth-child(even) {
+/* .styled-table tbody tr:nth-child(even) {
   background-color: #f5f8fd;
-}
+} */
 
 /* Hover */
 .styled-table tbody tr:hover {
@@ -277,4 +277,13 @@ select {
     /* opzionale: barra di scorrimento più elegante */
     scrollbar-color: #4a90e2 #e3e3e3; 
     scrollbar-width: thin;
+}
+
+.styled-table tr.selected {
+    background-color: #4a90e2;
+    /* background-color: #cce5ff; */
+}
+
+.styled-table tr:hover {
+    cursor: pointer;
 }

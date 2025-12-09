@@ -147,4 +147,9 @@ export class HomeComponent {
     });
   }
 
+  selectedRow: any = null;
+  
+  onSelectRow(row: any) {
+    this.selectedRow = row;
+  }
 }

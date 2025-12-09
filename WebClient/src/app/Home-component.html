@@ -170,7 +170,10 @@
       </thead>
       <tbody>
         @for (row of results; track $index) {
-          <tr (dblclick)="subOnDetailPage(row)">
+          <tr 
+          (click)="onSelectRow(row)"
+          (dblclick)="subOnDetailPage(row)"
+          [class.selected]="row === selectedRow">
           @for (col of columns; track $index) {
             @if(col.field !== 'ID_Result') {
               <td>{{ row[col.field] }}</td>              
