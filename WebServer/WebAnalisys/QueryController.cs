@@ -156,6 +156,7 @@ namespace WebAnalisys.Controllers
                     }
                 }
 
+                sql += " ORDER BY ProgressiveGroup";
 
                 var details = new List<Dictionary<string, object>>();
 
@@ -316,6 +317,27 @@ namespace WebAnalisys.Controllers
         private string Normalize(string key)
         {
             return key.Replace(" ", "").Replace("-", "");
+        }
+
+        private string formatnumber(string value)
+        {
+            try
+            {
+                Decimal outputDec = 0;
+                if (Decimal.TryParse(value, out outputDec))
+                {
+                    return Decimal.Round(outputDec, 3).ToString();
+                }
+                else
+                {
+                    return int.Parse(value).ToString();
+                }
+            }
+            catch
+            {
+                return value;
+            }
+            
         }
 
     }

@@ -24,7 +24,7 @@
     {
       "name": "Result",
       "type": "string",
-      "values": ["0-Fail","1-Pass", "2-Interrupted", "4-Warning", "5-Repair", "6-ByPass", "7-NFF"]
+      "values": ["0-Fail","1-Pass", "2-Interrupted", "4-Warning", "5-Repair", "7-ByPass", "8-NFF"]
     },
     {
       "name": "Line",

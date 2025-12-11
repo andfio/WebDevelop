@@ -67,7 +67,6 @@ export class DetailsdataComponent {
         console.log("RISULTATO BACKEND:", data);
         this.results = data; 
         this.subShowIcon();
-        this.subShowResultState();   
       },
       error: (err) => {
         console.error("ERRORE BACKEND:", err);
@@ -102,6 +101,8 @@ export class DetailsdataComponent {
         }
       });
     });
+
+    this.subShowResultState();   
   }
 
   rowColor: any[] = [];
@@ -112,11 +113,11 @@ export class DetailsdataComponent {
         if (col.field == 'TestResult') {
            const id =  itemSeq['ProgressiveGroup']
            const res =  itemSeq['TestResult']
-           console.log(id + " " + res);
+          //  console.log(id + " " + res);
 
            switch (res)
            {
-              case 6: //bypass
+              case 7: //bypass
                 this.rowColor[id] = "#00CCFF";
                 break;
               case 0: //fail
@@ -163,7 +164,15 @@ export class DetailsdataComponent {
           for (itemCol of this.columnsdetails) {
               if (itemCol.field !== 'TestType') {
                   this.tableInfo.description = itemCol.name;
-                  this.tableInfo.value = itemRow[itemCol.field]; 
+                  
+                  if (itemCol.field === 'TestResult' || itemCol.field === 'Result') {
+                    this.tableInfo.value = this.ResultDescription(itemRow[itemCol.field])
+                  } else if (itemCol.field === 'StartEventTime' || itemCol.field === 'EndEventTime') {
+                    this.tableInfo.value = this.convertSecondiToTime(Number(itemRow[itemCol.field]));
+                  }
+                  else {
+                    this.tableInfo.value = itemRow[itemCol.field];
+                  } 
                   this.detailsData.push({ description: this.tableInfo.description, value: this.tableInfo.value });
               }
           }
@@ -186,7 +195,11 @@ export class DetailsdataComponent {
                           else
                           {
                               this.tableInfo.description = itemMes.name;
-                              this.tableInfo.value = itemRow[itemMes.field];
+                              if (itemMes.field === 'Min' || itemMes.field === 'Max' || itemMes.field === 'Value' || itemMes.field === 'LimitMin' || itemMes.field === 'LimitMax') {
+                                this.tableInfo.value =  (Number(itemRow[itemMes.field])).toString();
+                              } else {
+                                this.tableInfo.value = itemRow[itemMes.field];
+                              }
                               this.detailsData.push({ description: this.tableInfo.description, value: this.tableInfo.value });
                           } 
                       }
@@ -208,4 +221,50 @@ export class DetailsdataComponent {
       }
     }
   }
+
+  ResultDescription(res: string): any {
+    let result: any = "";
+    let itm: (string | number)[] = [];
+    
+    try {
+      this.filters.forEach(itemRes => {
+        if (itemRes.name == "Result") {
+          itm = itemRes.values ?? [];
+          for(let idx = 0; idx < itm.length; idx++){
+            let code: any = itm[idx];
+            if(code.split('-')[0] == res )
+            {
+              result = itm[idx];
+            }
+          } 
+        }
+      });
+    }
+    catch(err)  {
+      console.error(res + " non trovato." + err)
+    }
+    return result;
+  }
+
+  convertSecondiToTime(a: number): string {
+    let tot_sec = a;
+    let tot_min = Math.floor(tot_sec / 60);
+    let tot_ore = Math.floor(tot_min / 60);
+
+    tot_sec = tot_sec - (tot_min * 60);
+    tot_min = tot_min - (tot_ore * 60);
+
+    // --- Formattazione dei secondi come "00.00"
+    const str_tot_sec = tot_sec.toFixed(2).padStart(5, "0");
+
+    // --- Formattazione minuti a 2 cifre
+    const str_tot_min = String(tot_min).padStart(2, "0");
+
+    // --- Le ore rimangono senza zeri iniziali (comportamento VB6 in questo caso)
+    const str_tot_ore = String(tot_ore);
+
+    return `${str_tot_ore}:${str_tot_min} - (${str_tot_sec})`;
+}
+
+
 }
