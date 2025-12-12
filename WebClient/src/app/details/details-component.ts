@@ -76,6 +76,19 @@ export class DetailsdataComponent {
     this.filtervalues['ID_Result'] = undefined;        
   }
 
+  currProgressiveGroup: number = 0;
+  subIncrementProgressive(item: any): boolean {
+    if (Number(item) !== this.currProgressiveGroup) {
+      this.currProgressiveGroup = Number(item);
+      return true;
+    }
+    else
+    {
+      return false;
+    }
+
+  }
+
   typeIcon: number[] = [];
   subShowIcon()
   {
@@ -157,10 +170,12 @@ export class DetailsdataComponent {
     let itemRow: any;
     let itemMes: any;
     let itemPar: any;
+    let CurrProgressiveGroup: number = 0;
 
     for (itemRow of this.results)
     {
       if (itemRow['ProgressiveGroup'] == item['ProgressiveGroup']) {
+        if (CurrProgressiveGroup !== Number(itemRow['ProgressiveGroup'])) {
           for (itemCol of this.columnsdetails) {
               if (itemCol.field !== 'TestType') {
                   this.tableInfo.description = itemCol.name;
@@ -176,8 +191,13 @@ export class DetailsdataComponent {
                   this.detailsData.push({ description: this.tableInfo.description, value: this.tableInfo.value });
               }
           }
+
+          CurrProgressiveGroup = Number(itemRow['ProgressiveGroup']);
+        }  
       }
     }
+
+    let currProgressiveTest: number = 1;
 
     for (itemRow of this.results) {
       if (itemRow['ProgressiveGroup'] == item['ProgressiveGroup']) {
@@ -185,6 +205,19 @@ export class DetailsdataComponent {
               if (itemCol.field == 'TestType') {
                   switch (itemRow[itemCol.field]) {
                     case 1:
+                      if (itemRow['M'] != "") {
+                          this.tableInfo.description = "Result n." + currProgressiveTest.toString();
+                          this.tableInfo.value = "";
+                          this.detailsData.push({ description: this.tableInfo.description, value: this.tableInfo.value })
+
+                          this.tableInfo.description = "Test Descr.";
+                          this.tableInfo.value = itemRow['TestDescr'];
+                          this.detailsData.push({ description: this.tableInfo.description, value: this.tableInfo.value })
+
+                          this.tableInfo.description = "Test Result";
+                          this.tableInfo.value = this.ResultDescription(itemRow['TestRes']);
+                          this.detailsData.push({ description: this.tableInfo.description, value: this.tableInfo.value })                          
+                      }
                       for (itemMes of this.columnsmeasuredetails) {
                           if (itemRow[itemMes.field] == "") {
                               this.tableInfo.description = "Trigger";
@@ -206,6 +239,19 @@ export class DetailsdataComponent {
                       break;
                           
                     default:
+
+                      this.tableInfo.description = "Result n." + currProgressiveTest.toString();
+                      this.tableInfo.value = "";
+                      this.detailsData.push({ description: this.tableInfo.description, value: this.tableInfo.value })                    
+
+                      this.tableInfo.description = "Test Descr.";
+                      this.tableInfo.value = itemRow['TestDescr'];
+                      this.detailsData.push({ description: this.tableInfo.description, value: this.tableInfo.value })
+
+                      this.tableInfo.description = "Test Result";
+                      this.tableInfo.value = this.ResultDescription(itemRow['TestRes']);
+                      this.detailsData.push({ description: this.tableInfo.description, value: this.tableInfo.value })  
+
                       for (let iPar: number = 1; iPar <= 10; iPar++) {
                           
                           if (itemRow["Valore" + iPar.toString()] !== "?") {
@@ -216,6 +262,8 @@ export class DetailsdataComponent {
                       }                    
                       break;
                   }
+                  
+                  currProgressiveTest = currProgressiveTest + 1;
               }
           }
       }

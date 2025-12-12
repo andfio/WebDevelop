@@ -190,14 +190,6 @@
       "field": "FunctionCode"
     },
     {
-      "name": "Test Descr.",
-      "field": "TestDescr"
-    },
-    {
-      "name": "Test Result",
-      "field": "TestResult"
-    },
-    {
       "name": "Type",
       "field": "TestType"
     }

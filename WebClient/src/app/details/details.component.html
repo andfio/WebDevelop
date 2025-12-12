@@ -18,22 +18,24 @@
 
                     @for(itemRow of results; track $index)
                     {
-                        <tr [bgColor]="rowColor[itemRow['ProgressiveGroup']]" (click)="subShowTestDetails(itemRow)">
-                            <td id="Progress">
-                                {{ itemRow['ProgressiveGroup'] }}
-                            </td>
+                        @if(subIncrementProgressive(itemRow['ProgressiveGroup'])) {
+                            <tr [bgColor]="rowColor[itemRow['ProgressiveGroup']]" (click)="subShowTestDetails(itemRow)">
+                                <td id="Progress">
+                                    {{ itemRow['ProgressiveGroup'] }}
+                                </td>
 
-                            <td id="Icon">
-                                @switch (typeIcon[itemRow['TestType']]) {
-                                    @case (1) { <img src="img/Measure.ico" width="32" height="32"> }
-                                    @case (2) { <img src="img/Actionament.ico" width="32" height="32"> }
-                                    @case (5) { <img src="img/SafetyTest.ico" width="32" height="32"> }
-                                    @default  { <img src="img/ComplexTest.ico" width="32" height="32"> }
-                                }
-                            </td>
+                                <td id="Icon">
+                                    @switch (typeIcon[itemRow['TestType']]) {
+                                        @case (1) { <img src="img/Measure.ico" width="32" height="32"> }
+                                        @case (2) { <img src="img/Actionament.ico" width="32" height="32"> }
+                                        @case (5) { <img src="img/SafetyTest.ico" width="32" height="32"> }
+                                        @default  { <img src="img/ComplexTest.ico" width="32" height="32"> }
+                                    }
+                                </td>
 
-                            <td id="TestDescription">{{ itemRow['TestDescription'] }}</td>
-                        </tr>
+                                <td id="TestDescription">{{ itemRow['TestDescription'] }}</td>
+                            </tr>
+                        }
                     }
 
                 </tbody>
