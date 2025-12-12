@@ -12,6 +12,7 @@ import { AppConfig, filterValues, tableinfo} from '../app.config.json';
   styleUrls: ['./details-component.css']
 })
 export class DetailsdataComponent {
+background: any;
 
   constructor(private router: Router, private http: HttpClient) {}
   goBack() {
@@ -158,7 +159,7 @@ export class DetailsdataComponent {
     for (itemCol of this.columnsrootdetails) {
         this.tableInfo.description = itemCol.name;
         this.tableInfo.value = this.row[itemCol.field]; 
-        this.detailsData.push({ description: this.tableInfo.description, value: this.tableInfo.value });
+        this.detailsData.push({ description: this.tableInfo.description, value: this.tableInfo.value, bgColor: "#FFFFFF", textColor: "#000000"});
     }
 
   }
@@ -188,7 +189,7 @@ export class DetailsdataComponent {
                   else {
                     this.tableInfo.value = itemRow[itemCol.field];
                   } 
-                  this.detailsData.push({ description: this.tableInfo.description, value: this.tableInfo.value });
+                  this.detailsData.push({ description: this.tableInfo.description, value: this.tableInfo.value, bgColor: "#FFFFFF", textColor: "#000000"});
               }
           }
 
@@ -208,21 +209,21 @@ export class DetailsdataComponent {
                       if (itemRow['M'] != "") {
                           this.tableInfo.description = "Result n." + currProgressiveTest.toString();
                           this.tableInfo.value = "";
-                          this.detailsData.push({ description: this.tableInfo.description, value: this.tableInfo.value })
+                          this.detailsData.push({ description: this.tableInfo.description, value: this.tableInfo.value, bgColor: "#4a90e2", textColor: "#FFFFFF" })
 
                           this.tableInfo.description = "Test Descr.";
                           this.tableInfo.value = itemRow['TestDescr'];
-                          this.detailsData.push({ description: this.tableInfo.description, value: this.tableInfo.value })
+                          this.detailsData.push({ description: this.tableInfo.description, value: this.tableInfo.value, bgColor: "#4a90e2", textColor: "#FFFFFF" })
 
                           this.tableInfo.description = "Test Result";
                           this.tableInfo.value = this.ResultDescription(itemRow['TestRes']);
-                          this.detailsData.push({ description: this.tableInfo.description, value: this.tableInfo.value })                          
+                          this.detailsData.push({ description: this.tableInfo.description, value: this.tableInfo.value, bgColor: "#4a90e2", textColor: "#FFFFFF" })                          
                       }
                       for (itemMes of this.columnsmeasuredetails) {
                           if (itemRow[itemMes.field] == "") {
                               this.tableInfo.description = "Trigger";
                               this.tableInfo.value = ( itemRow['TestTimeOut'] == 1 ? "FAIL" : "PASS" );
-                              this.detailsData.push({ description: this.tableInfo.description, value: this.tableInfo.value });
+                              this.detailsData.push({ description: this.tableInfo.description, value: this.tableInfo.value, bgColor: "#4a90e2", textColor: "#FFFFFF" });
                               break;
                           } 
                           else
@@ -233,7 +234,7 @@ export class DetailsdataComponent {
                               } else {
                                 this.tableInfo.value = itemRow[itemMes.field];
                               }
-                              this.detailsData.push({ description: this.tableInfo.description, value: this.tableInfo.value });
+                              this.detailsData.push({ description: this.tableInfo.description, value: this.tableInfo.value, bgColor: "#4a90e2", textColor: "#FFFFFF" });
                           } 
                       }
                       break;
@@ -242,22 +243,22 @@ export class DetailsdataComponent {
 
                       this.tableInfo.description = "Result n." + currProgressiveTest.toString();
                       this.tableInfo.value = "";
-                      this.detailsData.push({ description: this.tableInfo.description, value: this.tableInfo.value })                    
+                      this.detailsData.push({ description: this.tableInfo.description, value: this.tableInfo.value, bgColor: "#4a90e2", textColor: "#FFFFFF" })                    
 
                       this.tableInfo.description = "Test Descr.";
                       this.tableInfo.value = itemRow['TestDescr'];
-                      this.detailsData.push({ description: this.tableInfo.description, value: this.tableInfo.value })
+                      this.detailsData.push({ description: this.tableInfo.description, value: this.tableInfo.value, bgColor: "#4a90e2", textColor: "#FFFFFF" })
 
                       this.tableInfo.description = "Test Result";
                       this.tableInfo.value = this.ResultDescription(itemRow['TestRes']);
-                      this.detailsData.push({ description: this.tableInfo.description, value: this.tableInfo.value })  
+                      this.detailsData.push({ description: this.tableInfo.description, value: this.tableInfo.value, bgColor: "#4a90e2", textColor: "#FFFFFF" })  
 
                       for (let iPar: number = 1; iPar <= 10; iPar++) {
                           
                           if (itemRow["Valore" + iPar.toString()] !== "?") {
                             this.tableInfo.description = itemRow["Descr" + iPar.toString()];
                             this.tableInfo.value = itemRow["Valore" + iPar.toString()] + " " + itemRow["UM" + iPar.toString()];
-                            this.detailsData.push({ description: this.tableInfo.description, value: this.tableInfo.value });
+                            this.detailsData.push({ description: this.tableInfo.description, value: this.tableInfo.value, bgColor: "#4a90e2", textColor: "#FFFFFF" });
                           }
                       }                    
                       break;

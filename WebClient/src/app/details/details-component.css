@@ -126,7 +126,7 @@
     text-align: left;
     padding: 10px;
     border-bottom: 1px solid #ccc;
-    background: white;
+    /* background: white; */
     font-size: 15px;
 }
 
@@ -141,7 +141,7 @@
 
 /* Hover */
 .details-table tr:hover td {
-    background: #eef6ff;
+    background: #4a90e2;
 }
 
 /* ----- LAYOUT A DUE COLONNE ----- */

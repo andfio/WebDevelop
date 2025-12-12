@@ -55,7 +55,7 @@
 
                 <tbody>
                     @for(detail of detailsData; track $index) {
-                        <tr>
+                        <tr [ngStyle]="{'background-color': detail.bgColor, 'color': detail.textColor }">
                             <td class="desc-col">{{ detail.description }}</td>
                             <td class="info-col">{{ detail.value }}</td>
                         </tr>
