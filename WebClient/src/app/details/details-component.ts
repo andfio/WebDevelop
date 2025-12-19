@@ -63,7 +63,7 @@ background: any;
       query: this.querydetails  
     };
     
-    this.http.post('http://localhost:61694/api/query/details', payload).subscribe({
+    this.http.post('http://172.18.80.230:61694/api/query/details', payload).subscribe({
       next: (data: any) => {
         console.log("RISULTATO BACKEND:", data);
         this.results = data; 
