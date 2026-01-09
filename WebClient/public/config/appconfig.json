@@ -24,17 +24,17 @@
     {
       "name": "Result",
       "type": "string",
-      "values": ["0-Fail","1-Pass", "2-Interrupted", "4-Warning", "5-Repair", "7-ByPass", "8-NFF"]
+      "values": ["0-Fail","1-Pass", "2-Interrupted","4-Warning", "6-Repair", "7-ByPass", "8-No Fault Found"]
     },
     {
       "name": "Line",
       "type": "string",
-      "values": ["1-Line AL1", "2-Line AL2", "3-Line AL3","4-Line AL4","5-Line AL5", "6-Line AL6"]
+      "values": ["1-Line AL1", "2-Line AL2"]
     },
     {
       "name": "Unit Type",
       "type": "string",
-      "values": ["1-Programming", "3-Prefilling", "4-Start", "5-Pass Fail", "6-Functional", "7-Main", "8-Drain", "10-Visual Inspection", "11-Final", "8-Drain" ]
+      "values": ["10-Robot WM", "11-Start", "12-Functional 1", "13-Functional 2", "14-Visual Inspection", "15-Repair", "16-Audit", "17-Audit Area Stations", "18-Robot OS", "20-Arpuma", "21-Door Open", "25-StandAlone", "26-HomeConnect", "110-Repair Robot WM", "118-Repair Robot OS" ]
     },
     {
       "name": "Units",
@@ -104,10 +104,6 @@
     {
       "name": "Unit Type",
       "field": "UnitTypeID"
-    },
-    {
-      "name": "Repair",
-      "field": "RepairResult"
     }  
   ],
   "columnsrootdetails": [
@@ -347,8 +343,8 @@
     }
   ],
   "query": {
-    "select": "SELECT DISTINCT Tab_Headers.ID_Result, Tab_Headers.ModelCode, SerialNumber, DummyCode, ProgramCode, ProgramDescription, Date_Time, UnitID, UnitTypeID, LineID, Shift, Operator, Result, Tab_RepairResults.RepairResult ",
-    "from": "FROM Tab_Headers INNER JOIN Tab_Tests ON Tab_Headers.ID_Result = Tab_Tests.ID_Result LEFT JOIN Tab_RepairResults ON(Tab_Headers.ID_Result = Tab_RepairResults.ID_Res) ",
+    "select": "SELECT DISTINCT Tab_Headers.ID_Result, Tab_Headers.ModelCode, SerialNumber, DummyCode, ProgramCode, ProgramDescription, Date_Time, UnitID, UnitTypeID, LineID, Shift, Operator, Result ",
+    "from": "FROM Tab_Headers INNER JOIN Tab_Tests ON Tab_Headers.ID_Result = Tab_Tests.ID_Result ",
     "where": "WHERE ",
     "conditions": [
       { "filter": "Start Date", "sql": "Date_Time >= @StartDate" },

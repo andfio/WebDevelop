@@ -24,7 +24,7 @@
     {
       "name": "Result",
       "type": "string",
-      "values": ["0-Fail","1-Pass", "2-Interrupted", "4-Warning", "5-Repair", "6-ByPass", "7-NFF"]
+      "values": ["0-Fail","1-Pass", "2-Interrupted", "4-Warning", "5-Repair", "7-ByPass", "8-NFF"]
     },
     {
       "name": "Line",
@@ -104,10 +104,6 @@
     {
       "name": "Unit Type",
       "field": "UnitTypeID"
-    },
-    {
-      "name": "Repair",
-      "field": "RepairResult"
     }  
   ],
   "columnsrootdetails": [
@@ -190,19 +186,15 @@
       "field": "FunctionCode"
     },
     {
-      "name": "Test Descr.",
-      "field": "TestDescr"
-    },
-    {
-      "name": "Test Result",
-      "field": "TestResult"
-    },
-    {
       "name": "Type",
       "field": "TestType"
     }
   ],
     "columnsmeasuredetails": [
+    {
+      "name": "UM",
+      "field": "UM"
+    },      
     {
       "name": "Min.",
       "field": "Min"
@@ -351,8 +343,8 @@
     }
   ],
   "query": {
-    "select": "SELECT DISTINCT Tab_Headers.ID_Result, Tab_Headers.ModelCode, SerialNumber, DummyCode, ProgramCode, ProgramDescription, Date_Time, UnitID, UnitTypeID, LineID, Shift, Operator, Result, Tab_RepairResults.RepairResult ",
-    "from": "FROM Tab_Headers INNER JOIN Tab_Tests ON Tab_Headers.ID_Result = Tab_Tests.ID_Result LEFT JOIN Tab_RepairResults ON(Tab_Headers.ID_Result = Tab_RepairResults.ID_Res) ",
+    "select": "SELECT DISTINCT Tab_Headers.ID_Result, Tab_Headers.ModelCode, SerialNumber, DummyCode, ProgramCode, ProgramDescription, Date_Time, UnitID, UnitTypeID, LineID, Shift, Operator, Result ",
+    "from": "FROM Tab_Headers INNER JOIN Tab_Tests ON Tab_Headers.ID_Result = Tab_Tests.ID_Result ",
     "where": "WHERE ",
     "conditions": [
       { "filter": "Start Date", "sql": "Date_Time >= @StartDate" },
@@ -372,7 +364,7 @@
     ]
   },
   "querydetails": {
-    "select": "SELECT Tab_Headers.UnitTypeID, Tab_Tests.ProgressiveGroup, StartEventTime, EndEventTime, TestResult, TestDescription, FunctionCode, Tab_Tests.TestType, Tab_Test_Details.Result, Descr, Params, Tab_Measures.ProgressiveMeasure, ErrorMeasure, MinSet, MaxSet, AnalogueValue, StoreName, MinLimit, MaxLimit ",
+    "select": "SELECT Tab_Headers.UnitTypeID, Tab_Tests.ProgressiveGroup, StartEventTime, EndEventTime, TestResult, TestDescription, FunctionCode, Tab_Tests.TestTimeOut, Tab_Tests.TestType, Tab_Test_Details.Result, Descr, Params, Tab_Measures.ProgressiveMeasure, ErrorMeasure, MinSet, MaxSet, AnalogueValue, StoreName, MinLimit, MaxLimit ",
     "from": "FROM Tab_Headers LEFT JOIN Tab_Tests ON (Tab_Headers.ID_Result = Tab_Tests.ID_Result) LEFT JOIN Tab_Test_Details ON (Tab_Tests.ID_Result = Tab_Test_Details.ID_Result AND Tab_Tests.ProgressiveGroup = Tab_Test_Details.ProgressiveGroup) LEFT JOIN Tab_Measures ON (Tab_Tests.ID_Result = Tab_Measures.ID_Result AND Tab_Tests.ProgressiveGroup = Tab_Measures.ProgressiveGroup) ",
     "where": "WHERE ",
     "conditions": [

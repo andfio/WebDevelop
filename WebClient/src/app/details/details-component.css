@@ -9,7 +9,6 @@
     box-sizing: border-box;
 }
 
-/* LABEL ROOT FUORI DALLA TABELLA */
 /* LABEL ROOT FUORI DALLA TABELLA - ALLINEATA A SINISTRA */
 .root-label {
     display: block;             /* Garantisce posizione su una nuova linea */
@@ -34,26 +33,27 @@
 /* Wrapper della tabella (scroll configurabile) */
 .table-wrapper {
     display: inline-block;
-    max-height: 650px;
+    max-height: fit-content; 
 
     /* SCROLLBAR VERTICALE (abilitare/disabilitare QUI) */
-    overflow-y: auto;     /* scroll verticale ATTIVO */
-    /* overflow-y: hidden;*/ /* scroll verticale DISATTIVO */
+    overflow-y: auto;     
 
     /* SCROLLBAR ORIZZONTALE (abilitare/disabilitare QUI) */
-    overflow-x: auto;   /* scroll orizzontale DISATTIVO */
-    /* overflow-x: auto; */ /* scroll orizzontale ATTIVO */
-
+    overflow-x: auto;   
+    
+    margin-bottom: 40px;
     margin-left: 40px;
     padding-right: 8px;
+    width: 600px;
 }
 
 /* Tabella */
 .tablemaindetails {
     border-collapse: separate;
     border-spacing: 0 10px;
-    font-family: "Segoe UI", Tahoma, sans-serif;
-    width: auto;
+    font-family: Tahoma;
+    font-size: 11;
+    font-style: bold;
 }
 
 /* Celle */
@@ -70,7 +70,7 @@
 
 /* Colonna 1: ProgressiveGroup */
 #Progress {
-    width: 40px;
+    width: 80px;
     text-align: center;
     font-weight: 600;
 }
@@ -83,8 +83,8 @@
 
 /* Colonna 3: TestDescription */
 #TestDescription {
-    width: 80px;          /* PERSONALIZZABILE */
-    white-space: normal;  /* permetti testo multilinea */
+    white-space: normal; /*width: fit-content;*/          
+    text-align: left;
 }
 
 /* Hover righe */

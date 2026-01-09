@@ -80,7 +80,7 @@ export class HomeComponent {
       query: this.query  
     };
 
-    this.http.post('http://172.18.80.230:61694/api/query', payload).subscribe({
+    this.http.post('http://localhost:61694/api/query', payload).subscribe({
       next: (data: any) => {
         console.log("RISULTATO BACKEND:", data);
         this.results = data; 

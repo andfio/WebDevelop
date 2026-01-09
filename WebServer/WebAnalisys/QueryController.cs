@@ -82,7 +82,7 @@ namespace WebAnalisys.Controllers
 
                 sql += " ORDER BY Date_Time ASC";
 
-                using (var conn = new SqlConnection("Persist Security Info=False;User ID=sa;Password=Ab123456;Initial Catalog=DBResults_FDG_AL6_GV640A;Data Source=172.18.81.7\\SQLEXPRESS,1434"))
+                using (var conn = new SqlConnection("Persist Security Info=False;User ID=sa;Password=Ab123456;Initial Catalog=DBResults_Line1_FLCC;Data Source=172.18.81.36\\SQLEXPRESS2019,1430"))
                 using (var cmd = new SqlCommand(sql, conn))
                 {
                     // Parametri SQL
@@ -162,7 +162,7 @@ namespace WebAnalisys.Controllers
 
                 var details = new List<Dictionary<string, object>>();
 
-                using (var conn = new SqlConnection("Persist Security Info=False;User ID=sa;Password=Ab123456;Initial Catalog=DBResults_FDG_AL6_GV640A;Data Source=172.18.81.7\\SQLEXPRESS,1434"))
+                using (var conn = new SqlConnection("Persist Security Info=False;User ID=sa;Password=Ab123456;Initial Catalog=DBResults_Line1_FLCC;Data Source=172.18.81.36\\SQLEXPRESS2019,1430"))
                 using (var cmd = new SqlCommand(sql, conn))
                 {
                     // Parametri SQL
@@ -242,7 +242,7 @@ namespace WebAnalisys.Controllers
                     }
                 }
 
-                using (var conn = new SqlConnection("Persist Security Info=False;User ID=sa;Password=Ab123456;Initial Catalog=DBTest_FDG_SMM;Data Source=172.18.81.7\\SQLEXPRESS2019,1433"))
+                using (var conn = new SqlConnection("Persist Security Info=False;User ID=sa;Password=Ab123456;Initial Catalog=FLCC_Test;Data Source=172.18.81.36\\SQLEXPRESS2019,1430"))
                 {
                     conn.Open();
                     foreach (Dictionary<string, object> itemList in details)

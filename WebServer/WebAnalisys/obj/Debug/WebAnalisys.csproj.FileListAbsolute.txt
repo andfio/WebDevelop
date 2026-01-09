@@ -78,8 +78,8 @@ C:\Andrea Fiorentini\WebAnalisys\WebServer\WebAnalisys\bin\System.Web.WebPages.D
 C:\Andrea Fiorentini\WebAnalisys\WebServer\WebAnalisys\bin\System.Web.WebPages.Razor.xml
 C:\Andrea Fiorentini\WebAnalisys\WebServer\WebAnalisys\bin\Antlr3.Runtime.pdb
 C:\Andrea Fiorentini\WebAnalisys\WebServer\WebAnalisys\bin\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.xml
-C:\Andrea Fiorentini\WebAnalisys\WebServer\WebAnalisys\obj\Debug\WebAnalisys.csprojAssemblyReference.cache
 C:\Andrea Fiorentini\WebAnalisys\WebServer\WebAnalisys\obj\Debug\WebAnalisys.csproj.CoreCompileInputs.cache
 C:\Andrea Fiorentini\WebAnalisys\WebServer\WebAnalisys\obj\Debug\WebAnalisys.csproj.CopyComplete
 C:\Andrea Fiorentini\WebAnalisys\WebServer\WebAnalisys\obj\Debug\WebAnalisys.dll
 C:\Andrea Fiorentini\WebAnalisys\WebServer\WebAnalisys\obj\Debug\WebAnalisys.pdb
+C:\Andrea Fiorentini\WebAnalisys\WebServer\WebAnalisys\obj\Debug\WebAnalisys.csprojAssemblyReference.cache
