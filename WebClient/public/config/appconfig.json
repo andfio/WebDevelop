@@ -120,12 +120,16 @@
       "field": "DummyCode"
     },
     {
+      "name": "",
+      "field": ""
+    },
+    {
       "name": "Result",
       "field": "Result"
     },
     {
-      "name": "Date Test",
-      "field": "Date_Time"
+      "name": "",
+      "field": ""
     },
     {
       "name": "Program Code",
@@ -134,6 +138,10 @@
     {
       "name": "Program Description",
       "field": "ProgramDescription"
+    },
+    {
+      "name": "",
+      "field": ""
     },
     {
       "name": "Line",
@@ -148,6 +156,14 @@
       "field": "UnitID"
     },
     {
+      "name": "",
+      "field": ""
+    },
+    {
+      "name": "Date Test",
+      "field": "Date_Time"
+    },
+    {
       "name": "User",
       "field": "Operator"
     },
@@ -156,22 +172,30 @@
       "field": "Shift"
     },
     {
-      "name": "Interruption Anomalous",
-      "field": "AbortCode"
+      "name": "",
+      "field": ""
+    },
+    {
+      "name": "Time Test [hh:mm]-(ss.mm)",
+      "field": "TestTimeLength"
     }
   ],
     "columnsdetails": [
     {
-      "name": "ID",
+      "name": "Sequence N°",
       "field": "ProgressiveGroup"
     },
     {
-      "name": "Sequence Description",
+      "name": "Description",
       "field": "TestDescription"
     },
     {
-      "name": "Sequence Result",
+      "name": "Result",
       "field": "TestResult"
+    },
+    {
+      "name": "",
+      "field": ""
     },
     {
       "name": "Start Sequence Time",
@@ -182,8 +206,20 @@
       "field": "EndEventTime"
     },
     {
+      "name": "",
+      "field": ""
+    },
+    {
       "name": "Function",
       "field": "FunctionCode"
+    },
+    {
+      "name": "",
+      "field": ""
+    },
+    {
+      "name": "",
+      "field": ""
     },
     {
       "name": "Type",

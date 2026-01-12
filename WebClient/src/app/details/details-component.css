@@ -35,10 +35,10 @@
     display: inline-block;
     max-height: fit-content; 
 
-    /* SCROLLBAR VERTICALE (abilitare/disabilitare QUI) */
+    /* SCROLLBAR VERTICALE */
     overflow-y: auto;     
 
-    /* SCROLLBAR ORIZZONTALE (abilitare/disabilitare QUI) */
+    /* SCROLLBAR ORIZZONTALE */
     overflow-x: auto;   
     
     margin-bottom: 40px;
@@ -108,26 +108,34 @@
 /* COLONNA DESTRA (tabella dei dettagli) */
 .details-table-wrapper {
     flex-grow: 1;                /* Occupa tutto lo spazio restante a destra */
-    max-height: 650px;
-    overflow-y: auto;            /* Scroll verticale ABILITATO */
-    overflow-x: auto;            /* Scroll orizzontale SU RICHIESTA */
+    max-height: fit-content;
+    overflow-y: auto;            
+    overflow-x: auto;            
     padding-right: 10px;
+    margin-bottom: 40px;
 }
 
 /* TABELLA DEI DETTAGLI */
 .details-table {
     width: 100%;
     border-collapse: collapse;
-    font-family: "Segoe UI", Tahoma, sans-serif;
 }
 
-.details-table th, 
+.details-table th {
+    text-align: left;
+    padding: 5px;
+    font-family: "Tahoma";
+    font-size: 16px;
+    font-weight: bold;
+    color: black;    
+}
+
 .details-table td {
     text-align: left;
-    padding: 10px;
-    border-bottom: 1px solid #ccc;
-    /* background: white; */
-    font-size: 15px;
+    padding: 5px;
+    font-family: "Tahoma";
+    font-size: 16px;
+    color: #0d0080;    
 }
 
 /* Personalizzazione larghezze colonne */
@@ -144,10 +152,4 @@
     background: #4a90e2;
 }
 
-/* ----- LAYOUT A DUE COLONNE ----- */
-.tables-flex {
-    display: flex;
-    flex-direction: row;
-    align-items: flex-start;
-    gap: 40px;        /* distanza tra tabelle */
-}
+

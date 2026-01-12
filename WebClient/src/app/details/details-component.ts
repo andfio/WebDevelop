@@ -155,13 +155,42 @@ background: any;
   subShowRoot() {
     this.detailsData = [];  // pulizia
     let itemCol: any;
+    let itemValue: any;
     
     for (itemCol of this.columnsrootdetails) {
+        switch (itemCol.field) {
+          case "":
+            itemValue = "";
+            break;
+          case "TestTimeLength":
+            itemValue = this.subCalculateTestTime();
+            break;
+          default:
+            itemValue = this.row[itemCol.field];
+            break;
+        }
         this.tableInfo.description = itemCol.name;
-        this.tableInfo.value = this.row[itemCol.field]; 
-        this.detailsData.push({ description: this.tableInfo.description, value: this.tableInfo.value, bgColor: "#FFFFFF", textColor: "#000000"});
+        this.tableInfo.value = itemValue; 
+        this.detailsData.push({ description: this.tableInfo.description, value: this.tableInfo.value, bgColor: "#FFFFFF", textColor: "#0d0080"});
     }
 
+  }
+
+  subCalculateTestTime()
+  {
+    let TestTimeLength: number = 0;
+
+    this.results.forEach(itemRow => {
+      if(itemRow["EndEventTime"] > 0)
+        {
+          if(Number(itemRow["EndEventTime"]) > TestTimeLength)
+          {
+            TestTimeLength = Number(itemRow["EndEventTime"].toString());
+          }
+        }  
+    });
+
+    return this.convertSecondiToTime(TestTimeLength).toString();
   }
 
   subShowTestDetails(item: any)
@@ -184,12 +213,13 @@ background: any;
                   if (itemCol.field === 'TestResult' || itemCol.field === 'Result') {
                     this.tableInfo.value = this.ResultDescription(itemRow[itemCol.field])
                   } else if (itemCol.field === 'StartEventTime' || itemCol.field === 'EndEventTime') {
+                    console.log(itemRow[itemCol.field].toString())
                     this.tableInfo.value = this.convertSecondiToTime(Number(itemRow[itemCol.field]));
                   }
                   else {
                     this.tableInfo.value = itemRow[itemCol.field];
                   } 
-                  this.detailsData.push({ description: this.tableInfo.description, value: this.tableInfo.value, bgColor: "#FFFFFF", textColor: "#000000"});
+                  this.detailsData.push({ description: this.tableInfo.description, value: this.tableInfo.value, bgColor: "#FFFFFF", textColor: "#0d0080"});
               }
           }
 
@@ -204,26 +234,24 @@ background: any;
       if (itemRow['ProgressiveGroup'] == item['ProgressiveGroup']) {
           for (itemCol of this.columnsdetails) {
               if (itemCol.field == 'TestType') {
+                  this.detailsData.push({ description: "", value: "", bgColor: "#BEBFC5", textColor: "#0d0080"})  
+
                   switch (itemRow[itemCol.field]) {
                     case 1:
                       if (itemRow['M'] != "") {
-                          this.tableInfo.description = "Result n." + currProgressiveTest.toString();
-                          this.tableInfo.value = "";
-                          this.detailsData.push({ description: this.tableInfo.description, value: this.tableInfo.value, bgColor: "#4a90e2", textColor: "#FFFFFF" })
-
-                          this.tableInfo.description = "Test Descr.";
+                          this.tableInfo.description = "Descr.";
                           this.tableInfo.value = itemRow['TestDescr'];
-                          this.detailsData.push({ description: this.tableInfo.description, value: this.tableInfo.value, bgColor: "#4a90e2", textColor: "#FFFFFF" })
+                          this.detailsData.push({ description: this.tableInfo.description, value: this.tableInfo.value, bgColor: "#FFFFFF", textColor: "#0d0080"})
 
-                          this.tableInfo.description = "Test Result";
+                          this.tableInfo.description = "Result";
                           this.tableInfo.value = this.ResultDescription(itemRow['TestRes']);
-                          this.detailsData.push({ description: this.tableInfo.description, value: this.tableInfo.value, bgColor: "#4a90e2", textColor: "#FFFFFF" })                          
+                          this.detailsData.push({ description: this.tableInfo.description, value: this.tableInfo.value, bgColor: "#FFFFFF", textColor: "#0d0080"})                          
                       }
                       for (itemMes of this.columnsmeasuredetails) {
                           if (itemRow[itemMes.field] == "") {
                               this.tableInfo.description = "Trigger";
                               this.tableInfo.value = ( itemRow['TestTimeOut'] == 1 ? "FAIL" : "PASS" );
-                              this.detailsData.push({ description: this.tableInfo.description, value: this.tableInfo.value, bgColor: "#4a90e2", textColor: "#FFFFFF" });
+                              this.detailsData.push({ description: this.tableInfo.description, value: this.tableInfo.value, bgColor: "#FFFFFF", textColor: "#0d0080"});
                               break;
                           } 
                           else
@@ -234,31 +262,27 @@ background: any;
                               } else {
                                 this.tableInfo.value = itemRow[itemMes.field];
                               }
-                              this.detailsData.push({ description: this.tableInfo.description, value: this.tableInfo.value, bgColor: "#4a90e2", textColor: "#FFFFFF" });
+                              this.detailsData.push({ description: this.tableInfo.description, value: this.tableInfo.value, bgColor: "#FFFFFF", textColor: "#0d0080"});
                           } 
                       }
                       break;
                           
                     default:
 
-                      this.tableInfo.description = "Result n." + currProgressiveTest.toString();
-                      this.tableInfo.value = "";
-                      this.detailsData.push({ description: this.tableInfo.description, value: this.tableInfo.value, bgColor: "#4a90e2", textColor: "#FFFFFF" })                    
-
-                      this.tableInfo.description = "Test Descr.";
+                      this.tableInfo.description = "Descr.";
                       this.tableInfo.value = itemRow['TestDescr'];
-                      this.detailsData.push({ description: this.tableInfo.description, value: this.tableInfo.value, bgColor: "#4a90e2", textColor: "#FFFFFF" })
+                      this.detailsData.push({ description: this.tableInfo.description, value: this.tableInfo.value, bgColor: "#FFFFFF", textColor: "#0d0080"})
 
-                      this.tableInfo.description = "Test Result";
+                      this.tableInfo.description = "Result";
                       this.tableInfo.value = this.ResultDescription(itemRow['TestRes']);
-                      this.detailsData.push({ description: this.tableInfo.description, value: this.tableInfo.value, bgColor: "#4a90e2", textColor: "#FFFFFF" })  
+                      this.detailsData.push({ description: this.tableInfo.description, value: this.tableInfo.value, bgColor: "#FFFFFF", textColor: "#0d0080"})  
 
                       for (let iPar: number = 1; iPar <= 10; iPar++) {
                           
                           if (itemRow["Valore" + iPar.toString()] !== "?") {
                             this.tableInfo.description = itemRow["Descr" + iPar.toString()];
                             this.tableInfo.value = itemRow["Valore" + iPar.toString()] + " " + itemRow["UM" + iPar.toString()];
-                            this.detailsData.push({ description: this.tableInfo.description, value: this.tableInfo.value, bgColor: "#4a90e2", textColor: "#FFFFFF" });
+                            this.detailsData.push({ description: this.tableInfo.description, value: this.tableInfo.value, bgColor: "#FFFFFF", textColor: "#0d0080"});
                           }
                       }                    
                       break;
@@ -313,7 +337,6 @@ background: any;
     const str_tot_ore = String(tot_ore);
 
     return `${str_tot_ore}:${str_tot_min} - (${str_tot_sec})`;
-}
-
+  }
 
 }
