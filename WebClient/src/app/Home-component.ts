@@ -5,6 +5,7 @@ import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { RouterOutlet } from '@angular/router';
 import { StateService } from './state.service'
+import { isValidDate } from 'rxjs/internal/util/isDate';
 
 @Component({
   selector: 'app-root',
@@ -53,6 +54,24 @@ export class HomeComponent {
   
   fvalues: filterValues = {}
   submit() {
+
+    let mindate:Date = new Date("2000-01-01T00:00");
+    let maxdate:Date = new Date("2030-01-01T00:00");
+
+    let dtFrom: Date = new Date(this.DateFormatFrom);
+    let dtTo: Date = new Date(this.DateFormatTo);
+
+    if ((dtFrom < mindate || dtFrom > maxdate) || (dtTo < mindate || dtTo > maxdate))
+    {
+      alert("Date From or Date To out of range. check please!");
+      return;
+    }
+      
+    if(dtFrom > dtTo)
+    {
+      alert("Date To > Date From. Check please!!");
+      return;
+    }
 
     this.filterValues['Start Date'] = this.DateFormatFrom;
     this.filterValues['End Date'] = this.DateFormatTo;
@@ -151,5 +170,17 @@ export class HomeComponent {
   
   onSelectRow(row: any) {
     this.selectedRow = row;
+  }
+
+  subCheckDate()
+  {
+    if (this.DateFormatFrom.length > 16) {        
+      this.DateFormatFrom = new Date().toISOString().slice(0,10) + "T00:00"
+    }
+
+    if (this.DateFormatTo.length > 16) {        
+      this.DateFormatTo = new Date().toISOString().slice(0,10) + "T23:59";
+    }
+
   }
 }

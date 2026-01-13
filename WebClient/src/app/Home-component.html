@@ -138,12 +138,12 @@
           <div id="dategroup">
               <div class="fieldDate">  
                 <label id="lbldatestart">Start Date :</label>
-                <input id="txtdatestart" type="datetime-local" [(ngModel)]="DateFormatFrom" >
+                <input id="txtdatestart" type="datetime-local"  (change)="subCheckDate()" [(ngModel)]="DateFormatFrom" >
               </div>
 
               <div class="fieldDate">  
                 <label id="lbldateend">End Date :</label>
-                <input id="txtdateend" type="datetime-local" [(ngModel)]="DateFormatTo">
+                <input id="txtdateend" type="datetime-local" (change)="subCheckDate()"  [(ngModel)]="DateFormatTo">
               </div>
           </div>
 

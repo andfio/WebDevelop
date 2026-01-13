@@ -5,8 +5,9 @@
     border-radius: 12px;
     background: #f8f9fa;
     box-shadow: 0px 2px 8px rgba(0,0,0,0.15);
-    min-height: 100vh;
+    height: calc(100vh - 40px);
     box-sizing: border-box;
+    overflow-y: hidden;
 }
 
 /* LABEL ROOT FUORI DALLA TABELLA - ALLINEATA A SINISTRA */
@@ -15,11 +16,11 @@
     width: fit-content;         /* Larghezza esatta del contenuto */
     background: #0078d4;
     color: white;
-    font-family: Arial, Helvetica, sans-serif;
+    font-family: 'Tahoma';
     font-weight: bold;
     padding: 12px 18px;
     border-radius: 8px;
-    margin-left: 40px;          /* Stesso margine della tabella */
+    margin-left: 20px;          /* Stesso margine della tabella */
     margin-bottom: 15px;        /* Distanza dalla tabella */
     cursor: pointer;
     transition: 0.2s ease;
@@ -33,7 +34,7 @@
 /* Wrapper della tabella (scroll configurabile) */
 .table-wrapper {
     display: inline-block;
-    max-height: fit-content; 
+    max-height: calc(85vh - 40px); 
 
     /* SCROLLBAR VERTICALE */
     overflow-y: auto;     
@@ -41,10 +42,9 @@
     /* SCROLLBAR ORIZZONTALE */
     overflow-x: auto;   
     
-    margin-bottom: 40px;
-    margin-left: 40px;
+    margin-left: 20px;
     padding-right: 8px;
-    width: 600px;
+    width: 800px;
 }
 
 /* Tabella */
@@ -59,20 +59,18 @@
 /* Celle */
 .tablemaindetails td {
     padding: 5px 7px;
-    /* background: white; */
     border-radius: 8px;
     font-size: 15px;
     color: #333;
     vertical-align: middle;
     box-shadow: 0px 1px 3px rgba(0,0,0,0.15);
-    white-space: nowrap;
 }
 
 /* Colonna 1: ProgressiveGroup */
 #Progress {
     width: 80px;
     text-align: center;
-    font-weight: 600;
+    font-weight: bold;
 }
 
 /* Colonna 2: Icona */
@@ -85,11 +83,8 @@
 #TestDescription {
     white-space: normal; /*width: fit-content;*/          
     text-align: left;
-}
-
-/* Hover righe */
-.tablemaindetails tr:hover td {
-    background: #e9f3ff;
+    font-weight: bold;
+    width: 600px;
 }
 
 /* Icone */
@@ -102,17 +97,16 @@
     display: flex;
     flex-direction: row;
     align-items: flex-start;
-    gap: 40px;                    /* Spazio tra le due tabelle */
+    gap: 10px;                    /* Spazio tra le due tabelle */
 }
 
 /* COLONNA DESTRA (tabella dei dettagli) */
 .details-table-wrapper {
     flex-grow: 1;                /* Occupa tutto lo spazio restante a destra */
-    max-height: fit-content;
+    max-height: calc(85vh - 40px);
     overflow-y: auto;            
     overflow-x: auto;            
     padding-right: 10px;
-    margin-bottom: 40px;
 }
 
 /* TABELLA DEI DETTAGLI */
@@ -147,9 +141,6 @@
     width: 300px;     /* Modificabile */
 }
 
-/* Hover */
-.details-table tr:hover td {
-    background: #4a90e2;
-}
+
 
 

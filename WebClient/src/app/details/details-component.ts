@@ -67,6 +67,7 @@ background: any;
       next: (data: any) => {
         console.log("RISULTATO BACKEND:", data);
         this.results = data; 
+        this.subShowRoot();
         this.subShowIcon();
       },
       error: (err) => {
@@ -280,7 +281,7 @@ background: any;
                       for (let iPar: number = 1; iPar <= 10; iPar++) {
                           
                           if (itemRow["Valore" + iPar.toString()] !== "?") {
-                            this.tableInfo.description = itemRow["Descr" + iPar.toString()];
+                            this.tableInfo.description = (itemRow["Descr" + iPar.toString()] !== "" ? itemRow["Descr" + iPar.toString()] : "Parameter" + iPar.toString());
                             this.tableInfo.value = itemRow["Valore" + iPar.toString()] + " " + itemRow["UM" + iPar.toString()];
                             this.detailsData.push({ description: this.tableInfo.description, value: this.tableInfo.value, bgColor: "#FFFFFF", textColor: "#0d0080"});
                           }
