@@ -92,6 +92,10 @@
     border-radius: 4px;
 }
 
+.tablemaindetails tr.selected {
+    background-color: #4a90e2;
+}
+
 /* ----- LAYOUT A DUE COLONNE ----- */
 .tables-flex {
     display: flex;
@@ -113,6 +117,10 @@
 .details-table {
     width: 100%;
     border-collapse: collapse;
+}
+
+.details-table tr.selected {
+    background-color: yellow;
 }
 
 .details-table th {

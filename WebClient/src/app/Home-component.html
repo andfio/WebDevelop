@@ -19,32 +19,32 @@
 
         <div class="field">  
         <label id="lblDummyCode">DummyCode :</label>
-        <input type="text" placeholder="*" [(ngModel)]="filterValues['DummyCode']" >
+        <input type="text" [(ngModel)]="filterValues['DummyCode']" >
         </div>        
 
         <div class="field">  
         <label id="lblmodelcode">Model Code :</label>
-        <input type="text" placeholder="*" [(ngModel)]="filterValues['Model Code']">
+        <input type="text" [(ngModel)]="filterValues['Model Code']">
         </div>
 
         <div class="field">  
         <label id="lblprogrcode">Program Code :</label>
-        <input type="text" placeholder="*" [(ngModel)]="filterValues['Program Code']" >
+        <input type="text" [(ngModel)]="filterValues['Program Code']" >
         </div>
 
         <div class="field">  
         <label id="lblprogrdescr">Program Description :</label>
-        <input type="text" placeholder="*" [(ngModel)]="filterValues['Program Description']" >
+        <input type="text" [(ngModel)]="filterValues['Program Description']" >
         </div>
 
         <div class="field">  
         <label id="lbldefects">Defect :</label>
-        <input type="text" placeholder="*" [(ngModel)]="filterValues['Defect']">
+        <input type="text" [(ngModel)]="filterValues['Defect']">
         </div>
         
         <div class="field">  
         <label id="lblfailfunction">Fail Function :</label>
-        <input type="text" placeholder="*" [(ngModel)]="filterValues['Fail Function']">
+        <input type="text" [(ngModel)]="filterValues['Fail Function']">
         </div>        
         
       </div>
@@ -54,7 +54,7 @@
         <div class="selectbox">
           <label id="lblshiftselect">Shift :</label>
           <select [(ngModel)]="filterValues['Shift']">
-          <option value="%">All</option>
+          <option value="%" selected>All</option>
             @for (item of filters; track $index) {
               @if (item.name === "Shift") {
                 @if(item.type ==="number") {
@@ -70,7 +70,7 @@
         <div class="selectbox">
           <label id="lbllineselect">Lines :</label>
           <select [(ngModel)]="filterValues['Line']">
-            <option value="%">All</option>
+            <option value="%" selected>All</option>
             @for (item of filters; track $index) {
               @if (item.name === "Line") {
                 @if(item.type ==="string") {
@@ -86,7 +86,7 @@
         <div class="selectbox">
           <label id="lblutselect">Unit Type :</label>
           <select [(ngModel)]="filterValues['Unit Type']">
-            <option value="%">All</option>
+            <option value="%" selected>All</option>
             @for (item of filters; track $index) {
               @if (item.name === "Unit Type") {
                 @if(item.type ==="string") {
@@ -102,7 +102,7 @@
         <div class="selectbox">
           <label id="lblunselect">Unit :</label>
           <select [(ngModel)]="filterValues['Units']">
-            <option value="%">All</option>
+            <option value="%" selected>All</option>
             @for (item of filters; track $index) {
               @if (item.name === "Units") {
                 @if(item.type ==="string") {
@@ -118,7 +118,7 @@
         <div class="selectbox">
           <label id="lblresselect">Result :</label>
           <select [(ngModel)]="filterValues['Result']">
-            <option value="%">All</option>
+            <option value="%" selected>All</option>
             @for (item of filters; track $index) {
               @if (item.name === "Result") {
                 @if(item.type ==="string") {

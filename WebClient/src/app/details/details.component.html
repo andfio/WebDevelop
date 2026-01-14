@@ -19,7 +19,10 @@
                     @for(itemRow of results; track $index)
                     {
                         @if(subIncrementProgressive(itemRow['ProgressiveGroup'])) {
-                            <tr [bgColor]="rowColor[itemRow['ProgressiveGroup']]" (click)="subShowTestDetails(itemRow)">
+                            <tr [bgColor]="rowColor[itemRow['ProgressiveGroup']]" (click)="subShowTestDetails(itemRow)"
+                                (click)="onSelectRow(itemRow, 'Tests')"
+                                [class.selected]="itemRow === selectedRowTests">
+                                
                                 <td id="Progress">
                                     {{ itemRow['ProgressiveGroup'] }}
                                 </td>
@@ -55,7 +58,8 @@
 
                 <tbody>
                     @for(detail of detailsData; track $index) {
-                        <tr [ngStyle]="{'background-color': detail.bgColor, 'color': detail.textColor }">
+                        <tr (click)="onSelectRow(detail, 'Details')"
+                            [class.selected]="detail === selectedRowDetails">
                             <td class="desc-col">{{ detail.description }}</td>
                             <td class="info-col">{{ detail.value }}</td>
                         </tr>

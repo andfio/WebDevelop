@@ -251,17 +251,6 @@ select {
   border-bottom: 1px solid #ddd;
 }
 
-/* Righe alternate */
-/* .styled-table tbody tr:nth-child(even) {
-  background-color: #f5f8fd;
-} */
-
-/* Hover */
-.styled-table tbody tr:hover {
-  background-color: #e7f1ff;
-  cursor: pointer;
-}
-
 /* Ultima riga: togli il bordo */
 .styled-table tbody tr:last-child td {
   border-bottom: none;
@@ -281,7 +270,6 @@ select {
 
 .styled-table tr.selected {
     background-color: #4a90e2;
-    /* background-color: #cce5ff; */
 }
 
 .styled-table tr:hover {

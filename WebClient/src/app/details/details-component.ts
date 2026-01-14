@@ -340,4 +340,19 @@ background: any;
     return `${str_tot_ore}:${str_tot_min} - (${str_tot_sec})`;
   }
 
+  selectedRowTests: any = null;
+  selectedRowDetails: any = null;
+  
+  onSelectRow(row: any, tb: string) {
+    switch (tb) {
+      case "Tests":
+        this.selectedRowTests = row;
+        break;
+      case "Details":
+        this.selectedRowDetails = row;
+        break;
+    }
+    
+  }
+
 }
