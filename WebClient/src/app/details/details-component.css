@@ -10,6 +10,22 @@
     overflow-y: hidden;
 }
 
+.btn-goback {
+    background-color: black;
+    color: white;
+    font-family: 'Tahoma';
+    font-weight: bold;
+    padding: 5;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+    box-shadow: 0px 1px 4px rgba(0,0,0,0.3);
+    margin-bottom: 10px;
+    margin-left: 20px;
+    margin-top: 0px;
+}
+
 /* LABEL ROOT FUORI DALLA TABELLA - ALLINEATA A SINISTRA */
 .root-label {
     display: block;             /* Garantisce posizione su una nuova linea */

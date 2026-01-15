@@ -5,7 +5,6 @@ import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { RouterOutlet } from '@angular/router';
 import { StateService } from './state.service'
-import { isValidDate } from 'rxjs/internal/util/isDate';
 
 @Component({
   selector: 'app-root',
@@ -40,6 +39,8 @@ export class HomeComponent {
           this.filters = config.filters;
           this.columns = config.columns;
           this.query = config.query;
+
+          this.filterValues = this.subDefaultValues();
       },
       error: (err) => {
         console.error('ERRORE CARICAMENTO JSON:', err);
@@ -183,4 +184,21 @@ export class HomeComponent {
     }
 
   }
+
+  subDefaultValues(): { [key: string]: any } {
+    return {
+      "DummyCode": "%",
+      "Model Code": "%",
+      "Program Code": "%",
+      "Program Description": "%",
+      "Defect": "%",
+      "Fail Function": "%",
+      "Result": "%",
+      "Shift": "%",
+      "Line": "%",
+      "Unit Type": "%",
+      "Units": "%"
+    };
+  }
+
 }
