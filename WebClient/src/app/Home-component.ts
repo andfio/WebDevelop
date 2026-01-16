@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { AppConfig, filterValues, Filters} from './app.config.json';
+import { AppConfig, filterValues, Filters, StructUnitsInfo} from './app.config.json';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { RouterOutlet } from '@angular/router';
@@ -19,6 +19,7 @@ export class HomeComponent {
   filters: AppConfig["filters"] = [];
   columns: AppConfig["columns"] = [];
   query: AppConfig["query"] = {} as any;
+  unitsInfo: StructUnitsInfo[] = [];
 
   ngOnInit() {
 
@@ -30,6 +31,9 @@ export class HomeComponent {
       this.filterValues = this.state.filterValues;
       this.DateFormatFrom = this.state.DateFormatFrom;
       this.DateFormatTo = this.state.DateFormatTo;
+      this.linesItem = this.state.linesItem;
+      this.unitTypesItem = this.state.unitTypesItem;
+      this.unitsItem = this.state.unitsItem;
       return; // <-- evita reset
     }
 
@@ -46,6 +50,22 @@ export class HomeComponent {
         console.error('ERRORE CARICAMENTO JSON:', err);
       }
     });
+
+    this.http.post('http://localhost:61694/api/query/informations', null).subscribe({
+      next: (data: any) => {
+        data.forEach((itemUnit: StructUnitsInfo) => {
+          this.unitsInfo.push(itemUnit);
+        });
+
+        this.linesItem = this.subLoadInfo("LineID");
+        this.unitTypesItem = this.subLoadInfo("UnitTypeID");
+
+      },
+      error: (err) => {
+        console.error("ERRORE BACKEND:", err);
+      }
+    });		
+
   }
   
   DateFormatFrom: string = new Date().toISOString().slice(0,10) + "T00:00"
@@ -87,6 +107,23 @@ export class HomeComponent {
             this.fvalues[filter.name] = checkvalue !== '%' ? checkvalue : undefined;
         }
 
+        if(checkvalue === '*' || checkvalue === '') {
+            this.fvalues[filter.name] = undefined;
+            this.filterValues[filter.name] = '%';
+        }
+
+        switch (filter.name) {
+          case "Line": 
+          case "Unit Type":
+          case "Units":
+              if(checkvalue.indexOf('-') > 0) {
+                this.fvalues[filter.name] = checkvalue.split('-')[0];
+              }
+              break;
+          default:
+            break;
+        }
+
     })
 
     this.sendToBackend();
@@ -113,6 +150,10 @@ export class HomeComponent {
         this.state.filterValues = this.filterValues;
         this.state.DateFormatFrom = this.DateFormatFrom;
         this.state.DateFormatTo = this.DateFormatTo;
+        this.state.linesItem = this.linesItem;
+        this.state.unitTypesItem = this.unitTypesItem;
+        this.state.unitsItem = this.unitsItem;
+        /* fine salvataggio */
 
         this.results.forEach(itemRow => {
           this.columns.forEach(itemCol => {
@@ -197,8 +238,73 @@ export class HomeComponent {
       "Shift": "%",
       "Line": "%",
       "Unit Type": "%",
-      "Units": "%"
+      "Unit": "%"
     };
   }
 
+  linesItem : any[] = [];
+  unitTypesItem: any[] = [];
+  unitsItem: any[] = [];
+
+  subLoadInfo(fieldName: string): any[] {
+
+    switch(fieldName) {
+      case "LineID":
+        return this.subLinesInfo();
+      case "UnitTypeID":
+        return this.subUnitTypesInfo(); 
+      case "UnitID":
+        if (this.filterValues['Unit Type'] !== undefined && this.filterValues['Unit Type'] !== '%') {
+          this.unitsItem = this.subUnitsInfo(this.filterValues['Line'], this.filterValues['Unit Type']);
+        }
+        return [];
+      default:
+        return [];
+    }      
+  }
+
+  subLinesInfo(): any[] {
+    let values: any[] = [];
+    let CurrLinedID: string = "";
+
+    this.unitsInfo.forEach(item => {
+        if (item.LineID !== CurrLinedID) {
+          values.push(item.LineID + "-" + item.LineDescr);
+          CurrLinedID = item.LineID;
+        }
+    });    
+    return values;
+  }
+
+  subUnitTypesInfo(): any[] {
+    let values: any[] = [];
+
+    this.unitsInfo.forEach(item => {
+        if (!values.includes(item.UnitTypeID + "-" + item.UnitTypeDescr)) {
+          values.push(item.UnitTypeID + "-" + item.UnitTypeDescr);
+        }
+
+    });    
+    return values.sort(item => item.UnitTypeID);
+  } 
+
+  subUnitsInfo(lineID: string, unitTypeID: string): any[] {
+
+    let values: any[] = [];
+
+    this.unitsInfo.forEach(item => {
+        switch (lineID) {
+          case "%":
+            if (item.UnitTypeID == unitTypeID.substring(0, unitTypeID.indexOf("-"))) {
+              values.push(item.UnitID + "-" + item.UnitDescr);
+            }
+            break;
+          default:
+            if (item.LineID == lineID.substring(0, lineID.indexOf("-")) && item.UnitTypeID == unitTypeID.substring(0, unitTypeID.indexOf("-"))) {
+              values.push(item.UnitID + "-" + item.UnitDescr);
+            }
+        }
+    });    
+    return values;
+   } 
 }

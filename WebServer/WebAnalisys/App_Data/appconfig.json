@@ -24,20 +24,20 @@
     {
       "name": "Result",
       "type": "string",
-      "values": ["0-Fail","1-Pass", "2-Interrupted", "4-Warning", "5-Repair", "7-ByPass", "8-NFF"]
+      "values": ["0-Fail","1-Pass", "2-Interrupted","4-Warning", "6-Repair", "7-ByPass", "8-No Fault Found"]
     },
     {
       "name": "Line",
       "type": "string",
-      "values": ["1-Line AL1", "2-Line AL2", "3-Line AL3","4-Line AL4","5-Line AL5", "6-Line AL6"]
+      "values": ["1-Line AL1", "2-Line AL2"]
     },
     {
       "name": "Unit Type",
       "type": "string",
-      "values": ["1-Programming", "3-Prefilling", "4-Start", "5-Pass Fail", "6-Functional", "7-Main", "8-Drain", "10-Visual Inspection", "11-Final", "8-Drain" ]
+      "values": ["10-Robot WM", "11-Start", "12-Functional 1", "13-Functional 2", "14-Visual Inspection", "15-Repair", "16-Audit", "17-Audit Area Stations", "18-Robot OS", "20-Arpuma", "21-Door Open", "25-StandAlone", "26-HomeConnect", "110-Repair Robot WM", "118-Repair Robot OS" ]
     },
     {
-      "name": "Units",
+      "name": "Unit",
       "type": "string",
       "values": ["1-Unit test 1", "2-Unit Test 2", "3-Unit Test 4", "3-Unit Test 4"]
     },
@@ -120,12 +120,16 @@
       "field": "DummyCode"
     },
     {
+      "name": "",
+      "field": ""
+    },
+    {
       "name": "Result",
       "field": "Result"
     },
     {
-      "name": "Date Test",
-      "field": "Date_Time"
+      "name": "",
+      "field": ""
     },
     {
       "name": "Program Code",
@@ -134,6 +138,10 @@
     {
       "name": "Program Description",
       "field": "ProgramDescription"
+    },
+    {
+      "name": "",
+      "field": ""
     },
     {
       "name": "Line",
@@ -148,6 +156,14 @@
       "field": "UnitID"
     },
     {
+      "name": "",
+      "field": ""
+    },
+    {
+      "name": "Date Test",
+      "field": "Date_Time"
+    },
+    {
       "name": "User",
       "field": "Operator"
     },
@@ -156,22 +172,30 @@
       "field": "Shift"
     },
     {
-      "name": "Interruption Anomalous",
-      "field": "AbortCode"
+      "name": "",
+      "field": ""
+    },
+    {
+      "name": "Time Test [hh:mm]-(ss.mm)",
+      "field": "TestTimeLength"
     }
   ],
     "columnsdetails": [
     {
-      "name": "ID",
+      "name": "Sequence N°",
       "field": "ProgressiveGroup"
     },
     {
-      "name": "Sequence Description",
+      "name": "Description",
       "field": "TestDescription"
     },
     {
-      "name": "Sequence Result",
+      "name": "Result",
       "field": "TestResult"
+    },
+    {
+      "name": "",
+      "field": ""
     },
     {
       "name": "Start Sequence Time",
@@ -182,8 +206,20 @@
       "field": "EndEventTime"
     },
     {
+      "name": "",
+      "field": ""
+    },
+    {
       "name": "Function",
       "field": "FunctionCode"
+    },
+    {
+      "name": "",
+      "field": ""
+    },
+    {
+      "name": "",
+      "field": ""
     },
     {
       "name": "Type",
@@ -359,7 +395,7 @@
       { "filter": "Abort Code", "sql": "AND AbortCode LIKE @AbortCode" },
       { "filter": "Program Code", "sql": "AND ProgramCode LIKE @ProgramCode" },
       { "filter": "Program Description", "sql": "AND ProgramDescription LIKE @ProgramDescription" },
-      { "filter": "Defect", "sql": "AND Tab_Tests.Defects LIKE @Defect" },
+      { "filter": "Defect", "sql": "AND Defects LIKE @Defect" },
       { "filter": "Fail Function", "sql": "AND Tab_Tests.FunctionCode LIKE @FailFunction" }
     ]
   },

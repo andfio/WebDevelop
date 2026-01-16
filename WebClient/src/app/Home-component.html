@@ -71,46 +71,29 @@
           <label id="lbllineselect">Lines :</label>
           <select [(ngModel)]="filterValues['Line']">
             <option value="%" selected>All</option>
-            @for (item of filters; track $index) {
-              @if (item.name === "Line") {
-                @if(item.type ==="string") {
-                  @for (value of item.values; track $index) {
-                    <option [value]="value"> {{value}} </option>
-                  }
-                }
-              }
+            @for (item of linesItem; track $index) {
+              <option [value]="item"> {{item}} </option>
             }
           </select>
         </div>
 
         <div class="selectbox">
           <label id="lblutselect">Unit Type :</label>
-          <select [(ngModel)]="filterValues['Unit Type']">
+          <select [(ngModel)]="filterValues['Unit Type']"
+            (ngModelChange)="subLoadInfo('UnitID')">
             <option value="%" selected>All</option>
-            @for (item of filters; track $index) {
-              @if (item.name === "Unit Type") {
-                @if(item.type ==="string") {
-                  @for (value of item.values; track $index) {
-                    <option [value]="value"> {{value}} </option>
-                  }
-                }
-              }
+            @for (item of unitTypesItem; track $index) {
+              <option [value]="item" > {{item}} </option>
             }
           </select>
         </div>
 
         <div class="selectbox">
           <label id="lblunselect">Unit :</label>
-          <select [(ngModel)]="filterValues['Units']">
+          <select [(ngModel)]="filterValues['Unit']">
             <option value="%" selected>All</option>
-            @for (item of filters; track $index) {
-              @if (item.name === "Units") {
-                @if(item.type ==="string") {
-                  @for (value of item.values; track $index) {
-                    <option [value]="value"> {{value}} </option>
-                  }
-                }
-              }
+            @for (item of unitsItem; track $index) {
+              <option [value]="item"> {{item}} </option>
             }
           </select>
         </div> 

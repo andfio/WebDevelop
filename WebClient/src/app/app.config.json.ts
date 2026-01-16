@@ -51,3 +51,11 @@ export interface tableinfo {
     description: string,
     value: string
 }
+export interface StructUnitsInfo {
+    UnitID: string;
+    UnitDescr: string;
+    UnitTypeID: string;
+    UnitTypeDescr: string;
+    LineID: string;
+    LineDescr: string;
+}

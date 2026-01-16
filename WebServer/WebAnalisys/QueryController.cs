@@ -316,6 +316,47 @@ namespace WebAnalisys.Controllers
             return Ok(result);
         }
 
+        [HttpPost]
+        [Route("informations")]
+        public IHttpActionResult Informations([FromBody] object obj)
+        {
+            var result = new List<Dictionary<string, object>>();
+
+            try
+            {
+                string sql = "SELECT UnitID, UnitDescr, Units.UnitTypeID, UnitTypes.UnitTypeDescr, Units.LineID, Lines.LineDescr ";
+                sql += "FROM Units INNER JOIN Lines ON Units.LineID = Lines.LineID INNER JOIN UnitTypes ON Units.UnitTypeID = UnitTypes.UnitTypeID ";
+                sql += "ORDER BY LineID, UnitTypeID, UnitID";
+
+                using (var conn = new SqlConnection("Persist Security Info=False;User ID=sa;Password=Ab123456;Initial Catalog=FLCC_Test;Data Source=172.18.81.36\\SQLEXPRESS2019,1430"))
+                using (var cmd = new SqlCommand(sql, conn))
+                {
+                    conn.Open();
+                    var reader = cmd.ExecuteReader();
+
+                    while (reader.Read())
+                    {
+                        var row = new Dictionary<string, object>();
+
+                        for (int i = 0; i < reader.FieldCount; i++)
+                        {
+                            row.Add(reader.GetName(i), reader.GetValue(i));
+                        }
+
+                        result.Add(row);
+                    }
+                }
+
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+
+            return Ok(result);
+        }
+
+
         private string Normalize(string key)
         {
             return key.Replace(" ", "").Replace("-", "");

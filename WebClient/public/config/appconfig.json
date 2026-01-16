@@ -37,7 +37,7 @@
       "values": ["10-Robot WM", "11-Start", "12-Functional 1", "13-Functional 2", "14-Visual Inspection", "15-Repair", "16-Audit", "17-Audit Area Stations", "18-Robot OS", "20-Arpuma", "21-Door Open", "25-StandAlone", "26-HomeConnect", "110-Repair Robot WM", "118-Repair Robot OS" ]
     },
     {
-      "name": "Units",
+      "name": "Unit",
       "type": "string",
       "values": ["1-Unit test 1", "2-Unit Test 2", "3-Unit Test 4", "3-Unit Test 4"]
     },
@@ -395,7 +395,7 @@
       { "filter": "Abort Code", "sql": "AND AbortCode LIKE @AbortCode" },
       { "filter": "Program Code", "sql": "AND ProgramCode LIKE @ProgramCode" },
       { "filter": "Program Description", "sql": "AND ProgramDescription LIKE @ProgramDescription" },
-      { "filter": "Defect", "sql": "AND Tab_Tests.Defects LIKE @Defect" },
+      { "filter": "Defect", "sql": "AND Defects LIKE @Defect" },
       { "filter": "Fail Function", "sql": "AND Tab_Tests.FunctionCode LIKE @FailFunction" }
     ]
   },

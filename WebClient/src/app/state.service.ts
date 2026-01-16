@@ -11,4 +11,7 @@ export class StateService {
   filterValues: any = {};
   DateFormatFrom: string = "";
   DateFormatTo: string = "";
+  linesItem : any[] = [];
+  unitTypesItem: any[] = [];
+  unitsItem: any[] = [];  
 }
