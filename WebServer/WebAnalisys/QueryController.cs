@@ -356,6 +356,81 @@ namespace WebAnalisys.Controllers
             return Ok(result);
         }
 
+        [HttpPost]
+        [Route("modelsinfo")]
+        public IHttpActionResult modelsinfo([FromBody] object obj)
+        {
+            var result = new List<Dictionary<string, object>>();
+
+            try
+            {
+                string sql = "SELECT DISTINCT FixedPart As ModelCode, ModelDescr From Models";
+
+                using (var conn = new SqlConnection("Persist Security Info=False;User ID=sa;Password=Ab123456;Initial Catalog=FLCC_Test;Data Source=172.18.81.36\\SQLEXPRESS2019,1430"))
+                using (var cmd = new SqlCommand(sql, conn))
+                {
+                    conn.Open();
+                    var reader = cmd.ExecuteReader();
+
+                    while (reader.Read())
+                    {
+                        var row = new Dictionary<string, object>();
+
+                        for (int i = 0; i < reader.FieldCount; i++)
+                        {
+                            row.Add(reader.GetName(i), reader.GetValue(i));
+                        }
+
+                        result.Add(row);
+                    }
+                }
+
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+
+            return Ok(result);
+        }
+
+        [HttpPost]
+        [Route("abortcodeinfo")]
+        public IHttpActionResult abortcodeinfo([FromBody] object obj)
+        {
+            var result = new List<Dictionary<string, object>>();
+
+            try
+            {
+                string sql = "SELECT UnitTypeID, ErrorID As AbortCode, Descr As AbortDescr FROM UnitTypesErrors";
+
+                using (var conn = new SqlConnection("Persist Security Info=False;User ID=sa;Password=Ab123456;Initial Catalog=FLCC_Test;Data Source=172.18.81.36\\SQLEXPRESS2019,1430"))
+                using (var cmd = new SqlCommand(sql, conn))
+                {
+                    conn.Open();
+                    var reader = cmd.ExecuteReader();
+
+                    while (reader.Read())
+                    {
+                        var row = new Dictionary<string, object>();
+
+                        for (int i = 0; i < reader.FieldCount; i++)
+                        {
+                            row.Add(reader.GetName(i), reader.GetValue(i));
+                        }
+
+                        result.Add(row);
+                    }
+                }
+
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+
+            return Ok(result);
+        }
 
         private string Normalize(string key)
         {

@@ -59,3 +59,12 @@ export interface StructUnitsInfo {
     LineID: string;
     LineDescr: string;
 }
+export interface modelsinfo {
+    ModelCode: string;
+    ModelDescr: string;
+}
+export interface abortcodeinfo {
+    UnitTypeID: string;
+    AbortCode: string;
+    AbortDescr: string;
+}

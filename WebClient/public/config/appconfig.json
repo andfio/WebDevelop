@@ -19,7 +19,7 @@
     {
       "name": "Shift",
       "type": "number",
-      "values": [1, 2]
+      "values": [1, 2, 3]
     },
     {
       "name": "Result",
@@ -28,28 +28,23 @@
     },
     {
       "name": "Line",
-      "type": "string",
-      "values": ["1-Line AL1", "2-Line AL2"]
+      "type": "string"
     },
     {
       "name": "Unit Type",
-      "type": "string",
-      "values": ["10-Robot WM", "11-Start", "12-Functional 1", "13-Functional 2", "14-Visual Inspection", "15-Repair", "16-Audit", "17-Audit Area Stations", "18-Robot OS", "20-Arpuma", "21-Door Open", "25-StandAlone", "26-HomeConnect", "110-Repair Robot WM", "118-Repair Robot OS" ]
+      "type": "string"
     },
     {
       "name": "Unit",
-      "type": "string",
-      "values": ["1-Unit test 1", "2-Unit Test 2", "3-Unit Test 4", "3-Unit Test 4"]
+      "type": "string"
     },
     {
       "name": "Start Date",
-      "type": "date",
-      "Format": "yyyy/MM/dd HH:mm:ss"    
+      "type": "date"
     },
     {
       "name": "End Date",
-      "type": "date",
-      "Format": "yyyy/MM/dd HH:mm:ss"    
+      "type": "date"
     },
     {
       "name": "Defect",
@@ -104,7 +99,15 @@
     {
       "name": "Unit Type",
       "field": "UnitTypeID"
-    }  
+    },
+    {
+      "name": "Abort Code",
+      "field": "AbortCode"
+    },
+    {
+      "name": "VIB",
+      "field": "VIB"
+    }          
   ],
   "columnsrootdetails": [
     {
@@ -379,7 +382,7 @@
     }
   ],
   "query": {
-    "select": "SELECT DISTINCT Tab_Headers.ID_Result, Tab_Headers.ModelCode, SerialNumber, DummyCode, ProgramCode, ProgramDescription, Date_Time, UnitID, UnitTypeID, LineID, Shift, Operator, Result ",
+    "select": "SELECT DISTINCT Tab_Headers.ID_Result, Tab_Headers.ModelCode, SerialNumber, DummyCode, ProgramCode, ProgramDescription, Date_Time, UnitID, UnitTypeID, LineID, Shift, Operator, Result, AbortCode ",
     "from": "FROM Tab_Headers INNER JOIN Tab_Tests ON Tab_Headers.ID_Result = Tab_Tests.ID_Result ",
     "where": "WHERE ",
     "conditions": [

@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { AppConfig, filterValues, Filters, StructUnitsInfo} from './app.config.json';
+import { AppConfig, filterValues, Filters, StructUnitsInfo, modelsinfo, abortcodeinfo} from './app.config.json';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { RouterOutlet } from '@angular/router';
@@ -20,6 +20,8 @@ export class HomeComponent {
   columns: AppConfig["columns"] = [];
   query: AppConfig["query"] = {} as any;
   unitsInfo: StructUnitsInfo[] = [];
+  modelsInfo: modelsinfo [] = [];
+  abortcodeinfo: abortcodeinfo [] = [];
 
   ngOnInit() {
 
@@ -34,7 +36,7 @@ export class HomeComponent {
       this.linesItem = this.state.linesItem;
       this.unitTypesItem = this.state.unitTypesItem;
       this.unitsItem = this.state.unitsItem;
-      return; // <-- evita reset
+      return; 
     }
 
     this.http.get<AppConfig>('config/appconfig.json').subscribe({
@@ -64,7 +66,25 @@ export class HomeComponent {
       error: (err) => {
         console.error("ERRORE BACKEND:", err);
       }
-    });		
+    });
+    
+    this.http.post('http://localhost:61694/api/query/modelsinfo', null).subscribe({
+      next: (data: any) => {
+        this.modelsInfo = data;
+      },
+      error: (err) => {
+        console.error("ERRORE BACKEND:", err);
+      }
+    });	
+    
+    this.http.post('http://localhost:61694/api/query/abortcodeinfo', null).subscribe({
+      next: (data: any) => {
+        this.abortcodeinfo = data;
+      },
+      error: (err) => {
+        console.error("ERRORE BACKEND:", err);
+      }
+    });	    
 
   }
   
@@ -153,7 +173,6 @@ export class HomeComponent {
         this.state.linesItem = this.linesItem;
         this.state.unitTypesItem = this.unitTypesItem;
         this.state.unitsItem = this.unitsItem;
-        /* fine salvataggio */
 
         this.results.forEach(itemRow => {
           this.columns.forEach(itemCol => {
@@ -162,7 +181,22 @@ export class HomeComponent {
               {
                 itemRow[itemCol.field] = this.ResultDescription(itemRow[itemCol.field])
               } 
-              
+              if (itemCol.field == "ModelCode") {
+                let modeldescr: string = (this.modelsInfo.find(m => m.ModelCode === itemRow[itemCol.field])?.ModelDescr ?? "--");
+                itemRow["VIB"] = modeldescr;
+              }
+              if (itemCol.field == "AbortCode") {
+                let abortdescr: string = (this.abortcodeinfo.find(a => a.UnitTypeID === itemRow["UnitTypeID"] && a.AbortCode === itemRow[itemCol.field])?.AbortDescr ?? "--");
+                itemRow["AbortCode"] = abortdescr;
+              }
+              if(itemCol.field == "UnitID") {
+                let unitdescr: string = (this.unitsInfo.find(u => u.LineID === itemRow["LineID"] && u.UnitTypeID === itemRow["UnitTypeID"] && u.UnitID === itemRow[itemCol.field])?.UnitDescr ?? "--");
+                itemRow["UnitID"] = itemRow["UnitID"] + "-" + unitdescr;
+              }
+              if (itemCol.field =="Date_Time") {
+                let dt: Date = new Date(itemRow[itemCol.field]);
+                itemRow[itemCol.field] = dt.toISOString().slice(0,10).replace(/-/g,'/') + " " + dt.toISOString().slice(11,19);
+              }
             }  
             if(itemRow[itemCol.field] == null) { itemRow[itemCol.field] = '--' }
           })
@@ -256,6 +290,7 @@ export class HomeComponent {
       case "UnitID":
         if (this.filterValues['Unit Type'] !== undefined && this.filterValues['Unit Type'] !== '%') {
           this.unitsItem = this.subUnitsInfo(this.filterValues['Line'], this.filterValues['Unit Type']);
+          this.filterValues['Unit'] = '%';
         }
         return [];
       default:
@@ -304,7 +339,9 @@ export class HomeComponent {
               values.push(item.UnitID + "-" + item.UnitDescr);
             }
         }
-    });    
+    });
+  
     return values;
    } 
-}
+   
+  }

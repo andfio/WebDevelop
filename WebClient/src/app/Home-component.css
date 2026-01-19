@@ -222,8 +222,7 @@ select {
   width: 100%;
   border-collapse: collapse;
   table-layout: auto;   /* <-- le celle si adattano al contenuto */
-  font-family: Arial, Helvetica, sans-serif;
-  font-size: 14px;
+  font-family: Tahoma;
   margin-top: 20px;
   background-color: white;
   border-radius: 6px;
@@ -240,7 +239,7 @@ select {
 .styled-table th {
   padding: 10px;
   text-align: left;
-  font-size: 15px;
+  font-size: 14px;
   font-weight: bold;
   border-bottom: 2px solid #357bc8;
 }
@@ -249,6 +248,9 @@ select {
 .styled-table td {
   padding: 10px;
   border-bottom: 1px solid #ddd;
+  font-size: 12px;
+  font-weight: normal;
+  color: #0d0080;
 }
 
 /* Ultima riga: togli il bordo */

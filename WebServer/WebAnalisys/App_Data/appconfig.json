@@ -104,7 +104,15 @@
     {
       "name": "Unit Type",
       "field": "UnitTypeID"
-    }  
+    },
+    {
+      "name": "Abort Code",
+      "field": "AbortCode"
+    },
+    {
+      "name": "VIB",
+      "field": "VIB"
+    }          
   ],
   "columnsrootdetails": [
     {
@@ -379,7 +387,7 @@
     }
   ],
   "query": {
-    "select": "SELECT DISTINCT Tab_Headers.ID_Result, Tab_Headers.ModelCode, SerialNumber, DummyCode, ProgramCode, ProgramDescription, Date_Time, UnitID, UnitTypeID, LineID, Shift, Operator, Result ",
+    "select": "SELECT DISTINCT Tab_Headers.ID_Result, Tab_Headers.ModelCode, SerialNumber, DummyCode, ProgramCode, ProgramDescription, Date_Time, UnitID, UnitTypeID, LineID, Shift, Operator, Result, AbortCode ",
     "from": "FROM Tab_Headers INNER JOIN Tab_Tests ON Tab_Headers.ID_Result = Tab_Tests.ID_Result ",
     "where": "WHERE ",
     "conditions": [
