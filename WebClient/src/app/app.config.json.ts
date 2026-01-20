@@ -68,3 +68,7 @@ export interface abortcodeinfo {
     AbortCode: string;
     AbortDescr: string;
 }
+export interface functionsinfo {
+    FuncID: string;
+    FuncDescr: string;
+}

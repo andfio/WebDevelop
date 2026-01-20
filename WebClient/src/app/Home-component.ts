@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { AppConfig, filterValues, Filters, StructUnitsInfo, modelsinfo, abortcodeinfo} from './app.config.json';
+import { AppConfig, filterValues, Filters, StructUnitsInfo, modelsinfo, abortcodeinfo, functionsinfo} from './app.config.json';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { RouterOutlet } from '@angular/router';
@@ -22,6 +22,7 @@ export class HomeComponent {
   unitsInfo: StructUnitsInfo[] = [];
   modelsInfo: modelsinfo [] = [];
   abortcodeinfo: abortcodeinfo [] = [];
+  functionsInfo: functionsinfo [] = [];
 
   ngOnInit() {
 
@@ -36,6 +37,11 @@ export class HomeComponent {
       this.linesItem = this.state.linesItem;
       this.unitTypesItem = this.state.unitTypesItem;
       this.unitsItem = this.state.unitsItem;
+      this.unitsInfo = this.state.unitsInfo;
+      this.abortcodeinfo = this.state.abortcodeInfo;
+      this.modelsInfo = this.state.modelsinfo;
+      this.functionsInfo = this.state.functionsinfo;
+      this.selectedRow = this.state.SelectedRow;
       return; 
     }
 
@@ -59,8 +65,10 @@ export class HomeComponent {
           this.unitsInfo.push(itemUnit);
         });
 
+        this.filterValues = this.subDefaultValues();
+
         this.linesItem = this.subLoadInfo("LineID");
-        this.unitTypesItem = this.subLoadInfo("UnitTypeID");
+        this.unitTypesItem =this.subLoadInfo("UnitTypeID");
 
       },
       error: (err) => {
@@ -84,7 +92,16 @@ export class HomeComponent {
       error: (err) => {
         console.error("ERRORE BACKEND:", err);
       }
-    });	    
+    });
+    
+    this.http.post('http://localhost:61694/api/query/functionsinfo', null).subscribe({
+      next: (data: any) => {
+        this.functionsInfo = data;
+      },
+      error: (err) => {
+        console.error("ERRORE BACKEND:", err);
+      }
+    });    
 
   }
   
@@ -173,6 +190,12 @@ export class HomeComponent {
         this.state.linesItem = this.linesItem;
         this.state.unitTypesItem = this.unitTypesItem;
         this.state.unitsItem = this.unitsItem;
+        this.state.unitsInfo = this.unitsInfo;
+        this.state.abortcodeInfo = this.abortcodeinfo;
+        this.state.modelsinfo = this.modelsInfo;
+        this.state.functionsinfo = this.functionsInfo;
+
+         /* formatta i dati per la visualizzazione */
 
         this.results.forEach(itemRow => {
           this.columns.forEach(itemCol => {
@@ -189,6 +212,10 @@ export class HomeComponent {
                 let abortdescr: string = (this.abortcodeinfo.find(a => a.UnitTypeID === itemRow["UnitTypeID"] && a.AbortCode === itemRow[itemCol.field])?.AbortDescr ?? "--");
                 itemRow["AbortCode"] = abortdescr;
               }
+              if(itemCol.field == "UnitTypeID") {
+                let unitdescr: string = (this.unitsInfo.find(u => u.LineID === itemRow["LineID"] && u.UnitTypeID === itemRow["UnitTypeID"] )?.UnitTypeDescr ?? "--");
+                itemRow["UnitTypeID"] = itemRow["UnitTypeID"] + "-" + unitdescr;
+              }                                         
               if(itemCol.field == "UnitID") {
                 let unitdescr: string = (this.unitsInfo.find(u => u.LineID === itemRow["LineID"] && u.UnitTypeID === itemRow["UnitTypeID"] && u.UnitID === itemRow[itemCol.field])?.UnitDescr ?? "--");
                 itemRow["UnitID"] = itemRow["UnitID"] + "-" + unitdescr;
@@ -238,8 +265,9 @@ export class HomeComponent {
   
   subOnDetailPage(row: any) {
     this.router.navigate(['/pagina-details'], {
-      state: { rowData: row }   
+      state: { rowData: row, unitsInfo: this.unitsInfo, functionsInfo: this.functionsInfo }   
     });
+    this.state.SelectedRow = this.selectedRow;
   }
 
   selectedRow: any = null;
@@ -281,12 +309,16 @@ export class HomeComponent {
   unitsItem: any[] = [];
 
   subLoadInfo(fieldName: string): any[] {
+    let values: any[] = [];
 
     switch(fieldName) {
       case "LineID":
         return this.subLinesInfo();
       case "UnitTypeID":
-        return this.subUnitTypesInfo(); 
+        values = this.subUnitTypesInfo(this.filterValues['Line']);
+        this.filterValues['Unit Type'] = '%';
+        this.filterValues['Unit'] = '%';
+        return values; 
       case "UnitID":
         if (this.filterValues['Unit Type'] !== undefined && this.filterValues['Unit Type'] !== '%') {
           this.unitsItem = this.subUnitsInfo(this.filterValues['Line'], this.filterValues['Unit Type']);
@@ -311,12 +343,22 @@ export class HomeComponent {
     return values;
   }
 
-  subUnitTypesInfo(): any[] {
+  subUnitTypesInfo(lineID: string): any[] {
     let values: any[] = [];
 
     this.unitsInfo.forEach(item => {
-        if (!values.includes(item.UnitTypeID + "-" + item.UnitTypeDescr)) {
-          values.push(item.UnitTypeID + "-" + item.UnitTypeDescr);
+        switch (lineID) {
+          case "%":      
+            if (!values.includes(item.UnitTypeID + "-" + item.UnitTypeDescr)) {
+              values.push(item.UnitTypeID + "-" + item.UnitTypeDescr);
+            }
+            break;
+          default:
+            if (item.LineID.toString() == lineID.substring(0, lineID.indexOf("-"))) {
+              if (!values.includes(item.UnitTypeID + "-" + item.UnitTypeDescr)) {
+                values.push(item.UnitTypeID + "-" + item.UnitTypeDescr);
+              }
+            }
         }
 
     });    
@@ -331,7 +373,9 @@ export class HomeComponent {
         switch (lineID) {
           case "%":
             if (item.UnitTypeID == unitTypeID.substring(0, unitTypeID.indexOf("-"))) {
-              values.push(item.UnitID + "-" + item.UnitDescr);
+              if (!values.includes(item.UnitID + "-" + item.UnitDescr)) {
+                values.push(item.UnitID + "-" + item.UnitDescr);
+              }
             }
             break;
           default:

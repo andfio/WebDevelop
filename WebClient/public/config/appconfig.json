@@ -85,6 +85,10 @@
       "field": "UnitID"
     },
     {
+      "name": "Unit Type",
+      "field": "UnitTypeID"
+    },
+    {
       "name": "Line",
       "field": "LineID"
     },
@@ -95,10 +99,6 @@
     {
       "name": "Result",
       "field": "Result"
-    },
-    {
-      "name": "Unit Type",
-      "field": "UnitTypeID"
     },
     {
       "name": "Abort Code",
@@ -178,6 +178,14 @@
       "name": "",
       "field": ""
     },
+    {
+      "name": "Abort Code",
+      "field": "AbortCode"
+    },
+    {
+      "name": "",
+      "field": ""
+    },  
     {
       "name": "Time Test [hh:mm]-(ss.mm)",
       "field": "TestTimeLength"

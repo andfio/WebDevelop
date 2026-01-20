@@ -69,7 +69,8 @@
 
         <div class="selectbox">
           <label id="lbllineselect">Lines :</label>
-          <select [(ngModel)]="filterValues['Line']">
+          <select [(ngModel)]="filterValues['Line']"
+            (ngModelChange)="subLoadInfo('UnitTypeID')">
             <option value="%" selected>All</option>
             @for (item of linesItem; track $index) {
               <option [value]="item"> {{item}} </option>
@@ -159,8 +160,8 @@
           [class.selected]="row === selectedRow">
           @for (col of columns; track $index) {
             @if(col.field !== 'ID_Result') {
-              <td>{{ row[col.field] }}</td>              
-            }
+                <td>{{ row[col.field] }}</td>
+              }
           }
           </tr>
         }

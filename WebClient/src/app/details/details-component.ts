@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
-import { AppConfig, filterValues, tableinfo} from '../app.config.json';
+import { AppConfig, filterValues, tableinfo, StructUnitsInfo, functionsinfo} from '../app.config.json';
 
 @Component({
   selector: 'app-details',
@@ -15,6 +15,7 @@ export class DetailsdataComponent {
 background: any;
 
   constructor(private router: Router, private http: HttpClient) {}
+  
   goBack() {
     this.router.navigate(['/']);
   }
@@ -30,9 +31,14 @@ background: any;
 
   filtervalues: { [key: string]: any } = {};
   row: any;
+  unitsInfo: StructUnitsInfo[] = [];
+  functionsInfo: functionsinfo[] = [];
 
   ngOnInit() {
     this.row = history.state.rowData;
+    this.unitsInfo = history.state.unitsInfo;
+    this.functionsInfo = history.state.functionsInfo;
+    
     console.log("Riga ricevuta:", this.row);
     this.filtervalues['ID_Result'] = this.row['ID_Result'];
 
@@ -166,6 +172,18 @@ background: any;
           case "TestTimeLength":
             itemValue = this.subCalculateTestTime();
             break;
+          case "LineID":
+            itemValue = this.row[itemCol.field] + " - " + (this.unitsInfo.find(unit => unit.LineID === this.row[itemCol.field])?.LineDescr ?? "not found");
+            break;
+         case "UnitTypeID":
+            if (typeof this.row[itemCol.field] === "string") {this.row[itemCol.field] = Number(this.row[itemCol.field].split('-')[0].trim());}            
+            itemValue = this.row[itemCol.field] + " - " + (this.unitsInfo.find(unit => unit.UnitTypeID === this.row[itemCol.field])?.UnitTypeDescr ?? "not found");
+            break;
+         case "UnitID":
+            if (typeof this.row[itemCol.field] === "string") {this.row[itemCol.field] = Number(this.row[itemCol.field].split('-')[0].trim());}
+            itemValue = this.row[itemCol.field] + " - " + (this.unitsInfo.find(unit => unit.LineID === this.row["LineID"] && unit.UnitTypeID === this.row["UnitTypeID"] && unit.UnitID === this.row[itemCol.field])?.UnitDescr ?? "not found");
+            break;
+
           default:
             itemValue = this.row[itemCol.field];
             break;
@@ -211,15 +229,29 @@ background: any;
               if (itemCol.field !== 'TestType') {
                   this.tableInfo.description = itemCol.name;
                   
-                  if (itemCol.field === 'TestResult' || itemCol.field === 'Result') {
-                    this.tableInfo.value = this.ResultDescription(itemRow[itemCol.field])
-                  } else if (itemCol.field === 'StartEventTime' || itemCol.field === 'EndEventTime') {
-                    console.log(itemRow[itemCol.field].toString())
-                    this.tableInfo.value = this.convertSecondiToTime(Number(itemRow[itemCol.field]));
+                  switch (itemCol.field) {
+                    case "TestResult":
+                    case "Result":
+                      this.tableInfo.value = this.ResultDescription(itemRow[itemCol.field]);
+                      break;
+                    case "StartEventTime":
+                    case "EndEventTime":
+                      this.tableInfo.value = this.convertSecondiToTime(Number(itemRow[itemCol.field]));
+                      break;
+                    case "FunctionCode":
+                      const funcCode = itemRow[itemCol.field];
+                      if(funcCode !== 0) {
+                        this.tableInfo.value = funcCode + " - " + (this.functionsInfo.find(func => func.FuncID === funcCode)?.FuncDescr ?? "");
+                      }
+                      else {
+                        this.tableInfo.value = "--";
+                      }
+                      break;
+                    default:
+                      this.tableInfo.value = itemRow[itemCol.field];
+                      break;
                   }
-                  else {
-                    this.tableInfo.value = itemRow[itemCol.field];
-                  } 
+ 
                   this.detailsData.push({ description: this.tableInfo.description, value: this.tableInfo.value, bgColor: "#FFFFFF", textColor: "#0d0080"});
               }
           }
@@ -355,4 +387,16 @@ background: any;
     
   }
 
+  subLoadUnitsInfo(fieldName: string, fieldvalue: string): String  {
+    switch (fieldName) {
+      case "LineID":
+        return this.unitsInfo.find(unit => unit.LineID === fieldvalue)?.LineDescr ?? "";
+      case "UnitTypeID":
+        return this.unitsInfo.find(unit => unit.UnitTypeID === fieldvalue)?.UnitTypeDescr ?? "";
+      case "UnitID":
+        return this.unitsInfo.find(unit => unit.UnitID === fieldvalue)?.UnitDescr ?? "";
+      default:
+        return ""
+    }
+  }
 }

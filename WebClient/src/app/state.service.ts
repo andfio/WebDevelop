@@ -13,5 +13,10 @@ export class StateService {
   DateFormatTo: string = "";
   linesItem : any[] = [];
   unitTypesItem: any[] = [];
-  unitsItem: any[] = [];  
+  unitsItem: any[] = [];
+  unitsInfo: any[] = []; 
+  abortcodeInfo: any[] = [];
+  modelsinfo: any[] = [];
+  functionsinfo: any[] = [];
+  SelectedRow: any;
 }
