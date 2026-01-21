@@ -223,7 +223,8 @@ select {
   border-collapse: collapse;
   table-layout: auto;   /* <-- le celle si adattano al contenuto */
   font-family: Tahoma;
-  margin-top: 20px;
+  margin-top: 10px;
+  margin-bottom: 80px;
   background-color: white;
   border-radius: 6px;
   overflow: hidden; /* per bordi arrotondati */
@@ -276,4 +277,59 @@ select {
 
 .styled-table tr:hover {
     cursor: pointer;
+}
+
+/* POPUP riepilogo conteggi */
+.popup-overlay {
+  position: fixed;
+  inset: 0;
+  /* background: rgba(0, 0, 0, 0.4); */
+  z-index: 9999;
+
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+  pointer-events: none;
+}
+
+/* CONTENITORE POPUP */
+.popup-container {
+  width: 100%;
+  background: white;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.25);
+
+  pointer-events: auto;
+}
+
+/* HEADER */
+.popup-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  padding: 0px 20px;
+  background-color: #C0C0C0;
+  color: white;
+}
+
+.popup-title {
+  font-size: 14px;
+  font-weight: bold;
+  font-family: Tahoma;
+}
+
+.popup-close {
+  background: red;
+  border: none;
+  font-size: 18px;
+  cursor: pointer;
+  line-height: 1;
+}
+
+.popup-content {
+  padding: 5px 20px;
+  overflow-y: hidden;
+  height: calc(100% - 48px); /* sottrae l'altezza dell'header */
+  font-family: Tahoma;
+  font-size: 16px;
 }

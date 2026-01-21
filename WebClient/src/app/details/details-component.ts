@@ -71,13 +71,13 @@ background: any;
     
     this.http.post('http://localhost:61694/api/query/details', payload).subscribe({
       next: (data: any) => {
-        console.log("RISULTATO BACKEND:", data);
+        // console.log("RISULTATO BACKEND:", data);
         this.results = data; 
         this.subShowRoot();
         this.subShowIcon();
       },
       error: (err) => {
-        console.error("ERRORE BACKEND:", err);
+        console.error("ERRORE BACKEND DETAILS:", err);
       }
     });
 
@@ -244,7 +244,7 @@ background: any;
                         this.tableInfo.value = funcCode + " - " + (this.functionsInfo.find(func => func.FuncID === funcCode)?.FuncDescr ?? "");
                       }
                       else {
-                        this.tableInfo.value = "--";
+                        this.tableInfo.value = "0";
                       }
                       break;
                     default:

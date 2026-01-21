@@ -176,7 +176,7 @@ export class HomeComponent {
 
     this.http.post('http://localhost:61694/api/query', payload).subscribe({
       next: (data: any) => {
-        console.log("RISULTATO BACKEND:", data);
+        // console.log("RISULTATO BACKEND:", data);
         this.results = data; 
 
         /* salva tutto per ricaricare da details */
@@ -228,6 +228,9 @@ export class HomeComponent {
             if(itemRow[itemCol.field] == null) { itemRow[itemCol.field] = '--' }
           })
         })
+
+        let totalsummary: string = this.subTotalSummary(this.results);
+        this.openPopup(totalsummary, "8vh");        
       },
       error: (err) => {
         console.error("ERRORE BACKEND:", err);
@@ -237,7 +240,47 @@ export class HomeComponent {
     this.filters.forEach(filter => {
       this.fvalues[filter.name] = undefined;        
     });
+
   } 
+
+  subTotalSummary(results: any[]): string {
+    let total: number = results.length;
+    let passed: number = 0;
+    let failed: number = 0;
+    let warning: number = 0;
+    let interrupted: number = 0;
+    let notfailfound: number = 0;
+
+    results.forEach(item => {
+      switch (Number(item["Result"].split('-')[0])) {
+        case 1:
+          passed++;
+          break;
+        case 0:
+          failed++;
+          break;
+        case 4:
+          warning++;
+          break;
+        case 2:
+          interrupted++;
+          break;  
+        case 8:
+          notfailfound++;
+          break;                              
+      }
+    });
+
+    return `Total= ${total} - Passed= ${passed} [${this.percentage(passed, total)}%] - Failed= ${failed} [${this.percentage(failed, total)}%] - Warning= ${warning} [${this.percentage(warning, total)}%] - Interrupted= ${interrupted} - Not Fail Found= ${notfailfound}`;
+  }
+
+  percentage(partialValue: number, totalValue: number): number {
+    try {
+      return Number(((100 * partialValue) / totalValue).toFixed(2));
+    } catch (err) {
+      return partialValue;
+    }
+  }
 
   ResultDescription(res: string): any {
     let result: any = "";
@@ -387,5 +430,21 @@ export class HomeComponent {
   
     return values;
    } 
-   
+
+  showPopup = false;
+
+  popupLabel = 'Total Summary';
+  popupText = '';
+  popupHeight = '10vh';
+
+  openPopup(label?: string, height?: string) {
+    if (label) this.popupText = label;
+    if (height) this.popupHeight = height;
+    this.showPopup = true;
   }
+
+  closePopup() {
+    this.showPopup = false;
+  }
+   
+}
