@@ -359,6 +359,8 @@ export class HomeComponent {
         return this.subLinesInfo();
       case "UnitTypeID":
         values = this.subUnitTypesInfo(this.filterValues['Line']);
+        this.unitTypesItem = values;
+        this.unitsItem = [];
         this.filterValues['Unit Type'] = '%';
         this.filterValues['Unit'] = '%';
         return values; 
