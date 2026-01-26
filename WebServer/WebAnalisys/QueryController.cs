@@ -82,7 +82,7 @@ namespace WebAnalisys.Controllers
 
                 sql += " ORDER BY Date_Time ASC";
 
-                using (var conn = new SqlConnection("Persist Security Info=False;User ID=sa;Password=Ab123456;Initial Catalog=DBResults_Line1_FLCC;Data Source=172.18.81.36\\SQLEXPRESS2019,1430"))
+                using (var conn = new SqlConnection("Persist Security Info=False;User ID=sa;Password=Ab123456;Initial Catalog=DBResults_Line1_FLCC;Data Source=172.18.81.90\\SQLEXPRESS2019,1430"))
                 using (var cmd = new SqlCommand(sql, conn))
                 {
                     // Parametri SQL
@@ -162,7 +162,7 @@ namespace WebAnalisys.Controllers
 
                 var details = new List<Dictionary<string, object>>();
 
-                using (var conn = new SqlConnection("Persist Security Info=False;User ID=sa;Password=Ab123456;Initial Catalog=DBResults_Line1_FLCC;Data Source=172.18.81.36\\SQLEXPRESS2019,1430"))
+                using (var conn = new SqlConnection("Persist Security Info=False;User ID=sa;Password=Ab123456;Initial Catalog=DBResults_Line1_FLCC;Data Source=172.18.81.90\\SQLEXPRESS2019,1430"))
                 using (var cmd = new SqlCommand(sql, conn))
                 {
                     // Parametri SQL
@@ -242,7 +242,7 @@ namespace WebAnalisys.Controllers
                     }
                 }
 
-                using (var conn = new SqlConnection("Persist Security Info=False;User ID=sa;Password=Ab123456;Initial Catalog=FLCC_Test;Data Source=172.18.81.36\\SQLEXPRESS2019,1430"))
+                using (var conn = new SqlConnection("Persist Security Info=False;User ID=sa;Password=Ab123456;Initial Catalog=FLCC_Test;Data Source=172.18.81.90\\SQLEXPRESS2019,1430"))
                 {
                     conn.Open();
                     foreach (Dictionary<string, object> itemList in details)
@@ -328,7 +328,7 @@ namespace WebAnalisys.Controllers
                 sql += "FROM Units INNER JOIN Lines ON Units.LineID = Lines.LineID INNER JOIN UnitTypes ON Units.UnitTypeID = UnitTypes.UnitTypeID ";
                 sql += "ORDER BY LineID, UnitTypeID, UnitID";
 
-                using (var conn = new SqlConnection("Persist Security Info=False;User ID=sa;Password=Ab123456;Initial Catalog=FLCC_Test;Data Source=172.18.81.36\\SQLEXPRESS2019,1430"))
+                using (var conn = new SqlConnection("Persist Security Info=False;User ID=sa;Password=Ab123456;Initial Catalog=FLCC_Test;Data Source=172.18.81.90\\SQLEXPRESS2019,1430"))
                 using (var cmd = new SqlCommand(sql, conn))
                 {
                     conn.Open();
@@ -366,7 +366,7 @@ namespace WebAnalisys.Controllers
             {
                 string sql = "SELECT DISTINCT FixedPart As ModelCode, ModelDescr From Models";
 
-                using (var conn = new SqlConnection("Persist Security Info=False;User ID=sa;Password=Ab123456;Initial Catalog=FLCC_Test;Data Source=172.18.81.36\\SQLEXPRESS2019,1430"))
+                using (var conn = new SqlConnection("Persist Security Info=False;User ID=sa;Password=Ab123456;Initial Catalog=FLCC_Test;Data Source=172.18.81.90\\SQLEXPRESS2019,1430"))
                 using (var cmd = new SqlCommand(sql, conn))
                 {
                     conn.Open();
@@ -404,7 +404,7 @@ namespace WebAnalisys.Controllers
             {
                 string sql = "SELECT UnitTypeID, ErrorID As AbortCode, Descr As AbortDescr FROM UnitTypesErrors";
 
-                using (var conn = new SqlConnection("Persist Security Info=False;User ID=sa;Password=Ab123456;Initial Catalog=FLCC_Test;Data Source=172.18.81.36\\SQLEXPRESS2019,1430"))
+                using (var conn = new SqlConnection("Persist Security Info=False;User ID=sa;Password=Ab123456;Initial Catalog=FLCC_Test;Data Source=172.18.81.90\\SQLEXPRESS2019,1430"))
                 using (var cmd = new SqlCommand(sql, conn))
                 {
                     conn.Open();
@@ -442,7 +442,7 @@ namespace WebAnalisys.Controllers
             {
                 string sql = "SELECT FuncID, FuncDescr FROM Functions";
 
-                using (var conn = new SqlConnection("Persist Security Info=False;User ID=sa;Password=Ab123456;Initial Catalog=FLCC_Test;Data Source=172.18.81.36\\SQLEXPRESS2019,1430"))
+                using (var conn = new SqlConnection("Persist Security Info=False;User ID=sa;Password=Ab123456;Initial Catalog=FLCC_Test;Data Source=172.18.81.90\\SQLEXPRESS2019,1430"))
                 using (var cmd = new SqlCommand(sql, conn))
                 {
                     conn.Open();

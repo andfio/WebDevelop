@@ -230,7 +230,7 @@ export class HomeComponent {
         })
 
         let totalsummary: string = this.subTotalSummary(this.results);
-        this.openPopup(totalsummary, "8vh");        
+        this.openPopup(totalsummary, "120px");        
       },
       error: (err) => {
         console.error("ERRORE BACKEND:", err);
@@ -435,18 +435,13 @@ export class HomeComponent {
 
   showPopup = false;
 
-  popupLabel = 'Total Summary';
   popupText = '';
-  popupHeight = '10vh';
+  popupHeight = '120px';
 
   openPopup(label?: string, height?: string) {
     if (label) this.popupText = label;
     if (height) this.popupHeight = height;
     this.showPopup = true;
-  }
-
-  closePopup() {
-    this.showPopup = false;
   }
    
 }

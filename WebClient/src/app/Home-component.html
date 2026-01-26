@@ -4,16 +4,11 @@
   @if (showPopup) {
   <div class="popup-overlay">
 
-    <div class="popup-container" [style.height]="popupHeight">
+    <div class="popup-container">
 
       <div class="popup-header">
-        <label class="popup-title">{{ popupLabel }}</label>
-        <button class="popup-close" (click)="closePopup()">✖</button>
-      </div>
-
-      <div class="popup-content">
-        {{ popupText }}
-      </div>        
+        <label class="popup-title">{{ popupText }}</label>
+      </div>       
 
     </div>
 
