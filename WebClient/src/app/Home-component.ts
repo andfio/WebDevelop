@@ -431,7 +431,7 @@ export class HomeComponent {
     });
   
     return values;
-   } 
+  } 
 
   showPopup = false;
 
@@ -443,5 +443,51 @@ export class HomeComponent {
     if (height) this.popupHeight = height;
     this.showPopup = true;
   }
-   
+
+  sortField: string = ''; 
+  sortOrderAsc: boolean = false;
+  sortList: any[] = [];
+  subSortColumns(field: string) {
+    if (this.results.length == 0) {
+      return;
+    }
+
+    if (field !== 'ModelCode' && field !== 'DummyCode' && field !=='Date_Time') {
+      return; 
+    }  
+    
+    this.sortList = this.results
+
+    switch (this.sortOrderAsc) {
+      case true:
+        this.sortOrderAsc = false;
+        break;
+      case false:
+        this.sortOrderAsc = true;
+        break;
+    }
+
+    if(field !== this.sortField) {
+      this.sortField = field;
+      this.sortOrderAsc = true;
+    }
+
+    if (!this.sortOrderAsc) {
+      this.sortList.reverse();
+      this.results = this.sortList;
+      this.sortOrderAsc = true;
+      return;
+    }
+
+    this.sortList.sort((a, b) => {
+      if (a[field] < b[field]) {
+        return -1;
+      }
+      if (a[field] > b[field]) {
+        return 1;
+      }
+      return 0;
+    });
+    this.results = this.sortList;
+  }
 }

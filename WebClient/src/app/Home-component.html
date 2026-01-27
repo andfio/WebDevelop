@@ -163,7 +163,7 @@
       <thead id="columnsbox">
         @for (item of columns; track $index) {
           @if(item.field !== 'ID_Result') {
-          <th scope="col"> {{ item.name }}  </th>
+          <th scope="col" (click)="subSortColumns(item.field)" > {{ item.name }}  </th>
           }
         }
       </thead>

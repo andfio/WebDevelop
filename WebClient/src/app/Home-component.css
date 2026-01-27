@@ -245,6 +245,11 @@ select {
   border-bottom: 2px solid #357bc8;
 }
 
+.styled-table th:hover {
+    cursor: pointer;
+    border: 2px solid #2d6cad;
+}
+
 /* Righe */
 .styled-table td {
   padding: 8px;
