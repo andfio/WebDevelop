@@ -28,11 +28,12 @@
 
 /* LABEL ROOT FUORI DALLA TABELLA - ALLINEATA A SINISTRA */
 .root-label {
-    display: block;             /* Garantisce posizione su una nuova linea */
+    /* display: block; */             /* Garantisce posizione su una nuova linea */
     width: fit-content;         /* Larghezza esatta del contenuto */
     background: #0078d4;
     color: white;
     font-family: 'Tahoma';
+    font-size: 16px;
     font-weight: bold;
     padding: 12px 18px;
     border-radius: 8px;
@@ -45,6 +46,28 @@
 
 .root-label:hover {
     background: #005fa3;
+}
+
+.btn-export {  
+    background-color: #28a745;
+    color: white;
+    font-family: 'Tahoma';
+     font-size: 16px;
+    font-weight: bold;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+    box-shadow: 0px 1px 4px rgba(0,0,0,0.3);
+    margin-right: 40px;
+    margin-bottom: 15px;
+}
+
+.root-contenitor {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 }
 
 /* Wrapper della tabella (scroll configurabile) */

@@ -399,4 +399,20 @@ background: any;
         return ""
     }
   }
+
+  exportDetails() {
+    if (this.results.length == 0) {
+      alert("No data to export!");
+      return;
+    }
+
+    let rootContent = this.columnsrootdetails.map(f => {
+      if (f.field.trim() !== "") {
+        return `${f.name}= ${this.row[f.field]}`;
+      }
+      return "%";
+    }).join('\n') + '\n\r';
+
+    rootContent = rootContent.replaceAll('%\n', '');
+  }
 }

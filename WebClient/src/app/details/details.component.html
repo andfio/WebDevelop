@@ -1,10 +1,17 @@
 <div class="tables-container">
     <button class="btn-goback" (click)="goBack()">⬅ Torna alla Home</button>
 
-    <!-- LABEL ROOT ESTERNA -->
-    <div class="root-label" (click)="subShowRoot()">
-        {{ row['SerialNumber'] }}
-    </div>
+    <div class="root-contenitor">
+
+        <!-- LABEL ROOT ESTERNA -->
+        <div class="root-label" (click)="subShowRoot()">
+            {{ row['SerialNumber'] }}
+        </div>
+
+        <!-- BUTTON EXPORT DETAILS -->
+        <div class="btn-export" (click)="exportDetails()">Export Details </div >
+
+    </div>    
 
     <!-- CONTENITORE A DUE COLONNE -->
     <div class="tables-flex">
