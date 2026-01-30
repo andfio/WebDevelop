@@ -149,6 +149,10 @@ export class HomeComponent {
             this.filterValues[filter.name] = '%';
         }
 
+        if(checkvalue.length > 1 && checkvalue.indexOf('*') >= 0 ) {
+          this.fvalues[filter.name] = checkvalue.replaceAll('*','%');
+        }
+
         switch (filter.name) {
           case "Line": 
           case "Unit Type":
@@ -162,7 +166,6 @@ export class HomeComponent {
         }
 
     })
-
     this.sendToBackend();
   }
 
@@ -230,7 +233,8 @@ export class HomeComponent {
         })
 
         let totalsummary: string = this.subTotalSummary(this.results);
-        this.openPopup(totalsummary, "120px");        
+        this.openPopup(totalsummary, "120px");  
+        
       },
       error: (err) => {
         console.error("ERRORE BACKEND:", err);
@@ -490,4 +494,60 @@ export class HomeComponent {
     });
     this.results = this.sortList;
   }
+
+  subExportCSV() {
+    if (this.results.length == 0) {
+      alert("No data to export!");
+      return;
+    }
+
+    let searchfilters = this.filters.map(f => `${f.name}= ${this.filterValues[f.name]}`).map(f => f.replaceAll('%','--')).join('\n') + '\n\r';
+
+    let headerContent: string = this.columns.map(col => col.name).filter(col => col !== "ID_Result").join(';') + '\n';
+
+    let rowsContent: string = this.results.map(row => 
+      this.columns.map(col => {
+        let cellData = row[col.field];
+        switch (col.field) {
+          case "ModelCode":
+          case "DummyCode":
+          case "ProgramCode":  
+            cellData = this.csvEscape(this.forceExcelText(cellData));
+            break;
+          default:
+            break;
+        }
+        return cellData;
+      }).splice(1, this.columns.length).join(';')
+    ).join('\n');
+
+    let csvContent: string = searchfilters + headerContent + rowsContent;
+
+    let blob = new Blob([csvContent], { type: 'text/tab-separated-values;charset=utf-8;' });
+    let link = document.createElement("a");
+    let url = URL.createObjectURL(blob);
+    link.setAttribute("href", url);
+    link.setAttribute("download", "Export-List-" + new Date().toISOString().slice(0, 10) + ".csv");
+    link.style.visibility = 'hidden';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  }  
+
+  csvEscape(value: unknown): string {
+    // converte in stringa, gestisce ; " e newline secondo CSV
+    const s = value == null ? '' : String(value);
+    const needsQuotes = /[;"\r\n]/.test(s);
+    const escaped = s.replace(/"/g, '""');
+    return needsQuotes ? `"${escaped}"` : escaped;
+  }
+
+  forceExcelText(value: unknown): string {
+    // Forza Excel a trattarlo come testo: ="..."
+    // NB: il contenuto interno va escapato per la formula (doppie virgolette)
+    const s = value == null ? '' : String(value);
+    const formulaSafe = s.replace(/"/g, '""');
+    return `="${formulaSafe}"`;
+  }
+
 }

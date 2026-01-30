@@ -194,7 +194,7 @@ select {
     height: 18px;
 }
 
-.btn-graph {
+.btn-export {
     padding: 8px 16px;
     background-color: #4a90e2;
     color: white;
@@ -208,11 +208,11 @@ select {
     transition: background-color .2s ease;
 }
 
-.btn-graph:hover {
+.btn-export:hover {
     background-color: #357bc8;
 }
 
-.btn-graph:active {
+.btn-export:active {
     background-color: #2d6cad;
 }
 
