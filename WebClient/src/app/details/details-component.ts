@@ -261,8 +261,6 @@ background: any;
       }
     }
 
-    let currProgressiveTest: number = 1;
-
     for (itemRow of this.results) {
       if (itemRow['ProgressiveGroup'] == item['ProgressiveGroup']) {
           for (itemCol of this.columnsdetails) {
@@ -321,7 +319,6 @@ background: any;
                       break;
                   }
                   
-                  currProgressiveTest = currProgressiveTest + 1;
               }
           }
       }
@@ -406,13 +403,132 @@ background: any;
       return;
     }
 
-    let rootContent = this.columnsrootdetails.map(f => {
-      if (f.field.trim() !== "") {
-        return `${f.name}= ${this.row[f.field]}`;
-      }
-      return "%";
+    let columns: any[] = [];
+
+    this.columnsrootdetails.forEach(col => {
+      if (col.field.trim() !== "") {
+        columns.push(col);
+      }   
+    });
+
+    let rootContent = columns.map(f => {
+        return `${f.name}: ` + (f.name.length >= 6 ? "\t" : "\t\t") + `${this.row[f.field]}`;
     }).join('\n') + '\n\r';
 
-    rootContent = rootContent.replaceAll('%\n', '');
+
+    let CurrProgressiveGroup: number = 0;
+    let contentData: string = '';
+    let headerDetails: string = '';
+    let progressiveTest: number = 0;
+
+    let detailsContent = this.results.map(itemRow => {
+
+      headerDetails = '';  
+      if (CurrProgressiveGroup !== Number(itemRow['ProgressiveGroup'])) {
+
+        columns = [];
+        this.columnsdetails.forEach(col => {
+          if (col.field.trim() !== "") {
+            columns.push(col);
+          }
+        });
+        
+        progressiveTest = 0;
+
+        let columnValue:string = '';
+        columns.forEach(col => {
+          switch (col.field) {
+            case "TestResult":
+            case "Result":
+              columnValue = this.ResultDescription(itemRow[col.field]);
+              break;
+            case "StartEventTime":
+            case "EndEventTime":
+              columnValue = this.convertSecondiToTime(Number(itemRow[col.field]));
+              break;
+            case "FunctionCode":
+              const funcCode = itemRow[col.field];
+              if(funcCode !== 0) {
+                columnValue = funcCode + " - " + (this.functionsInfo.find(func => func.FuncID === funcCode)?.FuncDescr ?? "");
+              }
+              else {
+                columnValue = "0";
+              }
+              break;
+            default:
+              columnValue = itemRow[col.field];
+              break;
+          }
+
+          if (col.field.trim() !== "TestType") { 
+            headerDetails += `${col.name}: \t ${columnValue}\n`;
+          }
+        });    
+       
+        CurrProgressiveGroup = Number(itemRow['ProgressiveGroup']);
+      }
+
+      contentData = '';
+      columns.forEach(col => {
+        if (col.field == 'TestType') {
+            switch (itemRow[col.field]) {
+              case 'M':
+                if (itemRow['M'] != "") {
+                  contentData += `${'Descr'}= ${itemRow['TestDescr']}\n`;
+                  contentData += `${'Result'}= ${this.ResultDescription(itemRow['TestRes'])}\n`;
+                }
+                for (let i = 0; i < this.columnsmeasuredetails.length; i++) {
+                    const itemMes = this.columnsmeasuredetails[i];
+                    if (itemRow[itemMes.field] == "") {
+                        contentData += `${'Trigger'}= ${( itemRow['TestTimeOut'] == 1 ? "FAIL" : "PASS" )}\n`;
+                    }
+                    else {
+                        contentData += `${itemMes.name}= ${itemRow[itemMes.field]}\n`;
+                    }
+                }
+                contentData += '\n';
+                break;
+              default:
+                if (Number(itemRow['TestType']) == 2) {
+                  progressiveTest++;
+                  contentData += "Actionament: " + progressiveTest.toString() + "\n";
+                }
+
+                let parameterDetails: string = "";
+                for (let iPar: number = 1; iPar <= 10; iPar++) {
+                    if (itemRow["Valore" + iPar.toString()] !== "?") {
+                      let descr = (itemRow["Descr" + iPar.toString()] !== "" ? itemRow["Descr" + iPar.toString()] : "Parameter" + iPar.toString());
+                      parameterDetails += `${descr}: \t ${itemRow["Valore" + iPar.toString()]} ${itemRow["UM" + iPar.toString()]}\n`;
+                    }
+                }
+
+                contentData += `${'Descr'}: \t ${itemRow['TestDescr']}\n`;
+                contentData += `${'Result'}: \t ${this.ResultDescription(itemRow['TestRes'])}\n`;
+                contentData += parameterDetails + '\n';
+                break;
+            }
+          }
+          
+      });
+
+      return headerDetails + contentData;
+    });
+
+    let detailsComplete: string = '';
+    detailsContent.forEach(item => {
+       detailsComplete += item + '\n';
+    });
+
+    const finalContent = rootContent + detailsComplete;
+
+    const blob = new Blob([finalContent], { type: 'text/plain;charset=utf-8' });
+    const url = window.URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `Export-Details-${new Date().toISOString().slice(0, 10)}.txt`;
+    a.click();
+    window.URL.revokeObjectURL(url);
+    
   }
+
 }

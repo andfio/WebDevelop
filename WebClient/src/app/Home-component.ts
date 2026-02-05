@@ -501,9 +501,9 @@ export class HomeComponent {
       return;
     }
 
-    let searchfilters = this.filters.map(f => `${f.name}= ${this.filterValues[f.name]}`).map(f => f.replaceAll('%','--')).join('\n') + '\n\r';
+    let searchfilters = this.filters.map(f => `${f.name}= ${this.filterValues[f.name]}`).map(f => f.replaceAll('%','--')).join('\n') + '\n\n';
 
-    let headerContent: string = this.columns.map(col => col.name).filter(col => col !== "ID_Result").join(';') + '\n';
+    let headerContent: string = this.columns.map(col => col.name).filter(col => col !== "ID_Result").join('\t') + '\n';
 
     let rowsContent: string = this.results.map(row => 
       this.columns.map(col => {
@@ -512,13 +512,13 @@ export class HomeComponent {
           case "ModelCode":
           case "DummyCode":
           case "ProgramCode":  
-            cellData = this.csvEscape(this.forceExcelText(cellData));
+            cellData = `'` + cellData + `'` // this.csvEscape(this.forceExcelText(cellData));
             break;
           default:
             break;
         }
         return cellData;
-      }).splice(1, this.columns.length).join(';')
+      }).splice(1, this.columns.length).join('\t')
     ).join('\n');
 
     let csvContent: string = searchfilters + headerContent + rowsContent;
@@ -527,7 +527,7 @@ export class HomeComponent {
     let link = document.createElement("a");
     let url = URL.createObjectURL(blob);
     link.setAttribute("href", url);
-    link.setAttribute("download", "Export-List-" + new Date().toISOString().slice(0, 10) + ".csv");
+    link.setAttribute("download", "Export-List-" + new Date().toISOString().slice(0, 10) + ".txt");
     link.style.visibility = 'hidden';
     document.body.appendChild(link);
     link.click();

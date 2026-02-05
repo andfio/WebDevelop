@@ -193,7 +193,7 @@
   ],
     "columnsdetails": [
     {
-      "name": "Sequence N°",
+      "name": "Sequence N.",
       "field": "ProgressiveGroup"
     },
     {
