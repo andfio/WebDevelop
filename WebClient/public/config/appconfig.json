@@ -256,7 +256,7 @@
     },
     {
       "name": "Name",
-      "field": "StoreName"
+      "field": "Name"
     },
     {
       "name": "Limits(Min.)",

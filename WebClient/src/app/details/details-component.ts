@@ -171,6 +171,7 @@ background: any;
             break;
           case "TestTimeLength":
             itemValue = this.subCalculateTestTime();
+            this.row[itemCol.field] = itemValue;
             break;
           case "LineID":
             itemValue = this.row[itemCol.field] + " - " + (this.unitsInfo.find(unit => unit.LineID === this.row[itemCol.field])?.LineDescr ?? "not found");
@@ -279,7 +280,7 @@ background: any;
                           this.detailsData.push({ description: this.tableInfo.description, value: this.tableInfo.value, bgColor: "#FFFFFF", textColor: "#0d0080"})                          
                       }
                       for (itemMes of this.columnsmeasuredetails) {
-                          if (itemRow[itemMes.field] == "") {
+                          if (itemRow['Value'] == "") {
                               this.tableInfo.description = "Trigger";
                               this.tableInfo.value = ( itemRow['TestTimeOut'] == 1 ? "FAIL" : "PASS" );
                               this.detailsData.push({ description: this.tableInfo.description, value: this.tableInfo.value, bgColor: "#FFFFFF", textColor: "#0d0080"});
@@ -412,7 +413,7 @@ background: any;
     });
 
     let rootContent = columns.map(f => {
-        return `${f.name}: ` + (f.name.length >= 6 ? "\t" : "\t\t") + `${this.row[f.field]}`;
+        return `${f.name}: ` + (f.name.length >= 6 ? "\t" : " ".repeat(4) + "\t") + `${this.row[f.field]}`;
     }).join('\n') + '\n\r';
 
 
@@ -464,7 +465,8 @@ background: any;
             headerDetails += `${col.name}: \t ${columnValue}\n`;
           }
         });    
-       
+        headerDetails += '\n';
+
         CurrProgressiveGroup = Number(itemRow['ProgressiveGroup']);
       }
 
@@ -472,39 +474,39 @@ background: any;
       columns.forEach(col => {
         if (col.field == 'TestType') {
             switch (itemRow[col.field]) {
-              case 'M':
+              case 1:
                 if (itemRow['M'] != "") {
-                  contentData += `${'Descr'}= ${itemRow['TestDescr']}\n`;
-                  contentData += `${'Result'}= ${this.ResultDescription(itemRow['TestRes'])}\n`;
+                  contentData += `${'Descr'}.: \t ${itemRow['TestDescr']}\n`;
+                  contentData += `${'Result'}: \t ${this.ResultDescription(itemRow['TestRes'])}\n`;
                 }
                 for (let i = 0; i < this.columnsmeasuredetails.length; i++) {
                     const itemMes = this.columnsmeasuredetails[i];
-                    if (itemRow[itemMes.field] == "") {
-                        contentData += `${'Trigger'}= ${( itemRow['TestTimeOut'] == 1 ? "FAIL" : "PASS" )}\n`;
+                    if (itemRow['Value'] == "") {
+                        contentData += `${'Trigger'}: \t ${( itemRow['TestTimeOut'] == 1 ? "FAIL" : "PASS" )}\n`;
+                        break;
                     }
                     else {
-                        contentData += `${itemMes.name}= ${itemRow[itemMes.field]}\n`;
+                        contentData += `${itemMes.name}: ${itemMes.name.length >= 6 ? "\t" : " ".repeat(4) + "\t" } ${itemRow[itemMes.field]}\n`;
                     }
                 }
-                contentData += '\n';
                 break;
               default:
                 if (Number(itemRow['TestType']) == 2) {
                   progressiveTest++;
-                  contentData += "Actionament: " + progressiveTest.toString() + "\n";
+                  contentData += "Actionament:  \t " + progressiveTest.toString() + "\n";
                 }
 
                 let parameterDetails: string = "";
                 for (let iPar: number = 1; iPar <= 10; iPar++) {
                     if (itemRow["Valore" + iPar.toString()] !== "?") {
                       let descr = (itemRow["Descr" + iPar.toString()] !== "" ? itemRow["Descr" + iPar.toString()] : "Parameter" + iPar.toString());
-                      parameterDetails += `${descr}: \t ${itemRow["Valore" + iPar.toString()]} ${itemRow["UM" + iPar.toString()]}\n`;
+                      parameterDetails += `${descr}: ${descr.length >= 6 ? "\t" :  " ".repeat(4) + "\t"} ${itemRow["Valore" + iPar.toString()]} ${itemRow["UM" + iPar.toString()]}\n`;
                     }
                 }
 
-                contentData += `${'Descr'}: \t ${itemRow['TestDescr']}\n`;
+                contentData += `${'Descr'}.: \t ${itemRow['TestDescr']}\n`;
                 contentData += `${'Result'}: \t ${this.ResultDescription(itemRow['TestRes'])}\n`;
-                contentData += parameterDetails + '\n';
+                contentData += parameterDetails;
                 break;
             }
           }
