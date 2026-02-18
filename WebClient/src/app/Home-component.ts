@@ -42,6 +42,8 @@ export class HomeComponent {
       this.modelsInfo = this.state.modelsinfo;
       this.functionsInfo = this.state.functionsinfo;
       this.selectedRow = this.state.SelectedRow;
+      this.showPopup = this.state.showPopup;
+      this.totalsummary = this.state.totalsummary;
       return; 
     }
 
@@ -170,17 +172,18 @@ export class HomeComponent {
   }
 
   results: any[] = [];
+  totalsummary: string = ''; showPopup: boolean = false;
 
   sendToBackend() {
     const payload = {
       filters: this.fvalues,
       query: this.query  
     };
-
+    this.setBusy(true);
     this.http.post('http://localhost:61694/api/query', payload).subscribe({
       next: (data: any) => {
         // console.log("RISULTATO BACKEND:", data);
-        this.results = data; 
+        this.results = data 
 
         /* salva tutto per ricaricare da details */
         this.state.results = this.results;
@@ -196,7 +199,7 @@ export class HomeComponent {
         this.state.unitsInfo = this.unitsInfo;
         this.state.abortcodeInfo = this.abortcodeinfo;
         this.state.modelsinfo = this.modelsInfo;
-        this.state.functionsinfo = this.functionsInfo;
+        this.state.functionsinfo = this.functionsInfo;        
 
          /* formatta i dati per la visualizzazione */
 
@@ -232,8 +235,10 @@ export class HomeComponent {
           })
         })
 
-        let totalsummary: string = this.subTotalSummary(this.results);
-        this.openPopup(totalsummary, "120px");  
+        this.totalsummary =  this.subTotalSummary(this.results);
+        this.showPopup = true;
+        this.state.showPopup = this.showPopup;
+        this.state.totalsummary = this.totalsummary;  
         
       },
       error: (err) => {
@@ -245,6 +250,7 @@ export class HomeComponent {
       this.fvalues[filter.name] = undefined;        
     });
 
+    this.setBusy(false);
   } 
 
   subTotalSummary(results: any[]): string {
@@ -255,27 +261,33 @@ export class HomeComponent {
     let interrupted: number = 0;
     let notfailfound: number = 0;
 
-    results.forEach(item => {
-      switch (Number(item["Result"].split('-')[0])) {
-        case 1:
-          passed++;
-          break;
-        case 0:
-          failed++;
-          break;
-        case 4:
-          warning++;
-          break;
-        case 2:
-          interrupted++;
-          break;  
-        case 8:
-          notfailfound++;
-          break;                              
-      }
-    });
+    try {
+      results.forEach(item => {
+        switch (Number(item["Result"].split('-')[0])) {
+          case 1:
+            passed++;
+            break;
+          case 0:
+            failed++;
+            break;
+          case 4:
+            warning++;
+            break;
+          case 2:
+            interrupted++;
+            break;  
+          case 8:
+            notfailfound++;
+            break;                              
+        }
+      });
 
-    return `Total= ${total} - Passed= ${passed} [${this.percentage(passed, total)}%] - Failed= ${failed} [${this.percentage(failed, total)}%] - Warning= ${warning} [${this.percentage(warning, total)}%] - Interrupted= ${interrupted} - Not Fail Found= ${notfailfound}`;
+      return `Total= ${total} - Passed= ${passed} [${this.percentage(passed, total)}%] - Failed= ${failed} [${this.percentage(failed, total)}%] - Warning= ${warning} [${this.percentage(warning, total)}%] - Interrupted= ${interrupted} - Not Fail Found= ${notfailfound}`;
+    } catch(err) {
+      console.error("Errore nel calcolo del summary: " + err);
+      return `Total= ${total}`;
+    }
+    
   }
 
   percentage(partialValue: number, totalValue: number): number {
@@ -437,17 +449,6 @@ export class HomeComponent {
     return values;
   } 
 
-  showPopup = false;
-
-  popupText = '';
-  popupHeight = '120px';
-
-  openPopup(label?: string, height?: string) {
-    if (label) this.popupText = label;
-    if (height) this.popupHeight = height;
-    this.showPopup = true;
-  }
-
   sortField: string = ''; 
   sortOrderAsc: boolean = false;
   sortList: any[] = [];
@@ -534,20 +535,8 @@ export class HomeComponent {
     document.body.removeChild(link);
   }  
 
-  csvEscape(value: unknown): string {
-    // converte in stringa, gestisce ; " e newline secondo CSV
-    const s = value == null ? '' : String(value);
-    const needsQuotes = /[;"\r\n]/.test(s);
-    const escaped = s.replace(/"/g, '""');
-    return needsQuotes ? `"${escaped}"` : escaped;
-  }
-
-  forceExcelText(value: unknown): string {
-    // Forza Excel a trattarlo come testo: ="..."
-    // NB: il contenuto interno va escapato per la formula (doppie virgolette)
-    const s = value == null ? '' : String(value);
-    const formulaSafe = s.replace(/"/g, '""');
-    return `="${formulaSafe}"`;
+  setBusy(isBusy: boolean) {
+    document.body.classList.toggle('busy', isBusy);
   }
 
 }

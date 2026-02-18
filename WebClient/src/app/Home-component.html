@@ -7,7 +7,7 @@
     <div class="popup-container">
 
       <div class="popup-header">
-        <label class="popup-title">{{ popupText }}</label>
+        <label class="popup-title">{{ totalsummary }}</label>
       </div>       
 
     </div>
@@ -147,8 +147,8 @@
           </div>
 
           <div id="buttonbox">
-            <button class="btn-export" (click)="subExportCSV()">⬇️ Export</button>
-            <button class="btn-search" (click)="submit()">🔍 Search</button>
+            <button class="btn-export" (click)="subExportCSV()"><i class="material-symbols-outlined">file_export</i>Export</button>
+            <button class="btn-search" (click)="submit()"><i class="material-symbols-outlined">manage_search</i>Search</button>
           </div>
 
       </div>
@@ -175,8 +175,8 @@
           [class.selected]="row === selectedRow">
           @for (col of columns; track $index) {
             @if(col.field !== 'ID_Result') {
-                <td>{{ row[col.field] }}</td>
-              }
+                <td>{{ row[col.field] && row[col.field].length > 30 ? row[col.field].substring(0,30) + '...' : row[col.field] }}</td>
+            }
           }
           </tr>
         }

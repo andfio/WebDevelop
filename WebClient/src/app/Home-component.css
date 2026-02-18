@@ -252,7 +252,7 @@ select {
 
 /* Righe */
 .styled-table td {
-  padding: 8px;
+  padding: 6px;
   border-bottom: 1px solid #ddd;
   font-size: 12px;
   font-weight: normal;
@@ -326,4 +326,14 @@ select {
   font-family: Tahoma;
 }
 
+.material-symbols-outlined {
 
+ vertical-align: middle;
+ margin-right: 6px;
+
+}
+
+body.busy,
+body.busy * {
+  cursor: wait !important;
+}

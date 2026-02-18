@@ -19,4 +19,6 @@ export class StateService {
   modelsinfo: any[] = [];
   functionsinfo: any[] = [];
   SelectedRow: any;
+  showPopup: boolean = false;
+  totalsummary: string = '';
 }

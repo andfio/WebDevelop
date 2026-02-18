@@ -192,6 +192,10 @@ background: any;
         this.tableInfo.description = itemCol.name;
         this.tableInfo.value = itemValue; 
         this.detailsData.push({ description: this.tableInfo.description, value: this.tableInfo.value, bgColor: "#FFFFFF", textColor: "#0d0080"});
+        
+        this.selectedRowTests = null; // Deseleziona eventuale riga selezionata nei test
+        this.selectedRowDetails = null; // Deseleziona eventuale riga selezionata nei dettagli
+
     }
 
   }
@@ -531,6 +535,10 @@ background: any;
     a.click();
     window.URL.revokeObjectURL(url);
     
+  }
+
+  setBusy(isBusy: boolean) {
+    document.body.classList.toggle('busy', isBusy);
   }
 
 }

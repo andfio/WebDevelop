@@ -1,15 +1,15 @@
 <div class="tables-container">
-    <button class="btn-goback" (click)="goBack()">⬅ Torna alla Home</button>
 
     <div class="root-contenitor">
 
-        <!-- LABEL ROOT ESTERNA -->
         <div class="root-label" (click)="subShowRoot()">
             {{ row['SerialNumber'] }}
         </div>
 
-        <!-- BUTTON EXPORT DETAILS -->
-        <div class="btn-export" (click)="exportDetails()">Export Details </div >
+        <div class="button-container">
+            <div class="btn-goback" (click)="goBack()"><i class="material-symbols-outlined">arrow_back</i> Torna alla Home</div>
+            <div class="btn-export" (click)="exportDetails()"><i class="material-symbols-outlined">file_export</i> Export Details </div >
+        </div>    
 
     </div>    
 
@@ -27,21 +27,17 @@
                             <tr [bgColor]="rowColor[itemRow['ProgressiveGroup']]" (click)="subShowTestDetails(itemRow)"
                                 (click)="onSelectRow(itemRow, 'Tests')"
                                 [class.selected]="itemRow === selectedRowTests">
-                                
-                                <td id="Progress">
-                                    {{ itemRow['ProgressiveGroup'] }}
-                                </td>
 
                                 <td id="Icon">
                                     @switch (typeIcon[itemRow['TestType']]) {
-                                        @case (1) { <img src="img/Measure.ico" width="32" height="32"> }
-                                        @case (2) { <img src="img/Actionament.ico" width="32" height="32"> }
-                                        @case (5) { <img src="img/SafetyTest.ico" width="32" height="32"> }
-                                        @default  { <img src="img/ComplexTest.ico" width="32" height="32"> }
+                                        @case (1) { <img src="img/Measure.ico" width="20" height="20"> }
+                                        @case (2) { <img src="img/Actionament.ico" width="20" height="20"> }
+                                        @case (5) { <img src="img/SafetyTest.ico" width="20" height="20"> }
+                                        @default  { <img src="img/ComplexTest.ico" width="20" height="20"> }
                                     }
                                 </td>
 
-                                <td id="TestDescription">{{ itemRow['TestDescription'] }}</td>
+                                <td id="TestDescription">{{ itemRow['ProgressiveGroup'] }} - {{ itemRow['TestDescription'] }}</td>
                             </tr>
                         }
                     }
