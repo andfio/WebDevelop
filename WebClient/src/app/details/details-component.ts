@@ -3,6 +3,8 @@ import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 import { AppConfig, filterValues, tableinfo, StructUnitsInfo, functionsinfo} from '../app.config.json';
+import { DialogContent } from '../dialog-component';
+import { MatDialog } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-details',
@@ -14,7 +16,7 @@ import { AppConfig, filterValues, tableinfo, StructUnitsInfo, functionsinfo} fro
 export class DetailsdataComponent {
 background: any;
 
-  constructor(private router: Router, private http: HttpClient) {}
+  constructor(private router: Router, private http: HttpClient, private dialog: MatDialog) {}
   
   goBack() {
     this.router.navigate(['/']);
@@ -404,7 +406,7 @@ background: any;
 
   exportDetails() {
     if (this.results.length == 0) {
-      alert("No data to export!");
+      this.showDialog("No data to export!", "Export Error");
       return;
     }
 
@@ -539,6 +541,14 @@ background: any;
 
   setBusy(isBusy: boolean) {
     document.body.classList.toggle('busy', isBusy);
+  }
+
+  showDialog(message: string, title?: string ) {
+    this.dialog.open(DialogContent, {
+      data: { DialogMessage: message, DialogTitle: title ?? ''},
+      disableClose: true,
+      hasBackdrop: true,
+    });
   }
 
 }

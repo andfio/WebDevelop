@@ -5,16 +5,18 @@ import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { RouterOutlet } from '@angular/router';
 import { StateService } from './state.service'
+import { MatDialog } from '@angular/material/dialog';
+import { DialogContent } from './dialog-component';
 
 @Component({
   selector: 'app-root',
   standalone: true,
   imports: [FormsModule, RouterOutlet],
   templateUrl: './Home-component.html',
-  styleUrls: ['./Home-component.css']
+  styleUrls: ['./Home-component.css'],
 })
 export class HomeComponent {
-  constructor(private http: HttpClient, private router: Router, private state: StateService) {}
+  constructor(private http: HttpClient, private router: Router, private state: StateService, private dialog: MatDialog) {}
 
   filters: AppConfig["filters"] = [];
   columns: AppConfig["columns"] = [];
@@ -123,13 +125,13 @@ export class HomeComponent {
 
     if ((dtFrom < mindate || dtFrom > maxdate) || (dtTo < mindate || dtTo > maxdate))
     {
-      alert("Date From or Date To out of range. check please!");
+      this.showDialog("Date From or Date To out of range. check please!", "Invalid Date");
       return;
     }
       
     if(dtFrom > dtTo)
     {
-      alert("Date To > Date From. Check please!!");
+      this.showDialog("Date To > Date From. Check please!!", "Invalid Date");
       return;
     }
 
@@ -498,7 +500,7 @@ export class HomeComponent {
 
   subExportCSV() {
     if (this.results.length == 0) {
-      alert("No data to export!");
+      this.showDialog("No data to export!", "Export Error");
       return;
     }
 
@@ -537,6 +539,14 @@ export class HomeComponent {
 
   setBusy(isBusy: boolean) {
     document.body.classList.toggle('busy', isBusy);
+  }
+
+  showDialog(message: string, title?: string ) {
+    this.dialog.open(DialogContent, {
+      data: { DialogMessage: message, DialogTitle: title ?? ''},
+      disableClose: true,
+      hasBackdrop: true,
+    });
   }
 
 }
