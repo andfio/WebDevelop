@@ -390,12 +390,12 @@
     }
   ],
   "query": {
-    "select": "SELECT DISTINCT Tab_Headers.ID_Result, Tab_Headers.ModelCode, SerialNumber, DummyCode, ProgramCode, ProgramDescription, Date_Time, UnitID, UnitTypeID, LineID, Shift, Operator, Result, AbortCode ",
+    "select": "SELECT DISTINCT Tab_Headers.ID_Result, Tab_Headers.ModelCode, SerialNumber, DummyCode, ProgramCode, ProgramDescription, (Date_Time AT TIME ZONE 'UTC' AT TIME ZONE 'Central European Standard Time') As Date_Time, UnitID, UnitTypeID, LineID, Shift, Operator, Result, AbortCode ",
     "from": "FROM Tab_Headers INNER JOIN Tab_Tests ON Tab_Headers.ID_Result = Tab_Tests.ID_Result ",
     "where": "WHERE ",
     "conditions": [
-      { "filter": "Start Date", "sql": "Date_Time >= @StartDate" },
-      { "filter": "End Date", "sql": "AND Date_Time <= @EndDate" },      
+      { "filter": "Start Date", "sql": "Date_Time BETWEEN @StartDate AND" },
+      { "filter": "End Date", "sql": " @EndDate" },      
       { "filter": "Model Code", "sql": "AND ModelCode LIKE @ModelCode" },
       { "filter": "DummyCode", "sql": "AND SerialNumber LIKE @DummyCode" },
       { "filter": "Line", "sql": "AND LineID LIKE @Line" },
@@ -420,5 +420,8 @@
         "sql": "Tab_Headers.ID_Result = @ID_Result"
       }
     ]
+  },
+  "httpconfig": {
+    "baseurl": "http://localhost:61694/api"
   }
 }

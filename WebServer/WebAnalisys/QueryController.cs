@@ -7,7 +7,7 @@ using System.Web.Http;
 using WebAnalisys.Models;
 using Newtonsoft.Json.Linq;
 using System.Data.SqlClient;
-
+using System.Configuration;
 
 
 namespace WebAnalisys.Controllers
@@ -56,6 +56,8 @@ namespace WebAnalisys.Controllers
         [Route("")]
         public IHttpActionResult Query([FromBody] QueryPayload payload)
         {
+            string connString = ConfigurationManager.ConnectionStrings["DBResults"].ConnectionString;
+
             var result = new List<Dictionary<string, object>>();
             
             try
@@ -82,7 +84,7 @@ namespace WebAnalisys.Controllers
 
                 sql += " ORDER BY Date_Time ASC";
 
-                using (var conn = new SqlConnection("Persist Security Info=False;User ID=sa;Password=Ab123456;Initial Catalog=DBResults_Line1_FLCC;Data Source=172.18.81.90\\SQLEXPRESS2019,1430"))
+                using (var conn = new SqlConnection(connString))
                 using (var cmd = new SqlCommand(sql, conn))
                 {
                     // Parametri SQL
@@ -92,7 +94,7 @@ namespace WebAnalisys.Controllers
                         string value; DateTime dtvalue;
                         if (DateTime.TryParse(f.Value.ToString(), out dtvalue) == true)
                         {
-                            value = dtvalue.ToString("yyyy-MM-dd HH:mm");
+                            value = dtvalue.ToString("yyyy-MM-dd HH:mm:ss");
                         }
                         else if (f.Value.ToString().IndexOf("-") > -1)
                         {
@@ -136,6 +138,9 @@ namespace WebAnalisys.Controllers
         {
             var result = new List<Dictionary<string, object>>();
 
+            string connDBResultsString = ConfigurationManager.ConnectionStrings["DBResults"].ConnectionString;
+            string connDBTestString = ConfigurationManager.ConnectionStrings["DBTest"].ConnectionString;
+
             try
             {
                 if (payload == null)
@@ -162,7 +167,7 @@ namespace WebAnalisys.Controllers
 
                 var details = new List<Dictionary<string, object>>();
 
-                using (var conn = new SqlConnection("Persist Security Info=False;User ID=sa;Password=Ab123456;Initial Catalog=DBResults_Line1_FLCC;Data Source=172.18.81.90\\SQLEXPRESS2019,1430"))
+                using (var conn = new SqlConnection(connDBResultsString))
                 using (var cmd = new SqlCommand(sql, conn))
                 {
                     // Parametri SQL
@@ -242,7 +247,7 @@ namespace WebAnalisys.Controllers
                     }
                 }
 
-                using (var conn = new SqlConnection("Persist Security Info=False;User ID=sa;Password=Ab123456;Initial Catalog=FLCC_Test;Data Source=172.18.81.90\\SQLEXPRESS2019,1430"))
+                using (var conn = new SqlConnection(connDBTestString))
                 {
                     conn.Open();
                     foreach (Dictionary<string, object> itemList in details)
@@ -322,13 +327,15 @@ namespace WebAnalisys.Controllers
         {
             var result = new List<Dictionary<string, object>>();
 
+            string connDBTestString = ConfigurationManager.ConnectionStrings["DBTest"].ConnectionString;
+
             try
             {
                 string sql = "SELECT UnitID, UnitDescr, Units.UnitTypeID, UnitTypes.UnitTypeDescr, Units.LineID, Lines.LineDescr ";
                 sql += "FROM Units INNER JOIN Lines ON Units.LineID = Lines.LineID INNER JOIN UnitTypes ON Units.UnitTypeID = UnitTypes.UnitTypeID ";
                 sql += "ORDER BY LineID, UnitTypeID, UnitID";
 
-                using (var conn = new SqlConnection("Persist Security Info=False;User ID=sa;Password=Ab123456;Initial Catalog=FLCC_Test;Data Source=172.18.81.90\\SQLEXPRESS2019,1430"))
+                using (var conn = new SqlConnection(connDBTestString))
                 using (var cmd = new SqlCommand(sql, conn))
                 {
                     conn.Open();
@@ -362,11 +369,13 @@ namespace WebAnalisys.Controllers
         {
             var result = new List<Dictionary<string, object>>();
 
+            string connDBTestString = ConfigurationManager.ConnectionStrings["DBTest"].ConnectionString;
+
             try
             {
                 string sql = "SELECT DISTINCT FixedPart As ModelCode, ModelDescr From Models";
 
-                using (var conn = new SqlConnection("Persist Security Info=False;User ID=sa;Password=Ab123456;Initial Catalog=FLCC_Test;Data Source=172.18.81.90\\SQLEXPRESS2019,1430"))
+                using (var conn = new SqlConnection(connDBTestString))
                 using (var cmd = new SqlCommand(sql, conn))
                 {
                     conn.Open();
@@ -400,11 +409,13 @@ namespace WebAnalisys.Controllers
         {
             var result = new List<Dictionary<string, object>>();
 
+            string connDBTestString = ConfigurationManager.ConnectionStrings["DBTest"].ConnectionString;
+
             try
             {
                 string sql = "SELECT UnitTypeID, ErrorID As AbortCode, Descr As AbortDescr FROM UnitTypesErrors";
 
-                using (var conn = new SqlConnection("Persist Security Info=False;User ID=sa;Password=Ab123456;Initial Catalog=FLCC_Test;Data Source=172.18.81.90\\SQLEXPRESS2019,1430"))
+                using (var conn = new SqlConnection(connDBTestString))
                 using (var cmd = new SqlCommand(sql, conn))
                 {
                     conn.Open();
@@ -438,11 +449,13 @@ namespace WebAnalisys.Controllers
         {
             var result = new List<Dictionary<string, object>>();
 
+             string connDBTestString = ConfigurationManager.ConnectionStrings["DBTest"].ConnectionString;
+
             try
             {
                 string sql = "SELECT FuncID, FuncDescr FROM Functions";
 
-                using (var conn = new SqlConnection("Persist Security Info=False;User ID=sa;Password=Ab123456;Initial Catalog=FLCC_Test;Data Source=172.18.81.90\\SQLEXPRESS2019,1430"))
+                using (var conn = new SqlConnection(connDBTestString))
                 using (var cmd = new SqlCommand(sql, conn))
                 {
                     conn.Open();

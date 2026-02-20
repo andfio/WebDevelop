@@ -21,6 +21,7 @@ export class HomeComponent {
   filters: AppConfig["filters"] = [];
   columns: AppConfig["columns"] = [];
   query: AppConfig["query"] = {} as any;
+  httpconfig: AppConfig["httpconfig"] = {} as any;
   unitsInfo: StructUnitsInfo[] = [];
   modelsInfo: modelsinfo [] = [];
   abortcodeinfo: abortcodeinfo [] = [];
@@ -55,6 +56,9 @@ export class HomeComponent {
           this.filters = config.filters;
           this.columns = config.columns;
           this.query = config.query;
+          this.httpconfig = config.httpconfig;
+
+          this.subPost();
 
           this.filterValues = this.subDefaultValues();
       },
@@ -62,8 +66,10 @@ export class HomeComponent {
         console.error('ERRORE CARICAMENTO JSON:', err);
       }
     });
+  }
 
-    this.http.post('http://localhost:61694/api/query/informations', null).subscribe({
+  subPost() {
+    this.http.post(this.httpconfig.baseurl + '/query/informations', null).subscribe({
       next: (data: any) => {
         data.forEach((itemUnit: StructUnitsInfo) => {
           this.unitsInfo.push(itemUnit);
@@ -80,7 +86,7 @@ export class HomeComponent {
       }
     });
     
-    this.http.post('http://localhost:61694/api/query/modelsinfo', null).subscribe({
+    this.http.post(this.httpconfig.baseurl + '/query/modelsinfo', null).subscribe({
       next: (data: any) => {
         this.modelsInfo = data;
       },
@@ -89,7 +95,7 @@ export class HomeComponent {
       }
     });	
     
-    this.http.post('http://localhost:61694/api/query/abortcodeinfo', null).subscribe({
+    this.http.post(this.httpconfig.baseurl + '/query/abortcodeinfo', null).subscribe({
       next: (data: any) => {
         this.abortcodeinfo = data;
       },
@@ -98,7 +104,7 @@ export class HomeComponent {
       }
     });
     
-    this.http.post('http://localhost:61694/api/query/functionsinfo', null).subscribe({
+    this.http.post(this.httpconfig.baseurl + '/query/functionsinfo', null).subscribe({
       next: (data: any) => {
         this.functionsInfo = data;
       },
@@ -109,7 +115,7 @@ export class HomeComponent {
 
   }
   
-  DateFormatFrom: string = new Date().toISOString().slice(0,10) + "T00:00"
+  DateFormatFrom: string = new Date().toISOString().slice(0,10) + "T00:00";
   DateFormatTo: string = new Date().toISOString().slice(0,10) + "T23:59";
 
   filterValues: { [key: string]: any } = {};
@@ -131,7 +137,7 @@ export class HomeComponent {
       
     if(dtFrom > dtTo)
     {
-      this.showDialog("Date To > Date From. Check please!!", "Invalid Date");
+      this.showDialog("Start Date > End Date. Check please!!", "Invalid Date");
       return;
     }
 
@@ -182,7 +188,7 @@ export class HomeComponent {
       query: this.query  
     };
     this.setBusy(true);
-    this.http.post('http://localhost:61694/api/query', payload).subscribe({
+    this.http.post(this.httpconfig.baseurl + '/query', payload).subscribe({
       next: (data: any) => {
         // console.log("RISULTATO BACKEND:", data);
         this.results = data 
@@ -284,7 +290,7 @@ export class HomeComponent {
         }
       });
 
-      return `Total= ${total} - Passed= ${passed} [${this.percentage(passed, total)}%] - Failed= ${failed} [${this.percentage(failed, total)}%] - Warning= ${warning} [${this.percentage(warning, total)}%] - Interrupted= ${interrupted} - Not Fail Found= ${notfailfound}`;
+      return `Total= ${total} - Passed= ${passed} [${this.percentage(passed, total)}%] - Failed= ${failed} [${this.percentage(failed, total)}%] - Warning= ${warning} [${this.percentage(warning, total)}%] - Interrupted= ${interrupted} [${this.percentage(interrupted, total)}%] - Not Fail Found= ${notfailfound} [${this.percentage(notfailfound, total)}%]`;
     } catch(err) {
       console.error("Errore nel calcolo del summary: " + err);
       return `Total= ${total}`;

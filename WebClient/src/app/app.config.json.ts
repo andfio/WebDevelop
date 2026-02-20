@@ -4,6 +4,9 @@ export interface Filters {
     values?: string[] | number[]
     format?: string;
 }
+export interface httpconfig {
+    baseurl: string;
+}
 export interface Columns {
     name: string;
     field: string;
@@ -36,6 +39,7 @@ export interface structQuery {
 }
 export interface AppConfig {
     filters: Filters[];
+    httpconfig: httpconfig;
     columns: Columns[];
     columnsrootdetails: ColumnsRootDetails[];
     columnsdetails: ColumnsDetails[];

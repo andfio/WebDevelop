@@ -83,3 +83,6 @@ C:\Andrea Fiorentini\WebAnalisys\WebServer\WebAnalisys\obj\Release\WebAnalisys.c
 C:\Andrea Fiorentini\WebAnalisys\WebServer\WebAnalisys\obj\Release\WebAnalisys.csproj.CopyComplete
 C:\Andrea Fiorentini\WebAnalisys\WebServer\WebAnalisys\obj\Release\WebAnalisys.dll
 C:\Andrea Fiorentini\WebAnalisys\WebServer\WebAnalisys\obj\Release\WebAnalisys.pdb
+C:\inetpub\wwwroot\WebApi\WebAnalisys.dll.config
+C:\inetpub\wwwroot\WebApi\WebAnalisys.dll
+C:\inetpub\wwwroot\WebApi\WebAnalisys.pdb

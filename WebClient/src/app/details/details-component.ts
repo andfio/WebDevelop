@@ -23,6 +23,7 @@ background: any;
   }
 
   filters: AppConfig["filters"] = [];
+  httpConfig: AppConfig["httpconfig"] = {} as any;
   columnshome: AppConfig["columns"] = [];
   columnsrootdetails: AppConfig["columnsrootdetails"] = [];
   columnsdetails: AppConfig["columnsdetails"] = [];
@@ -48,6 +49,7 @@ background: any;
       next: (config) => {
         console.log('CONFIG OK:', config);
           this.filters = config.filters;
+          this.httpConfig = config.httpconfig;
           this.columnshome = config.columns;
           this.columnsrootdetails = config.columnsrootdetails;
           this.columnsdetails = config.columnsdetails;
@@ -71,7 +73,7 @@ background: any;
       query: this.querydetails  
     };
     
-    this.http.post('http://localhost:61694/api/query/details', payload).subscribe({
+    this.http.post(this.httpConfig.baseurl + '/query/details', payload).subscribe({
       next: (data: any) => {
         // console.log("RISULTATO BACKEND:", data);
         this.results = data; 
@@ -88,6 +90,10 @@ background: any;
 
   currProgressiveGroup: number = 0;
   subIncrementProgressive(item: any): boolean {
+    if (this.results.length === 1) {
+      return true;
+    }
+    
     if (Number(item) !== this.currProgressiveGroup) {
       this.currProgressiveGroup = Number(item);
       return true;
