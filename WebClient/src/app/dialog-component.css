@@ -1,0 +1,26 @@
+.dialog-title {
+    background-color: blue;
+    color: white;
+    font-family: Tahoma;
+    font-size: 18px;
+    font-weight: bold;
+    text-align: center;
+    align-items: center;
+}
+
+.dialog-message {
+    font-family: Tahoma;
+    font-size: 14px;
+    font-weight: bold;
+    text-align: center;
+    align-items: center;
+}
+
+.dialog-button {
+    background-color: rgb(105, 105, 241);
+    border-radius: 6px;
+    color: white;
+    font-family: Tahoma;
+    font-size: 14px;
+    font-weight: bold;
+}
