@@ -10,7 +10,7 @@ modificando il file MSBuild. Per altre informazioni su questo argomento, vedere 
   </PropertyGroup>
   <ItemGroup>
     <File Include="App_Data/appconfig.json">
-      <publishTime>01/19/2026 14:18:49</publishTime>
+      <publishTime>02/20/2026 16:14:17</publishTime>
     </File>
     <File Include="Areas/HelpPage/HelpPage.css">
       <publishTime>11/29/2025 09:38:36</publishTime>
@@ -76,10 +76,10 @@ modificando il file MSBuild. Per altre informazioni su questo argomento, vedere 
       <publishTime>11/29/2025 09:38:27</publishTime>
     </File>
     <File Include="bin/Antlr3.Runtime.dll">
-      <publishTime>11/09/2013 01:29:20</publishTime>
+      <publishTime>09/11/2013 01:29:20</publishTime>
     </File>
     <File Include="bin/Antlr3.Runtime.pdb">
-      <publishTime>11/09/2013 01:29:20</publishTime>
+      <publishTime>09/11/2013 01:29:20</publishTime>
     </File>
     <File Include="bin/Microsoft.CodeDom.Providers.DotNetCompilerPlatform.dll">
       <publishTime>05/24/2018 22:38:22</publishTime>
@@ -229,46 +229,46 @@ modificando il file MSBuild. Per altre informazioni su questo argomento, vedere 
       <publishTime>05/24/2018 22:38:24</publishTime>
     </File>
     <File Include="bin/System.Net.Http.Formatting.dll">
-      <publishTime>01/02/2018 20:17:18</publishTime>
+      <publishTime>02/01/2018 20:17:18</publishTime>
     </File>
     <File Include="bin/System.Web.Cors.dll">
       <publishTime>01/28/2015 13:01:46</publishTime>
     </File>
     <File Include="bin/System.Web.Helpers.dll">
-      <publishTime>01/02/2018 20:20:56</publishTime>
+      <publishTime>02/01/2018 20:20:56</publishTime>
     </File>
     <File Include="bin/System.Web.Http.Cors.dll">
       <publishTime>01/28/2015 13:03:04</publishTime>
     </File>
     <File Include="bin/System.Web.Http.dll">
-      <publishTime>01/02/2018 20:17:40</publishTime>
+      <publishTime>02/01/2018 20:17:40</publishTime>
     </File>
     <File Include="bin/System.Web.Http.WebHost.dll">
-      <publishTime>01/02/2018 20:19:26</publishTime>
+      <publishTime>02/01/2018 20:19:26</publishTime>
     </File>
     <File Include="bin/System.Web.Mvc.dll">
-      <publishTime>01/02/2018 20:16:32</publishTime>
+      <publishTime>02/01/2018 20:16:32</publishTime>
     </File>
     <File Include="bin/System.Web.Optimization.dll">
-      <publishTime>11/02/2014 23:26:04</publishTime>
+      <publishTime>02/11/2014 23:26:04</publishTime>
     </File>
     <File Include="bin/System.Web.Razor.dll">
-      <publishTime>01/02/2018 20:16:56</publishTime>
+      <publishTime>02/01/2018 20:16:56</publishTime>
     </File>
     <File Include="bin/System.Web.WebPages.Deployment.dll">
-      <publishTime>01/02/2018 20:20:56</publishTime>
+      <publishTime>02/01/2018 20:20:56</publishTime>
     </File>
     <File Include="bin/System.Web.WebPages.dll">
-      <publishTime>01/02/2018 20:20:56</publishTime>
+      <publishTime>02/01/2018 20:20:56</publishTime>
     </File>
     <File Include="bin/System.Web.WebPages.Razor.dll">
-      <publishTime>01/02/2018 20:20:56</publishTime>
+      <publishTime>02/01/2018 20:20:56</publishTime>
     </File>
     <File Include="bin/WebAnalisys.dll">
-      <publishTime>02/19/2026 15:15:39</publishTime>
+      <publishTime>02/23/2026 09:06:43</publishTime>
     </File>
     <File Include="bin/WebAnalisys.pdb">
-      <publishTime>02/19/2026 15:15:39</publishTime>
+      <publishTime>02/23/2026 09:06:43</publishTime>
     </File>
     <File Include="bin/WebGrease.dll">
       <publishTime>01/23/2014 21:57:34</publishTime>
@@ -364,7 +364,7 @@ modificando il file MSBuild. Per altre informazioni su questo argomento, vedere 
       <publishTime>11/29/2025 09:38:27</publishTime>
     </File>
     <File Include="Web.config">
-      <publishTime>12/15/2025 14:11:29</publishTime>
+      <publishTime>02/23/2026 09:06:44</publishTime>
     </File>
   </ItemGroup>
 </Project>

@@ -536,7 +536,7 @@ export class HomeComponent {
     let link = document.createElement("a");
     let url = URL.createObjectURL(blob);
     link.setAttribute("href", url);
-    link.setAttribute("download", "Export-List-" + new Date().toISOString().slice(0, 10) + ".txt");
+    link.setAttribute("download", "Export-List-" + new Date().toISOString().slice(0, 10) + ".xls");
     link.style.visibility = 'hidden';
     document.body.appendChild(link);
     link.click();
