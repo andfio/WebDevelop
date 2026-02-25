@@ -47,6 +47,7 @@ export interface AppConfig {
     columnsparametersdetails: ColumnsParametersDetails[];
     query: structQuery;
     querydetails: structQuery;
+    chartvalues: chartvalues;
 }
 export interface filterValues {
   [key: string]: string | number | undefined;
@@ -75,4 +76,10 @@ export interface abortcodeinfo {
 export interface functionsinfo {
     FuncID: string;
     FuncDescr: string;
+}
+
+export interface chartvalues {
+    time: string;
+    temperature: string;
+    pressure: string;
 }
