@@ -18,12 +18,15 @@ import { chartvalues } from "./app.config.json";
 import { DataPoint } from "./data-series";
 import { DialogContent } from './dialog-component';
 import { MatDialog } from '@angular/material/dialog';
+import { MatSliderModule } from '@angular/material/slider';
+import { AxisValues } from "./data-series";
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: "app-chart",
   templateUrl: "./chart-component.html",
   styleUrls: ["./chart-component.css"],
-  imports: [NgApexchartsModule]
+  imports: [NgApexchartsModule, MatSliderModule, FormsModule]
 })
 export class ChartComponent {
   public series: ApexAxisChartSeries = [];
@@ -51,45 +54,58 @@ export class ChartComponent {
     this.subChartEvents();
   }
   
-  dates: [number[][], number[][]] = [[], []];
+  dates: any = [];
+  DataPoint: DataPoint[] = [];
   public initChartData(): void {
-    let DataPoint: DataPoint = {
-      time: this.chartValues.time.split(';').map(Number),
-      temperature: this.chartValues.temperature.split(';').map(Number),
-      pressure: this.chartValues.pressure.split(';').map(Number)
-    };
-
-    for (let i = 0; i < DataPoint.time.length; i++) {
-      this.dates[0][i] = [DataPoint.time[i], DataPoint.temperature[i]];
-      this.dates[1][i]= [DataPoint.time[i], DataPoint.pressure[i]];
-    }
-
-    this.series = [
+     this.DataPoint = [
       {
+        time: this.chartValues.time.split(';').map(Number),
+        measure: this.chartValues.temperature.split(';').map(Number),
         name: "Temp.(°C)",
-        data: this.dates[0],
-        type: 'line',
         color: "#00E396"
       },
       {
+        time: this.chartValues.time.split(';').map(Number),
+        measure: this.chartValues.pressure.split(';').map(Number),
         name: "Press.(mbar)",
-        data: this.dates[1],
-        type: 'line',
         color: "#FEB019"
-      } 
+      },
+      {
+        time: this.chartValues.time.split(';').map(Number),
+        measure: this.chartValues.voltage.split(';').map(Number),
+        name: "Voltage (V)",
+        color: "#FF0000"
+      }
     ];
+
+    for (let s = 0; s < this.DataPoint.length; s++) {
+      this.dates[s] = [];
+      for (let i = 0; i < this.DataPoint[0].time.length; i++) {
+        this.dates[s].push([this.DataPoint[s].time[i], this.DataPoint[s].measure[i]]);
+      }
+    }
+
+    for (let s = 0; s < this.DataPoint.length; s++) {
+      this.series.push({
+          name: this.DataPoint[s].name,
+          data: this.dates[s],
+          type: 'line',
+          color: this.DataPoint[s].color
+        });
+    }; 
     this.chart = {
       type: "line",
       background: "#000000",
       stacked: false,
+      redrawOnParentResize: true,
       redrawOnWindowResize: true,
       height: 700,
       width: 1200,
       zoom: {
-        type: "x",
+        type: "xy",
         enabled: true,
-        autoScaleYaxis: true
-        
+        autoScaleYaxis: true,
+        allowMouseWheelZoom: false
       },
       toolbar: {
         autoSelected: "zoom"
@@ -105,9 +121,12 @@ export class ChartComponent {
       enabled: false
     };
     this.markers = {
-      size: 0,
+      size: 3,                 // <-- NON 0 (lascia la hit-area)
+      strokeWidth: 0,          // niente bordo
+      strokeColors: 'transparent',
+      colors: ['transparent'], // interno trasparente (vale per tutte le serie)
       hover: {
-        size: 6
+        sizeOffset: 7          // quando passi sopra, li “vedi” (se vuoi)
       }
     };
     this.title = {
@@ -120,12 +139,12 @@ export class ChartComponent {
     };
     this.yaxis = [
         {
-          seriesName: "Temp.(°C)",
-          opposite: false,
+          seriesName: ["Temp.(°C)", "Press.(mbar)", "Voltage (V)"],
+          opposite: false,      
           axisTicks: {
             show: true,
             color: '#FFFFFF',
-            width: 6             
+            width: 6
           },
           axisBorder: {
             show: true,
@@ -138,37 +157,12 @@ export class ChartComponent {
             }           
           },
           title: {
-            text: "Temperature (°C)",
+            text: "Temperature (°C), Pressure (mbar), Voltage (V)",
             style: {
               color: "#00E396"
             },  
           },
         },
-        {
-          seriesName: "Press.(mbar)",
-          opposite: true,
-          axisTicks: {
-            show: true,
-            color: '#FFFFFF',
-            width: 6            
-          },
-          axisBorder: {
-            show: true,
-            color: "#FFFFFF",
-            width: 2
-          },
-          labels: {
-            style: {
-              colors: "#FFFFFF"
-            }           
-          },
-          title: {
-            text: "Pressure (mbar)",
-            style: {
-              color: "#FEB019"
-            }
-          }
-        }
     ];
     this.xaxis = {
       type: "numeric",
@@ -207,8 +201,8 @@ export class ChartComponent {
     };   
     this.tooltip = {
        enabled: true,
-       shared: true,
-       intersect: false,
+       shared: false,
+       intersect: true,
        x: {
          show: false
        },   
@@ -225,8 +219,7 @@ export class ChartComponent {
        }
      };
       this.stroke = { 
-        width: 1,
-        curve: 'straight'
+        width: [1,1, 1],
       };
   }
 
@@ -241,6 +234,11 @@ export class ChartComponent {
       }
     }  
   }
+
+  AxisValues: AxisValues[] = [];
+  formatLabel(value: number): string {
+    return `${value}`;
+  }  
 
   showDialog(message: string, title?: string ) {
     this.dialog.open(DialogContent, {

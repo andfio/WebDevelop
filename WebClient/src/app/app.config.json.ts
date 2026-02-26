@@ -82,4 +82,5 @@ export interface chartvalues {
     time: string;
     temperature: string;
     pressure: string;
+    voltage: string;
 }

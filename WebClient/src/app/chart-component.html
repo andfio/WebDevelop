@@ -1,15 +1,30 @@
-<apx-chart
-  [series]="series"
-  [chart]="chart"
-  [dataLabels]="dataLabels"
-  [markers]="markers"
-  [title]="title"
-  [fill]="fill"
-  [yaxis]="yaxis"
-  [xaxis]="xaxis"
-  [tooltip]="tooltip"
-  [autoUpdateSeries]="true"
-  [stroke]="stroke"
-  [grid]="grid"
-  [legend]="legend"
-></apx-chart>
+<div class="chart-container">
+  <div class="char-wrappper">
+    <apx-chart
+      [series]="series"
+      [chart]="chart"
+      [dataLabels]="dataLabels"
+      [markers]="markers"
+      [title]="title"
+      [fill]="fill"
+      [yaxis]="yaxis"
+      [xaxis]="xaxis"
+      [tooltip]="tooltip"
+      [autoUpdateSeries]="true"
+      [stroke]="stroke"
+      [grid]="grid"
+      [legend]="legend"
+    ></apx-chart>
+  </div>
+  <div class="chart-details">
+    <div class="AxisX">
+      <label class="AxisXLabel">Time</label>
+      <mat-slider min={{DataPoint[0].time[0]}} max={{DataPoint[0].time[DataPoint[0].time.length - 1]}} step="1" showTickMarks discrete  (change)="formatLabel(AxisValues[0].max)">
+        <input matSliderThumb [value]="AxisValues[0].max">
+      </mat-slider>
+      <input type="text" class="AxisXmin" [value]="AxisValues[0].min" [(ngModel)]="AxisValues[0].min">
+      <input type="text" class="AxisXmax" [value]="AxisValues[0].max" [(ngModel)]="AxisValues[0].max">
+    </div>
+  </div>
+
+</div>
