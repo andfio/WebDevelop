@@ -1,6 +1,8 @@
 <div class="chart-container">
-  <div class="char-wrappper">
+  
+  <div class="chart-wrapper">
     <apx-chart
+       #chartObj
       [series]="series"
       [chart]="chart"
       [dataLabels]="dataLabels"
@@ -16,15 +18,82 @@
       [legend]="legend"
     ></apx-chart>
   </div>
-  <div class="chart-details">
-    <div class="AxisX">
-      <label class="AxisXLabel">Time</label>
-      <mat-slider min={{DataPoint[0].time[0]}} max={{DataPoint[0].time[DataPoint[0].time.length - 1]}} step="1" showTickMarks discrete  (change)="formatLabel(AxisValues[0].max)">
-        <input matSliderThumb [value]="AxisValues[0].max">
-      </mat-slider>
-      <input type="text" class="AxisXmin" [value]="AxisValues[0].min" [(ngModel)]="AxisValues[0].min">
-      <input type="text" class="AxisXmax" [value]="AxisValues[0].max" [(ngModel)]="AxisValues[0].max">
+
+  <div class="chart-details-container">
+    <div class="chart-details"> 
+
+       <div class="AxisX" style="text-align:center">Axis X (Time (sec))
+        <mat-slider
+          class="matSlider"
+          [min]="DataPoint[0].time[0]"
+          [max]="DataPoint[0].time[DataPoint[0].time.length - 1]"
+          [step]="1"
+          showTickMarks
+          discrete >
+          <input matSliderThumb [value]="8.1" (change)="formatLabel(10)">
+        </mat-slider>
+      </div> 
+
+      <!-- <div class="AxisY1">
+        <label class="AxisY1Label">Time</label>
+        <mat-slider min={{DataPoint[0].time[0]}} max={{DataPoint[0].time[DataPoint[0].time.length - 1]}} step="1" showTickMarks discrete  (change)="formatLabel(AxisValues[0].max)">
+          <input matSliderThumb [value]="AxisValues[1].max">
+        </mat-slider>
+        <input type="text" class="AxisYmin" [value]="AxisValues[1].min" [(ngModel)]="AxisValues[1].min">
+        <input type="text" class="AxisYmax" [value]="AxisValues[1].max" [(ngModel)]="AxisValues[1].max">
+      </div>
+
+      <div class="AxisY2">
+        <label class="AxisY2Label">Time</label>
+        <mat-slider min={{DataPoint[0].time[0]}} max={{DataPoint[0].time[DataPoint[0].time.length - 1]}} step="1" showTickMarks discrete  (change)="formatLabel(AxisValues[0].max)">
+          <input matSliderThumb [value]="AxisValues[2].max">
+        </mat-slider>
+        <input type="text" class="AxisYmin" [value]="AxisValues[2].min" [(ngModel)]="AxisValues[2].min">
+        <input type="text" class="AxisYmax" [value]="AxisValues[2].max" [(ngModel)]="AxisValues[2].max">
+      </div>   
+
+      <div class="AxisY3">
+        <label class="AxisY3Label">Time</label>
+        <mat-slider min={{DataPoint[0].time[0]}} max={{DataPoint[0].time[DataPoint[0].time.length - 1]}} step="1" showTickMarks discrete  (change)="formatLabel(AxisValues[0].max)">
+          <input matSliderThumb [value]="AxisValues[3].max">
+        </mat-slider>
+        <input type="text" class="AxisYmin" [value]="AxisValues[3].min" [(ngModel)]="AxisValues[3].min">
+        <input type="text" class="AxisYmax" [value]="AxisValues[3].max" [(ngModel)]="AxisValues[3].max">
+      </div>
+      
+      <div class ="AxisButtons">
+        <div id="firstAxisButtons">
+          <button class="LoadXY" (click)="LoadXYAxis()"><i class="material-symbols-outlined">upload</i>Load Axis</button>
+          <button class="SaveXY" (click)="SaveXYAxis()"><i class="material-symbols-outlined">sync_saved_locally</i>Save Axis</button>
+        </div>
+        <div id="SecondAxisButtons">
+          <button class="Legend" (click)="ToggleLegend()"><i class="material-symbols-outlined">stack</i>Toggle Legend</button>
+          <button class="GridChart" (click)="ShowGrid()"><i class="material-symbols-outlined">density_medium</i>Show Grid</button>
+        </div>  
+      </div> -->
+
     </div>
-  </div>
+    
+    <!-- <div class="CursorPoints">
+      <p id="cursorpoint">Cursor Points:</p>
+      <div class="Cursor1">
+        <label class="Cursor1Label" [style.background-color]="CursorValues[0].color">Cursor: {{ CursorValues[0].name }}</label>
+        <label class="CursorY">Y: {{ CursorValues[0].y }}</label>
+        <label class="CursorX">X: {{ CursorValues[0].x }}</label>
+      </div>
+      <div class="Cursor2">
+        <label class="Cursor2Label" [style.background-color]="CursorValues[1].color">Cursor: {{ CursorValues[1].name }}</label>
+        <label class="CursorY">Y: {{ CursorValues[1].y }}</label>
+        <label class="CursorX">X: {{ CursorValues[1].x }}</label>
+      </div>
+      <div class="CursorDifference">
+        <label class="CursorDifferenceLabel">Difference:</label>
+        <label class="CursorY">Y: {{ CursorValues[1].y - CursorValues[0].y }}</label>
+        <label class="CursorX">X: {{ CursorValues[1].x - CursorValues[0].x }}</label>
+      </div>         
+    
+    </div> -->
+
+  </div> 
 
 </div>

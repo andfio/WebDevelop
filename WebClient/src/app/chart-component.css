@@ -1,3 +1,120 @@
 ul {
   text-align: center;
 }
+
+.chart-container {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+}
+.chart-wrapper {
+  display: inline-block;
+  margin: 5px;
+  padding: 5px;
+  height: 80vh;
+  width: 80vw;
+}
+
+.chart-details-container {
+  flex-grow: 1;
+  margin: 10px 10px 0px 0px; /* top | right | bottom | left */
+  height: 80vh;
+  border-radius: 6px;
+  background: #f8f9fa;
+  box-shadow: 0px 2px 8px rgba(0,0,0,0.15);
+  box-sizing: border-box;
+  overflow-y: hidden;
+}   
+
+.chart-details {
+  padding: 5px;
+  height: 60%;
+}
+
+.AxisX, .AxisY1, .AxisY2, .AxisY3, .AxisButtons {
+  /* display: flex;
+  flex-direction: column; */
+  position: relative;
+  font-family: Tahoma;
+  font-size: 14px;
+  color:blue;
+  align-items: center;
+  height: calc(100% / 5);
+  margin-top: 10px;
+
+}
+
+.matSlider {
+  width: 100%;
+  height: auto;
+  align-items: center;
+}  
+
+
+.AxisYmin, .AxisYmax {
+  width: auto;
+  gap: 5px;
+  height: 30px;
+  border-bottom: 2px solid blue;
+}
+
+.AxisButtons {
+  display: flex;
+  flex-direction: row;
+}
+
+#firstAxisButtons {
+  width: fit-content;
+  height: 30px; 
+  gap: 10px;
+  padding-bottom: 10px;
+}
+
+#SecondAxisButtons {
+  width: fit-content;
+  height: 30px; 
+  gap: 10px;
+  padding-bottom: 10px;
+  border-radius: 6px;
+  background: #f8f9fa;
+  box-shadow: 0px 2px 8px rgba(0,0,0,0.15);
+  box-sizing: border-box;
+  overflow-y: hidden;  
+}
+
+.CursorPoints {
+  padding: 5px;
+  height: 40%;
+  border-radius: 6px;
+  background: #f8f9fa;
+  box-shadow: 0px 2px 8px rgba(0,0,0,0.15);
+  box-sizing: border-box;
+  overflow-y: hidden;
+}
+
+#cursorpoint {
+  font-family: Tahoma;
+  font-size: 14px;
+  color:blue;
+  align-items: center;
+}
+.Cursor1, .Cursor2, .CursorDifference {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 5px;
+}
+
+.Cursor1Label, .Cursor2Label, .CursorDifferenceLabel {
+  font-family: Tahoma;
+  font-size: 14px;
+  color:blue;
+  align-items: center;
+}
+
+.CursorX, .CursorY {
+  font-family: Tahoma;
+  font-size: 14px;
+  color:blue;
+  align-items: left;
+}

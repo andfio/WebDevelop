@@ -1,5 +1,6 @@
 import { Component } from "@angular/core";
 import {
+  ChartComponent as ApexChartComponent,
   ApexAxisChartSeries,
   ApexChart,
   ApexTitleSubtitle,
@@ -15,12 +16,18 @@ import {
 } from "ng-apexcharts";
 import { NgApexchartsModule } from "ng-apexcharts";
 import { chartvalues } from "./app.config.json";
-import { DataPoint } from "./data-series";
+import { DataPoint } from "./chart-config";
 import { DialogContent } from './dialog-component';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSliderModule } from '@angular/material/slider';
-import { AxisValues } from "./data-series";
+import { AxisValues } from "./chart-config";
 import { FormsModule } from '@angular/forms';
+import { CursorValues } from "./chart-config";
+import {
+  ViewChild,
+  HostListener
+} from '@angular/core';
+
 
 @Component({
   selector: "app-chart",
@@ -29,6 +36,8 @@ import { FormsModule } from '@angular/forms';
   imports: [NgApexchartsModule, MatSliderModule, FormsModule]
 })
 export class ChartComponent {
+  @ViewChild('chartObj') chartObj!: ApexChartComponent;
+
   public series: ApexAxisChartSeries = [];
   public chart: ApexChart = {
     type: 'area',       
@@ -97,10 +106,10 @@ export class ChartComponent {
       type: "line",
       background: "#000000",
       stacked: false,
-      redrawOnParentResize: true,
-      redrawOnWindowResize: true,
-      height: 700,
-      width: 1200,
+      redrawOnParentResize: false,
+      redrawOnWindowResize: false,
+      height: document.documentElement.clientHeight * 0.8,
+      width: document.documentElement.clientWidth * 0.8,
       zoom: {
         type: "xy",
         enabled: true,
@@ -223,22 +232,57 @@ export class ChartComponent {
       };
   }
 
+  CursorValues: CursorValues[] = [];
   subChartEvents() {
     this.chart = {
       ...this.chart,
       events: {
         markerClick: (event, chartContext, opts) => {
-          this.showDialog(`Marker clicked at time: ${this.dates[opts.seriesIndex][opts.dataPointIndex]}, series: ${this.series[opts.seriesIndex].name}`, 'Marker Clicked');
-          // this.showDialog(chartContext.w.globals.lastYAxis[opts.seriesIndex].seriesName, 'Chart Context');
+          this.CursorValues.push({
+            x: this.DataPoint[0].time[opts.dataPointIndex],
+            y: this.DataPoint[opts.seriesIndex].measure[opts.dataPointIndex],
+            name: this.series[opts.seriesIndex].name ?? '',
+            color: this.DataPoint[opts.seriesIndex].color
+          });
         }
       }
     }  
   }
 
+  resizeChart() {
+
+    setTimeout(() => {
+
+      this.chartObj?.updateOptions({}, false, true, true);
+
+    });
+
+  }
+
+  @HostListener('window:resize')
+
+  onResize() {
+
+    // this.resizeChart();
+
+  }
+
   AxisValues: AxisValues[] = [];
   formatLabel(value: number): string {
     return `${value}`;
-  }  
+  }
+  
+  LoadXYAxis() {
+  }
+
+  SaveXYAxis() {
+  }
+  
+  ToggleLegend() {
+  }
+
+  ShowGrid() {
+  }
 
   showDialog(message: string, title?: string ) {
     this.dialog.open(DialogContent, {
