@@ -2,7 +2,8 @@ export interface DataPoint {
   time: number[],
   measure: number[],
   color: string,
-  name: string
+  name: string,
+  AxisType: number
 }
 export interface AxisValues {
   min: number,

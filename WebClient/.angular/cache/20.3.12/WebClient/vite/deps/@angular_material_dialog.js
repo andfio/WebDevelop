@@ -1,4 +1,12 @@
 import {
+  RtlScrollAxisType,
+  _animationsDisabled,
+  _isTestEnvironment,
+  coerceCssPixelValue,
+  getRtlScrollAxisType,
+  supportsScrollBehavior
+} from "./chunk-GZNA5GEE.js";
+import {
   A11yModule,
   ESCAPE,
   FocusMonitor,
@@ -6,21 +14,15 @@ import {
   InteractivityChecker,
   MatCommonModule,
   Platform,
-  RtlScrollAxisType,
   _CdkPrivateStyleLoader,
   _IdGenerator,
-  _animationsDisabled,
   _getEventTarget,
   _getFocusedElementPierceShadowDom,
-  _isTestEnvironment,
   coerceArray,
-  coerceCssPixelValue,
   coerceElement,
   coerceNumberProperty,
-  getRtlScrollAxisType,
-  hasModifierKey,
-  supportsScrollBehavior
-} from "./chunk-POWKODJV.js";
+  hasModifierKey
+} from "./chunk-MTYGTUI6.js";
 import {
   BidiModule,
   Directionality

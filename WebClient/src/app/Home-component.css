@@ -37,11 +37,11 @@
 }
 
 .search-box {
-  border: 1px solid #aaa;       /* bordo sottile grigio */
-  border-radius: 6px;             /* angoli arrotondati */
-  padding: 10px;             /* spazio interno al box */
-  background-color: #fff;       /* sfondo bianco */
-  box-shadow: 0 2px 4px rgba(0,0,0,0.1); /* ombra leggera */
+  border: 1px solid #aaa;       
+  border-radius: 6px;             
+  padding: 10px;            
+  background-color: #fff;       
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
   display: block;
   margin-top: 15px;                
 }
@@ -60,9 +60,9 @@
 }
 
 .field input[type="text"] {
-    border: none;                /* rimuove tutti i bordi */
-    border-bottom: 2px solid #333;  /* lascia solo la linea sotto */
-    outline: none;               /* rimuove il bordo blu del focus */
+    border: none;                
+    border-bottom: 2px solid #333;  
+    outline: none;              
     background-color: transparent;
     height: 20px;
     width: 210px;

@@ -15,7 +15,7 @@ import {
   ApexLegend  
 } from "ng-apexcharts";
 import { NgApexchartsModule } from "ng-apexcharts";
-import { chartvalues } from "./app.config.json";
+import { chartseries, chartvalues } from "./app.config.json";
 import { DataPoint } from "./chart-config";
 import { DialogContent } from './dialog-component';
 import { MatDialog } from '@angular/material/dialog';
@@ -57,33 +57,47 @@ export class ChartComponent {
   constructor(private dialog: MatDialog) { }
 
   chartValues: chartvalues = {} as any;
+  chartSeries: any[] =  [];
   ngOnInit() {
     this.chartValues = history.state.chartValues;
+    let axistype: number[] = history.state.chartSeries.axistypes.split(';').map(Number) 
+    let axisposition: number[] = history.state.chartSeries.axisposition.split(';').map(Number) 
+    for (let index = 0; index < axistype.length; index++) {
+       this.chartSeries.push(axistype[index], axisposition[index]);
+    }
+    
     this.initChartData();
     this.subChartEvents();
   }
   
   dates: any = [];
   DataPoint: DataPoint[] = [];
+  AxisSeries: any[] = [];
+  AxisValues: AxisValues[] = [];
+  CursorValues: CursorValues[] = [];
+
   public initChartData(): void {
      this.DataPoint = [
       {
         time: this.chartValues.time.split(';').map(Number),
         measure: this.chartValues.temperature.split(';').map(Number),
         name: "Temp.(°C)",
-        color: "#00E396"
+        color: "#00E396",
+        AxisType: this.chartSeries[2]
       },
       {
         time: this.chartValues.time.split(';').map(Number),
         measure: this.chartValues.pressure.split(';').map(Number),
         name: "Press.(mbar)",
-        color: "#FEB019"
+        color: "#FEB019",
+        AxisType: this.chartSeries[2]
       },
       {
         time: this.chartValues.time.split(';').map(Number),
         measure: this.chartValues.voltage.split(';').map(Number),
         name: "Voltage (V)",
-        color: "#FF0000"
+        color: "#FF0000",
+        AxisType: this.chartSeries[4]
       }
     ];
 
@@ -93,6 +107,28 @@ export class ChartComponent {
         this.dates[s].push([this.DataPoint[s].time[i], this.DataPoint[s].measure[i]]);
       }
     }
+
+    this.AxisValues.push (
+      {
+        min: this.DataPoint[0].time[0],
+        max: this.DataPoint[0].time[this.DataPoint[0].time.length - 1]
+      }
+    )
+
+    for (let s = 0; s < this.DataPoint.length; s++) {
+      let maxValue: number = 0;
+      for (let i = 0; i < this.DataPoint[0].time.length; i++) {
+          if (this.DataPoint[s].measure[i] > maxValue) {
+            maxValue = this.DataPoint[s].measure[i] 
+          }
+      }  
+      this.AxisValues.push (
+        {
+          min: this.DataPoint[s].measure[0],
+          max: maxValue
+        }
+      )      
+    } 
 
     for (let s = 0; s < this.DataPoint.length; s++) {
       this.series.push({
@@ -146,36 +182,128 @@ export class ChartComponent {
       opacity: 1,
       type: 'solid'
     };
-    this.yaxis = [
-        {
-          seriesName: ["Temp.(°C)", "Press.(mbar)", "Voltage (V)"],
-          opposite: false,      
-          axisTicks: {
-            show: true,
-            color: '#FFFFFF',
-            width: 6
-          },
-          axisBorder: {
-            show: true,
-            color: "#FFFFFF",
-            width: 2
-          },
-          labels: {
-            style: {
-              colors: "#FFFFFF"
-            }           
-          },
-          title: {
-            text: "Temperature (°C), Pressure (mbar), Voltage (V)",
-            style: {
-              color: "#00E396"
-            },  
-          },
-        },
-    ];
+    let sn: any[] = []
+    for (let s = 0; s < this.DataPoint.length; s++) {
+      sn[s+1] = sn[s+1] || [];
+      
+      switch (this.DataPoint[s].AxisType) {
+      case 1: 
+        sn[this.DataPoint[s].AxisType].push(this.DataPoint[s].name);
+        break;
+      case 2:
+        sn[this.DataPoint[s].AxisType].push(this.DataPoint[s].name)
+        break;
+      case 3:
+        sn[this.DataPoint[s].AxisType].push(this.DataPoint[s].name)
+        break;
+      }
+    }           
+
+    for (let s = 0; s < this.DataPoint.length; s++) {
+      
+      this.yaxis =[]
+      switch (this.DataPoint[s].AxisType) {
+      case 1: //1 ASSE A SINISTRA          
+          this.yaxis.push(
+            {
+              seriesName: sn[1],
+              min: this.AxisValues[1].min,
+              max: this.AxisValues[1].max,
+              opposite: false,      
+              axisTicks: {
+                show: true,
+                color: '#FFFFFF',
+                width: 6
+              },
+              axisBorder: {
+                show: true,
+                color: "#FFFFFF",
+                width: 2
+              },
+              labels: {
+                style: {
+                  colors: "#FFFFFF"
+                }           
+              },
+              title: {
+                text: sn[1].join(", "),
+                style: {
+                  color: this.DataPoint[s].color
+                },  
+              },
+            },
+          );
+          break;
+
+        case 2: //2° ASSE A SINISTRA
+          this.yaxis.push(
+            {
+              seriesName: sn[2],
+              min: this.AxisValues[1].min,
+              max: this.AxisValues[1].max,
+              opposite: false,      
+              axisTicks: {
+                show: true,
+                color: '#FFFFFF',
+                width: 6
+              },
+              axisBorder: {
+                show: true,
+                color: "#FFFFFF",
+                width: 2
+              },
+              labels: {
+                style: {
+                  colors: "#FFFFFF"
+                }           
+              },
+              title: {
+                text: sn[2].join(", "),
+                style: {
+                  color: this.DataPoint[s].color
+                },  
+              },
+            },
+          );
+          break;
+
+        case 3: //1° ASSE A DESTRA
+          this.yaxis.push(
+            {
+              seriesName: sn[3],
+              min: this.AxisValues[1].min,
+              max: this.AxisValues[1].max,
+              opposite: true,      
+              axisTicks: {
+                show: true,
+                color: '#FFFFFF',
+                width: 6
+              },
+              axisBorder: {
+                show: true,
+                color: "#FFFFFF",
+                width: 2
+              },
+              labels: {
+                style: {
+                  colors: "#FFFFFF"
+                }           
+              },
+              title: {
+                text: sn[3].join(", "),
+                style: {
+                  color: this.DataPoint[s].color
+                },  
+              },
+            },
+          );
+          break;   
+    }
     this.xaxis = {
       type: "numeric",
       position: 'bottom',
+      min: this.AxisValues[0].min,
+      max: this.AxisValues[0].max,      
       tickAmount: 20,
       axisTicks: {
           show: true,
@@ -227,12 +355,12 @@ export class ChartComponent {
          }
        }
      };
-      this.stroke = { 
+    this.stroke = { 
         width: [1,1, 1],
       };
+    }
   }
 
-  CursorValues: CursorValues[] = [];
   subChartEvents() {
     this.chart = {
       ...this.chart,
@@ -267,11 +395,14 @@ export class ChartComponent {
 
   }
 
-  AxisValues: AxisValues[] = [];
   formatLabel(value: number): string {
     return `${value}`;
   }
-  
+
+  subShowAxisValues(value: any, index:number) {
+    this.AxisValues[index].max = value;
+  }
+
   LoadXYAxis() {
   }
 
@@ -291,4 +422,5 @@ export class ChartComponent {
       hasBackdrop: true,
     });
   }
+
 }

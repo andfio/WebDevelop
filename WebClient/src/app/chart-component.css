@@ -31,31 +31,45 @@ ul {
   height: 60%;
 }
 
-.AxisX, .AxisY1, .AxisY2, .AxisY3, .AxisButtons {
-  /* display: flex;
-  flex-direction: column; */
-  position: relative;
+.AxisX { 
+  display: flex;
+  flex-direction: column;
   font-family: Tahoma;
   font-size: 14px;
   color:blue;
   align-items: center;
-  height: calc(100% / 5);
+  height: auto;
+  padding: 0px 5px;
   margin-top: 10px;
-
 }
 
 .matSlider {
   width: 100%;
-  height: auto;
   align-items: center;
 }  
 
+.AxisX-container {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  width: 100%;
+  margin-top: 5px;
+}
 
-.AxisYmin, .AxisYmax {
-  width: auto;
-  gap: 5px;
-  height: 30px;
-  border-bottom: 2px solid blue;
+.AxisX {
+  padding: 2px;
+}
+
+.AxisX-Content input[type="text"] {
+    border: none;               
+    border-bottom: 2px solid blue;  
+    outline: none;               
+    background-color: transparent;
+    height: 20px;
+    width: 90%;
+    font-family: Tahoma;
+    font-size: 14px;
+    color:black;
 }
 
 .AxisButtons {

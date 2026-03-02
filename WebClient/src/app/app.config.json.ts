@@ -48,6 +48,7 @@ export interface AppConfig {
     query: structQuery;
     querydetails: structQuery;
     chartvalues: chartvalues;
+    chartseries: chartseries;
 }
 export interface filterValues {
   [key: string]: string | number | undefined;
@@ -83,4 +84,8 @@ export interface chartvalues {
     temperature: string;
     pressure: string;
     voltage: string;
+}
+export interface chartseries {
+    axistypes: string;
+    axisposition: string;
 }
