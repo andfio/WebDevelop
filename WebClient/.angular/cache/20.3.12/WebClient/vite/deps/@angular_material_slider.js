@@ -4,15 +4,13 @@ import {
   MatRippleModule,
   RippleState,
   _StructuralStylesLoader
-} from "./chunk-MRQOKRMB.js";
-import {
-  _animationsDisabled
-} from "./chunk-GZNA5GEE.js";
+} from "./chunk-NX63UX6X.js";
 import {
   MatCommonModule,
   Platform,
-  _CdkPrivateStyleLoader
-} from "./chunk-MTYGTUI6.js";
+  _CdkPrivateStyleLoader,
+  _animationsDisabled
+} from "./chunk-POWKODJV.js";
 import {
   Directionality
 } from "./chunk-MG5YDZBS.js";

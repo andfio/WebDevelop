@@ -63,7 +63,8 @@ export class ChartComponent {
     let axistype: number[] = history.state.chartSeries.axistypes.split(';').map(Number) 
     let axisposition: number[] = history.state.chartSeries.axisposition.split(';').map(Number) 
     for (let index = 0; index < axistype.length; index++) {
-       this.chartSeries.push(axistype[index], axisposition[index]);
+      this.chartSeries[axistype[index]] = []; 
+      this.chartSeries[axistype[index]] = axisposition[index];
     }
     
     this.initChartData();
@@ -108,6 +109,7 @@ export class ChartComponent {
       }
     }
 
+    //'AsseX'
     this.AxisValues.push (
       {
         min: this.DataPoint[0].time[0],
@@ -182,122 +184,124 @@ export class ChartComponent {
       opacity: 1,
       type: 'solid'
     };
-    let sn: any[] = []
+    let seriesName: any[] = []
     for (let s = 0; s < this.DataPoint.length; s++) {
-      sn[s+1] = sn[s+1] || [];
+      seriesName[s+1] = seriesName[s+1] || [];
       
       switch (this.DataPoint[s].AxisType) {
       case 1: 
-        sn[this.DataPoint[s].AxisType].push(this.DataPoint[s].name);
+        seriesName[this.DataPoint[s].AxisType].push(this.DataPoint[s].name);
         break;
       case 2:
-        sn[this.DataPoint[s].AxisType].push(this.DataPoint[s].name)
+        seriesName[this.DataPoint[s].AxisType].push(this.DataPoint[s].name)
         break;
       case 3:
-        sn[this.DataPoint[s].AxisType].push(this.DataPoint[s].name)
+        seriesName[this.DataPoint[s].AxisType].push(this.DataPoint[s].name)
         break;
       }
     }           
 
-    for (let s = 0; s < this.DataPoint.length; s++) {
+    for (let seriesindex = 1; seriesindex < seriesName.length; seriesindex++) {
       
-      this.yaxis =[]
-      switch (this.DataPoint[s].AxisType) {
-      case 1: //1 ASSE A SINISTRA          
-          this.yaxis.push(
-            {
-              seriesName: sn[1],
-              min: this.AxisValues[1].min,
-              max: this.AxisValues[1].max,
-              opposite: false,      
-              axisTicks: {
-                show: true,
-                color: '#FFFFFF',
-                width: 6
-              },
-              axisBorder: {
-                show: true,
-                color: "#FFFFFF",
-                width: 2
-              },
-              labels: {
-                style: {
-                  colors: "#FFFFFF"
-                }           
-              },
-              title: {
-                text: sn[1].join(", "),
-                style: {
-                  color: this.DataPoint[s].color
-                },  
-              },
-            },
-          );
-          break;
+      if (seriesName[seriesindex].length > 0) {
+          switch (seriesindex) {
+          case 1: //1 ASSE A SINISTRA          
+              this.yaxis.push(
+                {
+                  seriesName: seriesName[seriesindex],
+                  min: this.AxisValues[seriesindex].min,
+                  max: this.AxisValues[seriesindex].max,
+                  opposite: false,      
+                  axisTicks: {
+                    show: true,
+                    color: '#FFFFFF',
+                    width: 6
+                  },
+                  axisBorder: {
+                    show: true,
+                    color: "#FFFFFF",
+                    width: 2
+                  },
+                  labels: {
+                    style: {
+                      colors: "#FFFFFF"
+                    }           
+                  },
+                  title: {
+                    text: seriesName[seriesindex].join(", "),
+                    style: {
+                      color: "#FFFFFF"
+                    },  
+                  },
+                },
+              );
+              break;
 
-        case 2: //2° ASSE A SINISTRA
-          this.yaxis.push(
-            {
-              seriesName: sn[2],
-              min: this.AxisValues[1].min,
-              max: this.AxisValues[1].max,
-              opposite: false,      
-              axisTicks: {
-                show: true,
-                color: '#FFFFFF',
-                width: 6
-              },
-              axisBorder: {
-                show: true,
-                color: "#FFFFFF",
-                width: 2
-              },
-              labels: {
-                style: {
-                  colors: "#FFFFFF"
-                }           
-              },
-              title: {
-                text: sn[2].join(", "),
-                style: {
-                  color: this.DataPoint[s].color
-                },  
-              },
-            },
-          );
-          break;
+            case 2: //2° ASSE A SINISTRA
+              this.yaxis.push(
+                {
+                  seriesName: seriesName[seriesindex],
+                  min: this.AxisValues[seriesindex].min,
+                  max: this.AxisValues[seriesindex].max,
+                  opposite: false,      
+                  axisTicks: {
+                    show: true,
+                    color: '#FFFFFF',
+                    width: 6
+                  },
+                  axisBorder: {
+                    show: true,
+                    color: "#FFFFFF",
+                    width: 2
+                  },
+                  labels: {
+                    style: {
+                      colors: "#FFFFFF"
+                    }           
+                  },
+                  title: {
+                    text: seriesName[seriesindex].join(", "),
+                    style: {
+                      color: "#FFFFFF"
+                    },  
+                  },
+                },
+              );
+              break;
 
-        case 3: //1° ASSE A DESTRA
-          this.yaxis.push(
-            {
-              seriesName: sn[3],
-              min: this.AxisValues[1].min,
-              max: this.AxisValues[1].max,
-              opposite: true,      
-              axisTicks: {
-                show: true,
-                color: '#FFFFFF',
-                width: 6
-              },
-              axisBorder: {
-                show: true,
-                color: "#FFFFFF",
-                width: 2
-              },
-              labels: {
-                style: {
-                  colors: "#FFFFFF"
-                }           
-              },
-              title: {
-                text: sn[3].join(", "),
-                style: {
-                  color: this.DataPoint[s].color
-                },  
-              },
-            },
-          );
-          break;   
+            case 3: //1° ASSE A DESTRA
+              this.yaxis.push(
+                {
+                  seriesName: seriesName[seriesindex],
+                  min: this.AxisValues[seriesindex].min,
+                  max: this.AxisValues[seriesindex].max,
+                  opposite: true,      
+                  axisTicks: {
+                    show: true,
+                    color: '#FFFFFF',
+                    width: 6
+                  },
+                  axisBorder: {
+                    show: true,
+                    color: "#FFFFFF",
+                    width: 2
+                  },
+                  labels: {
+                    style: {
+                      colors: "#FFFFFF"
+                    }           
+                  },
+                  title: {
+                    text: seriesName[seriesindex].join(", "),
+                    style: {
+                      color: "#FFFFFF"
+                    },  
+                  },
+                },
+              );
+              break;   
+          }
+      }
     }
     this.xaxis = {
       type: "numeric",
@@ -358,8 +362,8 @@ export class ChartComponent {
     this.stroke = { 
         width: [1,1, 1],
       };
-    }
   }
+  
 
   subChartEvents() {
     this.chart = {

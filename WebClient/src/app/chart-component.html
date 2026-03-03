@@ -22,11 +22,11 @@
   <div class="chart-details-container">
     <div class="chart-details"> 
         
-       <div class="AxisX" style="text-align:center">Axis X (Time (sec))
+       <div class="AxisX" style="text-align:center">Axes X (Time (sec))
         <mat-slider
           class="matSlider"
-          [min]="DataPoint[0].time[0]"
-          [max]="DataPoint[0].time[DataPoint[0].time.length - 1]"
+          [min]="AxisValues[0].min"
+          [max]="AxisValues[0].max"
           [step]="1"
           showTickMarks
           discrete
@@ -46,29 +46,78 @@
         </div>  
       </div>
       
-       <!-- <div class="AxisY1" style="text-align:center">Axes 1* Left
+       <div class="AxisY" style="text-align:center">Axes 1° Left
         <mat-slider
           class="matSlider"
-          [min]="DataPoint[0].time[0]"
-          [max]="DataPoint[0].time[DataPoint[0].time.length - 1]"
+          [min]="AxisValues[1].min"
+          [max]="AxisValues[1].max"
           [step]="1"
           showTickMarks
           discrete
           [displayWith]="formatLabel" 
-          (change)="subShowAxisValues(slider.value, 0)">
-          <input matSliderThumb [(ngModel)]="AxisValues[0].max" #slider>
+          (change)="subShowAxisValues(slider.value, 1)">
+          <input matSliderThumb [(ngModel)]="AxisValues[1].max" #slider>
         </mat-slider>        
 
       </div> 
 
-      <div class="AxisX-container">
-        <div class ="AxisX-Content">
-          <input type="text" [(ngModel)]="AxisValues[0].min">
+      <div class="AxisY-container">
+        <div class ="AxisY-Content">
+          <input type="text" [(ngModel)]="AxisValues[1].min">
         </div>
-        <div class ="AxisX-Content">
-          <input type="text" [(ngModel)]="AxisValues[0].max">
+        <div class ="AxisY-Content">
+          <input type="text" [(ngModel)]="AxisValues[1].max">
         </div>  
-      </div>         -->
+      </div>
+
+       <div class="AxisY" style="text-align:center">Axes 2° Left
+        <mat-slider
+          class="matSlider"
+          [min]="AxisValues[2].min"
+          [max]="AxisValues[2].max"
+          [step]="1"
+          showTickMarks
+          discrete
+          [displayWith]="formatLabel" 
+          (change)="subShowAxisValues(slider.value, 2)">
+          <input matSliderThumb [(ngModel)]="AxisValues[2].max" #slider>
+        </mat-slider>        
+
+      </div> 
+
+      <div class="AxisY-container">
+        <div class ="AxisY-Content">
+          <input type="text" [(ngModel)]="AxisValues[2].min">
+        </div>
+        <div class ="AxisY-Content">
+          <input type="text" [(ngModel)]="AxisValues[2].max">
+        </div>  
+      </div>
+
+       <div class="AxisY" style="text-align:center">Axes 1° Right
+        <mat-slider
+          class="matSlider"
+          [min]="AxisValues[3].min"
+          [max]="AxisValues[3].max"
+          [step]="1"
+          showTickMarks
+          discrete
+          [displayWith]="formatLabel" 
+          (change)="subShowAxisValues(slider.value, 3)">
+          <input matSliderThumb [(ngModel)]="AxisValues[3].max" #slider>
+        </mat-slider>        
+
+      </div> 
+
+      <div class="AxisY-container">
+        <div class ="AxisY-Content">
+          <input type="text" [(ngModel)]="AxisValues[3].min">
+        </div>
+        <div class ="AxisY-Content">
+          <input type="text" [(ngModel)]="AxisValues[3].max">
+        </div>  
+      </div>      
+
       
       <!-- <div class ="AxisButtons">
         <div id="firstAxisButtons">

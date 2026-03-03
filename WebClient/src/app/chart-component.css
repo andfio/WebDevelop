@@ -31,7 +31,7 @@ ul {
   height: 60%;
 }
 
-.AxisX { 
+.AxisX, .AxisY { 
   display: flex;
   flex-direction: column;
   font-family: Tahoma;
@@ -39,8 +39,11 @@ ul {
   color:blue;
   align-items: center;
   height: auto;
-  padding: 0px 5px;
-  margin-top: 10px;
+  
+}
+
+.AxisY {
+  margin-top: 15px;
 }
 
 .matSlider {
@@ -48,19 +51,30 @@ ul {
   align-items: center;
 }  
 
-.AxisX-container {
+.AxisX-container, .AxisY-container {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
   width: 100%;
-  margin-top: 5px;
 }
 
-.AxisX {
+.AxisX, .AxisY {
   padding: 2px;
 }
 
 .AxisX-Content input[type="text"] {
+    border: none;               
+    border-bottom: 2px solid blue;  
+    outline: none;               
+    background-color: transparent;
+    height: auto;
+    width: 90%;
+    font-family: Tahoma;
+    font-size: 14px;
+    color:black;
+}
+
+.AxisY-Content input[type="text"] {
     border: none;               
     border-bottom: 2px solid blue;  
     outline: none;               
