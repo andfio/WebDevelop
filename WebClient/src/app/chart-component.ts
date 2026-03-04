@@ -109,28 +109,59 @@ export class ChartComponent {
       }
     }
 
-    //'AsseX'
-    this.AxisValues.push (
-      {
-        min: this.DataPoint[0].time[0],
-        max: this.DataPoint[0].time[this.DataPoint[0].time.length - 1]
-      }
-    )
+    this.chartSeries.forEach(AxisItem => {
+      this.AxisValues.push (
+        {
+          min: 0,
+          max: 0,
+          value: 0,
+          textMin: 0,
+          textMax: 0,
+          enabled: false
+        }
+      )      
+    });
 
+    //'AsseX'
+    this.AxisValues[0] = {
+        min: this.DataPoint[0].time[0],
+        max: this.DataPoint[0].time[this.DataPoint[0].time.length - 1],
+        value: this.DataPoint[0].time[this.DataPoint[0].time.length - 1],
+        textMin: this.DataPoint[0].time[0],
+        textMax: this.DataPoint[0].time[this.DataPoint[0].time.length - 1],
+        enabled: true 
+    }
+
+    let maxValue: number = 0; let minValue: number = 0;
     for (let s = 0; s < this.DataPoint.length; s++) {
-      let maxValue: number = 0;
+      maxValue: this.AxisValues[this.DataPoint[s].AxisType].max;
       for (let i = 0; i < this.DataPoint[0].time.length; i++) {
           if (this.DataPoint[s].measure[i] > maxValue) {
             maxValue = this.DataPoint[s].measure[i] 
           }
-      }  
-      this.AxisValues.push (
+      }
+      minValue: this.AxisValues[this.DataPoint[s].AxisType].min;
+      for (let i = this.DataPoint[0].time.length; i = 0; i--) {
+           if (minValue > this.DataPoint[s].measure[i]) {
+            minValue = this.DataPoint[s].measure[i] 
+          }
+      }
+
+      this.AxisValues[this.DataPoint[s].AxisType] =
         {
-          min: this.DataPoint[s].measure[0],
-          max: maxValue
-        }
-      )      
-    } 
+          min: minValue,
+          max: maxValue,
+          value: maxValue,
+          textMin: minValue,
+          textMax: maxValue,
+          enabled: true
+        }        
+    }  
+      
+      
+ 
+    
+     
 
     for (let s = 0; s < this.DataPoint.length; s++) {
       this.series.push({
@@ -205,7 +236,8 @@ export class ChartComponent {
       
       if (seriesName[seriesindex].length > 0) {
           switch (seriesindex) {
-          case 1: //1 ASSE A SINISTRA          
+          case 1: //1 ASSE A SINISTRA
+              this.AxisValues[seriesindex].enabled = true          
               this.yaxis.push(
                 {
                   seriesName: seriesName[seriesindex],
@@ -238,6 +270,7 @@ export class ChartComponent {
               break;
 
             case 2: //2° ASSE A SINISTRA
+              this.AxisValues[seriesindex].enabled = true
               this.yaxis.push(
                 {
                   seriesName: seriesName[seriesindex],
@@ -270,6 +303,7 @@ export class ChartComponent {
               break;
 
             case 3: //1° ASSE A DESTRA
+              this.AxisValues[seriesindex].enabled = true
               this.yaxis.push(
                 {
                   seriesName: seriesName[seriesindex],
@@ -403,8 +437,31 @@ export class ChartComponent {
     return `${value}`;
   }
 
-  subShowAxisValues(value: any, index:number) {
-    this.AxisValues[index].max = value;
+  subShowAxisValues(value: any, index:number, type: string) {
+    let numValue = Number(value);
+    
+    switch (type) {
+    case 'slider':
+      this.AxisValues[index].textMax = Number(numValue.toFixed(2));
+      break;
+    case 'input':
+      if (numValue > this.AxisValues[index].max || numValue < this.AxisValues[index].min) {numValue = this.AxisValues[index].max, this.AxisValues[index].textMax = this.AxisValues[index].max }
+      this.AxisValues[index].value = numValue;
+      break;      
+    }
+
+    this.yaxis[index].min = this.AxisValues[index].textMin;
+    this.yaxis[index].max = numValue;
+
+    this.chartObj.updateOptions({
+      yaxis: this.yaxis
+    });
+
+  }
+
+  subShowAxisMinValue (value: number, index:number) {
+      if (value < this.AxisValues[index].min || value > this.AxisValues[index].max ) {  this.AxisValues[index].textMin = this.AxisValues[index].min }
+      this.yaxis[index].min = value;
   }
 
   LoadXYAxis() {

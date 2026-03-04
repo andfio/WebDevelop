@@ -7,7 +7,11 @@ export interface DataPoint {
 }
 export interface AxisValues {
   min: number,
-  max: number
+  max: number,
+  value: number,
+  textMin:number;
+  textMax:number;
+  enabled: boolean
 }
 export interface CursorValues {
   x: number,

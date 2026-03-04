@@ -27,96 +27,158 @@
           class="matSlider"
           [min]="AxisValues[0].min"
           [max]="AxisValues[0].max"
-          [step]="1"
+          [step]="(AxisValues[0].max - AxisValues[0].min) / 100"
           showTickMarks
           discrete
-          [displayWith]="formatLabel" 
-          (change)="subShowAxisValues(slider.value, 0)">
-          <input matSliderThumb [(ngModel)]="AxisValues[0].max" #slider>
+          [displayWith]="formatLabel"
+          (change)="subShowAxisValues(sliderX.value, 0, 'slider')">
+          <input matSliderThumb [(ngModel)]="AxisValues[0].value" #sliderX>
         </mat-slider>        
 
       </div> 
 
       <div class="AxisX-container">
         <div class ="AxisX-Content">
-          <input type="text" [(ngModel)]="AxisValues[0].min">
+           <span class="inline-field">
+              <label class="label">min: </label>
+              <input type="number"
+                     oninput="if (this.value.length > 6) this.value = this.value.slice(0, 6);" 
+                     onkeydown="return ['Backspace','Delete','ArrowLeft','ArrowRight','Tab'].includes(event.code) || /[0-9.]/.test(event.key)"
+                     (change)="subShowAxisMinValue(AxisValues[0].textMin, 0)" 
+                     [(ngModel)]="AxisValues[0].textMin">
+          </span>
         </div>
         <div class ="AxisX-Content">
-          <input type="text" [(ngModel)]="AxisValues[0].max">
+            <span class="inline-field">
+              <label class="label">max: </label>
+              <input type="number"
+                     oninput="if (this.value.length > 6) this.value = this.value.slice(0, 6);" 
+                     onkeydown="return ['Backspace','Delete','ArrowLeft','ArrowRight','Tab'].includes(event.code) || /[0-9.]/.test(event.key)" 
+                     (change)="subShowAxisValues(AxisValues[0].textMax, 0, 'input')"
+                     [(ngModel)]="AxisValues[0].textMax">
+          </span>
         </div>  
       </div>
       
-       <div class="AxisY" style="text-align:center">Axes 1° Left
-        <mat-slider
-          class="matSlider"
-          [min]="AxisValues[1].min"
-          [max]="AxisValues[1].max"
-          [step]="1"
-          showTickMarks
-          discrete
-          [displayWith]="formatLabel" 
-          (change)="subShowAxisValues(slider.value, 1)">
-          <input matSliderThumb [(ngModel)]="AxisValues[1].max" #slider>
-        </mat-slider>        
+      @if(this.AxisValues[1].enabled) {
+        <div class="AxisY" style="text-align:center">Axes 1° Left
+          <mat-slider
+            class="matSlider"
+            [min]="AxisValues[1].min"
+            [max]="AxisValues[1].max"
+            [step]="(AxisValues[1].max - AxisValues[1].min) / 100"
+            showTickMarks
+            discrete
+            [displayWith]="formatLabel" 
+            (change)="subShowAxisValues(sliderY1.value, 1, 'slider')">
+            <input matSliderThumb [(ngModel)]="AxisValues[1].value" #sliderY1>
+          </mat-slider>        
 
-      </div> 
+        </div> 
 
-      <div class="AxisY-container">
-        <div class ="AxisY-Content">
-          <input type="text" [(ngModel)]="AxisValues[1].min">
+        <div class="AxisY-container">
+          <div class ="AxisY-Content">
+            <span class="inline-field">
+                <label class="label">min: </label>
+                <input type="number" 
+                     oninput="if (this.value.length > 6) this.value = this.value.slice(0, 6);" 
+                     onkeydown="return ['Backspace','Delete','ArrowLeft','ArrowRight','Tab'].includes(event.code) || /[0-9.]/.test(event.key)" 
+                     (change)="subShowAxisMinValue(AxisValues[1].textMin, 1)" 
+                     [(ngModel)]="AxisValues[1].textMin">
+            </span>
+          </div>
+          <div class ="AxisY-Content">
+            <span class="inline-field">
+                <label class="label">max: </label>
+                <input type="number" 
+                     oninput="if (this.value.length > 6) this.value = this.value.slice(0, 6);" 
+                     onkeydown="return ['Backspace','Delete','ArrowLeft','ArrowRight','Tab'].includes(event.code) || /[0-9.]/.test(event.key)" 
+                     (change)="subShowAxisValues(AxisValues[1].textMax, 1, 'input')"
+                     [(ngModel)]="AxisValues[1].textMax">
+            </span>
+          </div>  
         </div>
-        <div class ="AxisY-Content">
-          <input type="text" [(ngModel)]="AxisValues[1].max">
-        </div>  
-      </div>
+      }
 
-       <div class="AxisY" style="text-align:center">Axes 2° Left
-        <mat-slider
-          class="matSlider"
-          [min]="AxisValues[2].min"
-          [max]="AxisValues[2].max"
-          [step]="1"
-          showTickMarks
-          discrete
-          [displayWith]="formatLabel" 
-          (change)="subShowAxisValues(slider.value, 2)">
-          <input matSliderThumb [(ngModel)]="AxisValues[2].max" #slider>
-        </mat-slider>        
+      @if(this.AxisValues[2].enabled) {
+        <div class="AxisY" style="text-align:center">Axes 2° Left
+          <mat-slider
+            class="matSlider"
+            [min]="AxisValues[2].min"
+            [max]="AxisValues[2].max"
+            [step]="(AxisValues[2].max - AxisValues[2].min) / 100"
+            showTickMarks
+            discrete
+            [displayWith]="formatLabel"
+            (change)="subShowAxisValues(sliderY2.value, 2, 'slider')">
+            <input matSliderThumb [(ngModel)]="AxisValues[2].value" #sliderY2>
+          </mat-slider>        
 
-      </div> 
+        </div> 
 
-      <div class="AxisY-container">
-        <div class ="AxisY-Content">
-          <input type="text" [(ngModel)]="AxisValues[2].min">
+        <div class="AxisY-container">
+          <div class ="AxisY-Content">
+            <span class="inline-field">
+                <label class="label">min: </label>
+                <input type="number" 
+                      oninput="if (this.value.length > 6) this.value = this.value.slice(0, 6);" 
+                      onkeydown="return ['Backspace','Delete','ArrowLeft','ArrowRight','Tab'].includes(event.code) || /[0-9.]/.test(event.key)" 
+                      (change)="subShowAxisMinValue(AxisValues[2].textMin, 2)" 
+                      [(ngModel)]="AxisValues[2].textMin">
+            </span>
+          </div>
+          <div class ="AxisY-Content">
+            <span class="inline-field">
+                <label class="label">max: </label>
+                <input type="number" 
+                      oninput="if (this.value.length > 6) this.value = this.value.slice(0, 6);" 
+                      onkeydown="return ['Backspace','Delete','ArrowLeft','ArrowRight','Tab'].includes(event.code) || /[0-9.]/.test(event.key)" 
+                      (change)="subShowAxisValues(AxisValues[2].textMax, 2, 'input')"
+                      [(ngModel)]="AxisValues[2].textMax">
+            </span>
+          </div>  
         </div>
-        <div class ="AxisY-Content">
-          <input type="text" [(ngModel)]="AxisValues[2].max">
-        </div>  
-      </div>
+      }
 
-       <div class="AxisY" style="text-align:center">Axes 1° Right
-        <mat-slider
-          class="matSlider"
-          [min]="AxisValues[3].min"
-          [max]="AxisValues[3].max"
-          [step]="1"
-          showTickMarks
-          discrete
-          [displayWith]="formatLabel" 
-          (change)="subShowAxisValues(slider.value, 3)">
-          <input matSliderThumb [(ngModel)]="AxisValues[3].max" #slider>
-        </mat-slider>        
+      @if(this.AxisValues[3].enabled) {
+        <div class="AxisY" style="text-align:center">Axes 1° Right
+          <mat-slider
+            class="matSlider"
+            [min]="AxisValues[3].min"
+            [max]="AxisValues[3].max"
+            [step]="(AxisValues[3].max - AxisValues[3].min) / 100"
+            showTickMarks
+            discrete
+            [displayWith]="formatLabel"
+            (change)="subShowAxisValues(sliderY3.value, 3, 'slider')">
+            <input matSliderThumb [(ngModel)]="AxisValues[3].value" #sliderY3>
+          </mat-slider>        
 
-      </div> 
+        </div> 
 
-      <div class="AxisY-container">
-        <div class ="AxisY-Content">
-          <input type="text" [(ngModel)]="AxisValues[3].min">
-        </div>
-        <div class ="AxisY-Content">
-          <input type="text" [(ngModel)]="AxisValues[3].max">
-        </div>  
-      </div>      
+        <div class="AxisY-container">
+          <div class ="AxisY-Content">
+            <span class="inline-field">
+                <label class="label">min: </label>
+                <input type="number" 
+                     oninput="if (this.value.length > 6) this.value = this.value.slice(0, 6);" 
+                     onkeydown="return ['Backspace','Delete','ArrowLeft','ArrowRight','Tab'].includes(event.code) || /[0-9.]/.test(event.key)" 
+                     (change)="subShowAxisMinValue(AxisValues[3].textMin, 3)" 
+                     [(ngModel)]="AxisValues[3].textMin">
+            </span>
+          </div>
+          <div class ="AxisY-Content">
+            <span class="inline-field">
+                <label class="label">max: </label>
+              <input type="number" 
+                     oninput="if (this.value.length > 6) this.value = this.value.slice(0, 6);" 
+                     onkeydown="return ['Backspace','Delete','ArrowLeft','ArrowRight','Tab'].includes(event.code) || /[0-9.]/.test(event.key)" 
+                     (change)="subShowAxisValues(AxisValues[3].textMax, 3, 'input')"
+                     [(ngModel)]="AxisValues[3].textMax">
+            </span>
+          </div>  
+        </div>      
+      }
 
       
       <!-- <div class ="AxisButtons">

@@ -62,7 +62,7 @@ ul {
   padding: 2px;
 }
 
-.AxisX-Content input[type="text"] {
+.AxisX-Content input[type="number"] {
     border: none;               
     border-bottom: 2px solid blue;  
     outline: none;               
@@ -74,7 +74,13 @@ ul {
     color:black;
 }
 
-.AxisY-Content input[type="text"] {
+.inline-field {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+}
+
+.AxisY-Content input[type="number"] {
     border: none;               
     border-bottom: 2px solid blue;  
     outline: none;               
