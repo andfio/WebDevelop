@@ -6,6 +6,8 @@ export interface DataPoint {
   AxisType: number
 }
 export interface AxisValues {
+  seriesName: string[],
+  axisIndex: number,
   min: number,
   max: number,
   value: number,

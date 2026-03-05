@@ -58,13 +58,17 @@ export class ChartComponent {
 
   chartValues: chartvalues = {} as any;
   chartSeries: any[] =  [];
+  chartAxisOffSet: any[] = [];
   ngOnInit() {
     this.chartValues = history.state.chartValues;
     let axistype: number[] = history.state.chartSeries.axistypes.split(';').map(Number) 
-    let axisposition: number[] = history.state.chartSeries.axisposition.split(';').map(Number) 
+    let axisposition: number[] = history.state.chartSeries.axisposition.split(';').map(Number)
+    let axisregulatoroffset: number[] = history.state.chartSeries.axisregulatoroffset.split(';').map(Number) 
     for (let index = 0; index < axistype.length; index++) {
       this.chartSeries[axistype[index]] = []; 
       this.chartSeries[axistype[index]] = axisposition[index];
+      this.chartAxisOffSet[axisposition[index]] = [];
+      this.chartAxisOffSet[axisposition[index]] = axisregulatoroffset[index];
     }
     
     this.initChartData();
@@ -112,6 +116,8 @@ export class ChartComponent {
     this.chartSeries.forEach(AxisItem => {
       this.AxisValues.push (
         {
+          seriesName: [""],
+          axisIndex: 0,
           min: 0,
           max: 0,
           value: 0,
@@ -124,6 +130,8 @@ export class ChartComponent {
 
     //'AsseX'
     this.AxisValues[0] = {
+        seriesName: [""],
+        axisIndex: 0,
         min: this.DataPoint[0].time[0],
         max: this.DataPoint[0].time[this.DataPoint[0].time.length - 1],
         value: this.DataPoint[0].time[this.DataPoint[0].time.length - 1],
@@ -132,36 +140,42 @@ export class ChartComponent {
         enabled: true 
     }
 
-    let maxValue: number = 0; let minValue: number = 0;
+    let seriesNames: any[] = [];
+    let maxValue: any[] = []; let minValue: any[] = []; 
+    let AxisIndex: number = 0;
     for (let s = 0; s < this.DataPoint.length; s++) {
-      maxValue: this.AxisValues[this.DataPoint[s].AxisType].max;
+      
+      AxisIndex = this.DataPoint[s].AxisType;
+
       for (let i = 0; i < this.DataPoint[0].time.length; i++) {
-          if (this.DataPoint[s].measure[i] > maxValue) {
-            maxValue = this.DataPoint[s].measure[i] 
+          maxValue[AxisIndex] = maxValue[AxisIndex] || []
+          if (this.DataPoint[s].measure[i] > maxValue[AxisIndex]) {
+            maxValue[AxisIndex] = this.DataPoint[s].measure[i] 
           }
       }
-      minValue: this.AxisValues[this.DataPoint[s].AxisType].min;
-      for (let i = this.DataPoint[0].time.length; i = 0; i--) {
-           if (minValue > this.DataPoint[s].measure[i]) {
-            minValue = this.DataPoint[s].measure[i] 
+      
+      for (let i = this.DataPoint[0].time.length; i >= 0; i--) {
+          minValue[AxisIndex] =  minValue[AxisIndex] || [maxValue[AxisIndex]]
+           if (this.DataPoint[s].measure[i] < minValue[AxisIndex]) {
+            minValue[AxisIndex] = this.DataPoint[s].measure[i] 
           }
       }
 
-      this.AxisValues[this.DataPoint[s].AxisType] =
+      seriesNames[AxisIndex] = seriesNames[AxisIndex] || []
+      seriesNames[AxisIndex].push(this.DataPoint[s].name);
+
+      this.AxisValues[AxisIndex] =
         {
-          min: minValue,
-          max: maxValue,
-          value: maxValue,
-          textMin: minValue,
-          textMax: maxValue,
-          enabled: true
+          seriesName: seriesNames[AxisIndex],
+          axisIndex: 0, 
+          min: (minValue[AxisIndex] > 4 ? minValue[AxisIndex] : 0),
+          max: maxValue[AxisIndex] + (maxValue[AxisIndex] * this.chartAxisOffSet[AxisIndex] / 100),
+          value: ((maxValue[AxisIndex] - minValue[AxisIndex]) / 2),
+          textMin: (minValue[AxisIndex] > 4 ? minValue[AxisIndex] : 0),
+          textMax: maxValue[AxisIndex],
+          enabled: true 
         }        
     }  
-      
-      
- 
-    
-     
 
     for (let s = 0; s < this.DataPoint.length; s++) {
       this.series.push({
@@ -215,34 +229,21 @@ export class ChartComponent {
       opacity: 1,
       type: 'solid'
     };
-    let seriesName: any[] = []
-    for (let s = 0; s < this.DataPoint.length; s++) {
-      seriesName[s+1] = seriesName[s+1] || [];
-      
-      switch (this.DataPoint[s].AxisType) {
-      case 1: 
-        seriesName[this.DataPoint[s].AxisType].push(this.DataPoint[s].name);
-        break;
-      case 2:
-        seriesName[this.DataPoint[s].AxisType].push(this.DataPoint[s].name)
-        break;
-      case 3:
-        seriesName[this.DataPoint[s].AxisType].push(this.DataPoint[s].name)
-        break;
-      }
-    }           
 
-    for (let seriesindex = 1; seriesindex < seriesName.length; seriesindex++) {
+    let axisCount: number = 0;
+    for (let AxisIndex = 1; AxisIndex < this.AxisValues.length; AxisIndex++) {
       
-      if (seriesName[seriesindex].length > 0) {
-          switch (seriesindex) {
+      if (this.AxisValues[AxisIndex].enabled == true) {
+          
+          switch (AxisIndex) {
           case 1: //1 ASSE A SINISTRA
-              this.AxisValues[seriesindex].enabled = true          
+              this.AxisValues[AxisIndex].axisIndex = axisCount;
               this.yaxis.push(
                 {
-                  seriesName: seriesName[seriesindex],
-                  min: this.AxisValues[seriesindex].min,
-                  max: this.AxisValues[seriesindex].max,
+                  seriesName: this.AxisValues[AxisIndex].seriesName,
+                  min: this.AxisValues[AxisIndex].textMin,
+                  max: this.AxisValues[AxisIndex].textMax,
+                  tickAmount: 10,
                   opposite: false,      
                   axisTicks: {
                     show: true,
@@ -260,7 +261,7 @@ export class ChartComponent {
                     }           
                   },
                   title: {
-                    text: seriesName[seriesindex].join(", "),
+                    text: this.AxisValues[AxisIndex].seriesName.join(", "),
                     style: {
                       color: "#FFFFFF"
                     },  
@@ -270,12 +271,13 @@ export class ChartComponent {
               break;
 
             case 2: //2° ASSE A SINISTRA
-              this.AxisValues[seriesindex].enabled = true
+              this.AxisValues[AxisIndex].axisIndex = axisCount;
               this.yaxis.push(
                 {
-                  seriesName: seriesName[seriesindex],
-                  min: this.AxisValues[seriesindex].min,
-                  max: this.AxisValues[seriesindex].max,
+                  seriesName: this.AxisValues[AxisIndex].seriesName,
+                  min: this.AxisValues[AxisIndex].textMin,
+                  max: this.AxisValues[AxisIndex].textMax,
+                  tickAmount: 10,
                   opposite: false,      
                   axisTicks: {
                     show: true,
@@ -293,7 +295,7 @@ export class ChartComponent {
                     }           
                   },
                   title: {
-                    text: seriesName[seriesindex].join(", "),
+                    text: this.AxisValues[AxisIndex].seriesName.join(", "),
                     style: {
                       color: "#FFFFFF"
                     },  
@@ -303,12 +305,13 @@ export class ChartComponent {
               break;
 
             case 3: //1° ASSE A DESTRA
-              this.AxisValues[seriesindex].enabled = true
+              this.AxisValues[AxisIndex].axisIndex = axisCount;
               this.yaxis.push(
                 {
-                  seriesName: seriesName[seriesindex],
-                  min: this.AxisValues[seriesindex].min,
-                  max: this.AxisValues[seriesindex].max,
+                  seriesName: this.AxisValues[AxisIndex].seriesName,
+                  min: this.AxisValues[AxisIndex].textMin,
+                  max: this.AxisValues[AxisIndex].textMax,
+                  tickAmount: 10,
                   opposite: true,      
                   axisTicks: {
                     show: true,
@@ -326,7 +329,7 @@ export class ChartComponent {
                     }           
                   },
                   title: {
-                    text: seriesName[seriesindex].join(", "),
+                    text: this.AxisValues[AxisIndex].seriesName.join(", "),
                     style: {
                       color: "#FFFFFF"
                     },  
@@ -335,13 +338,14 @@ export class ChartComponent {
               );
               break;   
           }
+          axisCount++;
       }
     }
     this.xaxis = {
       type: "numeric",
       position: 'bottom',
-      min: this.AxisValues[0].min,
-      max: this.AxisValues[0].max,      
+      min: this.AxisValues[0].textMin,
+      max: this.AxisValues[0].textMax,      
       tickAmount: 20,
       axisTicks: {
           show: true,
@@ -446,22 +450,76 @@ export class ChartComponent {
       break;
     case 'input':
       if (numValue > this.AxisValues[index].max || numValue < this.AxisValues[index].min) {numValue = this.AxisValues[index].max, this.AxisValues[index].textMax = this.AxisValues[index].max }
-      this.AxisValues[index].value = numValue;
       break;      
     }
 
-    this.yaxis[index].min = this.AxisValues[index].textMin;
-    this.yaxis[index].max = numValue;
+    if (index > 0) {
+      this.yaxis[this.AxisValues[index].axisIndex].min = this.AxisValues[index].textMin;
+      this.yaxis[this.AxisValues[index].axisIndex].max = numValue;
 
-    this.chartObj.updateOptions({
-      yaxis: this.yaxis
-    });
+      this.chartObj.updateOptions({
+        yaxis: this.yaxis
+      });
+    }
+    else
+    {
+      this.xaxis.max = numValue;
+      this.xaxis.min = this.AxisValues[this.AxisValues[index].axisIndex].textMin;
 
+      this.chartObj.updateOptions({
+        xaxis: this.xaxis
+      });
+
+    }
   }
 
   subShowAxisMinValue (value: number, index:number) {
-      if (value < this.AxisValues[index].min || value > this.AxisValues[index].max ) {  this.AxisValues[index].textMin = this.AxisValues[index].min }
-      this.yaxis[index].min = value;
+    let numValue = Number(value);
+    if (numValue < this.AxisValues[index].min || numValue > this.AxisValues[index].max ) {  this.AxisValues[index].textMin = this.AxisValues[index].min }
+    
+    if(index > 0) {
+      this.yaxis[this.AxisValues[index].axisIndex].min = numValue;
+      this.yaxis[this.AxisValues[index].axisIndex].max = this.AxisValues[index].textMax;
+
+      this.chartObj.updateOptions({
+        yaxis: this.yaxis
+      });
+    }
+    else
+    {
+      this.xaxis.min = numValue;
+      this.xaxis.max = this.AxisValues[this.AxisValues[index].axisIndex].textMin;
+
+      this.chartObj.updateOptions({
+        xaxis: this.xaxis
+      });
+
+    }
+  }
+  subResetSliders(index: number) {
+    this.AxisValues[index].textMax = this.AxisValues[index].max - (this.AxisValues[index].max * this.chartAxisOffSet[index] / 100)
+    this.AxisValues[index].textMin = this.AxisValues[index].min
+    this.AxisValues[index].value = ((this.AxisValues[index].textMax - this.AxisValues[index].textMin) / 2)
+
+    if(index > 0) {
+      this.yaxis[this.AxisValues[index].axisIndex].min = this.AxisValues[index].textMin;
+      this.yaxis[this.AxisValues[index].axisIndex].max = this.AxisValues[index].textMax;
+
+      this.chartObj.updateOptions({
+        yaxis: this.yaxis
+      });
+    }
+    else
+    {
+      this.xaxis.min = this.AxisValues[index].textMin
+      this.xaxis.max = this.AxisValues[index].textMin;
+
+      this.chartObj.updateOptions({
+        xaxis: this.xaxis
+      });
+
+    }
+  
   }
 
   LoadXYAxis() {

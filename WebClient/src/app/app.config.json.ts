@@ -88,4 +88,5 @@ export interface chartvalues {
 export interface chartseries {
     axistypes: string;
     axisposition: string;
+    axisregulatoroffset: string;
 }

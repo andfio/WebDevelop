@@ -39,17 +39,39 @@ ul {
   color:blue;
   align-items: center;
   height: auto;
-  
 }
 
 .AxisY {
   margin-top: 15px;
 }
 
+.inline-slider {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  width: 100%;
+  gap: 2px;
+}
+
 .matSlider {
   width: 100%;
-  align-items: center;
-}  
+  padding-left: 0;
+  margin-left: 0;
+}
+
+.buttonReset {
+    width: fit-content;
+    height: fit-content;
+    background: black;
+    color: white;
+    font-family: 'Tahoma';
+    font-size: 20px;
+    font-weight: bold;
+    border-radius: 4px;
+    padding: 2px;
+    transition: 0.2s ease;
+    box-shadow: 0px 1px 4px rgba(0,0,0,0.3);
+}
 
 .AxisX-container, .AxisY-container {
   display: flex;

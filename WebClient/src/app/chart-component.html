@@ -21,21 +21,23 @@
 
   <div class="chart-details-container">
     <div class="chart-details"> 
-        
-       <div class="AxisX" style="text-align:center">Axes X (Time (sec))
-        <mat-slider
-          class="matSlider"
-          [min]="AxisValues[0].min"
-          [max]="AxisValues[0].max"
-          [step]="(AxisValues[0].max - AxisValues[0].min) / 100"
-          showTickMarks
-          discrete
-          [displayWith]="formatLabel"
-          (change)="subShowAxisValues(sliderX.value, 0, 'slider')">
-          <input matSliderThumb [(ngModel)]="AxisValues[0].value" #sliderX>
-        </mat-slider>        
-
-      </div> 
+      <div class="AxisX" style="text-align:center">Axes X (Time (sec))
+        <div class="inline-slider"> 
+            <mat-slider
+              class="matSlider"
+              [min]="AxisValues[0].min"
+              [max]="AxisValues[0].max"
+              [step]="(AxisValues[0].max - AxisValues[0].min) / 100"
+              showTickMarks
+              discrete
+              [displayWith]="formatLabel"
+              (change)="subShowAxisValues(sliderX.value, 0, 'slider')">
+              <input matSliderThumb [(ngModel)]="AxisValues[0].value" #sliderX>
+            </mat-slider>        
+            <div class="buttonReset" (click)="subResetSliders(0)"><i class="material-symbols-outlined" height="20" width="20">Home</i></div>
+          </div> 
+      </div>
+  
 
       <div class="AxisX-container">
         <div class ="AxisX-Content">
@@ -62,20 +64,22 @@
       
       @if(this.AxisValues[1].enabled) {
         <div class="AxisY" style="text-align:center">Axes 1° Left
-          <mat-slider
-            class="matSlider"
-            [min]="AxisValues[1].min"
-            [max]="AxisValues[1].max"
-            [step]="(AxisValues[1].max - AxisValues[1].min) / 100"
-            showTickMarks
-            discrete
-            [displayWith]="formatLabel" 
-            (change)="subShowAxisValues(sliderY1.value, 1, 'slider')">
-            <input matSliderThumb [(ngModel)]="AxisValues[1].value" #sliderY1>
-          </mat-slider>        
-
-        </div> 
-
+          <div class="inline-slider"> 
+            <mat-slider
+              class="matSlider"
+              [min]="AxisValues[1].min"
+              [max]="AxisValues[1].max"
+              [step]="(AxisValues[1].max - AxisValues[1].min) / 100"
+              showTickMarks
+              discrete
+              [displayWith]="formatLabel" 
+              (change)="subShowAxisValues(sliderY1.value, 1, 'slider')">
+              <input matSliderThumb [(ngModel)]="AxisValues[1].value" #sliderY1>
+            </mat-slider>        
+            <div class="buttonReset" (click)="subResetSliders(1)"><i class="material-symbols-outlined" height="20" width="20">Home</i></div>
+          </div>
+        </div>
+         
         <div class="AxisY-container">
           <div class ="AxisY-Content">
             <span class="inline-field">
@@ -102,18 +106,20 @@
 
       @if(this.AxisValues[2].enabled) {
         <div class="AxisY" style="text-align:center">Axes 2° Left
-          <mat-slider
-            class="matSlider"
-            [min]="AxisValues[2].min"
-            [max]="AxisValues[2].max"
-            [step]="(AxisValues[2].max - AxisValues[2].min) / 100"
-            showTickMarks
-            discrete
-            [displayWith]="formatLabel"
-            (change)="subShowAxisValues(sliderY2.value, 2, 'slider')">
-            <input matSliderThumb [(ngModel)]="AxisValues[2].value" #sliderY2>
-          </mat-slider>        
-
+          <div class="inline-slider"> 
+            <mat-slider
+              class="matSlider"
+              [min]="AxisValues[2].min"
+              [max]="AxisValues[2].max"
+              [step]="(AxisValues[2].max - AxisValues[2].min) / 100"
+              showTickMarks
+              discrete
+              [displayWith]="formatLabel"
+              (change)="subShowAxisValues(sliderY2.value, 2, 'slider')">
+              <input matSliderThumb [(ngModel)]="AxisValues[2].value" #sliderY2>
+            </mat-slider>        
+            <div class="buttonReset"(click)="subResetSliders(2)"><i class="material-symbols-outlined" height="20" width="20">Home</i></div>
+          </div>
         </div> 
 
         <div class="AxisY-container">
@@ -142,18 +148,20 @@
 
       @if(this.AxisValues[3].enabled) {
         <div class="AxisY" style="text-align:center">Axes 1° Right
-          <mat-slider
-            class="matSlider"
-            [min]="AxisValues[3].min"
-            [max]="AxisValues[3].max"
-            [step]="(AxisValues[3].max - AxisValues[3].min) / 100"
-            showTickMarks
-            discrete
-            [displayWith]="formatLabel"
-            (change)="subShowAxisValues(sliderY3.value, 3, 'slider')">
-            <input matSliderThumb [(ngModel)]="AxisValues[3].value" #sliderY3>
-          </mat-slider>        
-
+          <div class="inline-slider"> 
+            <mat-slider
+              class="matSlider"
+              [min]="AxisValues[3].min"
+              [max]="AxisValues[3].max"
+              [step]="(AxisValues[3].max - AxisValues[3].min) / 100"
+              showTickMarks
+              discrete
+              [displayWith]="formatLabel"
+              (change)="subShowAxisValues(sliderY3.value, 3, 'slider')">
+              <input matSliderThumb [(ngModel)]="AxisValues[3].value" #sliderY3>
+            </mat-slider>        
+            <div class="buttonReset"(click)="subResetSliders(3)"><i class="material-symbols-outlined" height="20" width="20">Home</i></div>
+          </div>
         </div> 
 
         <div class="AxisY-container">
@@ -190,10 +198,10 @@
           <button class="Legend" (click)="ToggleLegend()"><i class="material-symbols-outlined">stack</i>Toggle Legend</button>
           <button class="GridChart" (click)="ShowGrid()"><i class="material-symbols-outlined">density_medium</i>Show Grid</button>
         </div>  
-      </div> -->
+      </div> 
 
     </div>
-    
+     -->
     <!-- <div class="CursorPoints">
       <p id="cursorpoint">Cursor Points:</p>
       <div class="Cursor1">

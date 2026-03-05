@@ -432,6 +432,7 @@
   },
   "chartseries": { 
     "axistypes": "0;2;3;4",
-    "axisposition": "0;1;2;3" 
+    "axisposition": "0;1;2;3",
+    "axisregulatoroffset": "0;50;10;25" 
   }
 }
