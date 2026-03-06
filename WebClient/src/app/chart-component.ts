@@ -27,18 +27,19 @@ import { FormsModule } from '@angular/forms';
 import { CursorValues } from "./chart-config";
 import {
   ViewChild,
-  HostListener
 } from '@angular/core';
+//Menu Pagina
 import {MatIconModule} from '@angular/material/icon';
+import {MatMenuModule} from '@angular/material/menu';
 import {MatButtonModule} from '@angular/material/button';
-import {MatToolbarModule} from '@angular/material/toolbar';
-
+//gestione grafico
+import {MatButtonToggleModule} from '@angular/material/button-toggle';
 
 @Component({
   selector: "app-chart",
   templateUrl: "./chart-component.html",
   styleUrls: ["./chart-component.css"],
-  imports: [NgApexchartsModule, MatSliderModule, FormsModule, MatToolbarModule, MatButtonModule, MatIconModule]
+  imports: [NgApexchartsModule, MatSliderModule, FormsModule, MatIconModule, MatMenuModule, MatButtonModule, MatButtonToggleModule]
 })
 export class ChartComponent {
   @ViewChild('chartObj') chartObj!: ApexChartComponent;
@@ -445,24 +446,6 @@ export class ChartComponent {
     }  
   }
 
-  resizeChart() {
-
-    setTimeout(() => {
-
-      this.chartObj?.updateOptions({}, false, true, true);
-
-    });
-
-  }
-
-  @HostListener('window:resize')
-
-  onResize() {
-
-     //this.resizeChart();
-
-  }
-
   formatLabel(value: number): string {
     return `${value}`;
   }
@@ -569,6 +552,10 @@ export class ChartComponent {
   }
 
   ShowGrid() {
+  }
+
+  ShowTestsExecution() {
+    
   }
 
   showDialog(message: string, title?: string ) {

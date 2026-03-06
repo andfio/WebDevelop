@@ -1,5 +1,23 @@
+<!-- <button matIconButton [matMenuTriggerFor]="menu" aria-label="Example icon-button with a menu">
+  <mat-icon>more_vert</mat-icon>
+</button>
+<mat-menu #menu="matMenu">
+  <button mat-menu-item>
+    <mat-icon>dialpad</mat-icon>
+    <span>Redial</span>
+  </button>
+  <button mat-menu-item disabled>
+    <mat-icon>voicemail</mat-icon>
+    <span>Check voice mail</span>
+  </button>
+  <button mat-menu-item>
+    <mat-icon>notifications_off</mat-icon>
+    <span>Disable alerts</span>
+  </button>
+</mat-menu> -->
+
 <div class="chart-container">
-  
+
   <div class="chart-wrapper">
     <apx-chart class="apx-chart"
        #chartObj
@@ -202,6 +220,33 @@
       </div> 
 
     </div>
+
+    <div class ="GraphButtons">
+    
+      <div id="firstGraphButtons">
+          <div class="GraphButton" (click)="ShowTestsExecution()">Show Tests Execution</div>
+      <div id="SecondGraphButtons">
+
+            <!-- <div class="selectbox">
+              <label id="labelMeasures">Tests :</label>
+              <select [(ngModel)]="TestSelected">
+                <option value="%" selected>All</option>
+                @for (item of measures; track $index) {
+                    @for (value of item.values; track $index) {
+                      <option [value]="value"> {{value}} </option>
+                    }
+                }
+              </select>
+            </div>         
+
+          </div>        
+          <div class="GraphButton" (click)="ShowPeaks()"><i class="material-symbols-outlined">stack</i>Legend</div>
+          <div class="GraphButton" (click)="ShowConstantValues()"><i class="material-symbols-outlined">density_medium</i>Show Grid</div>
+          <div class="GraphButton" (click)="ShowTestsAree()"><i class="material-symbols-outlined">density_medium</i>Show Grid</div>
+        </div>   -->
+      </div> 
+
+    </div>    
     
     <!-- <div class="CursorPoints">
       <p id="cursorpoint">Cursor Points:</p>
