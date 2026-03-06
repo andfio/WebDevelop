@@ -12,7 +12,9 @@ import {
   ApexTooltip,
   ApexStroke,
   ApexGrid,
-  ApexLegend  
+  ApexLegend,  
+  ApexStates,
+  ApexOptions
 } from "ng-apexcharts";
 import { NgApexchartsModule } from "ng-apexcharts";
 import { chartseries, chartvalues } from "./app.config.json";
@@ -27,13 +29,16 @@ import {
   ViewChild,
   HostListener
 } from '@angular/core';
+import {MatIconModule} from '@angular/material/icon';
+import {MatButtonModule} from '@angular/material/button';
+import {MatToolbarModule} from '@angular/material/toolbar';
 
 
 @Component({
   selector: "app-chart",
   templateUrl: "./chart-component.html",
   styleUrls: ["./chart-component.css"],
-  imports: [NgApexchartsModule, MatSliderModule, FormsModule]
+  imports: [NgApexchartsModule, MatSliderModule, FormsModule, MatToolbarModule, MatButtonModule, MatIconModule]
 })
 export class ChartComponent {
   @ViewChild('chartObj') chartObj!: ApexChartComponent;
@@ -123,20 +128,27 @@ export class ChartComponent {
           value: 0,
           textMin: 0,
           textMax: 0,
+          DefaultMin: 0,
+          DefaultMax: 0,          
           enabled: false
         }
       )      
     });
 
     //'AsseX'
+    let minX = this.DataPoint[0].time[0];
+    let maxX = this.DataPoint[0].time[this.DataPoint[0].time.length - 1];
+
     this.AxisValues[0] = {
         seriesName: [""],
         axisIndex: 0,
-        min: this.DataPoint[0].time[0],
-        max: this.DataPoint[0].time[this.DataPoint[0].time.length - 1],
-        value: this.DataPoint[0].time[this.DataPoint[0].time.length - 1],
-        textMin: this.DataPoint[0].time[0],
-        textMax: this.DataPoint[0].time[this.DataPoint[0].time.length - 1],
+        min: minX,
+        max: maxX,
+        value: maxX,
+        textMin: minX,
+        textMax: maxX,
+        DefaultMin: minX,
+        DefaultMax: maxX,        
         enabled: true 
     }
 
@@ -173,6 +185,8 @@ export class ChartComponent {
           value: ((maxValue[AxisIndex] - minValue[AxisIndex]) / 2),
           textMin: (minValue[AxisIndex] > 4 ? minValue[AxisIndex] : 0),
           textMax: maxValue[AxisIndex],
+          DefaultMin: (minValue[AxisIndex] > 4 ? minValue[AxisIndex] : 0),
+          DefaultMax: maxValue[AxisIndex],          
           enabled: true 
         }        
     }  
@@ -189,10 +203,10 @@ export class ChartComponent {
       type: "line",
       background: "#000000",
       stacked: false,
-      redrawOnParentResize: false,
-      redrawOnWindowResize: false,
-      height: document.documentElement.clientHeight * 0.8,
-      width: document.documentElement.clientWidth * 0.8,
+      redrawOnParentResize: true,
+      redrawOnWindowResize: true,
+      height: 500,
+      width: '100%',
       zoom: {
         type: "xy",
         enabled: true,
@@ -200,8 +214,20 @@ export class ChartComponent {
         allowMouseWheelZoom: false
       },
       toolbar: {
-        autoSelected: "zoom"
-      },
+        show: true,
+        offsetX: 0,
+        offsetY: 0,
+        tools: {
+          download: true,
+          selection: true,
+          zoom: true,
+          zoomin: false,
+          zoomout: false,
+          pan: false,
+          reset: true 
+        },
+        autoSelected: 'zoom' 
+      }
     };
     this.legend = {
       show: false
@@ -433,7 +459,7 @@ export class ChartComponent {
 
   onResize() {
 
-    // this.resizeChart();
+     //this.resizeChart();
 
   }
 
@@ -442,7 +468,10 @@ export class ChartComponent {
   }
 
   subShowAxisValues(value: any, index:number, type: string) {
+    let axisIndex: number = 0;
     let numValue = Number(value);
+
+    axisIndex = this.AxisValues[index].axisIndex;
     
     switch (type) {
     case 'slider':
@@ -454,8 +483,8 @@ export class ChartComponent {
     }
 
     if (index > 0) {
-      this.yaxis[this.AxisValues[index].axisIndex].min = this.AxisValues[index].textMin;
-      this.yaxis[this.AxisValues[index].axisIndex].max = numValue;
+      this.yaxis[axisIndex].min = this.AxisValues[index].textMin;
+      this.yaxis[axisIndex].max = numValue;
 
       this.chartObj.updateOptions({
         yaxis: this.yaxis
@@ -464,7 +493,7 @@ export class ChartComponent {
     else
     {
       this.xaxis.max = numValue;
-      this.xaxis.min = this.AxisValues[this.AxisValues[index].axisIndex].textMin;
+      this.xaxis.min = this.AxisValues[index].textMin;
 
       this.chartObj.updateOptions({
         xaxis: this.xaxis
@@ -474,12 +503,16 @@ export class ChartComponent {
   }
 
   subShowAxisMinValue (value: number, index:number) {
+    let axisIndex: number = 0;
     let numValue = Number(value);
+
+    axisIndex = this.AxisValues[index].axisIndex;
+
     if (numValue < this.AxisValues[index].min || numValue > this.AxisValues[index].max ) {  this.AxisValues[index].textMin = this.AxisValues[index].min }
     
     if(index > 0) {
-      this.yaxis[this.AxisValues[index].axisIndex].min = numValue;
-      this.yaxis[this.AxisValues[index].axisIndex].max = this.AxisValues[index].textMax;
+      this.yaxis[axisIndex].min = numValue;
+      this.yaxis[axisIndex].max = this.AxisValues[index].textMax;
 
       this.chartObj.updateOptions({
         yaxis: this.yaxis
@@ -488,7 +521,7 @@ export class ChartComponent {
     else
     {
       this.xaxis.min = numValue;
-      this.xaxis.max = this.AxisValues[this.AxisValues[index].axisIndex].textMin;
+      this.xaxis.max = this.AxisValues[index].textMin;
 
       this.chartObj.updateOptions({
         xaxis: this.xaxis
@@ -497,13 +530,17 @@ export class ChartComponent {
     }
   }
   subResetSliders(index: number) {
-    this.AxisValues[index].textMax = this.AxisValues[index].max - (this.AxisValues[index].max * this.chartAxisOffSet[index] / 100)
-    this.AxisValues[index].textMin = this.AxisValues[index].min
+    let axisIndex: number = 0;
+
+    axisIndex = this.AxisValues[index].axisIndex;
+
+    this.AxisValues[index].textMax = this.AxisValues[index].DefaultMax;
+    this.AxisValues[index].textMin = this.AxisValues[index].DefaultMin;
     this.AxisValues[index].value = ((this.AxisValues[index].textMax - this.AxisValues[index].textMin) / 2)
 
     if(index > 0) {
-      this.yaxis[this.AxisValues[index].axisIndex].min = this.AxisValues[index].textMin;
-      this.yaxis[this.AxisValues[index].axisIndex].max = this.AxisValues[index].textMax;
+      this.yaxis[axisIndex].min = this.AxisValues[index].textMin;
+      this.yaxis[axisIndex].max = this.AxisValues[index].textMax;
 
       this.chartObj.updateOptions({
         yaxis: this.yaxis
@@ -512,7 +549,7 @@ export class ChartComponent {
     else
     {
       this.xaxis.min = this.AxisValues[index].textMin
-      this.xaxis.max = this.AxisValues[index].textMin;
+      this.xaxis.max = this.AxisValues[index].textMax;
 
       this.chartObj.updateOptions({
         xaxis: this.xaxis

@@ -1,7 +1,7 @@
 <div class="chart-container">
   
   <div class="chart-wrapper">
-    <apx-chart
+    <apx-chart class="apx-chart"
        #chartObj
       [series]="series"
       [chart]="chart"
@@ -189,19 +189,20 @@
       }
 
       
-      <!-- <div class ="AxisButtons">
-        <div id="firstAxisButtons">
-          <button class="LoadXY" (click)="LoadXYAxis()"><i class="material-symbols-outlined">upload</i>Load Axis</button>
-          <button class="SaveXY" (click)="SaveXYAxis()"><i class="material-symbols-outlined">sync_saved_locally</i>Save Axis</button>
+    <div class ="AxisButtons">
+    
+      <div id="firstAxisButtons">
+          <div class="AxisButton" (click)="LoadXYAxis()"><i class="material-symbols-outlined">upload</i>Load Axis</div>
+          <div class="AxisButton" (click)="SaveXYAxis()"><i class="material-symbols-outlined">save</i>Save Axis</div>
         </div>
-        <div id="SecondAxisButtons">
-          <button class="Legend" (click)="ToggleLegend()"><i class="material-symbols-outlined">stack</i>Toggle Legend</button>
-          <button class="GridChart" (click)="ShowGrid()"><i class="material-symbols-outlined">density_medium</i>Show Grid</button>
+      <div id="SecondAxisButtons">
+          <div class="AxisButton" (click)="ToggleLegend()"><i class="material-symbols-outlined">stack</i>Legend</div>
+          <div class="AxisButton" (click)="ShowGrid()"><i class="material-symbols-outlined">density_medium</i>Show Grid</div>
         </div>  
       </div> 
 
     </div>
-     -->
+    
     <!-- <div class="CursorPoints">
       <p id="cursorpoint">Cursor Points:</p>
       <div class="Cursor1">

@@ -13,6 +13,8 @@ export interface AxisValues {
   value: number,
   textMin:number;
   textMax:number;
+  DefaultMin:number;
+  DefaultMax:number;
   enabled: boolean
 }
 export interface CursorValues {

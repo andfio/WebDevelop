@@ -1,22 +1,23 @@
-ul {
-  text-align: center;
-}
-
 .chart-container {
   display: flex;
   flex-direction: row;
   align-items: flex-start;
+  gap: 16px;
 }
 .chart-wrapper {
-  display: inline-block;
+  flex: 1 1 auto;
+  min-width: 0;
   margin: 5px;
   padding: 5px;
-  height: 80vh;
-  width: 80vw;
+}
+
+.app-chart {
+  display: block;
+  width: 100%;
 }
 
 .chart-details-container {
-  flex-grow: 1;
+  flex: 0 0 260px;
   margin: 10px 10px 0px 0px; /* top | right | bottom | left */
   height: 80vh;
   border-radius: 6px;
@@ -116,33 +117,45 @@ ul {
 
 .AxisButtons {
   display: flex;
+  flex-direction: column;
+  margin-top: 20px;
+}
+
+#SecondAxisButtons, 
+#firstAxisButtons  {
+  display: flex;
   flex-direction: row;
+  align-items: center; 
+  justify-content: space-between;
+  padding: 5px;
 }
 
-#firstAxisButtons {
-  width: fit-content;
+.AxisButton {
+  width: 50%;
   height: 30px; 
-  gap: 10px;
-  padding-bottom: 10px;
-}
-
-#SecondAxisButtons {
-  width: fit-content;
-  height: 30px; 
-  gap: 10px;
-  padding-bottom: 10px;
+  padding: 5px;
   border-radius: 6px;
-  background: #f8f9fa;
+  background-color: #C0C0C0;
   box-shadow: 0px 2px 8px rgba(0,0,0,0.15);
   box-sizing: border-box;
-  overflow-y: hidden;  
+  margin-right: 5px;
+  align-items: center;
+  font-family: 'Tahoma';
+  font-size: 14px;
+  font-weight: bold;
+}
+
+.AxisButton, .material-symbols-outlined {
+  display: flex;
+  flex-direction: row;
+  align-items: center; 
 }
 
 .CursorPoints {
   padding: 5px;
   height: 40%;
   border-radius: 6px;
-  background: #f8f9fa;
+  background-color: #2fb231;
   box-shadow: 0px 2px 8px rgba(0,0,0,0.15);
   box-sizing: border-box;
   overflow-y: hidden;
