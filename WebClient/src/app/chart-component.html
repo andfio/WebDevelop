@@ -18,6 +18,27 @@
 
 <div class="chart-container">
 
+  <div class="CursorPoints">
+    <span id="cursorpoint" >Cursor Points: </span>
+    <div class="CursorPoint1" 
+      [style.box-shadow]="'0px 0px 0px 12px ' + CursorValues[0].color">
+      <label class="Cursor1Label" >Cursor: {{ CursorValues[0].name }}</label>
+      <label class="CursorY">Value: {{ CursorValues[0].y }}</label>
+      <label class="CursorX">Time: {{ CursorValues[0].x }}</label>
+    </div>
+    <!-- <div class="Cursor2">
+      <label class="Cursor2Label" [style.background-color]="CursorValues[1].color">Cursor: {{ CursorValues[1].name }}</label>
+      <label class="CursorY">Y: {{ CursorValues[1].y }}</label>
+      <label class="CursorX">X: {{ CursorValues[1].x }}</label>
+    </div>
+    <div class="CursorDifference">
+      <label class="CursorDifferenceLabel">Difference:</label>
+      <label class="CursorY">Y: {{ CursorValues[1].y - CursorValues[0].y }}</label>
+      <label class="CursorX">X: {{ CursorValues[1].x - CursorValues[0].x }}</label>
+    </div>           -->
+  
+  </div>     
+
   <div class="chart-wrapper">
     <apx-chart class="apx-chart"
        #chartObj
@@ -215,58 +236,47 @@
         </div>
       <div id="SecondAxisButtons">
           <div class="AxisButton" (click)="ToggleLegend()"><i class="material-symbols-outlined">stack</i>Legend</div>
-          <div class="AxisButton" (click)="ShowGrid()"><i class="material-symbols-outlined">density_medium</i>Show Grid</div>
+          <div class="AxisButton" (click)="ShowGrid()"><i class="material-symbols-outlined">grid_4x4</i>Show Grid</div>
         </div>  
       </div> 
 
     </div>
 
-    <div class ="GraphButtons">
+    <div class="GraphButton"  (click)="ShowTestsExecution('ShowTestsExecution')">
+      @if(buttonpressed['ShowTestsExecution'] === true ) 
+      { <i class="material-symbols-outlined">done_outline</i> }
+      <span>Show Tests Execution</span>
+    </div>
+
+    <div class="selectbox">
+      <label id="labelMeasures">Tests :</label>
+      <select [(ngModel)]="measureSelected">
+        <option value="%" selected>All</option>
+        @for (item of measures; track $index) {
+            @for (value of item.values; track $index) {
+              <option [value]="value"> {{value}} </option>
+            }
+        }
+      </select>
+    </div> 
     
-      <div id="firstGraphButtons">
-          <div class="GraphButton" (click)="ShowTestsExecution()">Show Tests Execution</div>
-      <div id="SecondGraphButtons">
-
-            <!-- <div class="selectbox">
-              <label id="labelMeasures">Tests :</label>
-              <select [(ngModel)]="TestSelected">
-                <option value="%" selected>All</option>
-                @for (item of measures; track $index) {
-                    @for (value of item.values; track $index) {
-                      <option [value]="value"> {{value}} </option>
-                    }
-                }
-              </select>
-            </div>         
-
-          </div>        
-          <div class="GraphButton" (click)="ShowPeaks()"><i class="material-symbols-outlined">stack</i>Legend</div>
-          <div class="GraphButton" (click)="ShowConstantValues()"><i class="material-symbols-outlined">density_medium</i>Show Grid</div>
-          <div class="GraphButton" (click)="ShowTestsAree()"><i class="material-symbols-outlined">density_medium</i>Show Grid</div>
-        </div>   -->
-      </div> 
-
+    <div class="GraphButton" name="ShowPeaks" (click)="ShowPeaks('ShowPeaks')">
+      @if(buttonpressed['ShowPeaks'] === true ) 
+      { <i class="material-symbols-outlined">done_outline</i> }
+      <span>Show Peaks</span>
     </div>    
-    
-    <!-- <div class="CursorPoints">
-      <p id="cursorpoint">Cursor Points:</p>
-      <div class="Cursor1">
-        <label class="Cursor1Label" [style.background-color]="CursorValues[0].color">Cursor: {{ CursorValues[0].name }}</label>
-        <label class="CursorY">Y: {{ CursorValues[0].y }}</label>
-        <label class="CursorX">X: {{ CursorValues[0].x }}</label>
-      </div>
-      <div class="Cursor2">
-        <label class="Cursor2Label" [style.background-color]="CursorValues[1].color">Cursor: {{ CursorValues[1].name }}</label>
-        <label class="CursorY">Y: {{ CursorValues[1].y }}</label>
-        <label class="CursorX">X: {{ CursorValues[1].x }}</label>
-      </div>
-      <div class="CursorDifference">
-        <label class="CursorDifferenceLabel">Difference:</label>
-        <label class="CursorY">Y: {{ CursorValues[1].y - CursorValues[0].y }}</label>
-        <label class="CursorX">X: {{ CursorValues[1].x - CursorValues[0].x }}</label>
-      </div>         
-    
-    </div> -->
+
+    <div class="GraphButton" name="ShowConstantValues" (click)="ShowConstantValues('ShowConstantValues')">
+      @if(buttonpressed['ShowConstantValues'] === true ) 
+      { <i class="material-symbols-outlined">done_outline</i> }
+      <span>Show Constant Values</span>
+    </div> 
+
+    <div class="GraphButton" name="ShowTestsAree" (click)="ShowTestsAree('ShowTestsAree')">
+      @if(buttonpressed['ShowTestsAree'] === true ) 
+      { <i class="material-symbols-outlined">done_outline</i> }
+      <span>Show Tests Aree</span>
+    </div>     
 
   </div> 
 

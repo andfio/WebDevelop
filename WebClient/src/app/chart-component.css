@@ -4,10 +4,34 @@
   align-items: flex-start;
   gap: 16px;
 }
+
+.CursorPoints {
+  flex: 0 0 260px;
+  margin: 10px 5px 0px 10px; /* top | right | bottom | left */
+  height: calc(100vh - 20px);
+}
+
+.CursorPoint1 {
+  border-radius: 6px;
+  background-color: whitesmoke;
+  box-shadow: 0px 2px 8px rgba(0,0,0,0.15);
+  box-sizing: border-box;
+  padding: 10px;
+  margin: 14px;
+  height: 200px;
+}
+
+.CursorPoint1 label {
+  font-family: Tahoma;
+  font-size: 12px;
+  font-weight: bold;
+  color: black
+
+}
+
 .chart-wrapper {
   flex: 1 1 auto;
   min-width: 0;
-  margin: 5px;
   padding: 5px;
 }
 
@@ -19,7 +43,7 @@
 .chart-details-container {
   flex: 0 0 260px;
   margin: 10px 10px 0px 0px; /* top | right | bottom | left */
-  height: 100vh;
+  height: calc(100vh - 20px);
   border-radius: 6px;
   background: #f8f9fa;
   box-shadow: 0px 2px 8px rgba(0,0,0,0.15);
@@ -29,7 +53,6 @@
 
 .chart-details {
   padding: 5px;
-  height: 60%;
 }
 
 .AxisX, .AxisY { 
@@ -118,7 +141,7 @@
 .AxisButtons {
   display: flex;
   flex-direction: column;
-  margin-top: 20px;
+  margin-top: 15px;
   padding-bottom: 15px;
   border: none;                
   border-bottom: 2px solid #333;  
@@ -155,67 +178,64 @@
   align-items: center; 
 }
 
-.GraphButtons {
-  display: flex;
-  flex-direction: column; 
-}
-
-#SecondGraphButtons, 
-#firstGraphButtons  {
-  display: flex;
-  flex-direction: row;
-  align-items: center; 
-  padding: 5px;
-}
-
 .GraphButton {
-  width: 100%;
+  flex: 1;
   height: 30px; 
-  padding: 5px;
   border-radius: 6px;
   background-color: #C0C0C0;
   box-shadow: 0px 2px 8px rgba(0,0,0,0.15);
   box-sizing: border-box;
-  margin-right: 5px;
-  align-items: center;
   font-family: 'Tahoma';
   font-size: 14px;
   font-weight: bold;
-}
-
-.CursorPoints {
-  padding: 5px;
-  height: 40%;
-  border-radius: 6px;
-  background-color: #2fb231;
-  box-shadow: 0px 2px 8px rgba(0,0,0,0.15);
-  box-sizing: border-box;
-  overflow-y: hidden;
-}
-
-#cursorpoint {
-  font-family: Tahoma;
-  font-size: 14px;
-  color:blue;
-  align-items: center;
-}
-.Cursor1, .Cursor2, .CursorDifference {
+  margin: 15px 5px;
   display: flex;
-  flex-direction: column;
-  gap: 10px;
-  padding: 5px;
-}
-
-.Cursor1Label, .Cursor2Label, .CursorDifferenceLabel {
-  font-family: Tahoma;
-  font-size: 14px;
-  color:blue;
+  flex-direction: row; 
   align-items: center;
+  justify-content: center;
+  gap: 6px;  
 }
 
-.CursorX, .CursorY {
-  font-family: Tahoma;
-  font-size: 14px;
-  color:blue;
-  align-items: left;
+.selectbox label {
+    font-family: 'Tahoma';
+    font-size: 14px;
+    font-weight: bold;
+    color: black;
+    width: fit-content;
 }
+
+.selectbox {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  margin: 15px 5px;
+  gap: 4px;
+
+  padding-top: 20px;
+  border: none;               
+  border-top: 2px solid black;  
+  outline: none; 
+}
+
+select {
+    border: 1px solid #777;
+    border-radius: 6px;
+    background-color: white;
+
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+
+    background-image: url("data:image/svg+xml;utf8,<svg fill='black' height='14' width='14' viewBox='0 0 24 24' xmlns='http://www.w3.org/2000/svg'><path d='M7 10l5 5 5-5z'/></svg>");
+    background-repeat: no-repeat;
+    background-position: right 8px center;
+
+    font-family: Tahoma;
+    font-size: 14px;
+    color: black;
+    margin-right: 5px;
+    height: 20px;
+    flex: 1;
+}
+

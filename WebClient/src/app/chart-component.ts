@@ -77,6 +77,13 @@ export class ChartComponent {
       this.chartAxisOffSet[axisposition[index]] = axisregulatoroffset[index];
     }
     
+    this.CursorValues.push({
+      x: 10.5,
+      y: 20.2,
+      name: "Temp°C",
+      color: "#00E396"
+    });
+
     this.initChartData();
     this.subChartEvents();
   }
@@ -249,7 +256,7 @@ export class ChartComponent {
       }
     };
     this.title = {
-      text: "Test Chart",
+      text: "",
       align: "left"
     };
     this.fill = {
@@ -554,9 +561,25 @@ export class ChartComponent {
   ShowGrid() {
   }
 
-  ShowTestsExecution() {
-    
+  buttonpressed: { [key: string]: boolean } = {}
+  ShowTestsExecution(button: string) {
+    this.buttonpressed[button] = !this.buttonpressed[button];
   }
+
+  ShowPeaks(button: string) {
+    this.buttonpressed[button] = !this.buttonpressed[button];
+  }
+
+  ShowConstantValues(button: string) {
+    this.buttonpressed[button] = !this.buttonpressed[button];
+  }  
+
+  ShowTestsAree(button: string) {
+    this.buttonpressed[button] = !this.buttonpressed[button];
+  }  
+
+  measureSelected: string = '';
+  measures: any[] = [];
 
   showDialog(message: string, title?: string ) {
     this.dialog.open(DialogContent, {
