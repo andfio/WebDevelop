@@ -27,6 +27,7 @@ import { FormsModule } from '@angular/forms';
 import { CursorValues } from "./chart-config";
 import {
   ViewChild,
+  HostListener
 } from '@angular/core';
 //Menu Pagina
 import {MatIconModule} from '@angular/material/icon';
@@ -77,15 +78,21 @@ export class ChartComponent {
       this.chartAxisOffSet[axisposition[index]] = axisregulatoroffset[index];
     }
     
-    this.CursorValues.push({
-      x: 10.5,
-      y: 20.2,
-      name: "Temp°C",
-      color: "#00E396"
-    });
+    for (let index = 0; index < 3; index++) {
+        this.CursorValues.push({
+          x: 0,
+          y: 0,
+          name: (index < 2 ? "--" : 'Difference'),
+          color: "#FFFFFF"
+        });
+    }
 
     this.initChartData();
     this.subChartEvents();
+  }
+
+  ngAfterViewInit() {
+    this.updateChartHeight();
   }
   
   dates: any = [];
@@ -213,7 +220,7 @@ export class ChartComponent {
       stacked: false,
       redrawOnParentResize: true,
       redrawOnWindowResize: true,
-      height: 500,
+      height: document.querySelector('#chart-details-mngt')?.clientHeight ?? '500px',
       width: '100%',
       zoom: {
         type: "xy",
@@ -247,12 +254,12 @@ export class ChartComponent {
       enabled: false
     };
     this.markers = {
-      size: 3,                 // <-- NON 0 (lascia la hit-area)
-      strokeWidth: 0,          // niente bordo
+      size: 3,                 
+      strokeWidth: 0,          
       strokeColors: 'transparent',
-      colors: ['transparent'], // interno trasparente (vale per tutte le serie)
+      colors: ['transparent'], 
       hover: {
-        sizeOffset: 7          // quando passi sopra, li “vedi” (se vuoi)
+        sizeOffset: 7          
       }
     };
     this.title = {
@@ -589,4 +596,19 @@ export class ChartComponent {
     });
   }
 
+  private updateChartHeight(): void {
+    const panel = document.querySelector('#chart-details-mngt') as HTMLElement | null;
+    const newHeight = panel?.clientHeight ?? 500;
+
+    this.chartObj?.updateOptions({
+      chart: {
+        height: newHeight
+      }
+    });
+  }
+
+  @HostListener('window:resize')
+  onResize() {
+    this.updateChartHeight();
+  }
 }

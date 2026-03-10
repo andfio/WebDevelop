@@ -19,23 +19,31 @@
 <div class="chart-container">
 
   <div class="CursorPoints">
-    <span id="cursorpoint" >Cursor Points: </span>
-    <div class="CursorPoint1" 
-      [style.box-shadow]="'0px 0px 0px 12px ' + CursorValues[0].color">
-      <label class="Cursor1Label" >Cursor: {{ CursorValues[0].name }}</label>
+    <span id="cursortitle" >Cursor Points: </span>
+
+    <div class="CursorPoint">
+      <div class="CursorLabel" 
+      [style.background-color]="CursorValues[0].color"
+      >Cursor: {{ CursorValues[0].name }}</div>
       <label class="CursorY">Value: {{ CursorValues[0].y }}</label>
       <label class="CursorX">Time: {{ CursorValues[0].x }}</label>
     </div>
-    <!-- <div class="Cursor2">
-      <label class="Cursor2Label" [style.background-color]="CursorValues[1].color">Cursor: {{ CursorValues[1].name }}</label>
-      <label class="CursorY">Y: {{ CursorValues[1].y }}</label>
-      <label class="CursorX">X: {{ CursorValues[1].x }}</label>
+
+    <div class="CursorPoint">
+      <div class="CursorLabel" 
+      [style.background-color]="CursorValues[1].color"
+      >Cursor: {{ CursorValues[1].name }}</div>
+      <label class="CursorY">Value: {{ CursorValues[1].y }}</label>
+      <label class="CursorX">Time: {{ CursorValues[1].x }}</label>
     </div>
-    <div class="CursorDifference">
-      <label class="CursorDifferenceLabel">Difference:</label>
-      <label class="CursorY">Y: {{ CursorValues[1].y - CursorValues[0].y }}</label>
-      <label class="CursorX">X: {{ CursorValues[1].x - CursorValues[0].x }}</label>
-    </div>           -->
+    
+    <div class="CursorPoint">
+      <div class="CursorLabel" 
+      [style.background-color]="CursorValues[2].color"
+      >Cursor: {{ CursorValues[2].name }}</div>
+      <label class="CursorY">Value: {{ CursorValues[2].y }}</label>
+      <label class="CursorX">Time: {{ CursorValues[2].x }}</label>
+    </div>              
   
   </div>     
 
@@ -58,7 +66,7 @@
     ></apx-chart>
   </div>
 
-  <div class="chart-details-container">
+  <div class="chart-details-container" id="chart-details-mngt">
     <div class="chart-details"> 
       <div class="AxisX" style="text-align:center">Axes X (Time (sec))
         <div class="inline-slider"> 
