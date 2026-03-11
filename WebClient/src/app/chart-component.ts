@@ -13,11 +13,10 @@ import {
   ApexStroke,
   ApexGrid,
   ApexLegend,  
-  ApexStates,
-  ApexOptions
+  ApexAnnotations
 } from "ng-apexcharts";
 import { NgApexchartsModule } from "ng-apexcharts";
-import { chartseries, chartvalues } from "./app.config.json";
+import { chartvalues } from "./app.config.json";
 import { DataPoint } from "./chart-config";
 import { DialogContent } from './dialog-component';
 import { MatDialog } from '@angular/material/dialog';
@@ -33,14 +32,14 @@ import {
 import {MatIconModule} from '@angular/material/icon';
 import {MatMenuModule} from '@angular/material/menu';
 import {MatButtonModule} from '@angular/material/button';
-//gestione grafico
-import {MatButtonToggleModule} from '@angular/material/button-toggle';
+//gestione cursori grafico
+import {MatSlideToggleModule} from '@angular/material/slide-toggle';
 
 @Component({
   selector: "app-chart",
   templateUrl: "./chart-component.html",
   styleUrls: ["./chart-component.css"],
-  imports: [NgApexchartsModule, MatSliderModule, FormsModule, MatIconModule, MatMenuModule, MatButtonModule, MatButtonToggleModule]
+  imports: [NgApexchartsModule, MatSliderModule, FormsModule, MatIconModule, MatMenuModule, MatButtonModule, MatSlideToggleModule]
 })
 export class ChartComponent {
   @ViewChild('chartObj') chartObj!: ApexChartComponent;
@@ -60,6 +59,7 @@ export class ChartComponent {
   public stroke: ApexStroke = {};
   public grid: ApexGrid = {};
   public legend: ApexLegend = {};
+  public annotations: ApexAnnotations[] = []
 
   constructor(private dialog: MatDialog) { }
 
@@ -440,24 +440,117 @@ export class ChartComponent {
      };
     this.stroke = { 
         width: [1,1, 1],
-      };
+    };
+
   }
   
-
+  isAddPointAnnotation: boolean = false;
   subChartEvents() {
     this.chart = {
       ...this.chart,
       events: {
         markerClick: (event, chartContext, opts) => {
-          this.CursorValues.push({
-            x: this.DataPoint[0].time[opts.dataPointIndex],
-            y: this.DataPoint[opts.seriesIndex].measure[opts.dataPointIndex],
-            name: this.series[opts.seriesIndex].name ?? '',
-            color: this.DataPoint[opts.seriesIndex].color
-          });
+          if (this.isAddPointAnnotation == true) { return }
+          if (opts.dataPointIndex == null || opts.seriesIndex == null) {return}
+          if (opts.dataPointIndex < 0 || opts.seriesIndex < 0) return;
+
+          this.subAddAnnotations(opts)
+        },
+        dataPointSelection: (event, chartContext, opts) => {
+
+          if (opts.w.config.annotations?.points?.length) {
+
+            const id = opts.w.config.annotations.points[0].id;
+
+            for (let i=0; i < this.CursorValues.length - 1; i++) {
+              if (this.CursorValues[i].name == id) {
+                this.chartObj.removeAnnotation(id);
+                this.CursorValues[i] = this.clearCursor();
+                return;
+              }
+            } 
+
+          }
+        } 
+      }
+    }
+
+  }
+
+  subAddAnnotations(opts: any) {
+    this.isAddPointAnnotation = true;
+
+    const annotation = {
+      id: this.DataPoint[opts.seriesIndex].name,
+      x: this.DataPoint[0].time[opts.dataPointIndex],
+      y: this.DataPoint[opts.seriesIndex].measure[opts.dataPointIndex],
+      yAxisIndex: this.AxisValues[this.DataPoint[opts.seriesIndex].AxisType].axisIndex,
+      seriesIndex: opts.seriesIndex,
+      marker: {
+        size: 6,
+        fillColor: '#FFFFFF',
+        strokeColor: '#FFFFFF',
+        shape: 'circle'
+      }
+    };
+    
+    this.chartObj.addPointAnnotation(annotation, true);
+
+    setTimeout(() => {
+      this.isAddPointAnnotation = false;
+    }, 0);
+    
+    for (let i=0; i < 1; i++) {
+      if (this.CursorValues[i].name == "--") {
+        this.CursorValues[i] = {
+          x: this.DataPoint[0].time[opts.dataPointIndex],
+          y: this.DataPoint[opts.seriesIndex].measure[opts.dataPointIndex],
+          name: this.DataPoint[opts.seriesIndex].name,
+          color: this.DataPoint[opts.seriesIndex].color
         }
+        return;
       }
     }  
+
+    this.CursorDifference();
+  }
+
+  clearCursor(): CursorValues {
+    return {
+      x: 0,
+      y: 0,
+      name: "--",
+      color: "#FFFFFF"
+    }
+  }
+
+  cursortype: boolean = true;
+  CursorDifference() {
+    for (let i=0; i < 1; i++) {
+      if (this.CursorValues[i].name == "--") {
+        return;
+      }
+    }
+    
+    let cursorname: string = this.CursorValues[0].name;
+    for (let i=0; i < 1; i++) {
+      cursorname = this.CursorValues[i].name 
+      this.cursortype = (cursorname == this.CursorValues[i].name)
+    }
+
+    let timeValue: number = 0; let measureValue: number = 0;
+
+    for (let i=0; i < 1; i++) {
+      timeValue = this.CursorValues[i].x - timeValue
+      measureValue = this.CursorValues[i].y - measureValue
+    }
+
+    this.CursorValues[this.CursorValues.length - 1] = {
+      x: Math.abs(timeValue),
+      y: Math.abs(measureValue),
+      name: "",
+      color: "#000000"
+    }
   }
 
   formatLabel(value: number): string {
@@ -583,10 +676,23 @@ export class ChartComponent {
 
   ShowTestsAree(button: string) {
     this.buttonpressed[button] = !this.buttonpressed[button];
-  }  
+  }
 
   measureSelected: string = '';
   measures: any[] = [];
+
+  slidedisable: boolean = false;
+  subCursorsEnabled(checked: any) {
+    this.slidedisable = checked;
+    if(checked == false) {
+      this.chartObj.clearAnnotations();
+    }
+  }
+
+  
+  subCursorsMode(checked: any) {
+
+  }
 
   showDialog(message: string, title?: string ) {
     this.dialog.open(DialogContent, {

@@ -24,7 +24,7 @@
     <div class="CursorPoint">
       <div class="CursorLabel" 
       [style.background-color]="CursorValues[0].color"
-      >Cursor: {{ CursorValues[0].name }}</div>
+      >Cursor: {{ CursorValues[0].name }} </div>
       <label class="CursorY">Value: {{ CursorValues[0].y }}</label>
       <label class="CursorX">Time: {{ CursorValues[0].x }}</label>
     </div>
@@ -40,8 +40,10 @@
     <div class="CursorPoint">
       <div class="CursorLabel" 
       [style.background-color]="CursorValues[2].color"
-      >Cursor: {{ CursorValues[2].name }}</div>
-      <label class="CursorY">Value: {{ CursorValues[2].y }}</label>
+      >{{ CursorValues[2].name }}</div>
+      @if(cursortype === true) {
+        <label class="CursorY">Value: {{ CursorValues[2].y }}</label>
+      }
       <label class="CursorX">Time: {{ CursorValues[2].x }}</label>
     </div>              
   
@@ -284,7 +286,24 @@
       @if(buttonpressed['ShowTestsAree'] === true ) 
       { <i class="material-symbols-outlined">done_outline</i> }
       <span>Show Tests Aree</span>
-    </div>     
+    </div>    
+    
+    <div class="slidetogle-container">
+      <div class="slidetoggle">
+        <mat-slide-toggle class="CursorToggle" (change)="subCursorsEnabled(slideToggle.checked)">
+        <span>Cursors Enabled</span>
+        <input matSlideToggle #slideToggle>
+        </mat-slide-toggle>
+      </div>
+
+      <div class="slidetoggle">
+        <mat-slide-toggle class="CursorToggle" (change)="subCursorsMode(slideToggle.checked)"
+            [disabled]="slidedisable" >
+            <span>Cursors Enabled</span>
+            <input matSlideToggle #slideToggle>
+        </mat-slide-toggle>
+      </div>
+    </div>
 
   </div> 
 

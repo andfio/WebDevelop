@@ -268,3 +268,19 @@ select {
     flex: 1;
 }
 
+.slidetogle-container {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 20px;
+  padding: 5px;
+  gap: 10px;
+}
+
+.CursorToggle {
+  font-family: Tahoma;
+  font-size: 14p;
+  font-weight: bold;
+  color: rgb(186, 43, 43);
+}
