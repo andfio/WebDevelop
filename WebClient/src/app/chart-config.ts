@@ -1,3 +1,5 @@
+import { ApexAnnotations } from "ng-apexcharts";
+
 export interface DataPoint {
   time: number[],
   measure: number[],
@@ -22,4 +24,7 @@ export interface CursorValues {
   y: number,
   name: string,
   color: string
+  pointX: number,
+  pointY: number,
+  id: string
 }

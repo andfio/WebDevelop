@@ -1,4 +1,5 @@
 import { Component } from "@angular/core";
+import { ChangeDetectorRef } from '@angular/core';
 import {
   ChartComponent as ApexChartComponent,
   ApexAxisChartSeries,
@@ -34,6 +35,7 @@ import {MatMenuModule} from '@angular/material/menu';
 import {MatButtonModule} from '@angular/material/button';
 //gestione cursori grafico
 import {MatSlideToggleModule} from '@angular/material/slide-toggle';
+import { CurrencyPipe } from "@angular/common";
 
 @Component({
   selector: "app-chart",
@@ -61,7 +63,7 @@ export class ChartComponent {
   public legend: ApexLegend = {};
   public annotations: ApexAnnotations[] = []
 
-  constructor(private dialog: MatDialog) { }
+  constructor(private dialog: MatDialog, private cd: ChangeDetectorRef) { }
 
   chartValues: chartvalues = {} as any;
   chartSeries: any[] =  [];
@@ -83,7 +85,10 @@ export class ChartComponent {
           x: 0,
           y: 0,
           name: (index < 2 ? "--" : 'Difference'),
-          color: "#FFFFFF"
+          color: "#FFFFFF",
+          pointX: 0,
+          pointY: 0,
+          id: ""
         });
     }
 
@@ -456,32 +461,40 @@ export class ChartComponent {
 
           this.subAddAnnotations(opts)
         },
-        dataPointSelection: (event, chartContext, opts) => {
+        click: (event, chartContext, opts) => {
+          if (this.isAddPointAnnotation == true) { return }
 
-          if (opts.w.config.annotations?.points?.length) {
-
-            const id = opts.w.config.annotations.points[0].id;
-
-            for (let i=0; i < this.CursorValues.length - 1; i++) {
-              if (this.CursorValues[i].name == id) {
-                this.chartObj.removeAnnotation(id);
-                this.CursorValues[i] = this.clearCursor();
-                return;
-              }
-            } 
-
-          }
-        } 
+          for (let i=0; i < this.CursorValues.length; i++) {
+            if ((this.CursorValues[i].pointX >= opts.globals.clientX -6 && this.CursorValues[i].pointX <= opts.globals.clientX + 6) && 
+                 (this.CursorValues[i].pointY >= opts.globals.clientY -6 && this.CursorValues[i].pointY <= opts.globals.clientY + 6 ) ) {
+                this.chartObj.removeAnnotation(this.CursorValues[i].id);
+                this.CursorValues = this.clearCursor(i);
+                this.CursorValues = this.clearCursor(this.CursorValues.length - 1)
+                this.cd.detectChanges()
+                break;
+            }
+          }          
+        }
       }
     }
 
   }
 
   subAddAnnotations(opts: any) {
+    let curIndex: number = -1;
+    for (let i=0; i < this.CursorValues.length; i++) {
+      if (this.CursorValues[i].name == "--") {
+        curIndex = i;
+        break;
+      }
+    }    
+
+    if (curIndex < 0) { return }
+
     this.isAddPointAnnotation = true;
 
-    const annotation = {
-      id: this.DataPoint[opts.seriesIndex].name,
+    let annotation: ApexAnnotations = {
+      id: `cursor-${opts.seriesIndex}-${opts.dataPointIndex}`,
       x: this.DataPoint[0].time[opts.dataPointIndex],
       y: this.DataPoint[opts.seriesIndex].measure[opts.dataPointIndex],
       yAxisIndex: this.AxisValues[this.DataPoint[opts.seriesIndex].AxisType].axisIndex,
@@ -492,65 +505,116 @@ export class ChartComponent {
         strokeColor: '#FFFFFF',
         shape: 'circle'
       }
-    };
+    } as ApexAnnotations;
     
     this.chartObj.addPointAnnotation(annotation, true);
 
     setTimeout(() => {
       this.isAddPointAnnotation = false;
     }, 0);
-    
-    for (let i=0; i < 1; i++) {
-      if (this.CursorValues[i].name == "--") {
-        this.CursorValues[i] = {
-          x: this.DataPoint[0].time[opts.dataPointIndex],
-          y: this.DataPoint[opts.seriesIndex].measure[opts.dataPointIndex],
-          name: this.DataPoint[opts.seriesIndex].name,
-          color: this.DataPoint[opts.seriesIndex].color
-        }
-        return;
-      }
-    }  
+
+    let cursor: CursorValues = { 
+      x: this.DataPoint[0].time[opts.dataPointIndex],
+      y: this.DataPoint[opts.seriesIndex].measure[opts.dataPointIndex],
+      name: this.DataPoint[opts.seriesIndex].name,
+      color: this.DataPoint[opts.seriesIndex].color,
+      pointX: opts.w.globals.clientX,
+      pointY: opts.w.globals.clientY,
+      id:`cursor-${opts.seriesIndex}-${opts.dataPointIndex}`,
+    }
+
+    this.CursorValues = this.UpdateCursor(cursor, curIndex);
+    this.cd.detectChanges() 
 
     this.CursorDifference();
   }
 
-  clearCursor(): CursorValues {
-    return {
-      x: 0,
-      y: 0,
-      name: "--",
-      color: "#FFFFFF"
+  clearCursor(index: number): CursorValues[] {
+    let cursorvalues: CursorValues[] = this.CursorValues
+
+    for (let i=0; i < cursorvalues.length; i++) {
+      if (i == index) {
+        cursorvalues[i] = { 
+          x: 0,
+          y: 0,
+          name:  (i != (cursorvalues.length - 1) ? "--" : "Difference"),
+          color: "#ffffff",
+          pointX: 0,
+          pointY: 0,
+          id: ""
+        }
+        break;
+      }
     }
+  
+    this.CursorValues = [];
+    return cursorvalues
   }
+  
 
   cursortype: boolean = true;
   CursorDifference() {
-    for (let i=0; i < 1; i++) {
+    for (let i=0; i < this.CursorValues.length; i++) {
       if (this.CursorValues[i].name == "--") {
         return;
       }
     }
     
     let cursorname: string = this.CursorValues[0].name;
-    for (let i=0; i < 1; i++) {
-      cursorname = this.CursorValues[i].name 
-      this.cursortype = (cursorname == this.CursorValues[i].name)
+    this.cursortype = true;
+    for (let i = 1; i < this.CursorValues.length; i++) {
+      if (this.CursorValues[i].name !== cursorname) {
+        this.cursortype = false;
+        break;
+      }
     }
 
     let timeValue: number = 0; let measureValue: number = 0;
 
-    for (let i=0; i < 1; i++) {
+    for (let i=0; i <  this.CursorValues.length; i++) {
       timeValue = this.CursorValues[i].x - timeValue
       measureValue = this.CursorValues[i].y - measureValue
     }
 
-    this.CursorValues[this.CursorValues.length - 1] = {
-      x: Math.abs(timeValue),
-      y: Math.abs(measureValue),
-      name: "",
-      color: "#000000"
+    let cursor: CursorValues = {
+      x: Number(Math.abs(timeValue).toFixed(2)),
+      y: Number(Math.abs(measureValue).toFixed(2)),
+      name: "Difference",
+      color: "#F5F5F5",
+      pointX: 0,
+      pointY: 0,
+      id: "Difference"
     }
+
+    this.CursorValues = this.UpdateCursor(cursor, 2);
+    this.cd.detectChanges()
+
+  }
+
+  findName(value: CursorValues, index: number, array: CursorValues[]): CursorValues {
+    return array[index];
+  }
+
+  UpdateCursor(cursors: CursorValues, index: number): CursorValues[] {
+    let cursorvalues: CursorValues[] = this.CursorValues
+
+    for (let i=0; i < cursorvalues.length; i++) {
+      if (i == index) {
+        cursorvalues[i] = { 
+          x: cursors.x,
+          y: cursors.y,
+          name:  cursors.name,
+          color: cursors.color,
+          pointX: cursors.pointX,
+          pointY: cursors.pointY,
+          id: cursors.id
+        }
+        break;
+      }
+    }
+  
+    this.CursorValues = [];
+    return cursorvalues
   }
 
   formatLabel(value: number): string {
