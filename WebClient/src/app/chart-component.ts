@@ -173,21 +173,21 @@ export class ChartComponent {
     }
 
     let seriesNames: any[] = [];
-    let maxValue: any[] = []; let minValue: any[] = []; 
+    let maxCursorValue: any[] = []; let minValue: any[] = []; 
     let AxisIndex: number = 0;
     for (let s = 0; s < this.DataPoint.length; s++) {
       
       AxisIndex = this.DataPoint[s].AxisType;
 
       for (let i = 0; i < this.DataPoint[0].time.length; i++) {
-          maxValue[AxisIndex] = maxValue[AxisIndex] || []
-          if (this.DataPoint[s].measure[i] > maxValue[AxisIndex]) {
-            maxValue[AxisIndex] = this.DataPoint[s].measure[i] 
+          maxCursorValue[AxisIndex] = maxCursorValue[AxisIndex] || []
+          if (this.DataPoint[s].measure[i] > maxCursorValue[AxisIndex]) {
+            maxCursorValue[AxisIndex] = this.DataPoint[s].measure[i] 
           }
       }
       
       for (let i = this.DataPoint[0].time.length; i >= 0; i--) {
-          minValue[AxisIndex] =  minValue[AxisIndex] || [maxValue[AxisIndex]]
+          minValue[AxisIndex] =  minValue[AxisIndex] || [maxCursorValue[AxisIndex]]
            if (this.DataPoint[s].measure[i] < minValue[AxisIndex]) {
             minValue[AxisIndex] = this.DataPoint[s].measure[i] 
           }
@@ -201,12 +201,12 @@ export class ChartComponent {
           seriesName: seriesNames[AxisIndex],
           axisIndex: 0, 
           min: (minValue[AxisIndex] > 4 ? minValue[AxisIndex] : 0),
-          max: maxValue[AxisIndex] + (maxValue[AxisIndex] * this.chartAxisOffSet[AxisIndex] / 100),
-          value: ((maxValue[AxisIndex] - minValue[AxisIndex]) / 2),
+          max: maxCursorValue[AxisIndex] + (maxCursorValue[AxisIndex] * this.chartAxisOffSet[AxisIndex] / 100),
+          value: ((maxCursorValue[AxisIndex] - minValue[AxisIndex]) / 2),
           textMin: (minValue[AxisIndex] > 4 ? minValue[AxisIndex] : 0),
-          textMax: maxValue[AxisIndex],
+          textMax: maxCursorValue[AxisIndex],
           DefaultMin: (minValue[AxisIndex] > 4 ? minValue[AxisIndex] : 0),
-          DefaultMax: maxValue[AxisIndex],          
+          DefaultMax: maxCursorValue[AxisIndex],          
           enabled: true 
         }        
     }  
@@ -458,21 +458,59 @@ export class ChartComponent {
           if (this.isAddPointAnnotation == true) { return }
           if (opts.dataPointIndex == null || opts.seriesIndex == null) {return}
           if (opts.dataPointIndex < 0 || opts.seriesIndex < 0) return;
-
-          this.subAddAnnotations(opts)
+          
+          if (this.IsCursorsEnabled[0] == true && this.IsCursorsEnabled[1] == false) {
+              this.subAddAnnotations(opts)
+          }
         },
         click: (event, chartContext, opts) => {
           if (this.isAddPointAnnotation == true) { return }
+          if (this.IsCursorsEnabled[0] == false) { return }
+          
+          if (this.IsCursorsEnabled[1] == false) {
+              for (let i=0; i < this.CursorValues.length; i++) {
+                if ((this.CursorValues[i].pointX >= opts.globals.clientX -6 && this.CursorValues[i].pointX <= opts.globals.clientX + 6) && 
+                    (this.CursorValues[i].pointY >= opts.globals.clientY -6 && this.CursorValues[i].pointY <= opts.globals.clientY + 6 ) ) {
+                    this.chartObj.removeAnnotation(this.CursorValues[i].id);
+                    this.CursorValues = this.clearCursor(i);
+                    this.CursorValues = this.clearCursor(this.CursorValues.length - 1)
+                    this.cd.detectChanges()
+                    break;
+                }
+              }
+          }
+          else
+          {
+              const plotRect = this.getPlotRect(chartContext);
+              if (!plotRect) return;
 
-          for (let i=0; i < this.CursorValues.length; i++) {
-            if ((this.CursorValues[i].pointX >= opts.globals.clientX -6 && this.CursorValues[i].pointX <= opts.globals.clientX + 6) && 
-                 (this.CursorValues[i].pointY >= opts.globals.clientY -6 && this.CursorValues[i].pointY <= opts.globals.clientY + 6 ) ) {
-                this.chartObj.removeAnnotation(this.CursorValues[i].id);
-                this.CursorValues = this.clearCursor(i);
-                this.CursorValues = this.clearCursor(this.CursorValues.length - 1)
-                this.cd.detectChanges()
-                break;
-            }
+              const px = event.clientX - plotRect.left;
+              const py = event.clientY - plotRect.top;
+
+              if (px < 0 || px > plotRect.width || py < 0 || py > plotRect.height) {
+                return;
+              }
+
+              const nearest = this.findNearestSeriesByScreenDistance(px, py, plotRect, chartContext);
+              if (!nearest) return;
+
+              // valori reali del punto più vicino sulla linea
+              const xValue = nearest.dataPoint.x;
+              const yValue = nearest.dataPoint.y;
+
+              for (let i=0; i < this.CursorValues.length; i++) {
+                if ((this.CursorValues[i].pointX >= xValue -6 && this.CursorValues[i].pointX <= xValue + 6) && 
+                    (this.CursorValues[i].pointY >= yValue -6 && this.CursorValues[i].pointY <= yValue + 6 ) ) {
+                    this.chartObj.removeAnnotation(this.CursorValues[i].id);
+                    this.CursorValues = this.clearCursor(i);
+                    this.CursorValues = this.clearCursor(this.CursorValues.length - 1)
+                    this.cd.detectChanges()
+                    return;
+                }
+              }
+
+              this.subAddAnnotations(xValue, yValue);
+
           }          
         }
       }
@@ -480,7 +518,20 @@ export class ChartComponent {
 
   }
 
-  subAddAnnotations(opts: any) {
+  subAddAnnotations(xValue: number, yValue: number): void;
+  subAddAnnotations(opts: any): void;
+
+  subAddAnnotations(typeArg?: any | number, yvalue?: number): void {
+    let opts; let xValue;
+    if (typeof typeArg !== 'number') {
+      opts = typeArg;
+    }
+    else
+    {
+      xValue = typeArg;
+    }
+
+
     let curIndex: number = -1;
     for (let i=0; i < this.CursorValues.length; i++) {
       if (this.CursorValues[i].name == "--") {
@@ -493,19 +544,39 @@ export class ChartComponent {
 
     this.isAddPointAnnotation = true;
 
-    let annotation: ApexAnnotations = {
-      id: `cursor-${opts.seriesIndex}-${opts.dataPointIndex}`,
-      x: this.DataPoint[0].time[opts.dataPointIndex],
-      y: this.DataPoint[opts.seriesIndex].measure[opts.dataPointIndex],
-      yAxisIndex: this.AxisValues[this.DataPoint[opts.seriesIndex].AxisType].axisIndex,
-      seriesIndex: opts.seriesIndex,
-      marker: {
-        size: 6,
-        fillColor: '#FFFFFF',
-        strokeColor: '#FFFFFF',
-        shape: 'circle'
-      }
-    } as ApexAnnotations;
+    let annotation: ApexAnnotations = {}
+    if (this.IsCursorsEnabled[1] == false) {
+
+      annotation = {
+        id: `cursor-${opts.seriesIndex}-${opts.dataPointIndex}`,
+        x: this.DataPoint[0].time[opts.dataPointIndex],
+        y: this.DataPoint[opts.seriesIndex].measure[opts.dataPointIndex],
+        yAxisIndex: this.AxisValues[this.DataPoint[opts.seriesIndex].AxisType].axisIndex,
+        seriesIndex: opts.seriesIndex,
+        marker: {
+          size: 6,
+          fillColor: '#FFFFFF',
+          strokeColor: '#FFFFFF',
+          shape: 'circle'
+        }
+      } as ApexAnnotations;
+
+    }
+    else
+    {
+      annotation = {
+        id: `cursor-${opts.w.globals.clientX}-${opts.w.globals.clientY}`,
+        x: opts.w.globals.clientX,
+        y: opts.w.globals.clientY,
+        marker: {
+          size: 6,
+          fillColor: '#FFFFFF',
+          strokeColor: '#FFFFFF',
+          shape: 'circle'
+        }
+      } as ApexAnnotations;
+    }  
+
     
     this.chartObj.addPointAnnotation(annotation, true);
 
@@ -513,14 +584,29 @@ export class ChartComponent {
       this.isAddPointAnnotation = false;
     }, 0);
 
-    let cursor: CursorValues = { 
-      x: this.DataPoint[0].time[opts.dataPointIndex],
-      y: this.DataPoint[opts.seriesIndex].measure[opts.dataPointIndex],
-      name: this.DataPoint[opts.seriesIndex].name,
-      color: this.DataPoint[opts.seriesIndex].color,
-      pointX: opts.w.globals.clientX,
-      pointY: opts.w.globals.clientY,
-      id:`cursor-${opts.seriesIndex}-${opts.dataPointIndex}`,
+    let cursor: any = {}
+    if (this.IsCursorsEnabled[1] == false) {
+      cursor = { 
+        x: this.DataPoint[0].time[opts.dataPointIndex],
+        y: this.DataPoint[opts.seriesIndex].measure[opts.dataPointIndex],
+        name: this.DataPoint[opts.seriesIndex].name,
+        color: this.DataPoint[opts.seriesIndex].color,
+        pointX: opts.w.globals.clientX,
+        pointY: opts.w.globals.clientY,
+        id:`cursor-${opts.seriesIndex}-${opts.dataPointIndex}`,
+      } as CursorValues
+    } 
+    else
+    {
+      cursor = { 
+        x: xValue,
+        y: yvalue,
+        name: "--",
+        color: "#ffffff",
+        pointX: xValue,
+        pointY: yvalue,
+        id:`cursor-${xValue}-${yvalue}`,
+      } as CursorValues
     }
 
     this.CursorValues = this.UpdateCursor(cursor, curIndex);
@@ -589,10 +675,6 @@ export class ChartComponent {
     this.CursorValues = this.UpdateCursor(cursor, 2);
     this.cd.detectChanges()
 
-  }
-
-  findName(value: CursorValues, index: number, array: CursorValues[]): CursorValues {
-    return array[index];
   }
 
   UpdateCursor(cursors: CursorValues, index: number): CursorValues[] {
@@ -745,18 +827,260 @@ export class ChartComponent {
   measureSelected: string = '';
   measures: any[] = [];
 
-  slidedisable: boolean = false;
+  IsCursorsEnabled: boolean[] = [false, false];
   subCursorsEnabled(checked: any) {
-    this.slidedisable = checked;
     if(checked == false) {
       this.chartObj.clearAnnotations();
+      for(let index = 0; index <= this.CursorValues.length; index++) {
+        this.CursorValues = this.clearCursor(index);
+      }
+      this.cd.detectChanges();
+      this.cursortype = true;
     }
   }
 
-  
   subCursorsMode(checked: any) {
 
   }
+
+  private findNearestSeriesByScreenDistance(
+    px: number,
+    py: number,
+    plotRect: DOMRect,
+    chartContext: any
+  ): {
+    seriesIndex: number;
+    seriesName: string;
+    segmentIndex: number;
+    distance: number;
+    dataPoint: { x: number; y: number };
+  } | null {
+    const series = chartContext?.w?.config?.series;
+    if (!Array.isArray(series) || series.length === 0) return null;
+
+    let best: {
+      seriesIndex: number;
+      seriesName: string;
+      segmentIndex: number;
+      distance: number;
+      dataPoint: { x: number; y: number };
+    } | null = null;
+
+    for (let sIndex = 0; sIndex < series.length; sIndex++) {
+      const serie = series[sIndex];
+      const data = serie?.data;
+      if (!Array.isArray(data) || data.length < 2) continue;
+
+      const yAxisIndex = this.findYAxisIndexForSeries(serie.name);
+      const yRange = this.getVisibleYRangeForAxis(yAxisIndex, chartContext);
+      const xRange = this.getVisibleXRange(chartContext);
+
+      if (!xRange || !yRange) continue;
+
+      const normalized = this.normalizeSeriesData(data);
+      if (normalized.length < 2) continue;
+
+      for (let i = 0; i < normalized.length - 1; i++) {
+        const p1 = normalized[i];
+        const p2 = normalized[i + 1];
+
+        if (p1.x == null || p1.y == null || p2.x == null || p2.y == null) continue;
+
+        const sx1 = this.dataXToPixel(p1.x, xRange.min, xRange.max, plotRect.width);
+        const sy1 = this.dataYToPixel(p1.y, yRange.min, yRange.max, plotRect.height);
+
+        const sx2 = this.dataXToPixel(p2.x, xRange.min, xRange.max, plotRect.width);
+        const sy2 = this.dataYToPixel(p2.y, yRange.min, yRange.max, plotRect.height);
+
+        const proj = this.projectPointOnSegment(px, py, sx1, sy1, sx2, sy2);
+
+        if (!best || proj.distance < best.distance) {
+          // t = posizione proiettata sul segmento: 0..1
+          const xValue = p1.x + (p2.x - p1.x) * proj.t;
+          const yValue = p1.y + (p2.y - p1.y) * proj.t;
+
+          best = {
+            seriesIndex: sIndex,
+            seriesName: serie.name ?? `Serie ${sIndex}`,
+            segmentIndex: i,
+            distance: proj.distance,
+            dataPoint: {
+              x: xValue,
+              y: yValue
+            }
+          };
+        }
+      }
+    }
+
+    return best;
+  }
+
+  private getPlotRect(chartContext: any): DOMRect | null {
+    const gridEl = chartContext?.el?.querySelector('.apexcharts-grid');
+    if (!gridEl) return null;
+    return gridEl.getBoundingClientRect();
+  }
+
+  private projectPointOnSegment(
+    px: number,
+    py: number,
+    x1: number,
+    y1: number,
+    x2: number,
+    y2: number
+  ): {
+    t: number;
+    projX: number;
+    projY: number;
+    distance: number;
+  } {
+    const dx = x2 - x1;
+    const dy = y2 - y1;
+
+    const lenSq = dx * dx + dy * dy;
+    if (lenSq === 0) {
+      const dist = Math.hypot(px - x1, py - y1);
+      return { t: 0, projX: x1, projY: y1, distance: dist };
+    }
+
+    let t = ((px - x1) * dx + (py - y1) * dy) / lenSq;
+    t = Math.max(0, Math.min(1, t));
+
+    const projX = x1 + t * dx;
+    const projY = y1 + t * dy;
+    const distance = Math.hypot(px - projX, py - projY);
+
+    return { t, projX, projY, distance };
+  }
+
+  private normalizeSeriesData(data: any[]): Array<{ x: number; y: number }> {
+    const result: Array<{ x: number; y: number }> = [];
+
+    for (const p of data) {
+      let x: number | null = null;
+      let y: number | null = null;
+
+      if (Array.isArray(p) && p.length >= 2) {
+        x = this.toNumberX(p[0]);
+        y = this.toNumberY(p[1]);
+      } else if (p && typeof p === 'object') {
+        x = this.toNumberX(p.x);
+        y = this.toNumberY(p.y);
+      }
+
+      if (x !== null && y !== null) {
+        result.push({ x, y });
+      }
+    }
+
+    return result;
+  }
+
+  private toNumberX(value: any): number | null {
+    if (typeof value === 'number' && !isNaN(value)) {
+      return value;
+    }
+
+    if (typeof value === 'string') {
+      // prova numero puro
+      const n = Number(value);
+      if (!isNaN(n)) return n;
+
+      // prova datetime string
+      const d = new Date(value).getTime();
+      if (!isNaN(d)) return d;
+    }
+
+    if (value instanceof Date) {
+      const d = value.getTime();
+      return isNaN(d) ? null : d;
+    }
+
+    return null;
+  }
+
+  private toNumberY(value: any): number | null {
+    if (typeof value === 'number' && !isNaN(value)) {
+      return value;
+    }
+
+    if (typeof value === 'string') {
+      const n = Number(value);
+      return isNaN(n) ? null : n;
+    }
+
+    return null;
+  }
+
+  private dataXToPixel(x: number, minX: number, maxX: number, width: number): number {
+    return ((x - minX) / (maxX - minX)) * width;
+  }
+
+  private dataYToPixel(y: number, minY: number, maxY: number, height: number): number {
+    return height - ((y - minY) / (maxY - minY)) * height;
+  }
+
+  private getVisibleYRangeForAxis(
+    yAxisIndex: number,
+    chartContext: any
+  ): { min: number; max: number } | null {
+    const yaxes = Array.isArray(this.yaxis) ? this.yaxis : [this.yaxis];
+    const axis = yaxes[yAxisIndex];
+    if (!axis) return null;
+
+    if (typeof axis.min === 'number' && typeof axis.max === 'number') {
+      return { min: axis.min, max: axis.max };
+    }
+
+    // fallback: prova a leggere dalle globals interne
+    const globals = chartContext?.w?.globals;
+    const minArr = globals?.minYArr;
+    const maxArr = globals?.maxYArr;
+
+    if (
+      Array.isArray(minArr) &&
+      Array.isArray(maxArr) &&
+      typeof minArr[yAxisIndex] === 'number' &&
+      typeof maxArr[yAxisIndex] === 'number'
+    ) {
+      return {
+        min: minArr[yAxisIndex],
+        max: maxArr[yAxisIndex]
+      };
+    }
+
+    return null;
+  }  
+
+  private findYAxisIndexForSeries(seriesName: string): number {
+    const yaxes = Array.isArray(this.yaxis) ? this.yaxis : [this.yaxis];
+
+    for (let i = 0; i < yaxes.length; i++) {
+      const axisSeriesName = yaxes[i]?.seriesName;
+
+      if (typeof axisSeriesName === 'string' && axisSeriesName === seriesName) {
+        return i;
+      }
+
+      if (Array.isArray(axisSeriesName) && axisSeriesName.includes(seriesName)) {
+        return i;
+      }
+    }
+
+    return 0;
+  }
+
+  private getVisibleXRange(chartContext: any): { min: number; max: number } | null {
+    const min = chartContext?.w?.globals?.minX;
+    const max = chartContext?.w?.globals?.maxX;
+
+    if (typeof min !== 'number' || typeof max !== 'number') {
+      return null;
+    }
+
+    return { min, max };
+  }  
 
   showDialog(message: string, title?: string ) {
     this.dialog.open(DialogContent, {

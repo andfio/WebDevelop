@@ -290,18 +290,11 @@
     
     <div class="slidetogle-container">
       <div class="slidetoggle">
-        <mat-slide-toggle class="CursorToggle" (change)="subCursorsEnabled(slideToggle.checked)">
-        <span>Cursors Enabled</span>
-        <input matSlideToggle #slideToggle>
-        </mat-slide-toggle>
+        <mat-slide-toggle class="CursorToggle" [(ngModel)]="IsCursorsEnabled[0]" (change)="subCursorsEnabled(IsCursorsEnabled[0])">Cursors Enabled</mat-slide-toggle>
       </div>
 
       <div class="slidetoggle">
-        <mat-slide-toggle class="CursorToggle" (change)="subCursorsMode(slideToggle.checked)"
-            [disabled]="slidedisable" >
-            <span>Cursors Enabled</span>
-            <input matSlideToggle #slideToggle>
-        </mat-slide-toggle>
+        <mat-slide-toggle class="CursorToggle" [(ngModel)]="IsCursorsEnabled[1]" (change)="subCursorsEnabled(IsCursorsEnabled[1])" [disabled]="!IsCursorsEnabled[0]">Cursors Free</mat-slide-toggle>
       </div>
     </div>
 
