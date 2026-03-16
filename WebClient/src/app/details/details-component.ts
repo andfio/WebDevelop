@@ -207,7 +207,6 @@ background: any;
         
         this.selectedRowTests = null; // Deseleziona eventuale riga selezionata nei test
         this.selectedRowDetails = null; // Deseleziona eventuale riga selezionata nei dettagli
-
     }
 
   }
@@ -235,7 +234,6 @@ background: any;
     let itemCol: any;
     let itemRow: any;
     let itemMes: any;
-    let itemPar: any;
     let CurrProgressiveGroup: number = 0;
 
     for (itemRow of this.results)
@@ -423,7 +421,7 @@ background: any;
     let columns: any[] = [];
 
     this.columnsrootdetails.forEach(col => {
-      if (col.field.trim() !== "") {
+      if (col.name.trim() !== "") {
         columns.push(col);
       }   
     });
@@ -561,8 +559,39 @@ background: any;
     });
   }
 
+  rowChart: any;
   subOnChartPage() {
-    this.router.navigate(['/pagina-chart'] , { state: { chartValues: this.chartvalues, chartSeries: this.chartseries } });
+    this.rowChart = this.subGetInformation();
+    this.router.navigate(['/pagina-chart'] , { state: { rowData: this.rowChart, rootFields: this.columnsrootdetails, chartValues: this.chartvalues, chartSeries: this.chartseries } });
   }
+
+  subGetInformation(): any {
+    let info: any = {};
+    let itemValue: any;
+    this.columnsrootdetails.forEach(col => {
+        switch (col.field) {
+        case "":
+            itemValue = "";
+            break;
+          case "LineID":
+            itemValue = this.row[col.field] + " - " + (this.unitsInfo.find(unit => unit.LineID === this.row[col.field])?.LineDescr ?? "not found");
+            break;
+         case "UnitTypeID":
+            if (typeof this.row[col.field] === "string") {this.row[col.field] = Number(this.row[col.field].split('-')[0].trim());}            
+            itemValue = this.row[col.field] + " - " + (this.unitsInfo.find(unit => unit.UnitTypeID === this.row[col.field])?.UnitTypeDescr ?? "not found");
+            break;
+         case "UnitID":
+            if (typeof this.row[col.field] === "string") {this.row[col.field] = Number(this.row[col.field].split('-')[0].trim());}
+            itemValue = this.row[col.field] + " - " + (this.unitsInfo.find(unit => unit.LineID === this.row["LineID"] && unit.UnitTypeID === this.row["UnitTypeID"] && unit.UnitID === this.row[col.field])?.UnitDescr ?? "not found");
+            break;
+
+          default:
+            itemValue = this.row[col.field];
+            break;
+        }
+        info[col.field]  = itemValue.toString().slice(0, 30) + (itemValue.toString().length > 30 ? "..." : ""); 
+    });
+    return info;
+  } 
 
 }

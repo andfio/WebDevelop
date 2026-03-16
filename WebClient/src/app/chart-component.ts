@@ -64,11 +64,15 @@ export class ChartComponent {
   public annotations: ApexAnnotations[] = []
 
   constructor(private dialog: MatDialog, private cd: ChangeDetectorRef) { }
+  chartData: any = {};
+  rootfields: any[] = [];
 
   chartValues: chartvalues = {} as any;
   chartSeries: any[] =  [];
   chartAxisOffSet: any[] = [];
   ngOnInit() {
+    this.chartData = history.state.rowData;
+    this.rootfields = history.state.rootFields;
     this.chartValues = history.state.chartValues;
     let axistype: number[] = history.state.chartSeries.axistypes.split(';').map(Number) 
     let axisposition: number[] = history.state.chartSeries.axisposition.split(';').map(Number)
@@ -555,8 +559,8 @@ export class ChartComponent {
         seriesIndex: opts.seriesIndex,
         marker: {
           size: 6,
-          fillColor: '#FFFFFF',
-          strokeColor: '#FFFFFF',
+          fillColor: (curIndex == 0 ? '#FFFFFF' : "#FFFF00" ),
+          strokeColor: (curIndex == 0 ? '#FFFFFF' : "#FFFF00" ),
           shape: 'circle'
         }
       } as ApexAnnotations;
@@ -565,13 +569,13 @@ export class ChartComponent {
     else
     {
       annotation = {
-        id: `cursor-${opts.w.globals.clientX}-${opts.w.globals.clientY}`,
-        x: opts.w.globals.clientX,
-        y: opts.w.globals.clientY,
+        id: `cursor-${xValue}-${yvalue}`,
+        x: xValue,
+        y: yvalue,
         marker: {
           size: 6,
-          fillColor: '#FFFFFF',
-          strokeColor: '#FFFFFF',
+          fillColor: (curIndex == 0 ? '#FFFFFF' : "#FFFF00" ),
+          strokeColor: (curIndex == 0 ? '#FFFFFF' : "#FFFF00" ),
           shape: 'circle'
         }
       } as ApexAnnotations;
@@ -587,8 +591,8 @@ export class ChartComponent {
     let cursor: any = {}
     if (this.IsCursorsEnabled[1] == false) {
       cursor = { 
-        x: this.DataPoint[0].time[opts.dataPointIndex],
-        y: this.DataPoint[opts.seriesIndex].measure[opts.dataPointIndex],
+        x: Number(this.DataPoint[0].time[opts.dataPointIndex].toFixed(2)),
+        y: Number(this.DataPoint[opts.seriesIndex].measure[opts.dataPointIndex].toFixed(2)),
         name: this.DataPoint[opts.seriesIndex].name,
         color: this.DataPoint[opts.seriesIndex].color,
         pointX: opts.w.globals.clientX,
@@ -599,9 +603,9 @@ export class ChartComponent {
     else
     {
       cursor = { 
-        x: xValue,
-        y: yvalue,
-        name: "--",
+        x: Number(xValue?.toFixed(2)),
+        y: Number(yvalue?.toFixed(2)),
+        name: "",
         color: "#ffffff",
         pointX: xValue,
         pointY: yvalue,
@@ -648,7 +652,7 @@ export class ChartComponent {
     
     let cursorname: string = this.CursorValues[0].name;
     this.cursortype = true;
-    for (let i = 1; i < this.CursorValues.length; i++) {
+    for (let i = 1; i < this.CursorValues.length - 1; i++) {
       if (this.CursorValues[i].name !== cursorname) {
         this.cursortype = false;
         break;
@@ -795,19 +799,50 @@ export class ChartComponent {
   
   }
 
-  LoadXYAxis() {
+  buttonpressed: { [key: string]: boolean } = {}
+  LoadXYAxis(button: string) {
+    this.buttonpressed[button] = !this.buttonpressed[button];
   }
 
-  SaveXYAxis() {
+  SaveXYAxis(button: string) {
+    this.buttonpressed[button] = !this.buttonpressed[button];
   }
   
-  ToggleLegend() {
+  ToggleLegend(button: string) {
+    this.buttonpressed[button] = !this.buttonpressed[button];
   }
 
-  ShowGrid() {
+  ShowGrid(button: string) {
+    this.buttonpressed[button] = !this.buttonpressed[button];
+    if (this.buttonpressed[button] == true) { 
+      
+      this.grid = {
+        show: true,
+        borderColor: '#90A4AE',
+        strokeDashArray: 0,
+        position: 'back',
+        xaxis: {
+          lines: {
+            show: true  
+          }
+        },
+        yaxis: {
+          lines: {  
+            show: true
+          }
+        }
+      }
+    }
+    else {
+      this.grid = {
+        show: false
+      };
+    }
+    this.chartObj.updateOptions({
+      grid: this.grid
+    });
   }
-
-  buttonpressed: { [key: string]: boolean } = {}
+  
   ShowTestsExecution(button: string) {
     this.buttonpressed[button] = !this.buttonpressed[button];
   }
@@ -830,17 +865,22 @@ export class ChartComponent {
   IsCursorsEnabled: boolean[] = [false, false];
   subCursorsEnabled(checked: any) {
     if(checked == false) {
-      this.chartObj.clearAnnotations();
-      for(let index = 0; index <= this.CursorValues.length; index++) {
-        this.CursorValues = this.clearCursor(index);
-      }
-      this.cd.detectChanges();
+      this.resetAnnotation();
       this.cursortype = true;
     }
   }
 
   subCursorsMode(checked: any) {
+    this.resetAnnotation();
+    this.cursortype = false;
+  }
 
+  resetAnnotation() {
+      this.chartObj.clearAnnotations();
+      for(let index = 0; index <= this.CursorValues.length; index++) {
+        this.CursorValues = this.clearCursor(index);
+      }
+      this.cd.detectChanges();
   }
 
   private findNearestSeriesByScreenDistance(
@@ -848,13 +888,13 @@ export class ChartComponent {
     py: number,
     plotRect: DOMRect,
     chartContext: any
-  ): {
+    ): {
     seriesIndex: number;
     seriesName: string;
     segmentIndex: number;
     distance: number;
     dataPoint: { x: number; y: number };
-  } | null {
+    } | null {
     const series = chartContext?.w?.config?.series;
     if (!Array.isArray(series) || series.length === 0) return null;
 

@@ -20,11 +20,10 @@
 
   <div class="CursorPoints">
     <span id="cursortitle" >Cursor Points: </span>
-
     <div class="CursorPoint">
       <div class="CursorLabel" 
       [style.background-color]="CursorValues[0].color"
-      >Cursor: {{ CursorValues[0].name }} </div>
+      > @if(CursorValues[0].name !== "") {Cursor: } {{ CursorValues[0].name }}</div>
       <label class="CursorY">Value: {{ CursorValues[0].y }}</label>
       <label class="CursorX">Time: {{ CursorValues[0].x }}</label>
     </div>
@@ -32,7 +31,7 @@
     <div class="CursorPoint">
       <div class="CursorLabel" 
       [style.background-color]="CursorValues[1].color"
-      >Cursor: {{ CursorValues[1].name }}</div>
+      >@if(CursorValues[1].name !== "") {Cursor: } {{ CursorValues[1].name }}</div>
       <label class="CursorY">Value: {{ CursorValues[1].y }}</label>
       <label class="CursorX">Time: {{ CursorValues[1].x }}</label>
     </div>
@@ -45,8 +44,26 @@
         <label class="CursorY">Value: {{ CursorValues[2].y }}</label>
       }
       <label class="CursorX">Time: {{ CursorValues[2].x }}</label>
-    </div>              
-  
+    </div>
+    
+    <div class="GraphInfo">
+        @for(itemfield of rootfields; track $index) {
+          @if(itemfield.field !== "") {
+            @if(itemfield.field !== "VIB") { 
+              @if(chartData[itemfield.field] !== "") {
+                <label class="labelInfo">{{itemfield.short}}: <span style="font-weight: normal;"> {{chartData[itemfield.field]}}</span></label> 
+              }
+              @else {
+                <label class="labelInfo">{{itemfield.short}}: <span style="font-weight: normal;">--</span></label> 
+              }
+          }
+            @else { 
+              <label class="labelInfo">VIB: <span style="font-weight: normal;">{{chartData[itemfield.field]}}</span></label> 
+            } 
+          }  
+        }
+        <!-- <label class="labelInfo">Print Date: {{ chartData['PrintDate'] }}</label> -->
+    </div>      
   </div>     
 
   <div class="chart-wrapper">
@@ -68,7 +85,8 @@
     ></apx-chart>
   </div>
 
-  <div class="chart-details-container" id="chart-details-mngt">
+  <div class="chart-details-container">
+    
     <div class="chart-details"> 
       <div class="AxisX" style="text-align:center">Axes X (Time (sec))
         <div class="inline-slider"> 
@@ -86,7 +104,6 @@
             <div class="buttonReset" (click)="subResetSliders(0)"><i class="material-symbols-outlined" height="20" width="20">Home</i></div>
           </div> 
       </div>
-  
 
       <div class="AxisX-container">
         <div class ="AxisX-Content">
@@ -111,7 +128,7 @@
         </div>  
       </div>
       
-      @if(this.AxisValues[1].enabled) {
+      @if(AxisValues[1].enabled) {
         <div class="AxisY" style="text-align:center">Axes 1° Left
           <div class="inline-slider"> 
             <mat-slider
@@ -153,7 +170,7 @@
         </div>
       }
 
-      @if(this.AxisValues[2].enabled) {
+      @if(AxisValues[2].enabled) {
         <div class="AxisY" style="text-align:center">Axes 2° Left
           <div class="inline-slider"> 
             <mat-slider
@@ -167,7 +184,7 @@
               (change)="subShowAxisValues(sliderY2.value, 2, 'slider')">
               <input matSliderThumb [(ngModel)]="AxisValues[2].value" #sliderY2>
             </mat-slider>        
-            <div class="buttonReset"(click)="subResetSliders(2)"><i class="material-symbols-outlined" height="20" width="20">Home</i></div>
+            <div class="buttonReset" (click)="subResetSliders(2)"><i class="material-symbols-outlined" height="20" width="20">Home</i></div>
           </div>
         </div> 
 
@@ -195,7 +212,7 @@
         </div>
       }
 
-      @if(this.AxisValues[3].enabled) {
+      @if(AxisValues[3].enabled) {
         <div class="AxisY" style="text-align:center">Axes 1° Right
           <div class="inline-slider"> 
             <mat-slider
@@ -209,7 +226,7 @@
               (change)="subShowAxisValues(sliderY3.value, 3, 'slider')">
               <input matSliderThumb [(ngModel)]="AxisValues[3].value" #sliderY3>
             </mat-slider>        
-            <div class="buttonReset"(click)="subResetSliders(3)"><i class="material-symbols-outlined" height="20" width="20">Home</i></div>
+            <div class="buttonReset" (click)="subResetSliders(3)"><i class="material-symbols-outlined" height="20" width="20">Home</i></div>
           </div>
         </div> 
 
@@ -241,12 +258,12 @@
     <div class ="AxisButtons">
     
       <div id="firstAxisButtons">
-          <div class="AxisButton" (click)="LoadXYAxis()"><i class="material-symbols-outlined">upload</i>Load Axis</div>
-          <div class="AxisButton" (click)="SaveXYAxis()"><i class="material-symbols-outlined">save</i>Save Axis</div>
+          <div class="AxisButton" (click)="LoadXYAxis('LoadXYAxis')"><i class="material-symbols-outlined">upload</i>Load Axis</div>
+          <div class="AxisButton" (click)="SaveXYAxis('SaveXYAxis')"><i class="material-symbols-outlined">save</i>Save Axis</div>
         </div>
       <div id="SecondAxisButtons">
-          <div class="AxisButton" (click)="ToggleLegend()"><i class="material-symbols-outlined">stack</i>Legend</div>
-          <div class="AxisButton" (click)="ShowGrid()"><i class="material-symbols-outlined">grid_4x4</i>Show Grid</div>
+          <div class="AxisButton" (click)="ToggleLegend('ToggleLegend')"><i class="material-symbols-outlined">stack</i>Legend</div>
+          <div class="AxisButton" (click)="ShowGrid('ShowGrid')"><i class="material-symbols-outlined">grid_4x4</i>Show Grid</div>
         </div>  
       </div> 
 
@@ -261,7 +278,6 @@
     <div class="selectbox">
       <label id="labelMeasures">Tests :</label>
       <select [(ngModel)]="measureSelected">
-        <option value="%" selected>All</option>
         @for (item of measures; track $index) {
             @for (value of item.values; track $index) {
               <option [value]="value"> {{value}} </option>
@@ -294,10 +310,11 @@
       </div>
 
       <div class="slidetoggle">
-        <mat-slide-toggle class="CursorToggle" [(ngModel)]="IsCursorsEnabled[1]" (change)="subCursorsEnabled(IsCursorsEnabled[1])" [disabled]="!IsCursorsEnabled[0]">Cursors Free</mat-slide-toggle>
+        <mat-slide-toggle class="CursorToggle" [(ngModel)]="IsCursorsEnabled[1]" (change)="subCursorsMode(IsCursorsEnabled[1])" [disabled]="!IsCursorsEnabled[0]">Cursors Free</mat-slide-toggle>
       </div>
+      
     </div>
-
+    
   </div> 
 
 </div>

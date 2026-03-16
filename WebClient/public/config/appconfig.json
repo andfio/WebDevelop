@@ -112,83 +112,108 @@
   "columnsrootdetails": [
     {
       "name": "Model Code",
-      "field": "ModelCode"
+      "field": "ModelCode",
+      "short": "Model Code"
+    },
+    {
+      "name": "",
+      "field": "VIB",
+      "short": "VIB"
     },
     {
       "name": "SerialNumber",
-      "field": "SerialNumber"
+      "field": "SerialNumber",
+      "short": "S/N"
     },
     {
       "name": "DummyCode",
-      "field": "DummyCode"
+      "field": "DummyCode",
+      "short": "Dummy"
     },
     {
       "name": "",
-      "field": ""
+      "field": "",
+      "short": ""
     },
     {
       "name": "Result",
-      "field": "Result"
+      "field": "Result",
+      "short": "Result"
     },
     {
       "name": "",
-      "field": ""
+      "field": "",
+      "short": ""
     },
     {
       "name": "Program Code",
-      "field": "ProgramCode"
+      "field": "ProgramCode",
+      "short": "Prog.Code"
     },
     {
       "name": "Program Description",
-      "field": "ProgramDescription"
+      "field": "ProgramDescription",
+      "short": "Prog.Desc"
     },
     {
       "name": "",
-      "field": ""
+      "field": "",
+      "short": ""
     },
     {
       "name": "Line",
-      "field": "LineID"
+      "field": "LineID",
+      "short": "LineID"
     },
     {
       "name": "Unit Type",
-      "field": "UnitTypeID"
+      "field": "UnitTypeID",
+      "short": "Unit Type"
     },
     {
       "name": "Unit",
-      "field": "UnitID"
+      "field": "UnitID",
+      "short": "Unit"
     },
     {
       "name": "",
-      "field": ""
+      "field": "",
+      "short": ""
     },
     {
       "name": "Date Test",
-      "field": "Date_Time"
+      "field": "Date_Time",
+      "short": "Date Test"
     },
     {
       "name": "User",
-      "field": "Operator"
+      "field": "Operator",
+      "short": "User"
     },
     {
       "name": "Shift",
-      "field": "Shift"
+      "field": "Shift",
+      "short": "Shift"
     },
     {
       "name": "",
-      "field": ""
+      "field": "",
+      "short": "VIB"
     },
     {
       "name": "Abort Code",
-      "field": "AbortCode"
+      "field": "AbortCode",
+      "short": "Abort Code"
     },
     {
       "name": "",
-      "field": ""
+      "field": "",
+      "short": ""
     },  
     {
       "name": "Time Test [hh:mm]-(ss.mm)",
-      "field": "TestTimeLength"
+      "field": "TestTimeLength",
+      "short": "Time Test [hh:mm]-(ss.mm)"
     }
   ],
     "columnsdetails": [

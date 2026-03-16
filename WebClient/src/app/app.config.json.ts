@@ -14,6 +14,7 @@ export interface Columns {
 export interface ColumnsRootDetails {
     name: string;
     field: string;
+    short: string;
 }
 export interface ColumnsDetails {
     name: string;
