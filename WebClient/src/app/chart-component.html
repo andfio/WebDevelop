@@ -1,21 +1,3 @@
-<!-- <button matIconButton [matMenuTriggerFor]="menu" aria-label="Example icon-button with a menu">
-  <mat-icon>more_vert</mat-icon>
-</button>
-<mat-menu #menu="matMenu">
-  <button mat-menu-item>
-    <mat-icon>dialpad</mat-icon>
-    <span>Redial</span>
-  </button>
-  <button mat-menu-item disabled>
-    <mat-icon>voicemail</mat-icon>
-    <span>Check voice mail</span>
-  </button>
-  <button mat-menu-item>
-    <mat-icon>notifications_off</mat-icon>
-    <span>Disable alerts</span>
-  </button>
-</mat-menu> -->
-
 <div class="chart-container">
 
   <div class="CursorPoints">
@@ -85,9 +67,9 @@
     ></apx-chart>
   </div>
 
-  <div class="chart-details-container">
+  <div class="chart-details-container" id="chart-details-mngt">
     
-    <div class="chart-details"> 
+    <div class="chart-details" [hidden]="buttonpressed['ToggleLegend']"> 
       <div class="AxisX" style="text-align:center">Axes X (Time (sec))
         <div class="inline-slider"> 
             <mat-slider
@@ -258,14 +240,32 @@
     <div class ="AxisButtons">
     
       <div id="firstAxisButtons">
-          <div class="AxisButton" (click)="LoadXYAxis('LoadXYAxis')"><i class="material-symbols-outlined">upload</i>Load Axis</div>
-          <div class="AxisButton" (click)="SaveXYAxis('SaveXYAxis')"><i class="material-symbols-outlined">save</i>Save Axis</div>
-        </div>
+      
+        <div class="AxisButton" (click)="LoadXYAxis('LoadXYAxis')">
+            @if(buttonpressed['LoadXYAxis'] === true ) 
+               { <i class="material-symbols-outlined">done_outline</i> } @else 
+               { <i class="material-symbols-outlined">upload</i>}Load Axis</div>
+
+          <div class="AxisButton" (click)="SaveXYAxis('SaveXYAxis')">
+            @if(buttonpressed['SaveXYAxis'] === true ) 
+              { <i class="material-symbols-outlined">done_outline</i> } @else 
+              { <i class="material-symbols-outlined">save</i>}Save Axis</div>               
+
+      </div>
+      
       <div id="SecondAxisButtons">
-          <div class="AxisButton" (click)="ToggleLegend('ToggleLegend')"><i class="material-symbols-outlined">stack</i>Legend</div>
-          <div class="AxisButton" (click)="ShowGrid('ShowGrid')"><i class="material-symbols-outlined">grid_4x4</i>Show Grid</div>
-        </div>  
-      </div> 
+
+        <div class="AxisButton" (click)="ToggleLegend('ToggleLegend')">          
+            @if(buttonpressed['ToggleLegend'] === true ) 
+               { <i class="material-symbols-outlined">done_outline</i> } @else 
+               { <i class="material-symbols-outlined">stack</i>}Legend</div>
+        
+        <div class="AxisButton" (click)="ShowGrid('ShowGrid')">
+          @if(buttonpressed['ShowGrid'] === true ) 
+            { <i class="material-symbols-outlined">done_outline</i> } @else 
+            { <i class="material-symbols-outlined">grid_4x4</i>}Show Grid</div>
+          
+      </div>   
 
     </div>
 
