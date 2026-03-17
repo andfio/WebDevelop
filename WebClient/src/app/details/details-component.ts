@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
-import { AppConfig, filterValues, tableinfo, StructUnitsInfo, functionsinfo} from '../app.config.json';
+import { AppConfig, tableinfo, StructUnitsInfo, functionsinfo} from '../app.config.json';
 import { DialogContent } from '../dialog-component';
 import { MatDialog } from '@angular/material/dialog';
 
@@ -562,7 +562,13 @@ background: any;
   rowChart: any;
   subOnChartPage() {
     this.rowChart = this.subGetInformation();
-    this.router.navigate(['/pagina-chart'] , { state: { rowData: this.rowChart, rootFields: this.columnsrootdetails, chartValues: this.chartvalues, chartSeries: this.chartseries } });
+    this.router.navigate(['/pagina-chart'] , { state: { 
+                                                        rowData: this.rowChart, 
+                                                        rootFields: this.columnsrootdetails, 
+                                                        chartValues: this.chartvalues, 
+                                                        chartSeries: this.chartseries, 
+                                                        httpConfig: this.httpConfig } 
+    });
   }
 
   subGetInformation(): any {

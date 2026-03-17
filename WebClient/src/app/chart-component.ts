@@ -18,6 +18,7 @@ import {
 } from "ng-apexcharts";
 import { NgApexchartsModule } from "ng-apexcharts";
 import { chartvalues } from "./app.config.json";
+import { chartseries } from "./app.config.json";
 import { DataPoint } from "./chart-config";
 import { DialogContent } from './dialog-component';
 import { MatDialog } from '@angular/material/dialog';
@@ -35,7 +36,11 @@ import {MatMenuModule} from '@angular/material/menu';
 import {MatButtonModule} from '@angular/material/button';
 //gestione cursori grafico
 import {MatSlideToggleModule} from '@angular/material/slide-toggle';
-import { CurrencyPipe } from "@angular/common";
+//richieste http
+import { HttpClient } from '@angular/common/http';
+//gestione file GPlot.ini (GPlot.json)
+import { saveAs } from 'file-saver';
+import { gplotConfig } from "./chart-config";
 
 @Component({
   selector: "app-chart",
@@ -63,27 +68,63 @@ export class ChartComponent {
   public legend: ApexLegend = {};
   public annotations: ApexAnnotations[] = []
 
-  constructor(private dialog: MatDialog, private cd: ChangeDetectorRef) { }
+  constructor(private dialog: MatDialog, private cd: ChangeDetectorRef, private http: HttpClient) { }
+  
   chartData: any = {};
   rootfields: any[] = [];
 
   chartValues: chartvalues = {} as any;
-  chartSeries: any[] =  [];
+  chartSeries: any[] = []
   chartAxisOffSet: any[] = [];
+
+  MeasuresInfo: any[] = [];
+  httpConfig: any = {} as any;
+
   ngOnInit() {
     this.chartData = history.state.rowData;
     this.rootfields = history.state.rootFields;
+    this.httpConfig = history.state.httpConfig;
+
+    this.subInitChartSeries();
+    this.subInitCursors();
+
+    const parameters = {
+      UnitTypeID: this.chartData[this.rootfields.find((field: any) => field.name === 'UnitTypeID')?.index],
+      CommandType: 1 //measures
+    }
+
+    // this.http.post(this.httpConfig.baseurl + '/query/measuresinfo', parameters).subscribe({
+    //   next: (data: any) => {
+    //     this.MeasuresInfo = data;
+    //   },
+    //   error: (err) => {
+    //     console.error("ERRORE BACKEND:", err);
+    //   }
+    // });	    
+
+    this.initChartData();
+    this.subChartEvents();
+  }
+
+  ngAfterViewInit() {
+    this.updateChartHeight();
+  }
+
+  subInitChartSeries() {
     this.chartValues = history.state.chartValues;
-    let axistype: number[] = history.state.chartSeries.axistypes.split(';').map(Number) 
-    let axisposition: number[] = history.state.chartSeries.axisposition.split(';').map(Number)
-    let axisregulatoroffset: number[] = history.state.chartSeries.axisregulatoroffset.split(';').map(Number) 
+    let chartSeriesConfig: any = history.state.chartSeries;
+    let axistype: number[] = chartSeriesConfig.axistypes.split(';').map(Number) 
+    let axisposition: number[] = chartSeriesConfig.axisposition.split(';').map(Number)
+    let axisregulatoroffset: number[] = chartSeriesConfig.axisregulatoroffset.split(';').map(Number) 
     for (let index = 0; index < axistype.length; index++) {
       this.chartSeries[axistype[index]] = []; 
       this.chartSeries[axistype[index]] = axisposition[index];
       this.chartAxisOffSet[axisposition[index]] = [];
       this.chartAxisOffSet[axisposition[index]] = axisregulatoroffset[index];
-    }
-    
+    }    
+  }
+
+  subInitCursors() {
     for (let index = 0; index < 3; index++) {
         this.CursorValues.push({
           x: 0,
@@ -94,16 +135,9 @@ export class ChartComponent {
           pointY: 0,
           id: ""
         });
-    }
-
-    this.initChartData();
-    this.subChartEvents();
+    }    
   }
 
-  ngAfterViewInit() {
-    this.updateChartHeight();
-  }
-  
   dates: any = [];
   DataPoint: DataPoint[] = [];
   AxisSeries: any[] = [];
@@ -142,7 +176,7 @@ export class ChartComponent {
       }
     }
 
-    this.chartSeries.forEach(AxisItem => {
+    for(let i=0; i < this.chartSeries.length - 1; i++) {
       this.AxisValues.push (
         {
           seriesName: [""],
@@ -157,7 +191,7 @@ export class ChartComponent {
           enabled: false
         }
       )      
-    });
+    };
 
     //'AsseX'
     let minX = this.DataPoint[0].time[0];
@@ -281,18 +315,18 @@ export class ChartComponent {
     };
 
     let axisCount: number = 0;
-    for (let AxisIndex = 1; AxisIndex < this.AxisValues.length; AxisIndex++) {
+    for (let axisIndex = 1; axisIndex < this.AxisValues.length; axisIndex++) {
       
-      if (this.AxisValues[AxisIndex].enabled == true) {
+      if (this.AxisValues[axisIndex].enabled == true) {
           
-          switch (AxisIndex) {
+          switch (axisIndex) {
           case 1: //1 ASSE A SINISTRA
-              this.AxisValues[AxisIndex].axisIndex = axisCount;
+              this.AxisValues[axisIndex].axisIndex = axisCount;
               this.yaxis.push(
                 {
-                  seriesName: this.AxisValues[AxisIndex].seriesName,
-                  min: this.AxisValues[AxisIndex].textMin,
-                  max: this.AxisValues[AxisIndex].textMax,
+                  seriesName: this.AxisValues[axisIndex].seriesName,
+                  min: this.AxisValues[axisIndex].textMin,
+                  max: this.AxisValues[axisIndex].textMax,
                   tickAmount: 10,
                   opposite: false,      
                   axisTicks: {
@@ -311,7 +345,7 @@ export class ChartComponent {
                     }           
                   },
                   title: {
-                    text: this.AxisValues[AxisIndex].seriesName.join(", "),
+                    text: this.AxisValues[axisIndex].seriesName.join(", "),
                     style: {
                       color: "#FFFFFF"
                     },  
@@ -321,12 +355,12 @@ export class ChartComponent {
               break;
 
             case 2: //2° ASSE A SINISTRA
-              this.AxisValues[AxisIndex].axisIndex = axisCount;
+              this.AxisValues[axisIndex].axisIndex = axisCount;
               this.yaxis.push(
                 {
-                  seriesName: this.AxisValues[AxisIndex].seriesName,
-                  min: this.AxisValues[AxisIndex].textMin,
-                  max: this.AxisValues[AxisIndex].textMax,
+                  seriesName: this.AxisValues[axisIndex].seriesName,
+                  min: this.AxisValues[axisIndex].textMin,
+                  max: this.AxisValues[axisIndex].textMax,
                   tickAmount: 10,
                   opposite: false,      
                   axisTicks: {
@@ -345,7 +379,7 @@ export class ChartComponent {
                     }           
                   },
                   title: {
-                    text: this.AxisValues[AxisIndex].seriesName.join(", "),
+                    text: this.AxisValues[axisIndex].seriesName.join(", "),
                     style: {
                       color: "#FFFFFF"
                     },  
@@ -355,12 +389,12 @@ export class ChartComponent {
               break;
 
             case 3: //1° ASSE A DESTRA
-              this.AxisValues[AxisIndex].axisIndex = axisCount;
+              this.AxisValues[axisIndex].axisIndex = axisCount;
               this.yaxis.push(
                 {
-                  seriesName: this.AxisValues[AxisIndex].seriesName,
-                  min: this.AxisValues[AxisIndex].textMin,
-                  max: this.AxisValues[AxisIndex].textMax,
+                  seriesName: this.AxisValues[axisIndex].seriesName,
+                  min: this.AxisValues[axisIndex].textMin,
+                  max: this.AxisValues[axisIndex].textMax,
                   tickAmount: 10,
                   opposite: true,      
                   axisTicks: {
@@ -379,7 +413,7 @@ export class ChartComponent {
                     }           
                   },
                   title: {
-                    text: this.AxisValues[AxisIndex].seriesName.join(", "),
+                    text: this.AxisValues[axisIndex].seriesName.join(", "),
                     style: {
                       color: "#FFFFFF"
                     },  
@@ -1145,4 +1179,5 @@ export class ChartComponent {
   onResize() {
     this.updateChartHeight();
   }
+
 }

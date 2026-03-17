@@ -483,6 +483,49 @@ namespace WebAnalisys.Controllers
             return Ok(result);
         }
 
+        [HttpPost]
+        [Route("measuresinfo")]
+        public IHttpActionResult measuresinfo([FromBody] MeasureCondition parameters)
+        {
+            var result = new List<Dictionary<string, object>>();
+
+            string connDBTestString = ConfigurationManager.ConnectionStrings["DBTest"].ConnectionString;
+
+            try
+            {
+                string sql = "SELECT ComID, ComDescr, UM, ComDescrShort, Axes, OffSet FROM Commands";
+                sql += " WHERE UnitTypeID = " + parameters.UnitTypeID;
+                sql += " AND ComType = " + parameters.CommandType;
+                sql += " ORDER BY ComID";
+
+                using (var conn = new SqlConnection(connDBTestString))
+                using (var cmd = new SqlCommand(sql, conn))
+                {
+                    conn.Open();
+                    var reader = cmd.ExecuteReader();
+
+                    while (reader.Read())
+                    {
+                        var row = new Dictionary<string, object>();
+
+                        for (int i = 0; i < reader.FieldCount; i++)
+                        {
+                            row.Add(reader.GetName(i), reader.GetValue(i));
+                        }
+
+                        result.Add(row);
+                    }
+                }
+
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+
+            return Ok(result);
+        }
+
         private string Normalize(string key)
         {
             return key.Replace(" ", "").Replace("-", "");

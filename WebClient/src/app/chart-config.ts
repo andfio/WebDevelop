@@ -28,3 +28,7 @@ export interface CursorValues {
   pointY: number,
   id: string
 }
+export interface gplotConfig {
+  name: string,
+  comgnome: string
+}
