@@ -47,6 +47,7 @@ export class HomeComponent {
       this.selectedRow = this.state.SelectedRow;
       this.showPopup = this.state.showPopup;
       this.totalsummary = this.state.totalsummary;
+      this.httpconfig = this.state.httpconfig;
       return; 
     }
 
@@ -246,7 +247,8 @@ export class HomeComponent {
         this.totalsummary =  this.subTotalSummary(this.results);
         this.showPopup = true;
         this.state.showPopup = this.showPopup;
-        this.state.totalsummary = this.totalsummary;  
+        this.state.totalsummary = this.totalsummary;
+        this.state.httpconfig = this.httpconfig;  
         
       },
       error: (err) => {

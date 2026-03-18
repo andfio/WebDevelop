@@ -28,7 +28,49 @@ export interface CursorValues {
   pointY: number,
   id: string
 }
-export interface gplotConfig {
-  name: string,
-  comgnome: string
+export interface StructPlot {
+  Plot: Number[]
+}
+
+export interface Plots {
+  [key: string]: StructPlot;
+}
+
+export interface StructVisiblePlot {
+  Plot: Number[]
+}
+
+export interface VisiblePlots {
+  [key: string]: StructVisiblePlot;
+}
+
+export interface StructPlotColors {
+  Color: string[],
+}
+
+export interface PlotColors {
+  [key: string]: StructPlotColors;
+}
+
+export interface StructAxesScale {
+  Xmin: Number[];
+  Xmax: Number[];
+  YAxes1MIN: Number[];
+  YAxes1MAX: Number[];
+  YAxes2MIN: Number[];
+  YAxes2MAX: Number[];
+  YAxes3MIN: Number[];
+  YAxes3MAX: Number[];
+  YAxes4MIN: Number[];
+  YAxes4MAX: Number[];
+}
+export interface AxesScale {
+  [key: string]: StructAxesScale;
+}
+
+export interface AxesConfig {
+  plots: Plots;
+  visibleplots: VisiblePlots;
+  plotcolors: PlotColors;
+  axesScale: AxesScale;
 }

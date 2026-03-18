@@ -11,13 +11,14 @@ import {
   createBlockScrollStrategy,
   createGlobalPositionStrategy,
   createOverlayRef
-} from "./chunk-X57O76TY.js";
+} from "./chunk-RVCD6U64.js";
 import {
   CdkScrollable
-} from "./chunk-WVEYWCAW.js";
+} from "./chunk-NFALSMBV.js";
 import {
   _animationsDisabled
-} from "./chunk-WN3MJUP2.js";
+} from "./chunk-ZQQJC6GH.js";
+import "./chunk-5EG33CFQ.js";
 import {
   A11yModule,
   ESCAPE,
@@ -28,16 +29,15 @@ import {
   _IdGenerator,
   _getFocusedElementPierceShadowDom,
   hasModifierKey
-} from "./chunk-YJFQ7J7B.js";
-import "./chunk-5EG33CFQ.js";
+} from "./chunk-N4JCPB4Y.js";
 import {
   Platform,
   coerceNumberProperty
-} from "./chunk-XQY2GZCV.js";
+} from "./chunk-QP45ZDVY.js";
+import "./chunk-5SJ7IVCD.js";
 import {
   Directionality
-} from "./chunk-HLNYLZGZ.js";
-import "./chunk-LKPUUOYC.js";
+} from "./chunk-E6IYFNEB.js";
 import "./chunk-PNXSFLCX.js";
 import {
   ChangeDetectionStrategy,
@@ -86,11 +86,11 @@ import {
   ɵɵqueryRefresh,
   ɵɵtemplate,
   ɵɵviewQuery
-} from "./chunk-6L7L5NXK.js";
+} from "./chunk-RGCNKW3S.js";
 import {
   __spreadProps,
   __spreadValues
-} from "./chunk-3OV72XIM.js";
+} from "./chunk-WDMUDEB6.js";
 
 // node_modules/@angular/cdk/fesm2022/dialog.mjs
 function CdkDialogContainer_ng_template_0_Template(rf, ctx) {

@@ -21,4 +21,5 @@ export class StateService {
   SelectedRow: any;
   showPopup: boolean = false;
   totalsummary: string = '';
+  httpconfig: any = {};
 }

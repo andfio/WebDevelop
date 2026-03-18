@@ -39,43 +39,39 @@ namespace WebAnalisys.Models
 
     public class Plots
     {
-        public string Plot { get; set; }
-        public string UnitTypeID { get; set; }
+        public string[] Plot { get; set; }
     }
 
     public class VisiblePlots
     {
-        public string Plot { get; set; }
-        public string UnitTypeID { get; set; }
+        public string[] Plot { get; set; }
     }
 
-    public class Colors
+    public class PlotColors
     {
-        public string Color { get; set; }
-        public string UnitTypeID { get; set; }
+        public string[] Color { get; set; }
     }
 
     public class AxesScale
     {
-        public string UnitTypeID { get; set; }
-        public string Xmin { get; set; }
-        public string Xmax { get; set; }
-        public string YAxes1MIN { get; set; }
-        public string YAxes1MAX { get; set; }
-        public string YAxes2MIN { get; set; }
-        public string YAxes2MAX { get; set; }
-        public string YAxes3MIN { get; set; }
-        public string YAxes3MAX { get; set; }
-        public string YAxes4MIN { get; set; }
-        public string YAxes4MAX { get; set; }
+        public string[] Xmin { get; set; }
+        public string[] Xmax { get; set; }
+        public string[] YAxes1MIN { get; set; }
+        public string[] YAxes1MAX { get; set; }
+        public string[] YAxes2MIN { get; set; }
+        public string[] YAxes2MAX { get; set; }
+        public string[] YAxes3MIN { get; set; }
+        public string[] YAxes3MAX { get; set; }
+        public string[] YAxes4MIN { get; set; }
+        public string[] YAxes4MAX { get; set; }
     }
 
     public class AxesConfiguration
     {
-        public Dictionary<string, List<Plots>> Plots = new Dictionary<string, List<Plots>>();
-        public Dictionary<string, List<VisiblePlots>> VisiblePlots = new Dictionary<string, List<VisiblePlots>>();
-        public Dictionary<string, List<Colors>> Colors = new Dictionary<string, List<Colors>>();
-        public Dictionary<string, List<AxesScale>> AxesScale = new Dictionary<string, List<AxesScale>>();
+        public Dictionary<string, Plots> Plots { get; set; } = new Dictionary<string, Plots>();
+        public Dictionary<string, VisiblePlots> VisiblePlots { get; set; } = new Dictionary<string, VisiblePlots>();
+        public Dictionary<string, PlotColors> Colors { get; set; } = new Dictionary<string, PlotColors>();
+        public Dictionary<string, AxesScale> AxesScale { get; set; } = new Dictionary<string, AxesScale>();
     }
 }
     

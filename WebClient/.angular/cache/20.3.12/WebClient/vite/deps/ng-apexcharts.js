@@ -1,6 +1,6 @@
 import {
   isPlatformBrowser
-} from "./chunk-LKPUUOYC.js";
+} from "./chunk-5SJ7IVCD.js";
 import "./chunk-PNXSFLCX.js";
 import {
   ChangeDetectionStrategy,
@@ -27,10 +27,10 @@ import {
   ɵɵdomElement,
   ɵɵqueryAdvance,
   ɵɵviewQuerySignal
-} from "./chunk-6L7L5NXK.js";
+} from "./chunk-RGCNKW3S.js";
 import {
   __async
-} from "./chunk-3OV72XIM.js";
+} from "./chunk-WDMUDEB6.js";
 
 // node_modules/ng-apexcharts/fesm2022/ng-apexcharts.mjs
 var _c0 = ["chart"];
@@ -150,7 +150,7 @@ var _ChartComponent = class _ChartComponent {
     return __async(this, null, function* () {
       const {
         default: ApexCharts
-      } = yield import("./apexcharts.esm-547TSNZB.js");
+      } = yield import("./apexcharts.esm-LLZQWILR.js");
       window.ApexCharts ||= ApexCharts;
       if (this._destroyed) return;
       if (!this.isConnected) {

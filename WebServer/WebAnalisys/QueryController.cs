@@ -8,6 +8,9 @@ using WebAnalisys.Models;
 using Newtonsoft.Json.Linq;
 using System.Data.SqlClient;
 using System.Configuration;
+using System.Text.Json;
+using System.Text.Json.Serialization;
+using System.IO;
 
 
 namespace WebAnalisys.Controllers
@@ -524,6 +527,60 @@ namespace WebAnalisys.Controllers
             }
 
             return Ok(result);
+        }
+
+
+        [HttpPost]
+        [Route("saveplots")]
+        public IHttpActionResult saveplots([FromBody] AxesConfiguration payload)
+        {
+            try
+            {
+                string fileConfig = System.Web.Hosting.HostingEnvironment.MapPath("~/App_Data/GPlot.json");
+
+                var options = new JsonSerializerOptions
+                {
+                    WriteIndented = true,
+                    IncludeFields = true
+                };
+
+                string json = JsonSerializer.Serialize(payload, options);
+                File.WriteAllText(fileConfig, json);
+
+                return Ok(new { success = true, message = "" });
+            }
+            catch (Exception ex)
+            {
+                return Ok(new { success = false, message = ex.Message });
+                throw;
+            }
+
+        }
+
+        [HttpPost]
+        [Route("loadplots")]
+        public IHttpActionResult loadplots([FromBody] object obj)
+        {
+            try
+            {
+                string fileConfig = System.Web.Hosting.HostingEnvironment.MapPath("~/App_Data/GPlot.json");
+                if (!File.Exists(fileConfig))
+                {
+                    return Ok(new { success = false, message = "file not found" });
+                }
+
+                string json = File.ReadAllText(fileConfig);
+
+                AxesConfiguration axesConfig = JsonSerializer.Deserialize<AxesConfiguration>(json);
+
+                return Ok(new { success = true, message = "", config = axesConfig });
+            }
+            catch (Exception ex)
+            {
+                return Ok(new { success = false, message = ex.Message, config = "" });
+                throw;
+            }
+
         }
 
         private string Normalize(string key)
