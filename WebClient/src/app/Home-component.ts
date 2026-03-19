@@ -7,6 +7,7 @@ import { RouterOutlet } from '@angular/router';
 import { StateService } from './state.service'
 import { MatDialog } from '@angular/material/dialog';
 import { DialogContent } from './dialog-component';
+import { AxesConfig } from './chart-config';
 
 @Component({
   selector: 'app-root',
@@ -26,6 +27,14 @@ export class HomeComponent {
   modelsInfo: modelsinfo [] = [];
   abortcodeinfo: abortcodeinfo [] = [];
   functionsInfo: functionsinfo [] = [];
+  axesConfig: AxesConfig = {
+    plots: {},
+    visibleplots: {},
+    plotcolors: {},
+    axesScale: {}
+  };
+  readonly numMAXPlots: number = 10;
+  buttonGraphDisabled: boolean = true;
 
   ngOnInit() {
 
@@ -114,6 +123,7 @@ export class HomeComponent {
       }
     });    
 
+    this.subInitAxesConfig();
   }
   
   DateFormatFrom: string = new Date().toISOString().slice(0,10) + "T00:00";
@@ -334,7 +344,7 @@ export class HomeComponent {
   
   subOnDetailPage(row: any) {
     this.router.navigate(['/pagina-details'], {
-      state: { rowData: row, unitsInfo: this.unitsInfo, functionsInfo: this.functionsInfo }   
+      state: { rowData: row, unitsInfo: this.unitsInfo, functionsInfo: this.functionsInfo, axesConfig: this.axesConfig }   
     });
     this.state.SelectedRow = this.selectedRow;
   }
@@ -547,6 +557,59 @@ export class HomeComponent {
 
   setBusy(isBusy: boolean) {
     document.body.classList.toggle('busy', isBusy);
+  }
+
+  subInitAxesConfig() {
+    this.http.post(this.httpconfig.baseurl + '/query/loadplots', null).subscribe({
+      next: (data: any) => {
+        if(data.success==true) {
+          this.axesConfig = data.config;
+        } 
+        else {
+          if (data.message == "NO_FILE")
+          {
+            console.warn("No plot configuration file found.");
+          };
+        }
+      },
+      error: (err) => {
+        console.error("ERRORE BACKEND:", err);
+      }
+    });	
+  }
+
+  subShowGraphParams() {
+    
+    if (this.filterValues['Unit Type'] !== undefined && this.filterValues['Unit Type'] !== '%') { return }
+
+    //inizializzazione config assi per il tipo di unita (GPlot.ini)
+    let UnitTypeID = this.filterValues['Unit Type'].toString();
+    let key = "Plot" + UnitTypeID.toString();
+    this.axesConfig.plots[key] = { Plot: [] };
+    this.axesConfig.visibleplots[key] = { Plot: [] };
+    this.axesConfig.plotcolors[key] = { Color: [] };
+    this.axesConfig.axesScale[key] = {
+      Xmin: [],
+      Xmax: [],
+      YAxes1MIN: [],
+      YAxes1MAX: [],
+      YAxes2MIN: [],
+      YAxes2MAX: [],
+      YAxes3MIN: [],
+      YAxes3MAX: [],
+      YAxes4MIN: [],
+      YAxes4MAX: []
+    };
+    
+    
+
+  }
+  subEnableGraphButton() {
+    if (this.filterValues['Unit Type'] !== undefined && this.filterValues['Unit Type'] !== '%') {
+      this.buttonGraphDisabled = false;
+    } else {
+      this.buttonGraphDisabled = true;
+    } 
   }
 
   showDialog(message: string, title?: string ) {

@@ -208,6 +208,24 @@ select {
     transition: background-color .2s ease;
 }
 
+.btn-graphconfig {
+    padding: 8px 16px;
+    background-color: #4a90e2;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    font-size: 14px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    transition: background-color .2s ease;
+}
+
+.btn-graphconfig:hover {
+    background-color: #357bc8;
+}
+
 .btn-export:hover {
     background-color: #357bc8;
 }

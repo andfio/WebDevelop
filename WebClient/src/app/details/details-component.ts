@@ -5,6 +5,7 @@ import { HttpClient } from '@angular/common/http';
 import { AppConfig, tableinfo, StructUnitsInfo, functionsinfo} from '../app.config.json';
 import { DialogContent } from '../dialog-component';
 import { MatDialog } from '@angular/material/dialog';
+import { AxesConfig } from '../chart-config';
 
 @Component({
   selector: 'app-details',
@@ -39,10 +40,19 @@ background: any;
   unitsInfo: StructUnitsInfo[] = [];
   functionsInfo: functionsinfo[] = [];
 
+  axesConfig: AxesConfig = {
+    plots: {},
+    visibleplots: {},
+    plotcolors: {},
+    axesScale: {}
+  };
+  readonly numMAXPlots: number = 10;
+
   ngOnInit() {
     this.row = history.state.rowData;
     this.unitsInfo = history.state.unitsInfo;
     this.functionsInfo = history.state.functionsInfo;
+    this.axesConfig = history.state.axesConfig;
     
     console.log("Riga ricevuta:", this.row);
     this.filtervalues['ID_Result'] = this.row['ID_Result'];
@@ -61,7 +71,7 @@ background: any;
           this.querydetails = config.querydetails;
           this.chartvalues = config.chartvalues;
           this.chartseries = config.chartseries;
-
+          
           this.sendToBackend();
       },
       error: (err) => {
@@ -561,16 +571,42 @@ background: any;
 
   rowChart: any;
   subOnChartPage() {
+    if (this.axesConfig.plots["Plot" + this.row["UnitTypeID"].toString()] === undefined || 
+       this.axesConfig.plots["Plot" + this.row["UnitTypeID"].toString()].Plot.length === 0) {
+      this.showDialog("No chart configuration found for this Unit Type! Please contact the administrator.", "Chart Configuration Missing");
+      return;
+    }
+    
     this.rowChart = this.subGetInformation();
     this.router.navigate(['/pagina-chart'] , { state: { 
                                                         rowData: this.rowChart, 
                                                         rootFields: this.columnsrootdetails, 
                                                         chartValues: this.chartvalues, 
                                                         chartSeries: this.chartseries, 
+                                                        axesConfig: this.axesConfig,
                                                         httpConfig: this.httpConfig } 
     });
   }
 
+  subOnChartParameters() {
+    let UnitTypeID = this.row["UnitTypeID"];
+    for (let index = 1; index <= this.numMAXPlots; index++) {
+      this.axesConfig.plots["Plot" + UnitTypeID.toString()].Plot[index] = 0;
+      this.axesConfig.visibleplots["Plot" + UnitTypeID.toString()].Plot[index] = 0;
+      this.axesConfig.plotcolors["Plot" + UnitTypeID.toString()].Color[index] = "#FFFFFF";   
+      this.axesConfig.axesScale["Plot" + UnitTypeID.toString()].Xmin[index] = 0;
+      this.axesConfig.axesScale["Plot" + UnitTypeID.toString()].Xmax[index] = 0;
+      this.axesConfig.axesScale["Plot" + UnitTypeID.toString()].YAxes1MIN[index] = 0;
+      this.axesConfig.axesScale["Plot" + UnitTypeID.toString()].YAxes1MAX[index] = 0;
+      this.axesConfig.axesScale["Plot" + UnitTypeID.toString()].YAxes2MIN[index] = 0;
+      this.axesConfig.axesScale["Plot" + UnitTypeID.toString()].YAxes2MAX[index] = 0;
+      this.axesConfig.axesScale["Plot" + UnitTypeID.toString()].YAxes3MIN[index] = 0;
+      this.axesConfig.axesScale["Plot" + UnitTypeID.toString()].YAxes3MAX[index] = 0;
+      this.axesConfig.axesScale["Plot" + UnitTypeID.toString()].YAxes4MIN[index] = 0;
+      this.axesConfig.axesScale["Plot" + UnitTypeID.toString()].YAxes4MAX[index] = 0;
+    } 
+  }
+  
   subGetInformation(): any {
     let info: any = {};
     let itemValue: any;

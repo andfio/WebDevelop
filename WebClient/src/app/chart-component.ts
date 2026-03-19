@@ -39,8 +39,8 @@ import {MatSlideToggleModule} from '@angular/material/slide-toggle';
 //richieste http
 import { HttpClient } from '@angular/common/http';
 //gestione file GPlot.ini (GPlot.json)
-import { saveAs } from 'file-saver';
-import { AxesConfig, StructAxesScale } from "./chart-config";
+import { AxesConfig } from "./chart-config";
+import { StructUnitsInfo } from "./app.config.json";
 
 @Component({
   selector: "app-chart",
@@ -80,10 +80,19 @@ export class ChartComponent {
   MeasuresInfo: any[] = [];
   httpConfig: any = {} as any;
 
+  axesConfig: AxesConfig = {
+    plots: {},
+    visibleplots: {},
+    plotcolors: {},
+    axesScale: {}
+  };
+  readonly numMAXPlots: number = 10;
+
   ngOnInit() {
     this.chartData = history.state.rowData;
     this.rootfields = history.state.rootFields;
     this.httpConfig = history.state.httpConfig;
+    this.axesConfig = history.state.axesConfig;
 
     this.subInitChartSeries();
     this.subInitCursors();
@@ -837,55 +846,34 @@ export class ChartComponent {
   LoadXYAxis(button: string) {
     this.buttonpressed[button] = !this.buttonpressed[button];
   }
+  
 
   SaveXYAxis(button: string) {
     this.buttonpressed[button] = !this.buttonpressed[button];
 
-      let axesConfig: AxesConfig = {
-        plots: {},
-        visibleplots: {},
-        plotcolors: {},
-        axesScale: {}
-      };
-      
-      let UnitTypeID = this.chartData[this.rootfields.find((x => x.field === 'UnitTypeID')).field];
-      UnitTypeID = UnitTypeID.substring(0, UnitTypeID.indexOf("-") - 1)
-      
-      let key = "Plot" + UnitTypeID.toString();
+    let UnitTypeID = this.chartData[this.rootfields.find((x => x.field === 'UnitTypeID')).field];
+    UnitTypeID = UnitTypeID.substring(0, UnitTypeID.indexOf("-") - 1)
+    
+    let key = "Plot" + UnitTypeID.toString();
 
-      axesConfig.plots[key] = { Plot: [] };
-      axesConfig.visibleplots[key] = { Plot: [] };
-      axesConfig.plotcolors[key] = { Color: [] };
-      axesConfig.axesScale[key] = {
-        Xmin: [],
-        Xmax: [],
-        YAxes1MIN: [],
-        YAxes1MAX: [],
-        YAxes2MIN: [],
-        YAxes2MAX: [],
-        YAxes3MIN: [],
-        YAxes3MAX: [],
-        YAxes4MIN: [],
-        YAxes4MAX: []
-      };      
       
-      
-      for (let index = 1; index <= 10; index++) {
-        axesConfig.plots["Plot" + UnitTypeID.toString()].Plot[index] = 0;
-        axesConfig.visibleplots["Plot" + UnitTypeID.toString()].Plot[index] = 0;
-        axesConfig.plotcolors["Plot" + UnitTypeID.toString()].Color[index] = "#FFFFFF";   
-        axesConfig.axesScale["Plot" + UnitTypeID.toString()].Xmin[index] = 0;
-        axesConfig.axesScale["Plot" + UnitTypeID.toString()].Xmax[index] = 0;
-        axesConfig.axesScale["Plot" + UnitTypeID.toString()].YAxes1MIN[index] = 0;
-        axesConfig.axesScale["Plot" + UnitTypeID.toString()].YAxes1MAX[index] = 0;
-        axesConfig.axesScale["Plot" + UnitTypeID.toString()].YAxes2MIN[index] = 0;
-        axesConfig.axesScale["Plot" + UnitTypeID.toString()].YAxes2MAX[index] = 0;
-        axesConfig.axesScale["Plot" + UnitTypeID.toString()].YAxes3MIN[index] = 0;
-        axesConfig.axesScale["Plot" + UnitTypeID.toString()].YAxes3MAX[index] = 0;
-        axesConfig.axesScale["Plot" + UnitTypeID.toString()].YAxes4MIN[index] = 0;
-        axesConfig.axesScale["Plot" + UnitTypeID.toString()].YAxes4MAX[index] = 0;
-      }
-      this.http.post(this.httpConfig.baseurl + '/query/saveplots', axesConfig).subscribe({
+    
+    for (let index = 1; index <= 10; index++) {
+      this.axesConfig.plots["Plot" + UnitTypeID.toString()].Plot[index] = 0;
+      this.axesConfig.visibleplots["Plot" + UnitTypeID.toString()].Plot[index] = 0;
+      this.axesConfig.plotcolors["Plot" + UnitTypeID.toString()].Color[index] = "#FFFFFF";   
+      this.axesConfig.axesScale["Plot" + UnitTypeID.toString()].Xmin[index] = 0;
+      this.axesConfig.axesScale["Plot" + UnitTypeID.toString()].Xmax[index] = 0;
+      this.axesConfig.axesScale["Plot" + UnitTypeID.toString()].YAxes1MIN[index] = 0;
+      this.axesConfig.axesScale["Plot" + UnitTypeID.toString()].YAxes1MAX[index] = 0;
+      this.axesConfig.axesScale["Plot" + UnitTypeID.toString()].YAxes2MIN[index] = 0;
+      this.axesConfig.axesScale["Plot" + UnitTypeID.toString()].YAxes2MAX[index] = 0;
+      this.axesConfig.axesScale["Plot" + UnitTypeID.toString()].YAxes3MIN[index] = 0;
+      this.axesConfig.axesScale["Plot" + UnitTypeID.toString()].YAxes3MAX[index] = 0;
+      this.axesConfig.axesScale["Plot" + UnitTypeID.toString()].YAxes4MIN[index] = 0;
+      this.axesConfig.axesScale["Plot" + UnitTypeID.toString()].YAxes4MAX[index] = 0;
+    }
+    this.http.post(this.httpConfig.baseurl + '/query/saveplots', this.axesConfig).subscribe({
       next: (data: any) => {
         if(data.success==true) {
           

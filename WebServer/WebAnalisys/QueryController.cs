@@ -566,18 +566,18 @@ namespace WebAnalisys.Controllers
                 string fileConfig = System.Web.Hosting.HostingEnvironment.MapPath("~/App_Data/GPlot.json");
                 if (!File.Exists(fileConfig))
                 {
-                    return Ok(new { success = false, message = "file not found" });
+                    return Ok(new { success = false, message = "NO_FILE" });
                 }
 
                 string json = File.ReadAllText(fileConfig);
 
                 AxesConfiguration axesConfig = JsonSerializer.Deserialize<AxesConfiguration>(json);
 
-                return Ok(new { success = true, message = "", config = axesConfig });
+                return Ok(new { success = true, config = axesConfig });
             }
             catch (Exception ex)
             {
-                return Ok(new { success = false, message = ex.Message, config = "" });
+                return Ok(new { success = false, message = ex.Message });
                 throw;
             }
 

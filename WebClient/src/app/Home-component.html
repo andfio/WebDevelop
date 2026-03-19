@@ -96,11 +96,13 @@
         <div class="selectbox">
           <label id="lblutselect">Unit Type :</label>
           <select [(ngModel)]="filterValues['Unit Type']"
-            (ngModelChange)="subLoadInfo('UnitID')">
+            (ngModelChange)="subLoadInfo('UnitID')" (ngModelChange)="subEnableGraphButton()">            
+            
             <option value="%" selected>All</option>
             @for (item of unitTypesItem; track $index) {
               <option [value]="item" > {{item}} </option>
             }
+
           </select>
         </div>
 
@@ -147,6 +149,7 @@
           </div>
 
           <div id="buttonbox">
+            <button class="btn-graphconfig" [disabled]="buttonGraphDisabled" (click)="subShowGraphParams()"><i class="material-symbols-outlined">settings</i>Graph Settings</button>
             <button class="btn-export" (click)="subExportCSV()"><i class="material-symbols-outlined">file_export</i>Export</button>
             <button class="btn-search" (click)="submit()"><i class="material-symbols-outlined">manage_search</i>Search</button>
           </div>
