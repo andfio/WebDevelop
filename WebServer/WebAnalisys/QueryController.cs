@@ -496,7 +496,7 @@ namespace WebAnalisys.Controllers
 
             try
             {
-                string sql = "SELECT ComID, ComDescr, UM, ComDescrShort, Axes, OffSet FROM Commands";
+                string sql = "SELECT ComID, ComDescr, UM, ComDescrShort, Axes, OffSet, UnitTypeID FROM Commands";
                 sql += " WHERE UnitTypeID = " + parameters.UnitTypeID;
                 sql += " AND ComType = " + parameters.CommandType;
                 sql += " ORDER BY ComID";

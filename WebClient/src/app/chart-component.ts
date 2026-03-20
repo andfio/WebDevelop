@@ -18,7 +18,6 @@ import {
 } from "ng-apexcharts";
 import { NgApexchartsModule } from "ng-apexcharts";
 import { chartvalues } from "./app.config.json";
-import { chartseries } from "./app.config.json";
 import { DataPoint } from "./chart-config";
 import { DialogContent } from './dialog-component';
 import { MatDialog } from '@angular/material/dialog';

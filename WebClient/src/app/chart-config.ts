@@ -74,3 +74,19 @@ export interface AxesConfig {
   plotcolors: PlotColors;
   axesScale: AxesScale;
 }
+
+export interface chartsettings {
+  measure: string[];
+  plotcolor: string[];
+  enableplot: boolean[];
+}
+
+export interface measuresinfo {
+  measureID: string;
+  description: string;
+  shortname: string;
+  UM: string;
+  offset: number;
+  axesposition: number;
+  unitTypeID: number;
+}

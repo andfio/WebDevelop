@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { AppConfig, filterValues, Filters, StructUnitsInfo, modelsinfo, abortcodeinfo, functionsinfo} from './app.config.json';
+import { measuresinfo } from './chart-config';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { RouterOutlet } from '@angular/router';
@@ -8,6 +9,7 @@ import { StateService } from './state.service'
 import { MatDialog } from '@angular/material/dialog';
 import { DialogContent } from './dialog-component';
 import { AxesConfig } from './chart-config';
+import { ChartSettingsComponent } from './chart-settings-component';
 
 @Component({
   selector: 'app-root',
@@ -17,7 +19,7 @@ import { AxesConfig } from './chart-config';
   styleUrls: ['./Home-component.css'],
 })
 export class HomeComponent {
-  constructor(private http: HttpClient, private router: Router, private state: StateService, private dialog: MatDialog) {}
+  constructor(private http: HttpClient, private router: Router, private state: StateService, private dialog: MatDialog, private chartDialog: MatDialog) {}
 
   filters: AppConfig["filters"] = [];
   columns: AppConfig["columns"] = [];
@@ -27,6 +29,7 @@ export class HomeComponent {
   modelsInfo: modelsinfo [] = [];
   abortcodeinfo: abortcodeinfo [] = [];
   functionsInfo: functionsinfo [] = [];
+  
   axesConfig: AxesConfig = {
     plots: {},
     visibleplots: {},
@@ -35,6 +38,7 @@ export class HomeComponent {
   };
   readonly numMAXPlots: number = 10;
   buttonGraphDisabled: boolean = true;
+  measuresinfo: measuresinfo[] = [];
 
   ngOnInit() {
 
@@ -581,14 +585,48 @@ export class HomeComponent {
   subShowGraphParams() {
     
     if (this.filterValues['Unit Type'] !== undefined && this.filterValues['Unit Type'] !== '%') { return }
+    
+    let UnitTypeID = this.filterValues['Unit Type'].toString();
+    let key = "Plot" + UnitTypeID.toString();
+
+    if (this.axesConfig.plots[key] == undefined) {
+      this.axesConfig = { ...this.axesConfig, ...this.SetInitGraphParams() };
+    }
+
+    let parameters = {
+      UnitTypeID: this.filterValues['Unit Type'].toString(),
+      CommandType: 1
+    }
+    
+    this.http.post(this.httpconfig.baseurl + '/query/measuresinfo', parameters).subscribe({
+      next: (data: any) => {
+        this.measuresinfo = data;
+      },
+      error: (err) => {
+        console.error("ERRORE BACKEND:", err);
+      }
+    });	
+
+    this.subChartDialogShow();
+
+  }
+
+  SetInitGraphParams(): AxesConfig {
+
+    let axesconfig: AxesConfig = {
+      plots: {},
+      visibleplots: {},
+      plotcolors: {},
+      axesScale: {}
+    };    
 
     //inizializzazione config assi per il tipo di unita (GPlot.ini)
     let UnitTypeID = this.filterValues['Unit Type'].toString();
     let key = "Plot" + UnitTypeID.toString();
-    this.axesConfig.plots[key] = { Plot: [] };
-    this.axesConfig.visibleplots[key] = { Plot: [] };
-    this.axesConfig.plotcolors[key] = { Color: [] };
-    this.axesConfig.axesScale[key] = {
+    axesconfig.plots[key] = { Plot: [] };
+    axesconfig.visibleplots[key] = { Plot: [] };
+    axesconfig.plotcolors[key] = { Color: [] };
+    axesconfig.axesScale[key] = {
       Xmin: [],
       Xmax: [],
       YAxes1MIN: [],
@@ -600,10 +638,26 @@ export class HomeComponent {
       YAxes4MIN: [],
       YAxes4MAX: []
     };
-    
-    
 
+    for (let index = 1; index <= 10; index++) {
+      axesconfig.plots["Plot" + UnitTypeID.toString()].Plot[index] = 0;
+      axesconfig.visibleplots["Plot" + UnitTypeID.toString()].Plot[index] = 0;
+      axesconfig.plotcolors["Plot" + UnitTypeID.toString()].Color[index] = "#FFFFFF";   
+      axesconfig.axesScale["Plot" + UnitTypeID.toString()].Xmin[index] = 0;
+      axesconfig.axesScale["Plot" + UnitTypeID.toString()].Xmax[index] = 0;
+      axesconfig.axesScale["Plot" + UnitTypeID.toString()].YAxes1MIN[index] = 0;
+      axesconfig.axesScale["Plot" + UnitTypeID.toString()].YAxes1MAX[index] = 0;
+      axesconfig.axesScale["Plot" + UnitTypeID.toString()].YAxes2MIN[index] = 0;
+      axesconfig.axesScale["Plot" + UnitTypeID.toString()].YAxes2MAX[index] = 0;
+      axesconfig.axesScale["Plot" + UnitTypeID.toString()].YAxes3MIN[index] = 0;
+      axesconfig.axesScale["Plot" + UnitTypeID.toString()].YAxes3MAX[index] = 0;
+      axesconfig.axesScale["Plot" + UnitTypeID.toString()].YAxes4MIN[index] = 0;
+      axesconfig.axesScale["Plot" + UnitTypeID.toString()].YAxes4MAX[index] = 0;
+    }
+
+    return axesconfig;
   }
+
   subEnableGraphButton() {
     if (this.filterValues['Unit Type'] !== undefined && this.filterValues['Unit Type'] !== '%') {
       this.buttonGraphDisabled = false;
@@ -612,11 +666,26 @@ export class HomeComponent {
     } 
   }
 
+  subChartDialogShow() {
+    const dialogRef = this.chartDialog.open(ChartSettingsComponent, {
+      data: (this.measuresinfo, this.axesConfig),
+      disableClose: false,
+      hasBackdrop: true
+    });
+    dialogRef.afterClosed().subscribe(result => {
+      console.log(`Dialog result: ${result}`);
+    });
+  }
+
   showDialog(message: string, title?: string ) {
-    this.dialog.open(DialogContent, {
+    const dialogRef = this.dialog.open(DialogContent, {
       data: { DialogMessage: message, DialogTitle: title ?? ''},
       disableClose: true,
       hasBackdrop: true,
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      console.log(`Dialog result: ${result}`);
     });
   }
 
