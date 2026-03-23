@@ -5,11 +5,13 @@ import {
   MatDialogContent,
   MatDialogActions,
   MatDialogClose,
+  MatDialog,
 } from '@angular/material/dialog';
 import { MatButtonModule } from '@angular/material/button';
 import { FormsModule } from '@angular/forms';
 import { measuresinfo, AxesConfig, chartsettings } from './chart-config';
 import { MatCheckboxModule } from '@angular/material/checkbox';
+import { DialogContent } from './dialog-component';
 
 @Component({
   selector: 'chart-settings-content',
@@ -20,6 +22,8 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ChartSettingsComponent {
+  constructor(private dialog: MatDialog) {}
+
   readonly DialogTitle = 'Chart Settings';
 
   measuresInfo = inject<measuresinfo[]>(MAT_DIALOG_DATA);
@@ -62,9 +66,43 @@ export class ChartSettingsComponent {
   }
 
   saveSettings() {
+    for (let index = 0; index <= this.chartSettings.measure.length; index++) {
+      if (index == this.chartSettings.measure.length) {return;}
+      if(Number(this.chartSettings.measure[index]) !== 0) {
+        break;
+      }
+    }
+
+    for (let index = 0; index < this.chartSettings.measure.length; index++) {
+      if(Number(this.chartSettings.measure[index]) !== 0) {
+        if(this.chartSettings.enableplot[index] == false) {
+          this.showDialog("You have to enable the plot, if you want to set a measure", "Message");
+          return;
+        }
+        if(this.chartSettings.plotcolor[index] == "#FFFFFF") {
+          this.showDialog("You have to select a color, if you want to set a measure", "Message");
+          return;
+        }
+      }
+    }
+  
+    for (let index = 0; index < this.chartSettings.measure.length; index++) {
+       this.axesConfig.plots[this.UnitTypeIDSelected].Plot[index] = Number(this.chartSettings.measure[index])
+       this.axesConfig.visibleplots[this.UnitTypeIDSelected].Plot[index] = Number(this.chartSettings.enableplot[index])
+       this.axesConfig.plotcolors[this.UnitTypeIDSelected].Color[index] = this.chartSettings.plotcolor[index]
+    }
   }
 
   closeDialog() {
+  }
+
+  showDialog(message: string, title?: string ) {
+    this.dialog.open(DialogContent, {
+      data: { DialogMessage: message, DialogTitle: title ?? ''},
+      disableClose: true,
+      hasBackdrop: true,
+    });
+
   }
 }
 

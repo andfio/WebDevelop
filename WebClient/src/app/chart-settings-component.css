@@ -1,0 +1,35 @@
+.dialog-container {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+}
+
+.dialog-title {
+  font-size: 16px;
+  font-weight: bold;
+  margin-bottom: 20px;
+  border: 4px solid #ccc;
+  padding: 5px;
+}
+
+.measurebox {
+  flex: 0 0 400px;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+
+.colorbox {
+  flex: 0 0 200px;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+
+.enablebox {
+  flex: 0 0 50px;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}

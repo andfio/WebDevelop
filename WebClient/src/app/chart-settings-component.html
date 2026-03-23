@@ -4,7 +4,7 @@
     <div class="dialog-content">
       <mat-dialog-content>
        @for(itemMeasure of axesConfig.plots[UnitTypeIDSelected].Plot; track $index) {
-        <div class="selectbox">
+        <div class="measurebox">
             <select [(ngModel)]="chartSettings.measure[$index]">
               <option [value]="0" selected> none </option>
               @for (item of measuresInfo; track $index) {
@@ -19,7 +19,7 @@
       }
 
       @for(itemColor of axesConfig.plotcolors[UnitTypeIDSelected].Color; track $index) {  
-        <div class="selectbox">
+        <div class="colorbox">
             <select [(ngModel)]="chartSettings.plotcolor[$index]">
               <option [value]="'#FFFFFF'" selected> none </option>
               @for (item of measuresInfo; track $index) {
@@ -34,7 +34,7 @@
        }
 
       @for(itemChecked of axesConfig.visibleplots[UnitTypeIDSelected].Plot; track $index) {  
-        <div class="checkbox" name="item">
+        <div class="enablebox" name="item">
           <mat-checkbox [checked]="itemChecked" (change)="chartSettings.enableplot[$index] = $event.checked"></mat-checkbox>
         </div>
        }

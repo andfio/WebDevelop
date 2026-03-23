@@ -7,6 +7,7 @@ import { Router } from '@angular/router';
 import { RouterOutlet } from '@angular/router';
 import { StateService } from './state.service'
 import { MatDialog } from '@angular/material/dialog';
+import { MatDialogConfig } from '@angular/material/dialog';
 import { DialogContent } from './dialog-component';
 import { AxesConfig } from './chart-config';
 import { ChartSettingsComponent } from './chart-settings-component';
@@ -667,11 +668,13 @@ export class HomeComponent {
   }
 
   subChartDialogShow() {
-    const dialogRef = this.chartDialog.open(ChartSettingsComponent, {
-      data: (this.measuresinfo, this.axesConfig),
-      disableClose: false,
-      hasBackdrop: true
-    });
+    const config = new MatDialogConfig();
+    config.disableClose = false;
+    config.hasBackdrop = true;
+    config.data = { measuresinfo: this.measuresinfo, axesConfig: this.axesConfig };
+    
+    const dialogRef = this.chartDialog.open(ChartSettingsComponent, config);
+    
     dialogRef.afterClosed().subscribe(result => {
       console.log(`Dialog result: ${result}`);
     });
