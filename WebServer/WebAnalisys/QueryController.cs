@@ -496,9 +496,10 @@ namespace WebAnalisys.Controllers
 
             try
             {
-                string sql = "SELECT ComID, ComDescr, UM, ComDescrShort, Axes, OffSet, UnitTypeID FROM Commands";
+                string sql = "SELECT ComID As measureID, ComDescr As description, UM, ComDescrShort As shortname, Axes As axespoistion, OffSet, UnitTypeID FROM Commands";
                 sql += " WHERE UnitTypeID = " + parameters.UnitTypeID;
                 sql += " AND ComType = " + parameters.CommandType;
+                sql += " AND ComVisible = 1";
                 sql += " ORDER BY ComID";
 
                 using (var conn = new SqlConnection(connDBTestString))

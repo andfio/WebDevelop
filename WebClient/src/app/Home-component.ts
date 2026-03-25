@@ -585,34 +585,34 @@ export class HomeComponent {
 
   subShowGraphParams() {
     
-    if (this.filterValues['Unit Type'] !== undefined && this.filterValues['Unit Type'] !== '%') { return }
+    if (this.filterValues['Unit Type'] === undefined || this.filterValues['Unit Type'] === '%') { return }
     
-    let UnitTypeID = this.filterValues['Unit Type'].toString();
-    let key = "Plot" + UnitTypeID.toString();
+    let UnitTypeIDSelected = this.filterValues['Unit Type'].substring(0, this.filterValues['Unit Type'].indexOf("-"));
+    let key = "Plot" + UnitTypeIDSelected.toString();
 
     if (this.axesConfig.plots[key] == undefined) {
-      this.axesConfig = { ...this.axesConfig, ...this.SetInitGraphParams() };
+      this.axesConfig = { ...this.axesConfig, ...this.SetInitGraphParams(key) };
     }
 
     let parameters = {
-      UnitTypeID: this.filterValues['Unit Type'].toString(),
+      UnitTypeID: UnitTypeIDSelected  ,
       CommandType: 1
     }
     
     this.http.post(this.httpconfig.baseurl + '/query/measuresinfo', parameters).subscribe({
       next: (data: any) => {
+        console.log("MEASURES INFO:", data);
         this.measuresinfo = data;
+        this.subChartDialogShow();
       },
       error: (err) => {
         console.error("ERRORE BACKEND:", err);
       }
     });	
 
-    this.subChartDialogShow();
-
   }
 
-  SetInitGraphParams(): AxesConfig {
+  SetInitGraphParams(key: string): AxesConfig {
 
     let axesconfig: AxesConfig = {
       plots: {},
@@ -622,8 +622,6 @@ export class HomeComponent {
     };    
 
     //inizializzazione config assi per il tipo di unita (GPlot.ini)
-    let UnitTypeID = this.filterValues['Unit Type'].toString();
-    let key = "Plot" + UnitTypeID.toString();
     axesconfig.plots[key] = { Plot: [] };
     axesconfig.visibleplots[key] = { Plot: [] };
     axesconfig.plotcolors[key] = { Color: [] };
@@ -640,20 +638,20 @@ export class HomeComponent {
       YAxes4MAX: []
     };
 
-    for (let index = 1; index <= 10; index++) {
-      axesconfig.plots["Plot" + UnitTypeID.toString()].Plot[index] = 0;
-      axesconfig.visibleplots["Plot" + UnitTypeID.toString()].Plot[index] = 0;
-      axesconfig.plotcolors["Plot" + UnitTypeID.toString()].Color[index] = "#FFFFFF";   
-      axesconfig.axesScale["Plot" + UnitTypeID.toString()].Xmin[index] = 0;
-      axesconfig.axesScale["Plot" + UnitTypeID.toString()].Xmax[index] = 0;
-      axesconfig.axesScale["Plot" + UnitTypeID.toString()].YAxes1MIN[index] = 0;
-      axesconfig.axesScale["Plot" + UnitTypeID.toString()].YAxes1MAX[index] = 0;
-      axesconfig.axesScale["Plot" + UnitTypeID.toString()].YAxes2MIN[index] = 0;
-      axesconfig.axesScale["Plot" + UnitTypeID.toString()].YAxes2MAX[index] = 0;
-      axesconfig.axesScale["Plot" + UnitTypeID.toString()].YAxes3MIN[index] = 0;
-      axesconfig.axesScale["Plot" + UnitTypeID.toString()].YAxes3MAX[index] = 0;
-      axesconfig.axesScale["Plot" + UnitTypeID.toString()].YAxes4MIN[index] = 0;
-      axesconfig.axesScale["Plot" + UnitTypeID.toString()].YAxes4MAX[index] = 0;
+    for (let index = 0; index < 10; index++) {
+      axesconfig.plots[key].Plot[index] = -2;
+      axesconfig.visibleplots[key].Plot[index] = false;
+      axesconfig.plotcolors[key].Color[index] = "#FFFFFF";   
+      axesconfig.axesScale[key].Xmin[index] = 0;
+      axesconfig.axesScale[key].Xmax[index] = 0;
+      axesconfig.axesScale[key].YAxes1MIN[index] = 0;
+      axesconfig.axesScale[key].YAxes1MAX[index] = 0;
+      axesconfig.axesScale[key].YAxes2MIN[index] = 0;
+      axesconfig.axesScale[key].YAxes2MAX[index] = 0;
+      axesconfig.axesScale[key].YAxes3MIN[index] = 0;
+      axesconfig.axesScale[key].YAxes3MAX[index] = 0;
+      axesconfig.axesScale[key].YAxes4MIN[index] = 0;
+      axesconfig.axesScale[key].YAxes4MAX[index] = 0;
     }
 
     return axesconfig;
@@ -668,16 +666,21 @@ export class HomeComponent {
   }
 
   subChartDialogShow() {
-    const config = new MatDialogConfig();
-    config.disableClose = false;
-    config.hasBackdrop = true;
-    config.data = { measuresinfo: this.measuresinfo, axesConfig: this.axesConfig };
-    
-    const dialogRef = this.chartDialog.open(ChartSettingsComponent, config);
-    
-    dialogRef.afterClosed().subscribe(result => {
-      console.log(`Dialog result: ${result}`);
+    const dialogRef = this.chartDialog.open(ChartSettingsComponent, {
+      data: { measuresinfo: this.measuresinfo, axesConfig: this.axesConfig },
+      ariaModal: true,
+      disableClose: true,
+      hasBackdrop: true,
+      width: '450px',
+      height: '550px',
+      maxWidth: '450px',
+      maxHeight: '550px',
+      panelClass: 'chart-settings-dialog'      
     });
+    
+    // dialogRef.afterClosed().subscribe((result: any) => {
+    //   console.log(`Dialog result: ${result}`);
+    // });
   }
 
   showDialog(message: string, title?: string ) {
@@ -687,7 +690,7 @@ export class HomeComponent {
       hasBackdrop: true,
     });
 
-    dialogRef.afterClosed().subscribe(result => {
+    dialogRef.afterClosed().subscribe((result: any) => {
       console.log(`Dialog result: ${result}`);
     });
   }

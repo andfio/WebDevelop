@@ -1,49 +1,57 @@
- <div class="dialog-container">
-  <div class="dialog-title" mat-dialog-title>{{ DialogTitle }} </div>
+<div class="dialog-title" mat-dialog-title>
+  {{ DialogTitle }}
+</div>
+
+<div class="dialog-container" >  
 
     <div class="dialog-content">
       <mat-dialog-content>
-       @for(itemMeasure of axesConfig.plots[UnitTypeIDSelected].Plot; track $index) {
-        <div class="measurebox">
-            <select [(ngModel)]="chartSettings.measure[$index]">
-              <option [value]="0" selected> none </option>
-              @for (item of measuresInfo; track $index) {
-                @if(item.measureID == itemMeasure.toString()) {
-                   <option [value]="item.measureID" selected> {{item.shortname}} </option>
-                } @else {
-                   <option [value]="item.measureID"> {{item.shortname}} </option>
-                }
-              }
-            </select>
-        </div>
-      }
+          <div class="label-title">
+            <label id="measuretitle">Measures: </label>
+            <label id="colortitle">Color Plots: </label>
+            <label id="visibletitle">Visible: </label>
+          </div>
 
-      @for(itemColor of axesConfig.plotcolors[UnitTypeIDSelected].Color; track $index) {  
-        <div class="colorbox">
-            <select [(ngModel)]="chartSettings.plotcolor[$index]">
-              <option [value]="'#FFFFFF'" selected> none </option>
-              @for (item of measuresInfo; track $index) {
-                @if(item.measureID == chartSettings.measure[$index].toString()) {
-                   <option [value]="itemColor" [style.background-color]="itemColor" selected> {{getColorName(itemColor)}} </option>
-                } @else {
-                   <option [value]="itemColor" [style.background-color]="itemColor"> {{getColorName(itemColor)}} </option>
-                }
-              }
-            </select>
-        </div>
-       }
+          @for(itemMeasure of axesConfig.plots[UnitTypeIDSelected].Plot; track $index) {
+                <div class="row-container">
+                    <div class="measurebox">
+                        <select [(ngModel)]="chartSettings.measure[$index]">
+                          <option [ngValue]="-2"> none </option>
+                          @for (item of measuresInfo; track item.measureID) {
+                              <option [ngValue]="item.measureID"> {{item.shortname}} </option>
+                          }
+                        </select>
+                    </div>
 
-      @for(itemChecked of axesConfig.visibleplots[UnitTypeIDSelected].Plot; track $index) {  
-        <div class="enablebox" name="item">
-          <mat-checkbox [checked]="itemChecked" (change)="chartSettings.enableplot[$index] = $event.checked"></mat-checkbox>
-        </div>
-       }
+                    @if(axesConfig.plotcolors[UnitTypeIDSelected].Color[$index]; as itemColor) {
+                      <div class="colorbox">
+
+                        <select [(ngModel)]="chartSettings.plotcolor[$index]">
+                          <option [ngValue]="'#FFFFFF'" > none </option>
+                          @for (item of colorItems; track item) {
+                            <option [ngValue]="item" [style.background-color]="item"> {{colorMap[item]}} </option>
+                          }
+                        </select>
+                    
+                      </div>
+                    }        
+                    
+                    <div class="enablebox">
+                      <mat-checkbox
+                        [checked]="axesConfig.visibleplots[UnitTypeIDSelected].Plot[$index] != 0"
+                        (change)="chartSettings.enableplot[$index] = $event.checked">
+                      </mat-checkbox>
+                    </div>
+              </div>
+              
+          }
+
+          <mat-dialog-actions align="end">
+            <button class="dialog-button" matButton cdkFocusInitial (click)="saveSettings()">Save</button>
+            <button class="dialog-button" matButton (click)="closeDialog()">Cancel</button>
+          </mat-dialog-actions>          
 
       </mat-dialog-content>
     </div>
 
-    <mat-dialog-actions align="end">
-      <button class="dialog-button" matButton mat-dialog-close cdkFocusInitial (click)="saveSettings()">Save</button>
-      <button class="dialog-button" matButton mat-dialog-close (click)="closeDialog()">Cancel</button>
-    </mat-dialog-actions>
 </div>

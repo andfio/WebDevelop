@@ -37,7 +37,7 @@ export interface Plots {
 }
 
 export interface StructVisiblePlot {
-  Plot: Number[]
+  Plot: boolean[]
 }
 
 export interface VisiblePlots {
@@ -82,11 +82,11 @@ export interface chartsettings {
 }
 
 export interface measuresinfo {
-  measureID: string;
+  measureID: number;
   description: string;
   shortname: string;
   UM: string;
-  offset: number;
+  offSet: number;
   axesposition: number;
-  unitTypeID: number;
+  UnitTypeID: number;
 }

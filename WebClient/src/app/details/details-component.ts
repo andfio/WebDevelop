@@ -592,7 +592,7 @@ background: any;
     let UnitTypeID = this.row["UnitTypeID"];
     for (let index = 1; index <= this.numMAXPlots; index++) {
       this.axesConfig.plots["Plot" + UnitTypeID.toString()].Plot[index] = 0;
-      this.axesConfig.visibleplots["Plot" + UnitTypeID.toString()].Plot[index] = 0;
+      this.axesConfig.visibleplots["Plot" + UnitTypeID.toString()].Plot[index] = false;
       this.axesConfig.plotcolors["Plot" + UnitTypeID.toString()].Color[index] = "#FFFFFF";   
       this.axesConfig.axesScale["Plot" + UnitTypeID.toString()].Xmin[index] = 0;
       this.axesConfig.axesScale["Plot" + UnitTypeID.toString()].Xmax[index] = 0;

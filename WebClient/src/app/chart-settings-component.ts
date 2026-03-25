@@ -16,27 +16,39 @@ import { DialogContent } from './dialog-component';
 @Component({
   selector: 'chart-settings-content',
   standalone: true,
-  imports: [MatDialogTitle, MatDialogContent, MatDialogActions, MatDialogClose, MatButtonModule, FormsModule, MatCheckboxModule],
+  imports: [ MatDialogContent, MatDialogActions, MatDialogClose, MatButtonModule, FormsModule, MatCheckboxModule],
   templateUrl: './chart-settings-component.html',
   styleUrls: ['./chart-settings-component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ChartSettingsComponent {
-  constructor(private dialog: MatDialog) {}
+  UnitTypeIDSelected: string = "";
+  measuresInfo: any[] = [];
+  axesConfig: any = { };
+  colorItems: any[] = [];
+  iniectObject: any = { };
+  dialogRef: MatDialogClose = {} as MatDialogClose;
+
+  constructor(private dialog: MatDialog) {
+    this.iniectObject = inject(MAT_DIALOG_DATA);
+    this.axesConfig = this.iniectObject.axesConfig; 
+    this.measuresInfo = this.iniectObject.measuresinfo; 
+    this.UnitTypeIDSelected = "Plot" +  this.measuresInfo[0].UnitTypeID.toString();
+    this.colorItems = Object.keys(this.colorMap);
+    this.chartSettings = {
+      measure: this.axesConfig.plots[this.UnitTypeIDSelected].Plot,
+      plotcolor: this.axesConfig.plotcolors[this.UnitTypeIDSelected].Color,
+      enableplot: this.axesConfig.visibleplots[this.UnitTypeIDSelected].Plot
+    }
+  }
 
   readonly DialogTitle = 'Chart Settings';
-
-  measuresInfo = inject<measuresinfo[]>(MAT_DIALOG_DATA);
-  axesConfig: AxesConfig =inject<AxesConfig>(MAT_DIALOG_DATA);
 
   chartSettings: chartsettings = {
     measure: [],
     plotcolor: [],
     enableplot: []
   };
-
-  UnitTypeIDSelected: string = "Plot" +  this.measuresInfo[0].unitTypeID.toString();
-  MeasureIDSelected: string = "";
 
   colorMap: { [key: string]: string } = {
   "#000000": "black",
@@ -61,24 +73,21 @@ export class ChartSettingsComponent {
   "#dc143c": "crimson"
   };
 
-  getColorName(hex: string): string {
+  getColorName(hex: any): string {
     return this.colorMap[hex.toLowerCase()] || "unknown";
   }
 
   saveSettings() {
     for (let index = 0; index <= this.chartSettings.measure.length; index++) {
       if (index == this.chartSettings.measure.length) {return;}
-      if(Number(this.chartSettings.measure[index]) !== 0) {
+      if(Number(this.chartSettings.measure[index]) !== -2) {
         break;
       }
     }
 
     for (let index = 0; index < this.chartSettings.measure.length; index++) {
-      if(Number(this.chartSettings.measure[index]) !== 0) {
-        if(this.chartSettings.enableplot[index] == false) {
-          this.showDialog("You have to enable the plot, if you want to set a measure", "Message");
-          return;
-        }
+      if(Number(this.chartSettings.measure[index]) !== -2) {
+
         if(this.chartSettings.plotcolor[index] == "#FFFFFF") {
           this.showDialog("You have to select a color, if you want to set a measure", "Message");
           return;
@@ -88,12 +97,18 @@ export class ChartSettingsComponent {
   
     for (let index = 0; index < this.chartSettings.measure.length; index++) {
        this.axesConfig.plots[this.UnitTypeIDSelected].Plot[index] = Number(this.chartSettings.measure[index])
-       this.axesConfig.visibleplots[this.UnitTypeIDSelected].Plot[index] = Number(this.chartSettings.enableplot[index])
+       this.axesConfig.visibleplots[this.UnitTypeIDSelected].Plot[index] = Boolean(this.chartSettings.enableplot[index])
        this.axesConfig.plotcolors[this.UnitTypeIDSelected].Color[index] = this.chartSettings.plotcolor[index]
     }
+
+    this.dialog.closeAll();
+    this.dialog.afterAllClosed.subscribe(() => {
+      this.dialogRef.dialogResult = this.axesConfig;
+    });
   }
 
   closeDialog() {
+    this.dialog.closeAll();
   }
 
   showDialog(message: string, title?: string ) {
