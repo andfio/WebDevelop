@@ -41,10 +41,10 @@ background: any;
   functionsInfo: functionsinfo[] = [];
 
   axesConfig: AxesConfig = {
-    plots: {},
-    visibleplots: {},
-    plotcolors: {},
-    axesScale: {}
+    Plots: {},
+    VisiblePlots: {},
+    PlotColors: {},
+    AxesScale: {}
   };
   readonly numMAXPlots: number = 10;
 
@@ -571,8 +571,8 @@ background: any;
 
   rowChart: any;
   subOnChartPage() {
-    if (this.axesConfig.plots["Plot" + this.row["UnitTypeID"].toString()] === undefined || 
-       this.axesConfig.plots["Plot" + this.row["UnitTypeID"].toString()].Plot.length === 0) {
+    if (this.axesConfig.Plots["Plot" + this.row["UnitTypeID"].toString()] === undefined || 
+       this.axesConfig.Plots["Plot" + this.row["UnitTypeID"].toString()].Plot.length === 0) {
       this.showDialog("No chart configuration found for this Unit Type! Please contact the administrator.", "Chart Configuration Missing");
       return;
     }
@@ -591,19 +591,19 @@ background: any;
   subOnChartParameters() {
     let UnitTypeID = this.row["UnitTypeID"];
     for (let index = 1; index <= this.numMAXPlots; index++) {
-      this.axesConfig.plots["Plot" + UnitTypeID.toString()].Plot[index] = 0;
-      this.axesConfig.visibleplots["Plot" + UnitTypeID.toString()].Plot[index] = false;
-      this.axesConfig.plotcolors["Plot" + UnitTypeID.toString()].Color[index] = "#FFFFFF";   
-      this.axesConfig.axesScale["Plot" + UnitTypeID.toString()].Xmin[index] = 0;
-      this.axesConfig.axesScale["Plot" + UnitTypeID.toString()].Xmax[index] = 0;
-      this.axesConfig.axesScale["Plot" + UnitTypeID.toString()].YAxes1MIN[index] = 0;
-      this.axesConfig.axesScale["Plot" + UnitTypeID.toString()].YAxes1MAX[index] = 0;
-      this.axesConfig.axesScale["Plot" + UnitTypeID.toString()].YAxes2MIN[index] = 0;
-      this.axesConfig.axesScale["Plot" + UnitTypeID.toString()].YAxes2MAX[index] = 0;
-      this.axesConfig.axesScale["Plot" + UnitTypeID.toString()].YAxes3MIN[index] = 0;
-      this.axesConfig.axesScale["Plot" + UnitTypeID.toString()].YAxes3MAX[index] = 0;
-      this.axesConfig.axesScale["Plot" + UnitTypeID.toString()].YAxes4MIN[index] = 0;
-      this.axesConfig.axesScale["Plot" + UnitTypeID.toString()].YAxes4MAX[index] = 0;
+      this.axesConfig.Plots["Plot" + UnitTypeID.toString()].Plot[index] = 0;
+      this.axesConfig.VisiblePlots["Plot" + UnitTypeID.toString()].Plot[index] = false;
+      this.axesConfig.PlotColors["Plot" + UnitTypeID.toString()].Color[index] = "#FFFFFF";   
+      this.axesConfig.AxesScale["Plot" + UnitTypeID.toString()].Xmin[index] = 0;
+      this.axesConfig.AxesScale["Plot" + UnitTypeID.toString()].Xmax[index] = 0;
+      this.axesConfig.AxesScale["Plot" + UnitTypeID.toString()].YAxes1MIN[index] = 0;
+      this.axesConfig.AxesScale["Plot" + UnitTypeID.toString()].YAxes1MAX[index] = 0;
+      this.axesConfig.AxesScale["Plot" + UnitTypeID.toString()].YAxes2MIN[index] = 0;
+      this.axesConfig.AxesScale["Plot" + UnitTypeID.toString()].YAxes2MAX[index] = 0;
+      this.axesConfig.AxesScale["Plot" + UnitTypeID.toString()].YAxes3MIN[index] = 0;
+      this.axesConfig.AxesScale["Plot" + UnitTypeID.toString()].YAxes3MAX[index] = 0;
+      this.axesConfig.AxesScale["Plot" + UnitTypeID.toString()].YAxes4MIN[index] = 0;
+      this.axesConfig.AxesScale["Plot" + UnitTypeID.toString()].YAxes4MAX[index] = 0;
     } 
   }
   

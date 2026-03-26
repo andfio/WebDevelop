@@ -32,10 +32,10 @@ export class HomeComponent {
   functionsInfo: functionsinfo [] = [];
   
   axesConfig: AxesConfig = {
-    plots: {},
-    visibleplots: {},
-    plotcolors: {},
-    axesScale: {}
+    Plots: {},
+    VisiblePlots: {},
+    PlotColors: {},
+    AxesScale: {}
   };
   readonly numMAXPlots: number = 10;
   buttonGraphDisabled: boolean = true;
@@ -590,8 +590,12 @@ export class HomeComponent {
     let UnitTypeIDSelected = this.filterValues['Unit Type'].substring(0, this.filterValues['Unit Type'].indexOf("-"));
     let key = "Plot" + UnitTypeIDSelected.toString();
 
-    if (this.axesConfig.plots[key] == undefined) {
-      this.axesConfig = { ...this.axesConfig, ...this.SetInitGraphParams(key) };
+    if (!this.axesConfig.Plots?.[key]) {
+      let axes = this.SetInitGraphParams(key);
+      this.axesConfig.Plots[key] = axes.Plots[key];
+      this.axesConfig.VisiblePlots[key] = axes.VisiblePlots[key];
+      this.axesConfig.PlotColors[key] = axes.PlotColors[key];
+      this.axesConfig.AxesScale[key] = axes.AxesScale[key];
     }
 
     let parameters = {
@@ -615,17 +619,17 @@ export class HomeComponent {
   SetInitGraphParams(key: string): AxesConfig {
 
     let axesconfig: AxesConfig = {
-      plots: {},
-      visibleplots: {},
-      plotcolors: {},
-      axesScale: {}
+      Plots: {},
+      VisiblePlots: {},
+      PlotColors: {},
+      AxesScale: {}
     };    
 
     //inizializzazione config assi per il tipo di unita (GPlot.ini)
-    axesconfig.plots[key] = { Plot: [] };
-    axesconfig.visibleplots[key] = { Plot: [] };
-    axesconfig.plotcolors[key] = { Color: [] };
-    axesconfig.axesScale[key] = {
+    axesconfig.Plots[key] = { Plot: [] };
+    axesconfig.VisiblePlots[key] = { Plot: [] };
+    axesconfig.PlotColors[key] = { Color: [] };
+    axesconfig.AxesScale[key] = {
       Xmin: [],
       Xmax: [],
       YAxes1MIN: [],
@@ -639,19 +643,19 @@ export class HomeComponent {
     };
 
     for (let index = 0; index < 10; index++) {
-      axesconfig.plots[key].Plot[index] = -2;
-      axesconfig.visibleplots[key].Plot[index] = false;
-      axesconfig.plotcolors[key].Color[index] = "#FFFFFF";   
-      axesconfig.axesScale[key].Xmin[index] = 0;
-      axesconfig.axesScale[key].Xmax[index] = 0;
-      axesconfig.axesScale[key].YAxes1MIN[index] = 0;
-      axesconfig.axesScale[key].YAxes1MAX[index] = 0;
-      axesconfig.axesScale[key].YAxes2MIN[index] = 0;
-      axesconfig.axesScale[key].YAxes2MAX[index] = 0;
-      axesconfig.axesScale[key].YAxes3MIN[index] = 0;
-      axesconfig.axesScale[key].YAxes3MAX[index] = 0;
-      axesconfig.axesScale[key].YAxes4MIN[index] = 0;
-      axesconfig.axesScale[key].YAxes4MAX[index] = 0;
+      axesconfig.Plots[key].Plot[index] = -2;
+      axesconfig.VisiblePlots[key].Plot[index] = false;
+      axesconfig.PlotColors[key].Color[index] = "#FFFFFF";   
+      axesconfig.AxesScale[key].Xmin[index] = 0;
+      axesconfig.AxesScale[key].Xmax[index] = 0;
+      axesconfig.AxesScale[key].YAxes1MIN[index] = 0;
+      axesconfig.AxesScale[key].YAxes1MAX[index] = 0;
+      axesconfig.AxesScale[key].YAxes2MIN[index] = 0;
+      axesconfig.AxesScale[key].YAxes2MAX[index] = 0;
+      axesconfig.AxesScale[key].YAxes3MIN[index] = 0;
+      axesconfig.AxesScale[key].YAxes3MAX[index] = 0;
+      axesconfig.AxesScale[key].YAxes4MIN[index] = 0;
+      axesconfig.AxesScale[key].YAxes4MAX[index] = 0;
     }
 
     return axesconfig;
@@ -678,9 +682,24 @@ export class HomeComponent {
       panelClass: 'chart-settings-dialog'      
     });
     
-    // dialogRef.afterClosed().subscribe((result: any) => {
-    //   console.log(`Dialog result: ${result}`);
-    // });
+    dialogRef.afterClosed().subscribe((result: any) => {
+      if (result !== undefined) {
+        this.axesConfig = result;
+        console.log("Config ricevuta dal dialog:", this.axesConfig);
+
+        this.http.post(this.httpconfig.baseurl + '/query/saveplots', this.axesConfig).subscribe({
+          next: (data: any) => {
+            if(data.success==false) {
+              this.showDialog("Error saving configuration: " + data.message, "Save Error");
+            }
+          },
+          error: (err) => {
+            console.error("ERRORE BACKEND:", err);
+          }
+        });	        
+
+      } 
+    });
   }
 
   showDialog(message: string, title?: string ) {

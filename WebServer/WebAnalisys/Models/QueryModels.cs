@@ -39,12 +39,12 @@ namespace WebAnalisys.Models
 
     public class Plots
     {
-        public string[] Plot { get; set; }
+        public int[] Plot { get; set; }
     }
 
     public class VisiblePlots
     {
-        public string[] Plot { get; set; }
+        public bool[] Plot { get; set; }
     }
 
     public class PlotColors
@@ -54,23 +54,23 @@ namespace WebAnalisys.Models
 
     public class AxesScale
     {
-        public string[] Xmin { get; set; }
-        public string[] Xmax { get; set; }
-        public string[] YAxes1MIN { get; set; }
-        public string[] YAxes1MAX { get; set; }
-        public string[] YAxes2MIN { get; set; }
-        public string[] YAxes2MAX { get; set; }
-        public string[] YAxes3MIN { get; set; }
-        public string[] YAxes3MAX { get; set; }
-        public string[] YAxes4MIN { get; set; }
-        public string[] YAxes4MAX { get; set; }
+        public double[] Xmin { get; set; }
+        public double[] Xmax { get; set; }
+        public double[] YAxes1MIN { get; set; }
+        public double[] YAxes1MAX { get; set; }
+        public double[] YAxes2MIN { get; set; }
+        public double[] YAxes2MAX { get; set; }
+        public double[] YAxes3MIN { get; set; }
+        public double[] YAxes3MAX { get; set; }
+        public double[] YAxes4MIN { get; set; }
+        public double[] YAxes4MAX { get; set; }
     }
 
     public class AxesConfiguration
     {
         public Dictionary<string, Plots> Plots { get; set; } = new Dictionary<string, Plots>();
         public Dictionary<string, VisiblePlots> VisiblePlots { get; set; } = new Dictionary<string, VisiblePlots>();
-        public Dictionary<string, PlotColors> Colors { get; set; } = new Dictionary<string, PlotColors>();
+        public Dictionary<string, PlotColors> PlotColors { get; set; } = new Dictionary<string, PlotColors>();
         public Dictionary<string, AxesScale> AxesScale { get; set; } = new Dictionary<string, AxesScale>();
     }
 }

@@ -12,7 +12,7 @@
             <label id="visibletitle">Visible: </label>
           </div>
 
-          @for(itemMeasure of axesConfig.plots[UnitTypeIDSelected].Plot; track $index) {
+          @for(itemMeasure of axesConfig.Plots[UnitTypeIDSelected].Plot; track $index) {
                 <div class="row-container">
                     <div class="measurebox">
                         <select [(ngModel)]="chartSettings.measure[$index]">
@@ -23,10 +23,10 @@
                         </select>
                     </div>
 
-                    @if(axesConfig.plotcolors[UnitTypeIDSelected].Color[$index]; as itemColor) {
+                    @if(axesConfig.PlotColors[UnitTypeIDSelected].Color[$index]; as itemColor) {
                       <div class="colorbox">
 
-                        <select [(ngModel)]="chartSettings.plotcolor[$index]">
+                        <select [(ngModel)]="chartSettings.plotcolor[$index]" [style.background-color]="chartSettings.plotcolor[$index]">
                           <option [ngValue]="'#FFFFFF'" > none </option>
                           @for (item of colorItems; track item) {
                             <option [ngValue]="item" [style.background-color]="item"> {{colorMap[item]}} </option>
@@ -38,7 +38,7 @@
                     
                     <div class="enablebox">
                       <mat-checkbox
-                        [checked]="axesConfig.visibleplots[UnitTypeIDSelected].Plot[$index] != 0"
+                        [checked]="axesConfig.VisiblePlots[UnitTypeIDSelected].Plot[$index] != 0"
                         (change)="chartSettings.enableplot[$index] = $event.checked">
                       </mat-checkbox>
                     </div>

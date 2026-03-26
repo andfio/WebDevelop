@@ -69,10 +69,10 @@ export interface AxesScale {
 }
 
 export interface AxesConfig {
-  plots: Plots;
-  visibleplots: VisiblePlots;
-  plotcolors: PlotColors;
-  axesScale: AxesScale;
+  Plots: Plots;
+  VisiblePlots: VisiblePlots;
+  PlotColors: PlotColors;
+  AxesScale: AxesScale;
 }
 
 export interface chartsettings {

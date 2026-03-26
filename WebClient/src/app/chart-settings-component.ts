@@ -5,6 +5,7 @@ import {
   MatDialogContent,
   MatDialogActions,
   MatDialogClose,
+  MatDialogRef,
   MatDialog,
 } from '@angular/material/dialog';
 import { MatButtonModule } from '@angular/material/button';
@@ -12,6 +13,12 @@ import { FormsModule } from '@angular/forms';
 import { measuresinfo, AxesConfig, chartsettings } from './chart-config';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { DialogContent } from './dialog-component';
+
+interface ChartSettingsDialogData {
+  axesConfig: AxesConfig;
+  measuresinfo: measuresinfo[];
+}
+
 
 @Component({
   selector: 'chart-settings-content',
@@ -26,19 +33,17 @@ export class ChartSettingsComponent {
   measuresInfo: any[] = [];
   axesConfig: any = { };
   colorItems: any[] = [];
-  iniectObject: any = { };
-  dialogRef: MatDialogClose = {} as MatDialogClose;
-
-  constructor(private dialog: MatDialog) {
-    this.iniectObject = inject(MAT_DIALOG_DATA);
-    this.axesConfig = this.iniectObject.axesConfig; 
-    this.measuresInfo = this.iniectObject.measuresinfo; 
+  
+  constructor(private dialog: MatDialog, private dialogRef: MatDialogRef<ChartSettingsComponent, AxesConfig | undefined>) {
+    const iniectObject = inject<ChartSettingsDialogData>(MAT_DIALOG_DATA);
+    this.measuresInfo = iniectObject.measuresinfo; 
+    this.axesConfig = structuredClone(iniectObject.axesConfig);
     this.UnitTypeIDSelected = "Plot" +  this.measuresInfo[0].UnitTypeID.toString();
     this.colorItems = Object.keys(this.colorMap);
     this.chartSettings = {
-      measure: this.axesConfig.plots[this.UnitTypeIDSelected].Plot,
-      plotcolor: this.axesConfig.plotcolors[this.UnitTypeIDSelected].Color,
-      enableplot: this.axesConfig.visibleplots[this.UnitTypeIDSelected].Plot
+      measure: this.axesConfig.Plots[this.UnitTypeIDSelected].Plot,
+      plotcolor: this.axesConfig.PlotColors[this.UnitTypeIDSelected].Color,
+      enableplot: this.axesConfig.VisiblePlots[this.UnitTypeIDSelected].Plot
     }
   }
 
@@ -96,19 +101,16 @@ export class ChartSettingsComponent {
     }
   
     for (let index = 0; index < this.chartSettings.measure.length; index++) {
-       this.axesConfig.plots[this.UnitTypeIDSelected].Plot[index] = Number(this.chartSettings.measure[index])
-       this.axesConfig.visibleplots[this.UnitTypeIDSelected].Plot[index] = Boolean(this.chartSettings.enableplot[index])
-       this.axesConfig.plotcolors[this.UnitTypeIDSelected].Color[index] = this.chartSettings.plotcolor[index]
+       this.axesConfig.Plots[this.UnitTypeIDSelected].Plot[index] = Number(this.chartSettings.measure[index])
+       this.axesConfig.VisiblePlots[this.UnitTypeIDSelected].Plot[index] = Boolean(this.chartSettings.enableplot[index])
+       this.axesConfig.PlotColors[this.UnitTypeIDSelected].Color[index] = this.chartSettings.plotcolor[index]
     }
 
-    this.dialog.closeAll();
-    this.dialog.afterAllClosed.subscribe(() => {
-      this.dialogRef.dialogResult = this.axesConfig;
-    });
+    this.dialogRef.close(this.axesConfig);
   }
 
   closeDialog() {
-    this.dialog.closeAll();
+    this.dialogRef.close(undefined);
   }
 
   showDialog(message: string, title?: string ) {
@@ -119,5 +121,6 @@ export class ChartSettingsComponent {
     });
 
   }
+
 }
 
