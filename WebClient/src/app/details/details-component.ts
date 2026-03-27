@@ -5,7 +5,8 @@ import { HttpClient } from '@angular/common/http';
 import { AppConfig, tableinfo, StructUnitsInfo, functionsinfo} from '../app.config.json';
 import { DialogContent } from '../dialog-component';
 import { MatDialog } from '@angular/material/dialog';
-import { AxesConfig } from '../chart-config';
+import { AxesConfig, measuresinfo} from '../chart-config';
+import { ChartSettingsComponent } from '../chart-settings-component';
 
 @Component({
   selector: 'app-details',
@@ -17,7 +18,7 @@ import { AxesConfig } from '../chart-config';
 export class DetailsdataComponent {
 background: any;
 
-  constructor(private router: Router, private http: HttpClient, private dialog: MatDialog) {}
+  constructor(private router: Router, private http: HttpClient, private dialog: MatDialog, private chartDialog: MatDialog) {}
   
   goBack() {
     this.router.navigate(['/']);
@@ -47,6 +48,7 @@ background: any;
     AxesScale: {}
   };
   readonly numMAXPlots: number = 10;
+  measuresinfo: measuresinfo[] = [];
 
   ngOnInit() {
     this.row = history.state.rowData;
@@ -571,12 +573,12 @@ background: any;
 
   rowChart: any;
   subOnChartPage() {
-    if (this.axesConfig.Plots["Plot" + this.row["UnitTypeID"].toString()] === undefined || 
-       this.axesConfig.Plots["Plot" + this.row["UnitTypeID"].toString()].Plot.length === 0) {
-      this.showDialog("No chart configuration found for this Unit Type! Please contact the administrator.", "Chart Configuration Missing");
-      return;
+    if (!this.axesConfig.Plots?.["Plot" + this.row["UnitTypeID"].toString()])  {
+      if (!this.subShowGraphParams()) {
+        return;
+      }
     }
-    
+
     this.rowChart = this.subGetInformation();
     this.router.navigate(['/pagina-chart'] , { state: { 
                                                         rowData: this.rowChart, 
@@ -586,25 +588,6 @@ background: any;
                                                         axesConfig: this.axesConfig,
                                                         httpConfig: this.httpConfig } 
     });
-  }
-
-  subOnChartParameters() {
-    let UnitTypeID = this.row["UnitTypeID"];
-    for (let index = 1; index <= this.numMAXPlots; index++) {
-      this.axesConfig.Plots["Plot" + UnitTypeID.toString()].Plot[index] = 0;
-      this.axesConfig.VisiblePlots["Plot" + UnitTypeID.toString()].Plot[index] = false;
-      this.axesConfig.PlotColors["Plot" + UnitTypeID.toString()].Color[index] = "#FFFFFF";   
-      this.axesConfig.AxesScale["Plot" + UnitTypeID.toString()].Xmin[index] = 0;
-      this.axesConfig.AxesScale["Plot" + UnitTypeID.toString()].Xmax[index] = 0;
-      this.axesConfig.AxesScale["Plot" + UnitTypeID.toString()].YAxes1MIN[index] = 0;
-      this.axesConfig.AxesScale["Plot" + UnitTypeID.toString()].YAxes1MAX[index] = 0;
-      this.axesConfig.AxesScale["Plot" + UnitTypeID.toString()].YAxes2MIN[index] = 0;
-      this.axesConfig.AxesScale["Plot" + UnitTypeID.toString()].YAxes2MAX[index] = 0;
-      this.axesConfig.AxesScale["Plot" + UnitTypeID.toString()].YAxes3MIN[index] = 0;
-      this.axesConfig.AxesScale["Plot" + UnitTypeID.toString()].YAxes3MAX[index] = 0;
-      this.axesConfig.AxesScale["Plot" + UnitTypeID.toString()].YAxes4MIN[index] = 0;
-      this.axesConfig.AxesScale["Plot" + UnitTypeID.toString()].YAxes4MAX[index] = 0;
-    } 
   }
   
   subGetInformation(): any {
@@ -634,6 +617,123 @@ background: any;
         info[col.field]  = itemValue.toString().slice(0, 30) + (itemValue.toString().length > 30 ? "..." : ""); 
     });
     return info;
-  } 
+  }
+  
+  subShowGraphParams(): boolean {
+    
+    let parameters = {
+      UnitTypeID: this.row["UnitTypeID"],
+      CommandType: 1
+    }
+
+    let configSaved = false;
+    this.http.post(this.httpConfig.baseurl + '/query/measuresinfo', parameters).subscribe({
+      next: (data: any) => {
+        console.log("MEASURES INFO:", data);
+        this.measuresinfo = data;
+        if (!this.subChartDialogShow()) {
+          configSaved = false;
+        }
+        configSaved = true;
+      },
+      error: (err) => {
+        console.error("ERRORE BACKEND:", err);
+        configSaved = false;
+      }
+    });	
+
+    setTimeout(() => {
+      return configSaved;
+    }, 0);    
+
+    return false;
+  }
+
+  SetInitGraphParams(key: string): AxesConfig {
+
+    let axesconfig: AxesConfig = {
+      Plots: {},
+      VisiblePlots: {},
+      PlotColors: {},
+      AxesScale: {}
+    };    
+
+    //inizializzazione config assi per il tipo di unita (GPlot.ini)
+    axesconfig.Plots[key] = { Plot: [] };
+    axesconfig.VisiblePlots[key] = { Plot: [] };
+    axesconfig.PlotColors[key] = { Color: [] };
+    axesconfig.AxesScale[key] = {
+      Xmin: [],
+      Xmax: [],
+      YAxes1MIN: [],
+      YAxes1MAX: [],
+      YAxes2MIN: [],
+      YAxes2MAX: [],
+      YAxes3MIN: [],
+      YAxes3MAX: [],
+      YAxes4MIN: [],
+      YAxes4MAX: []
+    };
+
+    for (let index = 0; index < 10; index++) {
+      axesconfig.Plots[key].Plot[index] = -2;
+      axesconfig.VisiblePlots[key].Plot[index] = false;
+      axesconfig.PlotColors[key].Color[index] = "#FFFFFF";   
+      axesconfig.AxesScale[key].Xmin[index] = 0;
+      axesconfig.AxesScale[key].Xmax[index] = 0;
+      axesconfig.AxesScale[key].YAxes1MIN[index] = 0;
+      axesconfig.AxesScale[key].YAxes1MAX[index] = 0;
+      axesconfig.AxesScale[key].YAxes2MIN[index] = 0;
+      axesconfig.AxesScale[key].YAxes2MAX[index] = 0;
+      axesconfig.AxesScale[key].YAxes3MIN[index] = 0;
+      axesconfig.AxesScale[key].YAxes3MAX[index] = 0;
+      axesconfig.AxesScale[key].YAxes4MIN[index] = 0;
+      axesconfig.AxesScale[key].YAxes4MAX[index] = 0;
+    }
+
+    return axesconfig;
+  }
+
+    subChartDialogShow(): boolean {
+      const dialogRef = this.chartDialog.open(ChartSettingsComponent, {
+        data: { measuresinfo: this.measuresinfo, axesConfig: this.axesConfig },
+        ariaModal: true,
+        disableClose: true,
+        hasBackdrop: true,
+        width: '450px',
+        height: '550px',
+        maxWidth: '450px',
+        maxHeight: '550px',
+        panelClass: 'chart-settings-dialog'      
+      });
+      
+      dialogRef.afterClosed().subscribe((result: any) => {
+        if (result !== undefined) {
+  
+          this.http.post(this.httpConfig.baseurl + '/query/saveplots', this.axesConfig).subscribe({
+            next: (data: any) => {
+              if(data.success==false) {
+                this.showDialog("Error saving configuration: " + data.message, "Save Error");
+                return false;
+              }
+              else {
+                this.axesConfig = result;
+                console.log("Config ricevuta dal dialog:", this.axesConfig);
+                return true;
+              }  
+            },
+            error: (err) => {
+              console.error("ERRORE BACKEND:", err);
+              return false;
+            }
+          });	        
+          return false;
+        }
+        else {
+          return false;
+        } 
+      });
+      return false;
+    }
 
 }

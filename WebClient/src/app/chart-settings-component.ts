@@ -23,7 +23,7 @@ interface ChartSettingsDialogData {
 @Component({
   selector: 'chart-settings-content',
   standalone: true,
-  imports: [ MatDialogContent, MatDialogActions, MatDialogClose, MatButtonModule, FormsModule, MatCheckboxModule],
+  imports: [ MatDialogContent, MatDialogActions, MatButtonModule, FormsModule, MatCheckboxModule],
   templateUrl: './chart-settings-component.html',
   styleUrls: ['./chart-settings-component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -40,6 +40,15 @@ export class ChartSettingsComponent {
     this.axesConfig = structuredClone(iniectObject.axesConfig);
     this.UnitTypeIDSelected = "Plot" +  this.measuresInfo[0].UnitTypeID.toString();
     this.colorItems = Object.keys(this.colorMap);
+
+    if (!this.axesConfig.Plots?.[this.UnitTypeIDSelected]) {
+      let axes = this.SetInitGraphParams(this.UnitTypeIDSelected);
+      this.axesConfig.Plots[this.UnitTypeIDSelected] = axes.Plots[this.UnitTypeIDSelected];
+      this.axesConfig.VisiblePlots[this.UnitTypeIDSelected] = axes.VisiblePlots[this.UnitTypeIDSelected];
+      this.axesConfig.PlotColors[this.UnitTypeIDSelected] = axes.PlotColors[this.UnitTypeIDSelected];
+      this.axesConfig.AxesScale[this.UnitTypeIDSelected] = axes.AxesScale[this.UnitTypeIDSelected];
+    }
+
     this.chartSettings = {
       measure: this.axesConfig.Plots[this.UnitTypeIDSelected].Plot,
       plotcolor: this.axesConfig.PlotColors[this.UnitTypeIDSelected].Color,
@@ -120,6 +129,51 @@ export class ChartSettingsComponent {
       hasBackdrop: true,
     });
 
+  }
+
+  SetInitGraphParams(key: string): AxesConfig {
+
+    let axesconfig: AxesConfig = {
+      Plots: {},
+      VisiblePlots: {},
+      PlotColors: {},
+      AxesScale: {}
+    };    
+
+    //inizializzazione config assi per il tipo di unita (GPlot.ini)
+    axesconfig.Plots[key] = { Plot: [] };
+    axesconfig.VisiblePlots[key] = { Plot: [] };
+    axesconfig.PlotColors[key] = { Color: [] };
+    axesconfig.AxesScale[key] = {
+      Xmin: [],
+      Xmax: [],
+      YAxes1MIN: [],
+      YAxes1MAX: [],
+      YAxes2MIN: [],
+      YAxes2MAX: [],
+      YAxes3MIN: [],
+      YAxes3MAX: [],
+      YAxes4MIN: [],
+      YAxes4MAX: []
+    };
+
+    for (let index = 0; index < 10; index++) {
+      axesconfig.Plots[key].Plot[index] = -2;
+      axesconfig.VisiblePlots[key].Plot[index] = false;
+      axesconfig.PlotColors[key].Color[index] = "#FFFFFF";   
+      axesconfig.AxesScale[key].Xmin[index] = 0;
+      axesconfig.AxesScale[key].Xmax[index] = 0;
+      axesconfig.AxesScale[key].YAxes1MIN[index] = 0;
+      axesconfig.AxesScale[key].YAxes1MAX[index] = 0;
+      axesconfig.AxesScale[key].YAxes2MIN[index] = 0;
+      axesconfig.AxesScale[key].YAxes2MAX[index] = 0;
+      axesconfig.AxesScale[key].YAxes3MIN[index] = 0;
+      axesconfig.AxesScale[key].YAxes3MAX[index] = 0;
+      axesconfig.AxesScale[key].YAxes4MIN[index] = 0;
+      axesconfig.AxesScale[key].YAxes4MAX[index] = 0;
+    }
+
+    return axesconfig;
   }
 
 }

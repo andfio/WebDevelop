@@ -7,7 +7,6 @@ import { Router } from '@angular/router';
 import { RouterOutlet } from '@angular/router';
 import { StateService } from './state.service'
 import { MatDialog } from '@angular/material/dialog';
-import { MatDialogConfig } from '@angular/material/dialog';
 import { DialogContent } from './dialog-component';
 import { AxesConfig } from './chart-config';
 import { ChartSettingsComponent } from './chart-settings-component';
@@ -588,18 +587,8 @@ export class HomeComponent {
     if (this.filterValues['Unit Type'] === undefined || this.filterValues['Unit Type'] === '%') { return }
     
     let UnitTypeIDSelected = this.filterValues['Unit Type'].substring(0, this.filterValues['Unit Type'].indexOf("-"));
-    let key = "Plot" + UnitTypeIDSelected.toString();
-
-    if (!this.axesConfig.Plots?.[key]) {
-      let axes = this.SetInitGraphParams(key);
-      this.axesConfig.Plots[key] = axes.Plots[key];
-      this.axesConfig.VisiblePlots[key] = axes.VisiblePlots[key];
-      this.axesConfig.PlotColors[key] = axes.PlotColors[key];
-      this.axesConfig.AxesScale[key] = axes.AxesScale[key];
-    }
-
     let parameters = {
-      UnitTypeID: UnitTypeIDSelected  ,
+      UnitTypeID: UnitTypeIDSelected,
       CommandType: 1
     }
     
@@ -614,51 +603,6 @@ export class HomeComponent {
       }
     });	
 
-  }
-
-  SetInitGraphParams(key: string): AxesConfig {
-
-    let axesconfig: AxesConfig = {
-      Plots: {},
-      VisiblePlots: {},
-      PlotColors: {},
-      AxesScale: {}
-    };    
-
-    //inizializzazione config assi per il tipo di unita (GPlot.ini)
-    axesconfig.Plots[key] = { Plot: [] };
-    axesconfig.VisiblePlots[key] = { Plot: [] };
-    axesconfig.PlotColors[key] = { Color: [] };
-    axesconfig.AxesScale[key] = {
-      Xmin: [],
-      Xmax: [],
-      YAxes1MIN: [],
-      YAxes1MAX: [],
-      YAxes2MIN: [],
-      YAxes2MAX: [],
-      YAxes3MIN: [],
-      YAxes3MAX: [],
-      YAxes4MIN: [],
-      YAxes4MAX: []
-    };
-
-    for (let index = 0; index < 10; index++) {
-      axesconfig.Plots[key].Plot[index] = -2;
-      axesconfig.VisiblePlots[key].Plot[index] = false;
-      axesconfig.PlotColors[key].Color[index] = "#FFFFFF";   
-      axesconfig.AxesScale[key].Xmin[index] = 0;
-      axesconfig.AxesScale[key].Xmax[index] = 0;
-      axesconfig.AxesScale[key].YAxes1MIN[index] = 0;
-      axesconfig.AxesScale[key].YAxes1MAX[index] = 0;
-      axesconfig.AxesScale[key].YAxes2MIN[index] = 0;
-      axesconfig.AxesScale[key].YAxes2MAX[index] = 0;
-      axesconfig.AxesScale[key].YAxes3MIN[index] = 0;
-      axesconfig.AxesScale[key].YAxes3MAX[index] = 0;
-      axesconfig.AxesScale[key].YAxes4MIN[index] = 0;
-      axesconfig.AxesScale[key].YAxes4MAX[index] = 0;
-    }
-
-    return axesconfig;
   }
 
   subEnableGraphButton() {
@@ -684,14 +628,16 @@ export class HomeComponent {
     
     dialogRef.afterClosed().subscribe((result: any) => {
       if (result !== undefined) {
-        this.axesConfig = result;
-        console.log("Config ricevuta dal dialog:", this.axesConfig);
 
         this.http.post(this.httpconfig.baseurl + '/query/saveplots', this.axesConfig).subscribe({
           next: (data: any) => {
             if(data.success==false) {
               this.showDialog("Error saving configuration: " + data.message, "Save Error");
             }
+            else {
+              this.axesConfig = result;
+              console.log("Config ricevuta dal dialog:", this.axesConfig);
+            }    
           },
           error: (err) => {
             console.error("ERRORE BACKEND:", err);
