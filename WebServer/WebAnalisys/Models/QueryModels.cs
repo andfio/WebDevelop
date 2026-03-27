@@ -54,16 +54,16 @@ namespace WebAnalisys.Models
 
     public class AxesScale
     {
-        public double[] Xmin { get; set; }
-        public double[] Xmax { get; set; }
-        public double[] YAxes1MIN { get; set; }
-        public double[] YAxes1MAX { get; set; }
-        public double[] YAxes2MIN { get; set; }
-        public double[] YAxes2MAX { get; set; }
-        public double[] YAxes3MIN { get; set; }
-        public double[] YAxes3MAX { get; set; }
-        public double[] YAxes4MIN { get; set; }
-        public double[] YAxes4MAX { get; set; }
+        public double Xmin { get; set; }
+        public double Xmax { get; set; }
+        public double YAxes1MIN { get; set; }
+        public double YAxes1MAX { get; set; }
+        public double YAxes2MIN { get; set; }
+        public double YAxes2MAX { get; set; }
+        public double YAxes3MIN { get; set; }
+        public double YAxes3MAX { get; set; }
+        public double YAxes4MIN { get; set; }
+        public double YAxes4MAX { get; set; }
     }
 
     public class AxesConfiguration

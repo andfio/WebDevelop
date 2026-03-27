@@ -145,32 +145,32 @@ export class ChartSettingsComponent {
     axesconfig.VisiblePlots[key] = { Plot: [] };
     axesconfig.PlotColors[key] = { Color: [] };
     axesconfig.AxesScale[key] = {
-      Xmin: [],
-      Xmax: [],
-      YAxes1MIN: [],
-      YAxes1MAX: [],
-      YAxes2MIN: [],
-      YAxes2MAX: [],
-      YAxes3MIN: [],
-      YAxes3MAX: [],
-      YAxes4MIN: [],
-      YAxes4MAX: []
+      Xmin: 0,
+      Xmax: 0,
+      YAxes1MIN: 0,
+      YAxes1MAX: 0,
+      YAxes2MIN: 0,
+      YAxes2MAX: 0,
+      YAxes3MIN: 0,
+      YAxes3MAX: 0,
+      YAxes4MIN: 0,
+      YAxes4MAX: 0
     };
 
     for (let index = 0; index < 10; index++) {
       axesconfig.Plots[key].Plot[index] = -2;
       axesconfig.VisiblePlots[key].Plot[index] = false;
       axesconfig.PlotColors[key].Color[index] = "#FFFFFF";   
-      axesconfig.AxesScale[key].Xmin[index] = 0;
-      axesconfig.AxesScale[key].Xmax[index] = 0;
-      axesconfig.AxesScale[key].YAxes1MIN[index] = 0;
-      axesconfig.AxesScale[key].YAxes1MAX[index] = 0;
-      axesconfig.AxesScale[key].YAxes2MIN[index] = 0;
-      axesconfig.AxesScale[key].YAxes2MAX[index] = 0;
-      axesconfig.AxesScale[key].YAxes3MIN[index] = 0;
-      axesconfig.AxesScale[key].YAxes3MAX[index] = 0;
-      axesconfig.AxesScale[key].YAxes4MIN[index] = 0;
-      axesconfig.AxesScale[key].YAxes4MAX[index] = 0;
+      axesconfig.AxesScale[key].Xmin = 0;
+      axesconfig.AxesScale[key].Xmax = 0;
+      axesconfig.AxesScale[key].YAxes1MIN = 0;
+      axesconfig.AxesScale[key].YAxes1MAX = 0;
+      axesconfig.AxesScale[key].YAxes2MIN = 0;
+      axesconfig.AxesScale[key].YAxes2MAX = 0;
+      axesconfig.AxesScale[key].YAxes3MIN = 0;
+      axesconfig.AxesScale[key].YAxes3MAX = 0;
+      axesconfig.AxesScale[key].YAxes4MIN = 0;
+      axesconfig.AxesScale[key].YAxes4MAX = 0;
     }
 
     return axesconfig;

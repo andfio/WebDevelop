@@ -854,28 +854,41 @@ export class ChartComponent {
     UnitTypeID = UnitTypeID.substring(0, UnitTypeID.indexOf("-") - 1)
     
     let key = "Plot" + UnitTypeID.toString();
-
-      
     
-    for (let index = 1; index <= 10; index++) {
-      this.axesConfig.Plots["Plot" + UnitTypeID.toString()].Plot[index] = 0;
-      this.axesConfig.VisiblePlots["Plot" + UnitTypeID.toString()].Plot[index] = false;
-      this.axesConfig.PlotColors["Plot" + UnitTypeID.toString()].Color[index] = "#FFFFFF";   
-      this.axesConfig.AxesScale["Plot" + UnitTypeID.toString()].Xmin[index] = 0;
-      this.axesConfig.AxesScale["Plot" + UnitTypeID.toString()].Xmax[index] = 0;
-      this.axesConfig.AxesScale["Plot" + UnitTypeID.toString()].YAxes1MIN[index] = 0;
-      this.axesConfig.AxesScale["Plot" + UnitTypeID.toString()].YAxes1MAX[index] = 0;
-      this.axesConfig.AxesScale["Plot" + UnitTypeID.toString()].YAxes2MIN[index] = 0;
-      this.axesConfig.AxesScale["Plot" + UnitTypeID.toString()].YAxes2MAX[index] = 0;
-      this.axesConfig.AxesScale["Plot" + UnitTypeID.toString()].YAxes3MIN[index] = 0;
-      this.axesConfig.AxesScale["Plot" + UnitTypeID.toString()].YAxes3MAX[index] = 0;
-      this.axesConfig.AxesScale["Plot" + UnitTypeID.toString()].YAxes4MIN[index] = 0;
-      this.axesConfig.AxesScale["Plot" + UnitTypeID.toString()].YAxes4MAX[index] = 0;
+    for (let index = 0; index < this.AxisValues.length; index++) {
+      
+      if (this.AxisValues[index].enabled == true) {
+        switch (index) {
+          case 0: 
+            this.axesConfig.AxesScale[key].Xmin = this.AxisValues[index].textMin;
+            this.axesConfig.AxesScale[key].Xmax = this.AxisValues[index].textMax;
+            break;
+          case 1:
+            this.axesConfig.AxesScale[key].YAxes1MIN = this.AxisValues[index].textMin;
+            this.axesConfig.AxesScale[key].YAxes1MAX = this.AxisValues[index].textMax;
+            break;
+          case 2:
+            this.axesConfig.AxesScale[key].YAxes2MIN = this.AxisValues[index].textMin;
+            this.axesConfig.AxesScale[key].YAxes2MAX = this.AxisValues[index].textMax;
+            break;
+          case 3:
+            this.axesConfig.AxesScale[key].YAxes3MIN = this.AxisValues[index].textMin;
+            this.axesConfig.AxesScale[key].YAxes3MAX = this.AxisValues[index].textMax;
+            break;
+          case 4:
+            this.axesConfig.AxesScale[key].YAxes4MIN = this.AxisValues[index].textMin;
+            this.axesConfig.AxesScale[key].YAxes4MAX = this.AxisValues[index].textMax;    
+            break;
+        }
+
+      }  
     }
+
+
     this.http.post(this.httpConfig.baseurl + '/query/saveplots', this.axesConfig).subscribe({
       next: (data: any) => {
-        if(data.success==true) {
-          
+        if(data.success==false) {
+            console.error("ERRORE BACKEND:", data.message);   
         }
       },
       error: (err) => {

@@ -649,91 +649,46 @@ background: any;
     return false;
   }
 
-  SetInitGraphParams(key: string): AxesConfig {
+  subChartDialogShow(): boolean {
+    const dialogRef = this.chartDialog.open(ChartSettingsComponent, {
+      data: { measuresinfo: this.measuresinfo, axesConfig: this.axesConfig },
+      ariaModal: true,
+      disableClose: true,
+      hasBackdrop: true,
+      width: '450px',
+      height: '550px',
+      maxWidth: '450px',
+      maxHeight: '550px',
+      panelClass: 'chart-settings-dialog'      
+    });
+    
+    dialogRef.afterClosed().subscribe((result: any) => {
+      if (result !== undefined) {
 
-    let axesconfig: AxesConfig = {
-      Plots: {},
-      VisiblePlots: {},
-      PlotColors: {},
-      AxesScale: {}
-    };    
-
-    //inizializzazione config assi per il tipo di unita (GPlot.ini)
-    axesconfig.Plots[key] = { Plot: [] };
-    axesconfig.VisiblePlots[key] = { Plot: [] };
-    axesconfig.PlotColors[key] = { Color: [] };
-    axesconfig.AxesScale[key] = {
-      Xmin: [],
-      Xmax: [],
-      YAxes1MIN: [],
-      YAxes1MAX: [],
-      YAxes2MIN: [],
-      YAxes2MAX: [],
-      YAxes3MIN: [],
-      YAxes3MAX: [],
-      YAxes4MIN: [],
-      YAxes4MAX: []
-    };
-
-    for (let index = 0; index < 10; index++) {
-      axesconfig.Plots[key].Plot[index] = -2;
-      axesconfig.VisiblePlots[key].Plot[index] = false;
-      axesconfig.PlotColors[key].Color[index] = "#FFFFFF";   
-      axesconfig.AxesScale[key].Xmin[index] = 0;
-      axesconfig.AxesScale[key].Xmax[index] = 0;
-      axesconfig.AxesScale[key].YAxes1MIN[index] = 0;
-      axesconfig.AxesScale[key].YAxes1MAX[index] = 0;
-      axesconfig.AxesScale[key].YAxes2MIN[index] = 0;
-      axesconfig.AxesScale[key].YAxes2MAX[index] = 0;
-      axesconfig.AxesScale[key].YAxes3MIN[index] = 0;
-      axesconfig.AxesScale[key].YAxes3MAX[index] = 0;
-      axesconfig.AxesScale[key].YAxes4MIN[index] = 0;
-      axesconfig.AxesScale[key].YAxes4MAX[index] = 0;
-    }
-
-    return axesconfig;
-  }
-
-    subChartDialogShow(): boolean {
-      const dialogRef = this.chartDialog.open(ChartSettingsComponent, {
-        data: { measuresinfo: this.measuresinfo, axesConfig: this.axesConfig },
-        ariaModal: true,
-        disableClose: true,
-        hasBackdrop: true,
-        width: '450px',
-        height: '550px',
-        maxWidth: '450px',
-        maxHeight: '550px',
-        panelClass: 'chart-settings-dialog'      
-      });
-      
-      dialogRef.afterClosed().subscribe((result: any) => {
-        if (result !== undefined) {
-  
-          this.http.post(this.httpConfig.baseurl + '/query/saveplots', this.axesConfig).subscribe({
-            next: (data: any) => {
-              if(data.success==false) {
-                this.showDialog("Error saving configuration: " + data.message, "Save Error");
-                return false;
-              }
-              else {
-                this.axesConfig = result;
-                console.log("Config ricevuta dal dialog:", this.axesConfig);
-                return true;
-              }  
-            },
-            error: (err) => {
-              console.error("ERRORE BACKEND:", err);
+        this.http.post(this.httpConfig.baseurl + '/query/saveplots', this.axesConfig).subscribe({
+          next: (data: any) => {
+            if(data.success==false) {
+              this.showDialog("Error saving configuration: " + data.message, "Save Error");
               return false;
             }
-          });	        
-          return false;
-        }
-        else {
-          return false;
-        } 
-      });
-      return false;
-    }
+            else {
+              this.axesConfig = result;
+              console.log("Config ricevuta dal dialog:", this.axesConfig);
+              return true;
+            }  
+          },
+          error: (err) => {
+            console.error("ERRORE BACKEND:", err);
+            return false;
+          }
+        });	        
+        return false;
+      }
+      else {
+        return false;
+      } 
+    });
+    return false;  
+  }
 
 }

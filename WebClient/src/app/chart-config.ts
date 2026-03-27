@@ -53,16 +53,16 @@ export interface PlotColors {
 }
 
 export interface StructAxesScale {
-  Xmin: Number[];
-  Xmax: Number[];
-  YAxes1MIN: Number[];
-  YAxes1MAX: Number[];
-  YAxes2MIN: Number[];
-  YAxes2MAX: Number[];
-  YAxes3MIN: Number[];
-  YAxes3MAX: Number[];
-  YAxes4MIN: Number[];
-  YAxes4MAX: Number[];
+  Xmin: Number;
+  Xmax: Number;
+  YAxes1MIN: Number;
+  YAxes1MAX: Number;
+  YAxes2MIN: Number;
+  YAxes2MAX: Number;
+  YAxes3MIN: Number;
+  YAxes3MAX: Number;
+  YAxes4MIN: Number;
+  YAxes4MAX: Number;
 }
 export interface AxesScale {
   [key: string]: StructAxesScale;
