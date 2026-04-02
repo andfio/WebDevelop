@@ -29,7 +29,7 @@ export interface CursorValues {
   id: string
 }
 export interface StructPlot {
-  Plot: Number[]
+  Plot: number[]
 }
 
 export interface Plots {
@@ -53,16 +53,16 @@ export interface PlotColors {
 }
 
 export interface StructAxesScale {
-  Xmin: Number;
-  Xmax: Number;
-  YAxes1MIN: Number;
-  YAxes1MAX: Number;
-  YAxes2MIN: Number;
-  YAxes2MAX: Number;
-  YAxes3MIN: Number;
-  YAxes3MAX: Number;
-  YAxes4MIN: Number;
-  YAxes4MAX: Number;
+  Xmin: number;
+  Xmax: number;
+  YAxes1MIN: number;
+  YAxes1MAX: number;
+  YAxes2MIN: number;
+  YAxes2MAX: number;
+  YAxes3MIN: number;
+  YAxes3MAX: number;
+  YAxes4MIN: number;
+  YAxes4MAX: number;
 }
 export interface AxesScale {
   [key: string]: StructAxesScale;

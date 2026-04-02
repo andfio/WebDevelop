@@ -844,6 +844,30 @@ export class ChartComponent {
   buttonpressed: { [key: string]: boolean } = {}
   LoadXYAxis(button: string) {
     this.buttonpressed[button] = !this.buttonpressed[button];
+
+    let UnitTypeID = this.chartData[this.rootfields.find((x => x.field === 'UnitTypeID')).field];
+    UnitTypeID = UnitTypeID.substring(0, UnitTypeID.indexOf("-") - 1)
+    
+    let key = "Plot" + UnitTypeID.toString();
+
+    this.http.post(this.httpConfig.baseurl + '/query/loadplots', null).subscribe({
+    next: (data: any) => {
+        if(data.success==true) {
+          this.axesConfig = data.config;
+          this.subLoadAxisConfig(key);
+        } 
+        else {
+          if (data.message == "NO_FILE")
+          {
+            console.warn("No plot configuration file found.");
+          };
+        }
+      },
+      error: (err) => {
+        console.error("ERRORE BACKEND:", err);
+      }
+    });	  
+    this.buttonpressed[button] = !this.buttonpressed[button];
   }
   
 
@@ -884,7 +908,6 @@ export class ChartComponent {
       }  
     }
 
-
     this.http.post(this.httpConfig.baseurl + '/query/saveplots', this.axesConfig).subscribe({
       next: (data: any) => {
         if(data.success==false) {
@@ -895,6 +918,7 @@ export class ChartComponent {
         console.error("ERRORE BACKEND:", err);
       }
     });	
+    this.buttonpressed[button] = !this.buttonpressed[button];
   }
   
   ToggleLegend(button: string) {
@@ -946,6 +970,37 @@ export class ChartComponent {
 
   ShowTestsAree(button: string) {
     this.buttonpressed[button] = !this.buttonpressed[button];
+  }
+
+  subLoadAxisConfig(key: string) {
+    for (let index = 0; index < this.AxisValues.length; index++) {
+      
+      if (this.AxisValues[index].enabled == true) {
+        switch (index) {
+          case 0: 
+            this.AxisValues[index].textMin = this.axesConfig.AxesScale[key].Xmin;
+            this.AxisValues[index].textMax = this.axesConfig.AxesScale[key].Xmax;
+            break;
+          case 1:
+            this.AxisValues[index].textMin = this.axesConfig.AxesScale[key].YAxes1MIN;
+            this.AxisValues[index].textMax = this.axesConfig.AxesScale[key].YAxes1MAX;
+            break;
+          case 2:
+            this.AxisValues[index].textMin = this.axesConfig.AxesScale[key].YAxes2MIN;
+            this.AxisValues[index].textMax = this.axesConfig.AxesScale[key].YAxes2MAX;
+            break;
+          case 3:
+            this.AxisValues[index].textMin = this.axesConfig.AxesScale[key].YAxes3MIN;
+            this.AxisValues[index].textMax = this.axesConfig.AxesScale[key].YAxes3MAX;
+            break;
+          case 4:
+            this.AxisValues[index].textMin = this.axesConfig.AxesScale[key].YAxes4MIN;
+            this.AxisValues[index].textMax = this.axesConfig.AxesScale[key].YAxes4MAX;    
+            break;
+        }
+
+      }  
+    }
   }
 
   measureSelected: string = '';

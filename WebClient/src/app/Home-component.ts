@@ -629,15 +629,14 @@ export class HomeComponent {
     dialogRef.afterClosed().subscribe((result: any) => {
       if (result !== undefined) {
 
+        this.axesConfig = result;
+        console.log("Config ricevuta dal dialog:", this.axesConfig);        
+
         this.http.post(this.httpconfig.baseurl + '/query/saveplots', this.axesConfig).subscribe({
           next: (data: any) => {
             if(data.success==false) {
               this.showDialog("Error saving configuration: " + data.message, "Save Error");
-            }
-            else {
-              this.axesConfig = result;
-              console.log("Config ricevuta dal dialog:", this.axesConfig);
-            }    
+            }  
           },
           error: (err) => {
             console.error("ERRORE BACKEND:", err);
