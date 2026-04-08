@@ -650,8 +650,9 @@ background: any;
   }
 
   subChartDialogShow(): boolean {
+    let seriesItem: any[] = [];
     const dialogRef = this.chartDialog.open(ChartSettingsComponent, {
-      data: { measuresinfo: this.measuresinfo, axesConfig: this.axesConfig },
+      data: { measuresinfo: this.measuresinfo, axesConfig: this.axesConfig, series: seriesItem },
       ariaModal: true,
       disableClose: true,
       hasBackdrop: true,

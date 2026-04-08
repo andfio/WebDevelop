@@ -61,6 +61,7 @@ export class HomeComponent {
       this.showPopup = this.state.showPopup;
       this.totalsummary = this.state.totalsummary;
       this.httpconfig = this.state.httpconfig;
+      this.axesConfig = this.state.axesConfig;
       return; 
     }
 
@@ -263,7 +264,7 @@ export class HomeComponent {
         this.state.showPopup = this.showPopup;
         this.state.totalsummary = this.totalsummary;
         this.state.httpconfig = this.httpconfig;  
-        
+        this.state.axesConfig = this.axesConfig;          
       },
       error: (err) => {
         console.error("ERRORE BACKEND:", err);
@@ -614,8 +615,9 @@ export class HomeComponent {
   }
 
   subChartDialogShow() {
+    let seriesItem: any[] = [];
     const dialogRef = this.chartDialog.open(ChartSettingsComponent, {
-      data: { measuresinfo: this.measuresinfo, axesConfig: this.axesConfig },
+      data: { measuresinfo: this.measuresinfo, axesConfig: this.axesConfig, series: seriesItem },
       ariaModal: true,
       disableClose: true,
       hasBackdrop: true,

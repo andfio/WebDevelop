@@ -13,9 +13,10 @@
           </div>
 
           @for(itemMeasure of axesConfig.Plots[UnitTypeIDSelected].Plot; track $index) {
+            @if (itemMeasure === getMeasureID(itemMeasure)) {
                 <div class="row-container">
                     <div class="measurebox">
-                        <select [(ngModel)]="chartSettings.measure[$index]">
+                        <select [disabled]="DialogTitle === 'Legend'" [(ngModel)]="chartSettings.measure[$index]">
                           <option [ngValue]="-2"> none </option>
                           @for (item of measuresInfo; track item.measureID) {
                               <option [ngValue]="item.measureID"> {{item.shortname}} </option>
@@ -26,7 +27,7 @@
                     @if(axesConfig.PlotColors[UnitTypeIDSelected].Color[$index]; as itemColor) {
                       <div class="colorbox">
 
-                        <select [(ngModel)]="chartSettings.plotcolor[$index]" [style.background-color]="chartSettings.plotcolor[$index]">
+                        <select [disabled]="DialogTitle === 'Legend'" [(ngModel)]="chartSettings.plotcolor[$index]" [style.background-color]="chartSettings.plotcolor[$index]">
                           <option [ngValue]="'#FFFFFF'" > none </option>
                           @for (item of colorItems; track item) {
                             <option [ngValue]="item" [style.background-color]="item"> {{colorMap[item]}} </option>
@@ -43,11 +44,17 @@
                       </mat-checkbox>
                     </div>
               </div>
-              
+            }  
           }
 
           <mat-dialog-actions align="end">
-            <button class="dialog-button" matButton cdkFocusInitial (click)="saveSettings()">Save</button>
+            @if (DialogTitle !== 'Legend') {
+              <button class="dialog-button" matButton cdkFocusInitial (click)="saveSettings()">Save</button>
+            }
+            @else
+            {
+              <button class="dialog-button" matButton cdkFocusInitial (click)="saveSettings()">OK</button>
+            }
             <button class="dialog-button" matButton (click)="closeDialog()">Cancel</button>
           </mat-dialog-actions>          
 

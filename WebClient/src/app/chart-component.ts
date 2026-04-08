@@ -39,7 +39,7 @@ import {MatSlideToggleModule} from '@angular/material/slide-toggle';
 import { HttpClient } from '@angular/common/http';
 //gestione file GPlot.ini (GPlot.json)
 import { AxesConfig } from "./chart-config";
-import { StructUnitsInfo } from "./app.config.json";
+import { ChartSettingsComponent } from './chart-settings-component';
 
 @Component({
   selector: "app-chart",
@@ -67,7 +67,7 @@ export class ChartComponent {
   public legend: ApexLegend = {};
   public annotations: ApexAnnotations[] = []
 
-  constructor(private dialog: MatDialog, private cd: ChangeDetectorRef, private http: HttpClient) { }
+  constructor(private dialog: MatDialog, private cd: ChangeDetectorRef, private http: HttpClient, private chartDialog: MatDialog) { }
   
   chartData: any = {};
   rootfields: any[] = [];
@@ -76,7 +76,7 @@ export class ChartComponent {
   chartSeries: any[] = []
   chartAxisOffSet: any[] = [];
 
-  MeasuresInfo: any[] = [];
+  measuresinfo: any[] = [];
   httpConfig: any = {} as any;
 
   axesConfig: AxesConfig = {
@@ -86,6 +86,7 @@ export class ChartComponent {
     AxesScale: {}
   };
   readonly numMAXPlots: number = 10;
+  KeyPlot: string = "Plot";
 
   ngOnInit() {
     this.chartData = history.state.rowData;
@@ -96,19 +97,23 @@ export class ChartComponent {
     this.subInitChartSeries();
     this.subInitCursors();
 
+    let UnitTypeIDSelected = this.chartData[this.rootfields.find((x => x.field === 'UnitTypeID')).field];
     const parameters = {
-      UnitTypeID: this.chartData[this.rootfields.find((x => x.field === 'UnitTypeID')).field],
+      UnitTypeID: UnitTypeIDSelected.substring(0, UnitTypeIDSelected.indexOf("-") - 1),
       CommandType: 1 //measures
     }
 
-    // this.http.post(this.httpConfig.baseurl + '/query/measuresinfo', parameters).subscribe({
-    //   next: (data: any) => {
-    //     this.MeasuresInfo = data;
-    //   },
-    //   error: (err) => {
-    //     console.error("ERRORE BACKEND:", err);
-    //   }
-    // });	    
+    this.http.post(this.httpConfig.baseurl + '/query/measuresinfo', parameters).subscribe({
+      next: (data: any) => {
+        this.measuresinfo = data;
+      },
+      error: (err) => {
+        console.error("ERRORE BACKEND:", err);
+      }
+    });	
+    
+    let UnitTypeID = this.chartData[this.rootfields.find((x => x.field === 'UnitTypeID')).field];
+    this.KeyPlot = "Plot" + UnitTypeID.substring(0, UnitTypeID.indexOf("-") - 1);
 
     this.initChartData();
     this.subChartEvents();
@@ -157,21 +162,21 @@ export class ChartComponent {
       {
         time: this.chartValues.time.split(';').map(Number),
         measure: this.chartValues.temperature.split(';').map(Number),
-        name: "Temp.(°C)",
+        name: "E[mWh]",
         color: "#00E396",
         AxisType: this.chartSeries[2]
       },
       {
         time: this.chartValues.time.split(';').map(Number),
         measure: this.chartValues.pressure.split(';').map(Number),
-        name: "Press.(mbar)",
+        name: "N.P[W]",
         color: "#FEB019",
         AxisType: this.chartSeries[2]
       },
       {
         time: this.chartValues.time.split(';').map(Number),
         measure: this.chartValues.voltage.split(';').map(Number),
-        name: "Voltage (V)",
+        name: "PE_VW",
         color: "#FF0000",
         AxisType: this.chartSeries[4]
       }
@@ -845,16 +850,11 @@ export class ChartComponent {
   LoadXYAxis(button: string) {
     this.buttonpressed[button] = !this.buttonpressed[button];
 
-    let UnitTypeID = this.chartData[this.rootfields.find((x => x.field === 'UnitTypeID')).field];
-    UnitTypeID = UnitTypeID.substring(0, UnitTypeID.indexOf("-") - 1)
-    
-    let key = "Plot" + UnitTypeID.toString();
-
     this.http.post(this.httpConfig.baseurl + '/query/loadplots', null).subscribe({
     next: (data: any) => {
         if(data.success==true) {
           this.axesConfig = data.config;
-          this.subLoadAxisConfig(key);
+          this.subLoadAxisConfig(this.KeyPlot);
         } 
         else {
           if (data.message == "NO_FILE")
@@ -873,35 +873,30 @@ export class ChartComponent {
 
   SaveXYAxis(button: string) {
     this.buttonpressed[button] = !this.buttonpressed[button];
-
-    let UnitTypeID = this.chartData[this.rootfields.find((x => x.field === 'UnitTypeID')).field];
-    UnitTypeID = UnitTypeID.substring(0, UnitTypeID.indexOf("-") - 1)
-    
-    let key = "Plot" + UnitTypeID.toString();
     
     for (let index = 0; index < this.AxisValues.length; index++) {
       
       if (this.AxisValues[index].enabled == true) {
         switch (index) {
           case 0: 
-            this.axesConfig.AxesScale[key].Xmin = this.AxisValues[index].textMin;
-            this.axesConfig.AxesScale[key].Xmax = this.AxisValues[index].textMax;
+            this.axesConfig.AxesScale[this.KeyPlot].Xmin = this.AxisValues[index].textMin;
+            this.axesConfig.AxesScale[this.KeyPlot].Xmax = this.AxisValues[index].textMax;
             break;
           case 1:
-            this.axesConfig.AxesScale[key].YAxes1MIN = this.AxisValues[index].textMin;
-            this.axesConfig.AxesScale[key].YAxes1MAX = this.AxisValues[index].textMax;
+            this.axesConfig.AxesScale[this.KeyPlot].YAxes1MIN = this.AxisValues[index].textMin;
+            this.axesConfig.AxesScale[this.KeyPlot].YAxes1MAX = this.AxisValues[index].textMax;
             break;
           case 2:
-            this.axesConfig.AxesScale[key].YAxes2MIN = this.AxisValues[index].textMin;
-            this.axesConfig.AxesScale[key].YAxes2MAX = this.AxisValues[index].textMax;
+            this.axesConfig.AxesScale[this.KeyPlot].YAxes2MIN = this.AxisValues[index].textMin;
+            this.axesConfig.AxesScale[this.KeyPlot].YAxes2MAX = this.AxisValues[index].textMax;
             break;
           case 3:
-            this.axesConfig.AxesScale[key].YAxes3MIN = this.AxisValues[index].textMin;
-            this.axesConfig.AxesScale[key].YAxes3MAX = this.AxisValues[index].textMax;
+            this.axesConfig.AxesScale[this.KeyPlot].YAxes3MIN = this.AxisValues[index].textMin;
+            this.axesConfig.AxesScale[this.KeyPlot].YAxes3MAX = this.AxisValues[index].textMax;
             break;
           case 4:
-            this.axesConfig.AxesScale[key].YAxes4MIN = this.AxisValues[index].textMin;
-            this.axesConfig.AxesScale[key].YAxes4MAX = this.AxisValues[index].textMax;    
+            this.axesConfig.AxesScale[this.KeyPlot].YAxes4MIN = this.AxisValues[index].textMin;
+            this.axesConfig.AxesScale[this.KeyPlot].YAxes4MAX = this.AxisValues[index].textMax;    
             break;
         }
 
@@ -923,6 +918,7 @@ export class ChartComponent {
   
   ToggleLegend(button: string) {
     this.buttonpressed[button] = !this.buttonpressed[button];
+    this.subChartDialogShow();
   }
 
   ShowGrid(button: string) {
@@ -980,10 +976,12 @@ export class ChartComponent {
           case 0: 
             this.AxisValues[index].textMin = this.axesConfig.AxesScale[key].Xmin;
             this.AxisValues[index].textMax = this.axesConfig.AxesScale[key].Xmax;
+            this.xaxis.max = this.AxisValues[index].textMax;
+            this.xaxis.min = this.AxisValues[index].textMin;
             break;
           case 1:
             this.AxisValues[index].textMin = this.axesConfig.AxesScale[key].YAxes1MIN;
-            this.AxisValues[index].textMax = this.axesConfig.AxesScale[key].YAxes1MAX;
+            this.AxisValues[index].textMax = this.axesConfig.AxesScale[key].YAxes1MAX;          
             break;
           case 2:
             this.AxisValues[index].textMin = this.axesConfig.AxesScale[key].YAxes2MIN;
@@ -998,9 +996,63 @@ export class ChartComponent {
             this.AxisValues[index].textMax = this.axesConfig.AxesScale[key].YAxes4MAX;    
             break;
         }
-
-      }  
+        
+        if (index > 0) {
+          this.yaxis[this.AxisValues[index].axisIndex].min = this.AxisValues[index].textMin;
+          this.yaxis[this.AxisValues[index].axisIndex].max = this.AxisValues[index].textMax;          
+        }  
+      }
     }
+
+    this.chartObj.updateOptions({
+      xaxis: this.xaxis,
+      yaxis: this.yaxis
+    });
+  
+  }
+
+  subChartDialogShow() {
+    let seriesItem: any[] = [];
+    for (let s = 0; s < this.series.length; s++) {
+      seriesItem.push(this.getMeasureID(this.series[s].name?.toString() ?? "") ?? -2);
+    }
+    const dialogRef = this.chartDialog.open(ChartSettingsComponent, {
+      data: { measuresinfo: this.measuresinfo, axesConfig: this.axesConfig, series: seriesItem },
+      ariaModal: true,
+      disableClose: true,
+      hasBackdrop: true,     
+    });
+    
+    dialogRef.afterClosed().subscribe((result: any) => {
+      if (result !== undefined) {
+
+        this.axesConfig = result;
+
+        this.series.forEach(s => {
+          let measureID = this.getMeasureID(s.name?.toString() ?? "") ?? -2;
+          let index = this.axesConfig.Plots[this.KeyPlot].Plot.indexOf(measureID);
+          if (index !== -1) {
+            if (this.axesConfig.VisiblePlots[this.KeyPlot].Plot[index] == false) {
+              s.hidden = true;
+            }
+            else            {
+              this.chartObj.showSeries(s.name ?? "");
+              s.hidden = false;   
+            }
+          }
+        });  
+
+        this.chartObj.updateOptions({
+          series: this.series,        
+        });
+
+      } 
+    });
+  }
+
+  getMeasureID(measureName: string): number | null {
+    const measure = this.measuresinfo.find(x => x.shortname === measureName);
+    return measure ? measure.measureID : null;
   }
 
   measureSelected: string = '';

@@ -73,5 +73,11 @@ namespace WebAnalisys.Models
         public Dictionary<string, PlotColors> PlotColors { get; set; } = new Dictionary<string, PlotColors>();
         public Dictionary<string, AxesScale> AxesScale { get; set; } = new Dictionary<string, AxesScale>();
     }
+
+    public class GraphData
+    {
+        public string ID_Result { get; set; }
+    }
 }
+
     

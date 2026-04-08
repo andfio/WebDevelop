@@ -22,4 +22,5 @@ export class StateService {
   showPopup: boolean = false;
   totalsummary: string = '';
   httpconfig: any = {};
+  axesConfig: any = {};
 }

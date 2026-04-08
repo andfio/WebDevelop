@@ -17,8 +17,8 @@ import { DialogContent } from './dialog-component';
 interface ChartSettingsDialogData {
   axesConfig: AxesConfig;
   measuresinfo: measuresinfo[];
+  series: number[];
 }
-
 
 @Component({
   selector: 'chart-settings-content',
@@ -33,11 +33,18 @@ export class ChartSettingsComponent {
   measuresInfo: any[] = [];
   axesConfig: any = { };
   colorItems: any[] = [];
+  series: any[] = [];
+  chartSettings: chartsettings = {
+    measure: [],
+    plotcolor: [],
+    enableplot: [],
+  };
   
   constructor(private dialog: MatDialog, private dialogRef: MatDialogRef<ChartSettingsComponent, AxesConfig | undefined>) {
     const iniectObject = inject<ChartSettingsDialogData>(MAT_DIALOG_DATA);
     this.measuresInfo = iniectObject.measuresinfo; 
     this.axesConfig = structuredClone(iniectObject.axesConfig);
+    this.series = iniectObject.series;
     this.UnitTypeIDSelected = "Plot" +  this.measuresInfo[0].UnitTypeID.toString();
     this.colorItems = Object.keys(this.colorMap);
 
@@ -52,17 +59,33 @@ export class ChartSettingsComponent {
     this.chartSettings = {
       measure: this.axesConfig.Plots[this.UnitTypeIDSelected].Plot,
       plotcolor: this.axesConfig.PlotColors[this.UnitTypeIDSelected].Color,
-      enableplot: this.axesConfig.VisiblePlots[this.UnitTypeIDSelected].Plot
+      enableplot: this.axesConfig.VisiblePlots[this.UnitTypeIDSelected].Plot,
     }
   }
 
-  readonly DialogTitle = 'Chart Settings';
+  DialogTitle: string = "";
+  ngOnInit() {
+    if (this.series.length == 0) {
+      this.DialogTitle = "Graph Settings";
+    }
+    else {
+      this.DialogTitle = "Legend";
+    
+      const element = document.querySelector('.dialog-container');
+      if (element) {
+        let dlgHeight: string = (element.clientHeight + 120).toString() + 'px';
+        this.dialogRef.updateSize('450px',dlgHeight);
+      }
+    }
+  }
 
-  chartSettings: chartsettings = {
-    measure: [],
-    plotcolor: [],
-    enableplot: []
-  };
+  getMeasureID(measureID: number): number {
+    if (this.series.length == 0) {  
+      return measureID;
+    }
+    const measure = this.series.find(x => x === measureID);
+    return measure !== undefined ? measureID : -99;
+  }
 
   colorMap: { [key: string]: string } = {
   "#000000": "black",

@@ -69,7 +69,7 @@
 
   <div class="chart-details-container" id="chart-details-mngt">
     
-    <div class="chart-details" [hidden]="buttonpressed['ToggleLegend']"> 
+    <div class="chart-details"> 
       <div class="AxisX" style="text-align:center">Axes X (Time (sec))
         <div class="inline-slider"> 
             <mat-slider
@@ -313,8 +313,8 @@
         <mat-slide-toggle class="CursorToggle" [(ngModel)]="IsCursorsEnabled[1]" (change)="subCursorsMode(IsCursorsEnabled[1])" [disabled]="!IsCursorsEnabled[0]">Cursors Free</mat-slide-toggle>
       </div>
       
-    </div>
-    
+    </div> 
+
   </div> 
 
 </div>

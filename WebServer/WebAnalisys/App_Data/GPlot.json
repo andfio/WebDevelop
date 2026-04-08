@@ -1,0 +1,64 @@
+{
+  "Plots": {
+    "Plot11": {
+      "Plot": [
+        14,
+        2,
+        10,
+        1,
+        100,
+        -2,
+        -2,
+        -2,
+        -2,
+        -2
+      ]
+    }
+  },
+  "VisiblePlots": {
+    "Plot11": {
+      "Plot": [
+        false,
+        true,
+        true,
+        true,
+        true,
+        false,
+        false,
+        false,
+        false,
+        false
+      ]
+    }
+  },
+  "PlotColors": {
+    "Plot11": {
+      "Color": [
+        "#ffff00",
+        "#00ff00",
+        "#ffa500",
+        "#0000ff",
+        "#00ffff",
+        "#FFFFFF",
+        "#FFFFFF",
+        "#FFFFFF",
+        "#FFFFFF",
+        "#FFFFFF"
+      ]
+    }
+  },
+  "AxesScale": {
+    "Plot11": {
+      "Xmin": 0.10000000000000001,
+      "Xmax": 46.020000000000003,
+      "YAxes1MIN": 0,
+      "YAxes1MAX": 3450,
+      "YAxes2MIN": 0,
+      "YAxes2MAX": 0,
+      "YAxes3MIN": 21.18,
+      "YAxes3MAX": 22.52,
+      "YAxes4MIN": 0,
+      "YAxes4MAX": 0
+    }
+  }
+}

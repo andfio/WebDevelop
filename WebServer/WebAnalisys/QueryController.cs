@@ -12,6 +12,7 @@ using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.Text.Json.Nodes;
 using System.IO;
+using System.IO.Compression;
 
 
 namespace WebAnalisys.Controllers
@@ -275,10 +276,6 @@ namespace WebAnalisys.Controllers
                                         sql = "SELECT CommandsInputParameters.Descr, CommandsInputParameters.UM FROM Commands INNER JOIN CommandsInputParameters ON (Commands.UnitTypeID = CommandsInputParameters.UnitTypeID AND Commands.ComID = CommandsInputParameters.ComID AND Commands.ComType = CommandsInputParameters.ComType) ";
                                         sql = sql + "WHERE Commands.UnitTypeID=" + row["UnitTypeID"].ToString() + " AND Commands.ComID=" + itemRow.Value.ToString();
                                         break;
-                                }
-                                using (System.IO.StreamWriter wr = new System.IO.StreamWriter("C:\\temp\\Debug.log", false))
-                                {
-                                    wr.Write(sql);
                                 }
 
                                 if (itemRow.Value.ToString().Trim() != "")
@@ -585,6 +582,51 @@ namespace WebAnalisys.Controllers
 
         }
 
+        [HttpPost]
+        [Route("acquisitonstring")]
+        public IHttpActionResult acquisitonstring([FromBody] GraphData payload)
+        {
+            var result = new List<Dictionary<string, object>>();
+
+            string connDBTestString = ConfigurationManager.ConnectionStrings["DBTest"].ConnectionString;
+
+            try
+            {
+                string sql = "SELECT ACQType, ACQData, ACQName FROM Tab_Acquisitions WHERE ID_Result='" + payload.ID_Result + "'";
+
+                using (var conn = new SqlConnection(connDBTestString))
+                using (var cmd = new SqlCommand(sql, conn))
+                {
+                    conn.Open();
+                    var reader = cmd.ExecuteReader();
+
+                    if (reader.Read())
+                    {
+                        short AcqType = reader.GetInt16(0);
+
+                        switch (AcqType)
+                        {
+                            case 1:
+                                byte[] fileData = (byte[])reader["ACQData"];
+                                var bin = string.Concat(fileData.Select(b => Convert.ToString(b, 2).PadLeft(8, '0')));
+
+                                break;
+                            default:
+                                break;
+                        }
+                    }
+                }
+
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+
+            return Ok(result);
+
+        }
+
         private string Normalize(string key)
         {
             return key.Replace(" ", "").Replace("-", "");
@@ -610,6 +652,8 @@ namespace WebAnalisys.Controllers
             }
             
         }
+
+        
 
     }
 }
