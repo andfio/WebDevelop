@@ -74,9 +74,17 @@ namespace WebAnalisys.Models
         public Dictionary<string, AxesScale> AxesScale { get; set; } = new Dictionary<string, AxesScale>();
     }
 
-    public class GraphData
+    public class InputField
     {
         public string ID_Result { get; set; }
+    }
+
+
+    public class GraphData
+    {
+        public int[] MeasurID { get; set; }
+
+        public List<float[]> MeasurColl { get; set; }
     }
 }
 

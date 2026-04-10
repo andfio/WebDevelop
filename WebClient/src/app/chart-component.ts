@@ -17,7 +17,6 @@ import {
   ApexAnnotations
 } from "ng-apexcharts";
 import { NgApexchartsModule } from "ng-apexcharts";
-import { chartvalues } from "./app.config.json";
 import { DataPoint } from "./chart-config";
 import { DialogContent } from './dialog-component';
 import { MatDialog } from '@angular/material/dialog';
@@ -40,6 +39,8 @@ import { HttpClient } from '@angular/common/http';
 //gestione file GPlot.ini (GPlot.json)
 import { AxesConfig } from "./chart-config";
 import { ChartSettingsComponent } from './chart-settings-component';
+// Parse dei dati di ACQ 
+import { ChartData} from "./chart-config";
 
 @Component({
   selector: "app-chart",
@@ -69,10 +70,14 @@ export class ChartComponent {
 
   constructor(private dialog: MatDialog, private cd: ChangeDetectorRef, private http: HttpClient, private chartDialog: MatDialog) { }
   
-  chartData: any = {};
+  chartData: ChartData = {
+    MeasurID: [],
+    MeasurColl: []
+  };
+
+  rowData: any = {};
   rootfields: any[] = [];
 
-  chartValues: chartvalues = {} as any;
   chartSeries: any[] = []
   chartAxisOffSet: any[] = [];
 
@@ -87,17 +92,57 @@ export class ChartComponent {
   };
   readonly numMAXPlots: number = 10;
   KeyPlot: string = "Plot";
+  KeyResult: string = "";
+  MeasureID: number[] = [];
+  MeasurColl: number[][] = [];
 
   ngOnInit() {
-    this.chartData = history.state.rowData;
+    this.rowData = history.state.rowData;
     this.rootfields = history.state.rootFields;
     this.httpConfig = history.state.httpConfig;
     this.axesConfig = history.state.axesConfig;
 
+    this.KeyResult = history.state.KeyResult;
+    
     this.subInitChartSeries();
     this.subInitCursors();
 
-    let UnitTypeIDSelected = this.chartData[this.rootfields.find((x => x.field === 'UnitTypeID')).field];
+    let UnitTypeID = this.rowData[this.rootfields.find((x => x.field === 'UnitTypeID')).field];
+    this.KeyPlot = "Plot" + UnitTypeID.substring(0, UnitTypeID.indexOf("-") - 1);
+
+    this.subPost();
+  }
+
+  ngAfterViewInit() {
+    this.updateChartHeight();
+  }
+
+  subPost() {
+    this.subParserMeasureData(this.KeyResult);
+  }
+  
+  subParserMeasureData(KeyResult: string) {
+      const payload = {
+        ID_Result: KeyResult
+      }
+
+        this.http.post(this.httpConfig.baseurl + '/query/acquisitionstring', payload).subscribe({
+          next: (data: any) => {
+            this.chartData = data;
+            this.MeasureID = this.chartData.MeasurID;
+            this.MeasurColl = this.chartData.MeasurColl;
+            this.subInitMeasuresInfo();
+          },
+          error: (err) => {
+            console.error("ERRORE BACKEND:", err);
+          }
+        });	
+
+      
+  }
+
+  subInitMeasuresInfo() {
+    let UnitTypeIDSelected = this.rowData[this.rootfields.find((x => x.field === 'UnitTypeID')).field];
     const parameters = {
       UnitTypeID: UnitTypeIDSelected.substring(0, UnitTypeIDSelected.indexOf("-") - 1),
       CommandType: 1 //measures
@@ -106,25 +151,20 @@ export class ChartComponent {
     this.http.post(this.httpConfig.baseurl + '/query/measuresinfo', parameters).subscribe({
       next: (data: any) => {
         this.measuresinfo = data;
+        this.ShowChart();
       },
       error: (err) => {
         console.error("ERRORE BACKEND:", err);
       }
-    });	
-    
-    let UnitTypeID = this.chartData[this.rootfields.find((x => x.field === 'UnitTypeID')).field];
-    this.KeyPlot = "Plot" + UnitTypeID.substring(0, UnitTypeID.indexOf("-") - 1);
+    });	   
+  }
 
+  ShowChart() {
     this.initChartData();
     this.subChartEvents();
   }
 
-  ngAfterViewInit() {
-    this.updateChartHeight();
-  }
-
   subInitChartSeries() {
-    this.chartValues = history.state.chartValues;
     let chartSeriesConfig: any = history.state.chartSeries;
     let axistype: number[] = chartSeriesConfig.axistypes.split(';').map(Number) 
     let axisposition: number[] = chartSeriesConfig.axisposition.split(';').map(Number)
@@ -134,7 +174,25 @@ export class ChartComponent {
       this.chartSeries[axistype[index]] = axisposition[index];
       this.chartAxisOffSet[axisposition[index]] = [];
       this.chartAxisOffSet[axisposition[index]] = axisregulatoroffset[index];
-    }    
+    }
+    
+    for(let i=0; i < this.chartSeries.length - 1; i++) {
+      this.AxisValues.push (
+        {
+          seriesName: [""],
+          axisIndex: 0,
+          min: 0,
+          max: 0,
+          value: 0,
+          textMin: 0,
+          textMax: 0,
+          DefaultMin: 0,
+          DefaultMax: 0,          
+          enabled: false
+        }
+      )      
+    };
+
   }
 
   subInitCursors() {
@@ -158,29 +216,38 @@ export class ChartComponent {
   CursorValues: CursorValues[] = [];
 
   public initChartData(): void {
-     this.DataPoint = [
-      {
-        time: this.chartValues.time.split(';').map(Number),
-        measure: this.chartValues.temperature.split(';').map(Number),
-        name: "E[mWh]",
-        color: "#00E396",
-        AxisType: this.chartSeries[2]
-      },
-      {
-        time: this.chartValues.time.split(';').map(Number),
-        measure: this.chartValues.pressure.split(';').map(Number),
-        name: "N.P[W]",
-        color: "#FEB019",
-        AxisType: this.chartSeries[2]
-      },
-      {
-        time: this.chartValues.time.split(';').map(Number),
-        measure: this.chartValues.voltage.split(';').map(Number),
-        name: "PE_VW",
-        color: "#FF0000",
-        AxisType: this.chartSeries[4]
-      }
-    ];
+
+     let timeValues: number[] = [];
+     let measuresValues: number[][] = [];
+
+     for (let i = 0; i < this.MeasurColl.length; i++) {
+
+        let values: number[] = this.MeasurColl[i];
+        timeValues.push(Math.round(values[0] * 100) / 100);
+        for (let index = 1; index < this.MeasureID.length; index++) {
+          measuresValues[index] = measuresValues[index] || [];
+          measuresValues[index].push(Math.round(values[index] * 100) / 100);
+        }
+
+     }
+
+     for (let index = 1; index < this.MeasureID.length; index++) {
+        if (this.measuresinfo.find((x) => x.measureID == this.MeasureID[index]) !== undefined) {   
+            let plotIndex = this.axesConfig.Plots[this.KeyPlot].Plot.find(x => x == this.MeasureID[index])
+            if (plotIndex !== undefined) { 
+                if (this.axesConfig.VisiblePlots[this.KeyPlot].Plot[plotIndex] == true) {
+                    let dataPoint: DataPoint = {  
+                      time: timeValues,
+                      measure: measuresValues[index],
+                      name: this.measuresinfo.find((x) => x.measureID == this.MeasureID[index]).shortname,
+                      color:  this.axesConfig.PlotColors[this.KeyPlot].Color[plotIndex],
+                      AxisType: this.chartSeries[this.measuresinfo.find((x) => x.measureID == this.MeasureID[index]).axesposition]
+                    }
+                    this.DataPoint.push(dataPoint);
+                }
+            }
+        }   
+     }  
 
     for (let s = 0; s < this.DataPoint.length; s++) {
       this.dates[s] = [];
@@ -188,23 +255,6 @@ export class ChartComponent {
         this.dates[s].push([this.DataPoint[s].time[i], this.DataPoint[s].measure[i]]);
       }
     }
-
-    for(let i=0; i < this.chartSeries.length - 1; i++) {
-      this.AxisValues.push (
-        {
-          seriesName: [""],
-          axisIndex: 0,
-          min: 0,
-          max: 0,
-          value: 0,
-          textMin: 0,
-          textMax: 0,
-          DefaultMin: 0,
-          DefaultMax: 0,          
-          enabled: false
-        }
-      )      
-    };
 
     //'AsseX'
     let minX = this.DataPoint[0].time[0];
@@ -260,7 +310,7 @@ export class ChartComponent {
           DefaultMax: maxCursorValue[AxisIndex],          
           enabled: true 
         }        
-    }  
+    }   
 
     for (let s = 0; s < this.DataPoint.length; s++) {
       this.series.push({
@@ -497,7 +547,8 @@ export class ChartComponent {
     this.stroke = { 
         width: [1,1, 1],
     };
-
+    this.subLoadAxisConfig(this.KeyPlot);
+    this.cd.detectChanges()
   }
   
   isAddPointAnnotation: boolean = false;
@@ -765,7 +816,7 @@ export class ChartComponent {
       this.AxisValues[index].textMax = Number(numValue.toFixed(2));
       break;
     case 'input':
-      if (numValue > this.AxisValues[index].max || numValue < this.AxisValues[index].min) {numValue = this.AxisValues[index].max, this.AxisValues[index].textMax = this.AxisValues[index].max }
+      // if (numValue > this.AxisValues[index].max || numValue < this.AxisValues[index].min) {numValue = this.AxisValues[index].max, this.AxisValues[index].textMax = this.AxisValues[index].max }
       break;      
     }
 
@@ -795,7 +846,7 @@ export class ChartComponent {
 
     axisIndex = this.AxisValues[index].axisIndex;
 
-    if (numValue < this.AxisValues[index].min || numValue > this.AxisValues[index].max ) {  this.AxisValues[index].textMin = this.AxisValues[index].min }
+    // if (numValue < this.AxisValues[index].min || numValue > this.AxisValues[index].max ) {  this.AxisValues[index].textMin = this.AxisValues[index].min }
     
     if(index > 0) {
       this.yaxis[axisIndex].min = numValue;
@@ -969,6 +1020,7 @@ export class ChartComponent {
   }
 
   subLoadAxisConfig(key: string) {
+    if (this.axesConfig.AxesScale[key] == undefined) { return }
     for (let index = 0; index < this.AxisValues.length; index++) {
       
       if (this.AxisValues[index].enabled == true) {

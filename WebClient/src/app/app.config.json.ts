@@ -48,7 +48,6 @@ export interface AppConfig {
     columnsparametersdetails: ColumnsParametersDetails[];
     query: structQuery;
     querydetails: structQuery;
-    chartvalues: chartvalues;
     chartseries: chartseries;
 }
 export interface filterValues {
@@ -80,12 +79,6 @@ export interface functionsinfo {
     FuncDescr: string;
 }
 
-export interface chartvalues {
-    time: string;
-    temperature: string;
-    pressure: string;
-    voltage: string;
-}
 export interface chartseries {
     axistypes: string;
     axisposition: string;

@@ -90,3 +90,8 @@ export interface measuresinfo {
   axesposition: number;
   UnitTypeID: number;
 }
+
+export interface ChartData {
+  MeasurID: number[];
+  MeasurColl: number[][];
+}

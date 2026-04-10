@@ -33,7 +33,6 @@ background: any;
   columnsparametersdetails: AppConfig["columnsparametersdetails"] = [];
   queryhome: AppConfig["query"] = {} as any;
   querydetails: AppConfig["querydetails"] = {} as any;
-  chartvalues: AppConfig["chartvalues"] = {} as any;
   chartseries: AppConfig["chartseries"] = {} as any;
 
   filtervalues: { [key: string]: any } = {};
@@ -71,7 +70,6 @@ background: any;
           this.columnsparametersdetails = config.columnsparametersdetails;
           this.queryhome = config.query;
           this.querydetails = config.querydetails;
-          this.chartvalues = config.chartvalues;
           this.chartseries = config.chartseries;
           
           this.sendToBackend();
@@ -579,11 +577,12 @@ background: any;
       }
     }
 
+    let KeyResult = this.row["ID_Result"];
     this.rowChart = this.subGetInformation();
     this.router.navigate(['/pagina-chart'] , { state: { 
+                                                        KeyResult: KeyResult,
                                                         rowData: this.rowChart, 
                                                         rootFields: this.columnsrootdetails, 
-                                                        chartValues: this.chartvalues, 
                                                         chartSeries: this.chartseries, 
                                                         axesConfig: this.axesConfig,
                                                         httpConfig: this.httpConfig } 

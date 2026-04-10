@@ -15,6 +15,7 @@ using System.IO;
 using System.IO.Compression;
 
 
+
 namespace WebAnalisys.Controllers
 {
     [RoutePrefix("api/query")]
@@ -494,7 +495,7 @@ namespace WebAnalisys.Controllers
 
             try
             {
-                string sql = "SELECT ComID As measureID, ComDescr As description, UM, ComDescrShort As shortname, Axes As axespoistion, OffSet, UnitTypeID FROM Commands";
+                string sql = "SELECT ComID As measureID, ComDescr As description, UM, ComDescrShort As shortname, Axes As axesposition, OffSet, UnitTypeID FROM Commands";
                 sql += " WHERE UnitTypeID = " + parameters.UnitTypeID;
                 sql += " AND ComType = " + parameters.CommandType;
                 sql += " AND ComVisible = 1";
@@ -583,12 +584,10 @@ namespace WebAnalisys.Controllers
         }
 
         [HttpPost]
-        [Route("acquisitonstring")]
-        public IHttpActionResult acquisitonstring([FromBody] GraphData payload)
+        [Route("acquisitionstring")]
+        public IHttpActionResult acquisitionstring([FromBody] InputField payload)
         {
-            var result = new List<Dictionary<string, object>>();
-
-            string connDBTestString = ConfigurationManager.ConnectionStrings["DBTest"].ConnectionString;
+            string connDBTestString = ConfigurationManager.ConnectionStrings["DBResults"].ConnectionString;
 
             try
             {
@@ -602,17 +601,34 @@ namespace WebAnalisys.Controllers
 
                     if (reader.Read())
                     {
-                        short AcqType = reader.GetInt16(0);
+                        string binaryString = "";
+
+                        int AcqType = int.Parse(reader.GetValue(0).ToString());
 
                         switch (AcqType)
                         {
                             case 1:
-                                byte[] fileData = (byte[])reader["ACQData"];
-                                var bin = string.Concat(fileData.Select(b => Convert.ToString(b, 2).PadLeft(8, '0')));
 
-                                break;
+                                lock (this)
+                                {
+                                    byte[] fileData = (Byte[])reader["ACQData"];
+                                    string FileZip = System.Web.Hosting.HostingEnvironment.MapPath("~/App_Data/ACQFile.Zip");
+                                    string FileAcq = System.Web.Hosting.HostingEnvironment.MapPath("~/App_Data/ACQFile.ACQ");
+
+                                    File.WriteAllBytes(FileZip, fileData); 
+
+                                    string destionationPath = UnZipFile(FileZip, System.Web.Hosting.HostingEnvironment.MapPath("~/App_Data/"));
+                                    if (destionationPath.Trim() != "")
+                                    {
+                                        binaryString = File.ReadAllText(FileAcq, System.Text.Encoding.Default );
+                                    }
+                                }
+
+                                return Ok(ParserMeasures(binaryString));
+
                             default:
-                                break;
+                                binaryString = ReadFile(reader["ACQName"].ToString());
+                                return Ok(ParserMeasures(binaryString));
                         }
                     }
                 }
@@ -623,7 +639,7 @@ namespace WebAnalisys.Controllers
                 Console.WriteLine(ex.Message);
             }
 
-            return Ok(result);
+            return Ok(new GraphData());
 
         }
 
@@ -653,7 +669,71 @@ namespace WebAnalisys.Controllers
             
         }
 
-        
+        private GraphData ParserMeasures(string measuredata)
+        {
+            GraphData graphData = new GraphData();
+            if (measuredata.Trim() == "") return graphData;
+ 
+            Measures measures = new Measures();
+
+            bool res = measures.ParsMeasures(measuredata);
+            
+            if (res) {
+                graphData.MeasurID = measures.MeasurID;
+                graphData.MeasurColl = measures.MeasurColl;  
+            }
+
+            return graphData;
+
+        }
+
+        public string ReadFile(string fileAcqName)
+        {
+            if (!File.Exists(fileAcqName))
+            {
+                return "";
+            }
+
+            using (StreamReader rd = new StreamReader(fileAcqName, System.Text.Encoding.GetEncoding(1252)))
+            {
+                return rd.ReadToEnd(); 
+            }
+        }
+
+        public string UnZipFile(string FileZipName, string extractPath)
+        {
+            try
+            {
+                if (!extractPath.EndsWith(Path.DirectorySeparatorChar.ToString(), StringComparison.Ordinal))
+                    extractPath += Path.DirectorySeparatorChar;
+
+                string destinationPath = "";
+
+                using (ZipArchive archive = ZipFile.OpenRead(FileZipName))
+                {
+                    foreach (ZipArchiveEntry entry in archive.Entries)
+                    {
+                        if (entry.FullName.EndsWith(".ACQ", StringComparison.OrdinalIgnoreCase))
+                        {
+                            // SOLO nome file (senza cartelle)
+                            string fileName = entry.Name;
+
+                            destinationPath = Path.Combine(extractPath, fileName);
+
+                            entry.ExtractToFile(destinationPath, true); // overwrite se esiste
+                        }
+                    }
+                }
+
+                return destinationPath;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+
+            return "";
+        }
 
     }
 }

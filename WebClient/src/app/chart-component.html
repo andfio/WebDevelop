@@ -32,19 +32,18 @@
         @for(itemfield of rootfields; track $index) {
           @if(itemfield.field !== "") {
             @if(itemfield.field !== "VIB") { 
-              @if(chartData[itemfield.field] !== "") {
-                <label class="labelInfo">{{itemfield.short}}: <span style="font-weight: normal;"> {{chartData[itemfield.field]}}</span></label> 
+              @if(rowData[itemfield.field] !== "") {
+                <label class="labelInfo">{{itemfield.short}}: <span style="font-weight: normal;"> {{rowData[itemfield.field]}}</span></label> 
               }
               @else {
                 <label class="labelInfo">{{itemfield.short}}: <span style="font-weight: normal;">--</span></label> 
               }
           }
             @else { 
-              <label class="labelInfo">VIB: <span style="font-weight: normal;">{{chartData[itemfield.field]}}</span></label> 
+              <label class="labelInfo">VIB: <span style="font-weight: normal;">{{rowData[itemfield.field]}}</span></label> 
             } 
           }  
         }
-        <!-- <label class="labelInfo">Print Date: {{ chartData['PrintDate'] }}</label> -->
     </div>      
   </div>     
 
