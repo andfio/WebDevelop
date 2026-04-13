@@ -233,8 +233,8 @@ export class ChartComponent {
 
      for (let index = 1; index < this.MeasureID.length; index++) {
         if (this.measuresinfo.find((x) => x.measureID == this.MeasureID[index]) !== undefined) {   
-            let plotIndex = this.axesConfig.Plots[this.KeyPlot].Plot.find(x => x == this.MeasureID[index])
-            if (plotIndex !== undefined) { 
+            let plotIndex = this.axesConfig.Plots[this.KeyPlot].Plot.findIndex(x => x == this.MeasureID[index])
+            if (plotIndex !== -1) { 
                 if (this.axesConfig.VisiblePlots[this.KeyPlot].Plot[plotIndex] == true) {
                     let dataPoint: DataPoint = {  
                       time: timeValues,
@@ -378,8 +378,8 @@ export class ChartComponent {
     };
 
     let axisCount: number = 0;
-    for (let axisIndex = 1; axisIndex < this.AxisValues.length; axisIndex++) {
-      
+    // for (let axisIndex = 1; axisIndex < this.AxisValues.length; axisIndex++) {
+    for (let axisIndex = this.AxisValues.length - 1; axisIndex >= 0; axisIndex--) {  
       if (this.AxisValues[axisIndex].enabled == true) {
           
           switch (axisIndex) {
@@ -1020,7 +1020,7 @@ export class ChartComponent {
   }
 
   subLoadAxisConfig(key: string) {
-    if (this.axesConfig.AxesScale[key] == undefined) { return }
+    if (this.axesConfig.AxesScale[key].Xmin == 0 && this.axesConfig.AxesScale[key].Xmax == 0) { return }
     for (let index = 0; index < this.AxisValues.length; index++) {
       
       if (this.AxisValues[index].enabled == true) {
@@ -1104,7 +1104,7 @@ export class ChartComponent {
 
   getMeasureID(measureName: string): number | null {
     const measure = this.measuresinfo.find(x => x.shortname === measureName);
-    return measure ? measure.measureID : null;
+    return measure ? measure.measureID : -99;
   }
 
   measureSelected: string = '';

@@ -70,10 +70,14 @@ export class ChartSettingsComponent {
     }
     else {
       this.DialogTitle = "Legend";
-    
+    }
+  }
+
+  ngAfterViewInit () {
+    if (this.series.length !== 0) { 
       const element = document.querySelector('.dialog-container');
       if (element) {
-        let dlgHeight: string = (element.clientHeight + 120).toString() + 'px';
+        let dlgHeight: string = (element.clientHeight).toString() + 'px';
         this.dialogRef.updateSize('450px',dlgHeight);
       }
     }
@@ -84,7 +88,10 @@ export class ChartSettingsComponent {
       return measureID;
     }
     const measure = this.series.find(x => x === measureID);
-    return measure !== undefined ? measureID : -99;
+    if (measure === undefined) {
+      return -99;
+    }
+    return measureID;
   }
 
   colorMap: { [key: string]: string } = {
