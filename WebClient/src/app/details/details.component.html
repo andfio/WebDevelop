@@ -2,10 +2,6 @@
 
     <div class="root-contenitor">
 
-        <div class="root-label" (click)="subShowRoot()">
-            {{ row['SerialNumber'] }}
-        </div>
-
         <div class="button-container">
             <div class="btn-goback" (click)="goBack()"><i class="material-symbols-outlined">home</i> Home </div>
             <div class="btn-export" (click)="exportDetails()"><i class="material-symbols-outlined">file_export</i> Export </div >
@@ -15,10 +11,15 @@
     </div>    
 
     <!-- CONTENITORE A DUE COLONNE -->
-    <div class="tables-flex">
+    <div class="tables-flex">     
 
         <!-- COLONNA SINISTRA -->
         <div class="table-wrapper">
+
+          <div class="root-label" (click)="subShowRoot()">
+            {{ row['SerialNumber'] }}
+         </div>             
+
             <table class="tablemaindetails">
                 <tbody>
 
@@ -31,10 +32,10 @@
 
                                 <td id="Icon">
                                     @switch (typeIcon[itemRow['TestType']]) {
-                                        @case (1) { <img src="img/Measure.ico" width="20" height="20"> }
-                                        @case (2) { <img src="img/Actionament.ico" width="20" height="20"> }
-                                        @case (5) { <img src="img/SafetyTest.ico" width="20" height="20"> }
-                                        @default  { <img src="img/ComplexTest.ico" width="20" height="20"> }
+                                        @case (1) { <img src="img/Measure.ico" width="16" height="16"> }
+                                        @case (2) { <img src="img/Actionament.ico" width="16" height="16"> }
+                                        @case (5) { <img src="img/SafetyTest.ico" width="16" height="16"> }
+                                        @default  { <img src="img/ComplexTest.ico" width="16" height="16"> }
                                     }
                                 </td>
 

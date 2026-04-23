@@ -274,21 +274,21 @@ export class ChartComponent {
     }
 
     let seriesNames: any[] = [];
-    let maxCursorValue: any[] = []; let minValue: any[] = []; 
+    let maxValue: any[] = []; let minValue: any[] = []; 
     let AxisIndex: number = 0;
     for (let s = 0; s < this.DataPoint.length; s++) {
       
       AxisIndex = this.DataPoint[s].AxisType;
 
       for (let i = 0; i < this.DataPoint[0].time.length; i++) {
-          maxCursorValue[AxisIndex] = maxCursorValue[AxisIndex] || []
-          if (this.DataPoint[s].measure[i] > maxCursorValue[AxisIndex]) {
-            maxCursorValue[AxisIndex] = this.DataPoint[s].measure[i] 
+          maxValue[AxisIndex] = maxValue[AxisIndex] || []
+          if (this.DataPoint[s].measure[i] > maxValue[AxisIndex]) {
+            maxValue[AxisIndex] = this.DataPoint[s].measure[i] 
           }
       }
       
       for (let i = this.DataPoint[0].time.length; i >= 0; i--) {
-          minValue[AxisIndex] =  minValue[AxisIndex] || [maxCursorValue[AxisIndex]]
+          minValue[AxisIndex] =  minValue[AxisIndex] || []
            if (this.DataPoint[s].measure[i] < minValue[AxisIndex]) {
             minValue[AxisIndex] = this.DataPoint[s].measure[i] 
           }
@@ -301,13 +301,13 @@ export class ChartComponent {
         {
           seriesName: seriesNames[AxisIndex],
           axisIndex: 0, 
-          min: (minValue[AxisIndex] > 4 ? minValue[AxisIndex] : 0),
-          max: maxCursorValue[AxisIndex] + (maxCursorValue[AxisIndex] * this.chartAxisOffSet[AxisIndex] / 100),
-          value: ((maxCursorValue[AxisIndex] - minValue[AxisIndex]) / 2),
-          textMin: (minValue[AxisIndex] > 4 ? minValue[AxisIndex] : 0),
-          textMax: maxCursorValue[AxisIndex],
-          DefaultMin: (minValue[AxisIndex] > 4 ? minValue[AxisIndex] : 0),
-          DefaultMax: maxCursorValue[AxisIndex],          
+          min: minValue[AxisIndex],
+          max: (maxValue[AxisIndex] * this.chartAxisOffSet[AxisIndex] / 100),
+          value: maxValue[AxisIndex],
+          textMin: minValue[AxisIndex],
+          textMax: maxValue[AxisIndex],
+          DefaultMin: minValue[AxisIndex],
+          DefaultMax: maxValue[AxisIndex],          
           enabled: true 
         }        
     }   
@@ -348,6 +348,9 @@ export class ChartComponent {
           reset: true 
         },
         autoSelected: 'zoom' 
+      },
+      animations: { 
+        enabled: false
       }
     };
     this.legend = {
@@ -547,6 +550,8 @@ export class ChartComponent {
     this.stroke = { 
         width: [1,1, 1],
     };
+    
+
     this.subLoadAxisConfig(this.KeyPlot);
     this.cd.detectChanges()
   }
@@ -874,7 +879,7 @@ export class ChartComponent {
 
     this.AxisValues[index].textMax = this.AxisValues[index].DefaultMax;
     this.AxisValues[index].textMin = this.AxisValues[index].DefaultMin;
-    this.AxisValues[index].value = ((this.AxisValues[index].textMax - this.AxisValues[index].textMin) / 2)
+    this.AxisValues[index].value = this.AxisValues[index].textMax;
 
     if(index > 0) {
       this.yaxis[axisIndex].min = this.AxisValues[index].textMin;
@@ -899,7 +904,6 @@ export class ChartComponent {
 
   buttonpressed: { [key: string]: boolean } = {}
   LoadXYAxis(button: string) {
-    this.buttonpressed[button] = !this.buttonpressed[button];
 
     this.http.post(this.httpConfig.baseurl + '/query/loadplots', null).subscribe({
     next: (data: any) => {
@@ -918,12 +922,10 @@ export class ChartComponent {
         console.error("ERRORE BACKEND:", err);
       }
     });	  
-    this.buttonpressed[button] = !this.buttonpressed[button];
   }
   
 
   SaveXYAxis(button: string) {
-    this.buttonpressed[button] = !this.buttonpressed[button];
     
     for (let index = 0; index < this.AxisValues.length; index++) {
       
@@ -964,11 +966,9 @@ export class ChartComponent {
         console.error("ERRORE BACKEND:", err);
       }
     });	
-    this.buttonpressed[button] = !this.buttonpressed[button];
   }
   
   ToggleLegend(button: string) {
-    this.buttonpressed[button] = !this.buttonpressed[button];
     this.subChartDialogShow();
   }
 
@@ -1026,26 +1026,51 @@ export class ChartComponent {
       if (this.AxisValues[index].enabled == true) {
         switch (index) {
           case 0: 
+            this.AxisValues[index].min = this.axesConfig.AxesScale[key].Xmin;
+            this.AxisValues[index].max = (this.axesConfig.AxesScale[key].Xmax * this.chartAxisOffSet[index] / 100);
+            this.AxisValues[index].value = this.axesConfig.AxesScale[key].Xmax;
             this.AxisValues[index].textMin = this.axesConfig.AxesScale[key].Xmin;
             this.AxisValues[index].textMax = this.axesConfig.AxesScale[key].Xmax;
+            this.AxisValues[index].DefaultMin = this.axesConfig.AxesScale[key].Xmin;
+            this.AxisValues[index].DefaultMax = this.axesConfig.AxesScale[key].Xmax;
             this.xaxis.max = this.AxisValues[index].textMax;
             this.xaxis.min = this.AxisValues[index].textMin;
             break;
           case 1:
+            this.AxisValues[index].min = this.axesConfig.AxesScale[key].YAxes1MIN;
+            this.AxisValues[index].max = (this.axesConfig.AxesScale[key].YAxes1MAX * this.chartAxisOffSet[index] / 100);
+            this.AxisValues[index].value = this.axesConfig.AxesScale[key].YAxes1MAX;
             this.AxisValues[index].textMin = this.axesConfig.AxesScale[key].YAxes1MIN;
-            this.AxisValues[index].textMax = this.axesConfig.AxesScale[key].YAxes1MAX;          
+            this.AxisValues[index].textMax = this.axesConfig.AxesScale[key].YAxes1MAX;
+            this.AxisValues[index].DefaultMin = this.axesConfig.AxesScale[key].YAxes1MIN;
+            this.AxisValues[index].DefaultMax = this.axesConfig.AxesScale[key].YAxes1MAX;                  
             break;
           case 2:
+            this.AxisValues[index].min = this.axesConfig.AxesScale[key].YAxes2MIN;
+            this.AxisValues[index].max = (this.axesConfig.AxesScale[key].YAxes2MAX * this.chartAxisOffSet[index] / 100);
+            this.AxisValues[index].value = this.axesConfig.AxesScale[key].YAxes2MAX;
             this.AxisValues[index].textMin = this.axesConfig.AxesScale[key].YAxes2MIN;
             this.AxisValues[index].textMax = this.axesConfig.AxesScale[key].YAxes2MAX;
+            this.AxisValues[index].DefaultMin = this.axesConfig.AxesScale[key].YAxes2MIN;
+            this.AxisValues[index].DefaultMax = this.axesConfig.AxesScale[key].YAxes2MAX;                
             break;
           case 3:
+            this.AxisValues[index].min = this.axesConfig.AxesScale[key].YAxes3MIN;
+            this.AxisValues[index].max = (this.axesConfig.AxesScale[key].YAxes3MAX * this.chartAxisOffSet[index] / 100);
+            this.AxisValues[index].value = this.axesConfig.AxesScale[key].YAxes3MAX;
             this.AxisValues[index].textMin = this.axesConfig.AxesScale[key].YAxes3MIN;
             this.AxisValues[index].textMax = this.axesConfig.AxesScale[key].YAxes3MAX;
+            this.AxisValues[index].DefaultMin = this.axesConfig.AxesScale[key].YAxes3MIN;
+            this.AxisValues[index].DefaultMax = this.axesConfig.AxesScale[key].YAxes3MAX;   
             break;
           case 4:
+            this.AxisValues[index].min = this.axesConfig.AxesScale[key].YAxes4MIN;
+            this.AxisValues[index].max = (this.axesConfig.AxesScale[key].YAxes4MAX * this.chartAxisOffSet[index] / 100);
+            this.AxisValues[index].value = this.axesConfig.AxesScale[key].YAxes4MAX;
             this.AxisValues[index].textMin = this.axesConfig.AxesScale[key].YAxes4MIN;
-            this.AxisValues[index].textMax = this.axesConfig.AxesScale[key].YAxes4MAX;    
+            this.AxisValues[index].textMax = this.axesConfig.AxesScale[key].YAxes4MAX;
+            this.AxisValues[index].DefaultMin = this.axesConfig.AxesScale[key].YAxes4MIN;
+            this.AxisValues[index].DefaultMax = this.axesConfig.AxesScale[key].YAxes4MAX;    
             break;
         }
         

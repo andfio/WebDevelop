@@ -1,11 +1,11 @@
 /* Container generale */
 .tables-container {
-    margin: 20px;
-    padding: 20px;
+    margin: 5px;
+    padding: 10px;
     border-radius: 12px;
     background: #f8f9fa;
     box-shadow: 0px 2px 8px rgba(0,0,0,0.15);
-    height: calc(100vh - 40px);
+    height: calc(100vh - 10px);;
     box-sizing: border-box;
     overflow-y: hidden;
 }
@@ -15,15 +15,15 @@
 .root-label {
     /* display: block; */             /* Garantisce posizione su una nuova linea */
     width: fit-content;         /* Larghezza esatta del contenuto */
-    background: #0078d4;
+    background: darkblue;
     color: white;
     font-family: 'Tahoma';
-    font-size: 16px;
+    font-size: 20px;
     font-weight: bold;
-    padding: 12px 18px;
-    border-radius: 8px;
-    margin-left: 20px;          /* Stesso margine della tabella */
-    margin-bottom: 15px;        /* Distanza dalla tabella */
+    padding: 4px;
+    border-radius: 2px;
+    margin-left: 5px;          /* Stesso margine della tabella */
+    margin-bottom: 10px;        /* Distanza dalla tabella */
     cursor: pointer;
     transition: 0.2s ease;
     box-shadow: 0px 1px 4px rgba(0,0,0,0.3);
@@ -37,8 +37,8 @@
     flex-grow: 1;
     display: flex;
     gap: 10px; 
-    justify-content: flex-end;  
-    margin-right: 20px;
+    justify-content: flex-start;  
+    margin-left: 20px;
     text-align: center;
 }
 
@@ -48,7 +48,7 @@
     font-family: 'Tahoma';
     font-size: 16px;
     font-weight: bold;
-    padding: 10px 15px;
+    padding: 5px 15px;
     border: none;
     border-radius: 6px;
     cursor: pointer;
@@ -64,7 +64,7 @@
     font-family: 'Tahoma';
     font-size: 16px;
     font-weight: bold;
-    padding: 10px 15px;
+    padding: 5px 15px;
     border: none;
     border-radius: 6px;
     cursor: pointer;
@@ -80,7 +80,7 @@
     font-family: 'Tahoma';
     font-size: 16px;
     font-weight: bold;
-    padding: 10px 15px;
+    padding: 5px 15px;
     border: none;
     border-radius: 6px;
     cursor: pointer;
@@ -98,7 +98,7 @@
 /* Wrapper della tabella (scroll configurabile) */
 .table-wrapper {
     display: inline-block;
-    max-height: calc(85vh - 40px); 
+    height: calc(90vh + 10px); 
 
     /* SCROLLBAR VERTICALE */
     overflow-y: auto;     
@@ -106,21 +106,22 @@
     /* SCROLLBAR ORIZZONTALE */
     overflow-x: auto;   
     
-    margin-left: 20px;
+    margin-left: 15px;
     padding-right: 8px;
     width: 800px;
 }
 
 /* Tabella */
 .tablemaindetails {
-    border-collapse: separate;
-    border-spacing: 0 10px;
+    border-collapse: collapse;
+    margin-left: 40px;
+    margin-bottom: 10px;
 }
 
 /* Celle */
 .tablemaindetails td {
     font-family: Tahoma;
-    font-size: 15px;
+    font-size: 14px;
     font-style: bold;
     color:#0d0080;
     vertical-align: middle;
@@ -138,7 +139,7 @@
     white-space: normal; /*width: fit-content;*/          
     text-align: left;
     font-weight: bold;
-    width: 600px;
+    width: 680px;
 }
 
 .tablemaindetails tr.selected {
@@ -156,7 +157,7 @@
 /* COLONNA DESTRA (tabella dei dettagli) */
 .details-table-wrapper {
     flex-grow: 1;                /* Occupa tutto lo spazio restante a destra */
-    max-height: calc(85vh - 40px);
+    max-height: calc(90vh - 50px); 
     overflow-y: auto;            
     overflow-x: auto;            
     padding-right: 10px;

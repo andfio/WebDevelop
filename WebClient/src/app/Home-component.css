@@ -164,12 +164,12 @@ select {
     margin-right: 50px;
     display: flex;
     align-items: flex-end;  
-    gap: 10px; 
+    gap: 5px; 
 }   
 
 .btn-search {
     padding: 8px 16px;
-    background-color: #4a90e2;
+    background-color: firebrick;
     color: white;
     border: none;
     border-radius: 6px;
@@ -182,12 +182,9 @@ select {
 }
 
 .btn-search:hover {
-    background-color: #357bc8;
+    background-color: chartreuse;
 }
 
-.btn-search:active {
-    background-color: #2d6cad;
-}
 
 .btn-search .icon {
     width: 18px;
