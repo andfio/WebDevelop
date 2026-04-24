@@ -182,9 +182,8 @@ select {
 }
 
 .btn-search:hover {
-    background-color: chartreuse;
+    background-color: crimson;
 }
-
 
 .btn-search .icon {
     width: 18px;

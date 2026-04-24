@@ -7,6 +7,7 @@ import { DialogContent } from '../dialog-component';
 import { MatDialog } from '@angular/material/dialog';
 import { AxesConfig, measuresinfo} from '../chart-config';
 import { ChartSettingsComponent } from '../chart-settings-component';
+import { DetailsStateService } from '../DetailsState.Service';
 
 @Component({
   selector: 'app-details',
@@ -18,7 +19,7 @@ import { ChartSettingsComponent } from '../chart-settings-component';
 export class DetailsdataComponent {
 background: any;
 
-  constructor(private router: Router, private http: HttpClient, private dialog: MatDialog, private chartDialog: MatDialog) {}
+  constructor(private router: Router, private http: HttpClient, private dialog: MatDialog, private chartDialog: MatDialog, private detailsState: DetailsStateService) {}
   
   goBack() {
     this.router.navigate(['/']);
@@ -50,11 +51,19 @@ background: any;
   measuresinfo: measuresinfo[] = [];
 
   ngOnInit() {
-    this.row = history.state.rowData;
-    this.unitsInfo = history.state.unitsInfo;
-    this.functionsInfo = history.state.functionsInfo;
-    this.axesConfig = history.state.axesConfig;
-    
+    if (this.detailsState.rowData !== undefined) {
+      this.row = this.detailsState.rowData;
+      this.unitsInfo = this.detailsState.unitsInfo;
+      this.functionsInfo = this.detailsState.functionsInfo;
+      this.axesConfig = this.detailsState.axesConfig; 
+    }
+    else {
+      this.row = history.state.rowData;
+      this.unitsInfo = history.state.unitsInfo;
+      this.functionsInfo = history.state.functionsInfo;
+      this.axesConfig = history.state.axesConfig;
+    }
+
     console.log("Riga ricevuta:", this.row);
     this.filtervalues['ID_Result'] = this.row['ID_Result'];
 
@@ -91,6 +100,12 @@ background: any;
       next: (data: any) => {
         // console.log("RISULTATO BACKEND:", data);
         this.results = data; 
+
+        this.detailsState.rowData = this.row;
+        this.detailsState.unitsInfo = this.unitsInfo;
+        this.detailsState.functionsInfo = this.functionsInfo;
+        this.detailsState.axesConfig = this.axesConfig;
+
         this.subShowRoot();
         this.subShowIcon();
       },

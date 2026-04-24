@@ -24,3 +24,4 @@ export class StateService {
   httpconfig: any = {};
   axesConfig: any = {};
 }
+

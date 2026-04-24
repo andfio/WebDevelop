@@ -41,6 +41,8 @@ import { AxesConfig } from "./chart-config";
 import { ChartSettingsComponent } from './chart-settings-component';
 // Parse dei dati di ACQ 
 import { ChartData} from "./chart-config";
+//Router
+import { Router } from '@angular/router';
 
 @Component({
   selector: "app-chart",
@@ -68,7 +70,7 @@ export class ChartComponent {
   public legend: ApexLegend = {};
   public annotations: ApexAnnotations[] = []
 
-  constructor(private dialog: MatDialog, private cd: ChangeDetectorRef, private http: HttpClient, private chartDialog: MatDialog) { }
+  constructor(private dialog: MatDialog, private cd: ChangeDetectorRef, private http: HttpClient, private chartDialog: MatDialog, private router: Router) { }
   
   chartData: ChartData = {
     MeasurID: [],
@@ -122,23 +124,21 @@ export class ChartComponent {
   }
   
   subParserMeasureData(KeyResult: string) {
-      const payload = {
-        ID_Result: KeyResult
+    const payload = {
+      ID_Result: KeyResult
+    }
+
+    this.http.post(this.httpConfig.baseurl + '/query/acquisitionstring', payload).subscribe({
+      next: (data: any) => {
+        this.chartData = data;
+        this.MeasureID = this.chartData.MeasurID;
+        this.MeasurColl = this.chartData.MeasurColl;
+        this.subInitMeasuresInfo();
+      },
+      error: (err) => {
+        console.error("ERRORE BACKEND:", err);
       }
-
-        this.http.post(this.httpConfig.baseurl + '/query/acquisitionstring', payload).subscribe({
-          next: (data: any) => {
-            this.chartData = data;
-            this.MeasureID = this.chartData.MeasurID;
-            this.MeasurColl = this.chartData.MeasurColl;
-            this.subInitMeasuresInfo();
-          },
-          error: (err) => {
-            console.error("ERRORE BACKEND:", err);
-          }
-        });	
-
-      
+    });	 
   }
 
   subInitMeasuresInfo() {
@@ -1418,5 +1418,12 @@ export class ChartComponent {
   onResize() {
     this.updateChartHeight();
   }
+
+  goBack() {
+    this.router.navigate(['pagina-details']);
+  }
+
+  ShowTableData() { 
+  }    
 
 }
