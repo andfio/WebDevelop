@@ -20,8 +20,8 @@ export interface AxisValues {
   enabled: boolean
 }
 export interface CursorValues {
-  x: number,
-  y: number,
+  x: number | string,
+  y: number | string,
   name: string,
   color: string
   pointX: number,

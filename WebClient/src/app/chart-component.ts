@@ -555,6 +555,22 @@ export class ChartComponent {
     this.subLoadAxisConfig(this.KeyPlot);
     this.cd.detectChanges()
   }
+
+  buttonName: string = "Table"
+  blnShowGraph: boolean = true;
+
+  ShowPanel(buttonName: string) {
+    if (buttonName == "Graph") {
+      this.blnShowGraph = true;
+      this.buttonName = "Table"
+    }
+    else
+    {
+      this.blnShowGraph = false;
+      this.buttonName = "Graph"
+    }
+  }
+  
   
   isAddPointAnnotation: boolean = false;
   subChartEvents() {
@@ -616,7 +632,7 @@ export class ChartComponent {
                 }
               }
 
-              this.subAddAnnotations(xValue, yValue);
+              this.subAddAnnotations(xValue, yValue, nearest.seriesIndex);
 
           }          
         }
@@ -625,10 +641,10 @@ export class ChartComponent {
 
   }
 
-  subAddAnnotations(xValue: number, yValue: number): void;
+  subAddAnnotations(xValue: number, yValue: number, seriesIndex: number): void;
   subAddAnnotations(opts: any): void;
 
-  subAddAnnotations(typeArg?: any | number, yvalue?: number): void {
+  subAddAnnotations(typeArg?: any | number, yvalue?: number, seriesIndex?: number): void {
     let opts; let xValue;
     if (typeof typeArg !== 'number') {
       opts = typeArg;
@@ -675,6 +691,8 @@ export class ChartComponent {
         id: `cursor-${xValue}-${yvalue}`,
         x: xValue,
         y: yvalue,
+        yAxisIndex: this.AxisValues[this.DataPoint[seriesIndex!].AxisType].axisIndex,
+        seriesIndex: seriesIndex,
         marker: {
           size: 6,
           fillColor: (curIndex == 0 ? '#FFFFFF' : "#FFFF00" ),
@@ -708,8 +726,8 @@ export class ChartComponent {
       cursor = { 
         x: Number(xValue?.toFixed(2)),
         y: Number(yvalue?.toFixed(2)),
-        name: "",
-        color: "#ffffff",
+        name: this.DataPoint[seriesIndex!].name,
+        color: this.DataPoint[seriesIndex!].color,
         pointX: xValue,
         pointY: yvalue,
         id:`cursor-${xValue}-${yvalue}`,
@@ -762,16 +780,35 @@ export class ChartComponent {
       }
     }
 
-    let timeValue: number = 0; let measureValue: number = 0;
+    let timeValue: number = 0; let measureValue: number = 0; let measureUM: string[] = [];
 
-    for (let i=0; i <  this.CursorValues.length; i++) {
-      timeValue = this.CursorValues[i].x - timeValue
-      measureValue = this.CursorValues[i].y - measureValue
+    for (let i=0; i <  this.CursorValues.length - 1; i++) {
+      if (typeof this.CursorValues[i].x === 'string') {
+        timeValue = Number((this.CursorValues[i].x as string).substring(0, (this.CursorValues[i].x as string).indexOf(" ")))  - timeValue
+      } 
+      if (typeof this.CursorValues[i].y === 'string') {
+        measureValue = Number((this.CursorValues[i].y as string).substring(0, (this.CursorValues[i].y as string).indexOf(" "))) - measureValue
+      }
+      
+      measureUM[i] = this.CursorValues[i].name;
+       
+    }
+
+    let measureUMequivalent: string = "";
+    for (let i=0; i < measureUM.length; i++) {
+      measureUM[i] = this.getMeasureUM(measureUM[i]);
+    }
+
+    if (measureUM.every(um => um === measureUM[0])) {
+      measureUMequivalent = measureUM[0];
+    }
+    else    {
+      measureUMequivalent = "";
     }
 
     let cursor: CursorValues = {
       x: Number(Math.abs(timeValue).toFixed(2)),
-      y: Number(Math.abs(measureValue).toFixed(2)),
+      y: Number(Math.abs(measureValue).toFixed(2)) + " " + measureUMequivalent,
       name: "Difference",
       color: "#F5F5F5",
       pointX: 0,
@@ -787,11 +824,11 @@ export class ChartComponent {
   UpdateCursor(cursors: CursorValues, index: number): CursorValues[] {
     let cursorvalues: CursorValues[] = this.CursorValues
 
-    for (let i=0; i < cursorvalues.length; i++) {
+    for (let i=0; i < cursorvalues.length ; i++) {
       if (i == index) {
         cursorvalues[i] = { 
-          x: cursors.x,
-          y: cursors.y,
+          x: cursors.x + " sec",
+          y: cursors.y + this.getMeasureUM(cursors.name),
           name:  cursors.name,
           color: cursors.color,
           pointX: cursors.pointX,
@@ -804,6 +841,14 @@ export class ChartComponent {
   
     this.CursorValues = [];
     return cursorvalues
+  }
+
+  getMeasureUM(cursorShortName: string): string {
+    let measure = this.measuresinfo.find((x) => x.shortname == cursorShortName);
+    if (measure !== undefined) {
+      return " " + measure.UM;
+    }
+    return "";
   }
 
   formatLabel(value: number): string {

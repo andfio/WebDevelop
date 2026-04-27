@@ -4,7 +4,7 @@
 
       <div class="button-container">
           <div class="btn-goback" (click)="goBack()"><i class="material-symbols-outlined">home</i> Home </div>
-          <div class="btn-table" (click)="ShowTableData()"><i class="material-symbols-outlined">file_export</i> Table </div >
+          <div class="btn-tableAndGraph" (click)="ShowPanel(buttonName)"><i class="material-symbols-outlined">file_export</i> {{ buttonName }} </div >
       </div>    
 
   </div> 
@@ -59,22 +59,30 @@
     </div>     
 
     <div class="chart-wrapper">
-      <apx-chart class="apx-chart"
-        #chartObj
-        [series]="series"
-        [chart]="chart"
-        [dataLabels]="dataLabels"
-        [markers]="markers"
-        [title]="title"
-        [fill]="fill"
-        [yaxis]="yaxis"
-        [xaxis]="xaxis"
-        [tooltip]="tooltip"
-        [autoUpdateSeries]="true"
-        [stroke]="stroke"
-        [grid]="grid"
-        [legend]="legend"
-      ></apx-chart>
+      <div [hidden]="!blnShowGraph">
+          <apx-chart class="apx-chart"
+            #chartObj
+            [series]="series"
+            [chart]="chart"
+            [dataLabels]="dataLabels"
+            [markers]="markers"
+            [title]="title"
+            [fill]="fill"
+            [yaxis]="yaxis"
+            [xaxis]="xaxis"
+            [tooltip]="tooltip"
+            [autoUpdateSeries]="true"
+            [stroke]="stroke"
+            [grid]="grid"
+            [legend]="legend"
+          ></apx-chart>
+      </div>
+
+      <div [hidden]="blnShowGraph">
+        <div class="table-wrapper">
+          
+        </div>
+      </div>      
     </div>
 
     <div class="chart-details-container" id="chart-details-mngt">
