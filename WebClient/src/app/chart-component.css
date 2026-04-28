@@ -57,7 +57,8 @@
     gap: 10px;       
 }
 
-.chart-container {
+.table-wrapper,
+.chart-wrapper-container {
   display: flex;
   flex-direction: row;
   align-items: flex-start;
@@ -138,20 +139,11 @@
   margin-left: 5px;
 } */
 
-.table-wrapper,
 .chart-wrapper {
   flex: 1 1 auto;
   min-width: 0;
   padding: 5px;
   margin-right: 5px;
-}
-
-.table-wrapper {
-  height: auto;
-  border-radius: 6px;
-  background: #f8f9fa;
-  box-shadow: 0px 2px 8px rgba(0,0,0,0.15);
-  box-sizing: border-box;
 }
 
 .app-chart {
@@ -381,3 +373,10 @@ select {
   color: rgb(186, 43, 43);
 }
 
+.table-wrapper {
+  height: auto;
+  border-radius: 6px;
+  background: #f8f9fa;
+  box-shadow: 0px 2px 8px rgba(0,0,0,0.15);
+  box-sizing: border-box;
+}

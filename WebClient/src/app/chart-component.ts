@@ -557,17 +557,20 @@ export class ChartComponent {
   }
 
   buttonName: string = "Table"
+  buttonIcon: string = "table_chart";
   blnShowGraph: boolean = true;
 
   ShowPanel(buttonName: string) {
     if (buttonName == "Graph") {
       this.blnShowGraph = true;
       this.buttonName = "Table"
+      this.buttonIcon = "table_chart"
     }
     else
     {
       this.blnShowGraph = false;
       this.buttonName = "Graph"
+      this.buttonIcon = "monitoring"
     }
   }
   
