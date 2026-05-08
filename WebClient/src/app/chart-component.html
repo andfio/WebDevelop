@@ -3,341 +3,351 @@
     <div class="root-contenitor">
 
       <div class="button-container">
-          <div class="btn-goback" (click)="goBack()"><i class="material-symbols-outlined">home</i> Home </div>
+          <div class="btn-goback" (click)="goBack()"><i class="material-symbols-outlined">home</i> Back </div>
           <div class="btn-tableAndGraph" (click)="ShowPanel(buttonName)"><i class="material-symbols-outlined">{{ buttonIcon }}</i> {{ buttonName }} </div >
       </div>    
 
   </div> 
 
-  <div  [hidden]="!blnShowGraph" class="chart-container">
+  <div class="chart-container">
   
+    @if(blnShowGraph) {  
     <div class = "chart-wrapper-container">
-    
-      <div class="CursorPoints">
-        <span id="cursortitle" >Cursor Points: </span>
-        <div class="CursorPoint">
-          <div class="CursorLabel" 
-          [style.background-color]="CursorValues[0].color"
-          > @if(CursorValues[0].name !== "") {Cursor: } {{ CursorValues[0].name }}</div>
-          <label class="CursorY">Value: {{ CursorValues[0].y }}</label>
-          <label class="CursorX">Time: {{ CursorValues[0].x }}</label>
+      
+        <div class="CursorPoints">
+          <span id="cursortitle" >Cursor Points: </span>
+          <div class="CursorPoint">
+            <div class="CursorLabel" 
+            [style.background-color]="CursorValues[0].color"
+            > @if(CursorValues[0].name !== "") {Cursor: } {{ CursorValues[0].name }}</div>
+            <label class="CursorY">Value: {{ CursorValues[0].y }}</label>
+            <label class="CursorX">Time: {{ CursorValues[0].x }}</label>
+          </div>
+
+          <div class="CursorPoint">
+            <div class="CursorLabel" 
+            [style.background-color]="CursorValues[1].color"
+            >@if(CursorValues[1].name !== "") {Cursor: } {{ CursorValues[1].name }}</div>
+            <label class="CursorY">Value: {{ CursorValues[1].y }}</label>
+            <label class="CursorX">Time: {{ CursorValues[1].x }}</label>
+          </div>
+          
+          <div class="CursorPoint">
+            <div class="CursorLabel" 
+            [style.background-color]="CursorValues[2].color"
+            >{{ CursorValues[2].name }}</div>
+            @if(cursortype === true) {
+              <label class="CursorY">Value: {{ CursorValues[2].y }}</label>
+            }
+            <label class="CursorX">Time: {{ CursorValues[2].x }}</label>
+          </div>
+          
+          <!-- <div class="GraphInfo">
+              @for(itemfield of rootfields; track $index) {
+                @if(itemfield.field !== "") {
+                  @if(itemfield.field !== "VIB") { 
+                    @if(rowData[itemfield.field] !== "") {
+                      <label class="labelInfo">{{itemfield.short}}: <span style="font-weight: normal;"> {{rowData[itemfield.field]}}</span></label> 
+                    }
+                    @else {
+                      <label class="labelInfo">{{itemfield.short}}: <span style="font-weight: normal;">--</span></label> 
+                    }
+                }
+                  @else { 
+                    <label class="labelInfo">VIB: <span style="font-weight: normal;">{{rowData[itemfield.field]}}</span></label> 
+                  } 
+                }  
+              }
+          </div>       -->
+        </div>     
+
+        <div class="chart-wrapper">
+            <apx-chart class="apx-chart"
+              #chartObj
+              [series]="series"
+              [chart]="chart"
+              [dataLabels]="dataLabels"
+              [markers]="markers"
+              [title]="title"
+              [fill]="fill"
+              [yaxis]="yaxis"
+              [xaxis]="xaxis"
+              [tooltip]="tooltip"
+              [autoUpdateSeries]="true"
+              [stroke]="stroke"
+              [grid]="grid"
+              [legend]="legend"
+            ></apx-chart>     
         </div>
 
-        <div class="CursorPoint">
-          <div class="CursorLabel" 
-          [style.background-color]="CursorValues[1].color"
-          >@if(CursorValues[1].name !== "") {Cursor: } {{ CursorValues[1].name }}</div>
-          <label class="CursorY">Value: {{ CursorValues[1].y }}</label>
-          <label class="CursorX">Time: {{ CursorValues[1].x }}</label>
-        </div>
-        
-        <div class="CursorPoint">
-          <div class="CursorLabel" 
-          [style.background-color]="CursorValues[2].color"
-          >{{ CursorValues[2].name }}</div>
-          @if(cursortype === true) {
-            <label class="CursorY">Value: {{ CursorValues[2].y }}</label>
-          }
-          <label class="CursorX">Time: {{ CursorValues[2].x }}</label>
-        </div>
-        
-        <!-- <div class="GraphInfo">
-            @for(itemfield of rootfields; track $index) {
-              @if(itemfield.field !== "") {
-                @if(itemfield.field !== "VIB") { 
-                  @if(rowData[itemfield.field] !== "") {
-                    <label class="labelInfo">{{itemfield.short}}: <span style="font-weight: normal;"> {{rowData[itemfield.field]}}</span></label> 
-                  }
-                  @else {
-                    <label class="labelInfo">{{itemfield.short}}: <span style="font-weight: normal;">--</span></label> 
+        <div class="chart-details-container" id="chart-details-mngt">
+          
+          <div class="chart-details"> 
+            <div class="AxisX" style="text-align:center">Axes X (Time (sec))
+              <div class="inline-slider"> 
+                  <mat-slider
+                    class="matSlider"
+                    [min]="AxisValues[0].min"
+                    [max]="AxisValues[0].max"
+                    [step]="(AxisValues[0].max - AxisValues[0].min) / 100"
+                    showTickMarks
+                    discrete
+                    [displayWith]="formatLabel"
+                    (change)="subShowAxisValues(sliderX.value, 0, 'slider')">
+                    <input matSliderThumb [(ngModel)]="AxisValues[0].value" #sliderX>
+                  </mat-slider>        
+                  <div class="buttonReset" (click)="subResetSliders(0)"><i class="material-symbols-outlined" height="20" width="20">Home</i></div>
+                </div> 
+            </div>
+
+            <div class="AxisX-container">
+              <div class ="AxisX-Content">
+                <span class="inline-field">
+                    <label class="label">min: </label>
+                    <input type="number"
+                          oninput="if (this.value.length > 6) this.value = this.value.slice(0, 6);" 
+                          onkeydown="return ['Backspace','Delete','ArrowLeft','ArrowRight','Tab'].includes(event.code) || /[0-9.]/.test(event.key)"
+                          (change)="subShowAxisMinValue(AxisValues[0].textMin, 0)" 
+                          [(ngModel)]="AxisValues[0].textMin">
+                </span>
+              </div>
+              <div class ="AxisX-Content">
+                  <span class="inline-field">
+                    <label class="label">max: </label>
+                    <input type="number"
+                          oninput="if (this.value.length > 6) this.value = this.value.slice(0, 6);" 
+                          onkeydown="return ['Backspace','Delete','ArrowLeft','ArrowRight','Tab'].includes(event.code) || /[0-9.]/.test(event.key)" 
+                          (change)="subShowAxisValues(AxisValues[0].textMax, 0, 'input')"
+                          [(ngModel)]="AxisValues[0].textMax">
+                </span>
+              </div>  
+            </div>
+            
+            @if(AxisValues[1].enabled) {
+              <div class="AxisY" style="text-align:center">Axes 1° Left
+                <div class="inline-slider"> 
+                  <mat-slider
+                    class="matSlider"
+                    [min]="AxisValues[1].min"
+                    [max]="AxisValues[1].max"
+                    [step]="(AxisValues[1].max - AxisValues[1].min) / 100"
+                    showTickMarks
+                    discrete
+                    [displayWith]="formatLabel" 
+                    (change)="subShowAxisValues(sliderY1.value, 1, 'slider')">
+                    <input matSliderThumb [(ngModel)]="AxisValues[1].value" #sliderY1>
+                  </mat-slider>        
+                  <div class="buttonReset" (click)="subResetSliders(1)"><i class="material-symbols-outlined" height="20" width="20">Home</i></div>
+                </div>
+              </div>
+              
+              <div class="AxisY-container">
+                <div class ="AxisY-Content">
+                  <span class="inline-field">
+                      <label class="label">min: </label>
+                      <input type="number" 
+                          oninput="if (this.value.length > 6) this.value = this.value.slice(0, 6);" 
+                          onkeydown="return ['Backspace','Delete','ArrowLeft','ArrowRight','Tab'].includes(event.code) || /[0-9.]/.test(event.key)" 
+                          (change)="subShowAxisMinValue(AxisValues[1].textMin, 1)" 
+                          [(ngModel)]="AxisValues[1].textMin">
+                  </span>
+                </div>
+                <div class ="AxisY-Content">
+                  <span class="inline-field">
+                      <label class="label">max: </label>
+                      <input type="number" 
+                          oninput="if (this.value.length > 6) this.value = this.value.slice(0, 6);" 
+                          onkeydown="return ['Backspace','Delete','ArrowLeft','ArrowRight','Tab'].includes(event.code) || /[0-9.]/.test(event.key)" 
+                          (change)="subShowAxisValues(AxisValues[1].textMax, 1, 'input')"
+                          [(ngModel)]="AxisValues[1].textMax">
+                  </span>
+                </div>  
+              </div>
+            }
+
+            @if(AxisValues[2].enabled) {
+              <div class="AxisY" style="text-align:center">Axes 2° Left
+                <div class="inline-slider"> 
+                  <mat-slider
+                    class="matSlider"
+                    [min]="AxisValues[2].min"
+                    [max]="AxisValues[2].max"
+                    [step]="(AxisValues[2].max - AxisValues[2].min) / 100"
+                    showTickMarks
+                    discrete
+                    [displayWith]="formatLabel"
+                    (change)="subShowAxisValues(sliderY2.value, 2, 'slider')">
+                    <input matSliderThumb [(ngModel)]="AxisValues[2].value" #sliderY2>
+                  </mat-slider>        
+                  <div class="buttonReset" (click)="subResetSliders(2)"><i class="material-symbols-outlined" height="20" width="20">Home</i></div>
+                </div>
+              </div> 
+
+              <div class="AxisY-container">
+                <div class ="AxisY-Content">
+                  <span class="inline-field">
+                      <label class="label">min: </label>
+                      <input type="number" 
+                            oninput="if (this.value.length > 6) this.value = this.value.slice(0, 6);" 
+                            onkeydown="return ['Backspace','Delete','ArrowLeft','ArrowRight','Tab'].includes(event.code) || /[0-9.]/.test(event.key)" 
+                            (change)="subShowAxisMinValue(AxisValues[2].textMin, 2)" 
+                            [(ngModel)]="AxisValues[2].textMin">
+                  </span>
+                </div>
+                <div class ="AxisY-Content">
+                  <span class="inline-field">
+                      <label class="label">max: </label>
+                      <input type="number" 
+                            oninput="if (this.value.length > 6) this.value = this.value.slice(0, 6);" 
+                            onkeydown="return ['Backspace','Delete','ArrowLeft','ArrowRight','Tab'].includes(event.code) || /[0-9.]/.test(event.key)" 
+                            (change)="subShowAxisValues(AxisValues[2].textMax, 2, 'input')"
+                            [(ngModel)]="AxisValues[2].textMax">
+                  </span>
+                </div>  
+              </div>
+            }
+
+            @if(AxisValues[3].enabled) {
+              <div class="AxisY" style="text-align:center">Axes 1° Right
+                <div class="inline-slider"> 
+                  <mat-slider
+                    class="matSlider"
+                    [min]="AxisValues[3].min"
+                    [max]="AxisValues[3].max"
+                    [step]="(AxisValues[3].max - AxisValues[3].min) / 100"
+                    showTickMarks
+                    discrete
+                    [displayWith]="formatLabel"
+                    (change)="subShowAxisValues(sliderY3.value, 3, 'slider')">
+                    <input matSliderThumb [(ngModel)]="AxisValues[3].value" #sliderY3>
+                  </mat-slider>        
+                  <div class="buttonReset" (click)="subResetSliders(3)"><i class="material-symbols-outlined" height="20" width="20">Home</i></div>
+                </div>
+              </div> 
+
+              <div class="AxisY-container">
+                <div class ="AxisY-Content">
+                  <span class="inline-field">
+                      <label class="label">min: </label>
+                      <input type="number" 
+                          oninput="if (this.value.length > 6) this.value = this.value.slice(0, 6);" 
+                          onkeydown="return ['Backspace','Delete','ArrowLeft','ArrowRight','Tab'].includes(event.code) || /[0-9.]/.test(event.key)" 
+                          (change)="subShowAxisMinValue(AxisValues[3].textMin, 3)" 
+                          [(ngModel)]="AxisValues[3].textMin">
+                  </span>
+                </div>
+                <div class ="AxisY-Content">
+                  <span class="inline-field">
+                      <label class="label">max: </label>
+                    <input type="number" 
+                          oninput="if (this.value.length > 6) this.value = this.value.slice(0, 6);" 
+                          onkeydown="return ['Backspace','Delete','ArrowLeft','ArrowRight','Tab'].includes(event.code) || /[0-9.]/.test(event.key)" 
+                          (change)="subShowAxisValues(AxisValues[3].textMax, 3, 'input')"
+                          [(ngModel)]="AxisValues[3].textMax">
+                  </span>
+                </div>  
+              </div>      
+            }
+
+            
+          <div class ="AxisButtons">
+          
+            <div id="firstAxisButtons">
+            
+              <div class="AxisButton" (click)="LoadXYAxis('LoadXYAxis')">
+                  @if(buttonpressed['LoadXYAxis'] === true ) 
+                    { <i class="material-symbols-outlined">done_outline</i> } @else 
+                    { <i class="material-symbols-outlined">upload</i>}Load Axis</div>
+
+                <div class="AxisButton" (click)="SaveXYAxis('SaveXYAxis')">
+                  @if(buttonpressed['SaveXYAxis'] === true ) 
+                    { <i class="material-symbols-outlined">done_outline</i> } @else 
+                    { <i class="material-symbols-outlined">save</i>}Save Axis</div>               
+
+            </div>
+            
+            <div id="SecondAxisButtons">
+
+              <div class="AxisButton" (click)="ToggleLegend('ToggleLegend')">          
+                  @if(buttonpressed['ToggleLegend'] === true ) 
+                    { <i class="material-symbols-outlined">done_outline</i> } @else 
+                    { <i class="material-symbols-outlined">stack</i>}Legend</div>
+              
+              <div class="AxisButton" (click)="ShowGrid('ShowGrid')">
+                @if(buttonpressed['ShowGrid'] === true ) 
+                  { <i class="material-symbols-outlined">done_outline</i> } @else 
+                  { <i class="material-symbols-outlined">grid_4x4</i>}Show Grid</div>
+                
+            </div>   
+
+          </div>
+
+          <div class="GraphButton"  (click)="ShowTestsExecution('ShowTestsExecution')">
+            @if(buttonpressed['ShowTestsExecution'] === true ) 
+            { <i class="material-symbols-outlined">done_outline</i> }
+            <span>Show Tests Execution</span>
+          </div>
+
+          <div class="selectbox">
+            <label id="labelMeasures">Tests :</label>
+            <select [(ngModel)]="measureSelected">
+              @for (item of measures; track $index) {
+                  @for (value of item.values; track $index) {
+                    <option [value]="value"> {{value}} </option>
                   }
               }
-                @else { 
-                  <label class="labelInfo">VIB: <span style="font-weight: normal;">{{rowData[itemfield.field]}}</span></label> 
-                } 
-              }  
-            }
-        </div>       -->
-      </div>     
+            </select>
+          </div> 
+          
+          <div class="GraphButton" name="ShowPeaks" (click)="ShowPeaks('ShowPeaks')">
+            @if(buttonpressed['ShowPeaks'] === true ) 
+            { <i class="material-symbols-outlined">done_outline</i> }
+            <span>Show Peaks</span>
+          </div>    
 
-      <div class="chart-wrapper">
-          <apx-chart class="apx-chart"
-            #chartObj
-            [series]="series"
-            [chart]="chart"
-            [dataLabels]="dataLabels"
-            [markers]="markers"
-            [title]="title"
-            [fill]="fill"
-            [yaxis]="yaxis"
-            [xaxis]="xaxis"
-            [tooltip]="tooltip"
-            [autoUpdateSeries]="true"
-            [stroke]="stroke"
-            [grid]="grid"
-            [legend]="legend"
-          ></apx-chart>     
+          <div class="GraphButton" name="ShowConstantValues" (click)="ShowConstantValues('ShowConstantValues')">
+            @if(buttonpressed['ShowConstantValues'] === true ) 
+            { <i class="material-symbols-outlined">done_outline</i> }
+            <span>Show Constant Values</span>
+          </div> 
+
+          <div class="GraphButton" name="ShowTestsAree" (click)="ShowTestsAree('ShowTestsAree')">
+            @if(buttonpressed['ShowTestsAree'] === true ) 
+            { <i class="material-symbols-outlined">done_outline</i> }
+            <span>Show Tests Aree</span>
+          </div>    
+          
+          <div class="slidetogle-container">
+            <div class="slidetoggle">
+              <mat-slide-toggle class="CursorToggle" [(ngModel)]="IsCursorsEnabled[0]" (change)="subCursorsEnabled(IsCursorsEnabled[0])">Cursors Enabled</mat-slide-toggle>
+            </div>
+
+            <div class="slidetoggle">
+              <mat-slide-toggle class="CursorToggle" [(ngModel)]="IsCursorsEnabled[1]" (change)="subCursorsMode(IsCursorsEnabled[1])" [disabled]="!IsCursorsEnabled[0]">Cursors Free</mat-slide-toggle>
+            </div>
+            
+          </div> 
+
+        </div> 
+      
       </div>
-
-      <div class="chart-details-container" id="chart-details-mngt">
-        
-        <div class="chart-details"> 
-          <div class="AxisX" style="text-align:center">Axes X (Time (sec))
-            <div class="inline-slider"> 
-                <mat-slider
-                  class="matSlider"
-                  [min]="AxisValues[0].min"
-                  [max]="AxisValues[0].max"
-                  [step]="(AxisValues[0].max - AxisValues[0].min) / 100"
-                  showTickMarks
-                  discrete
-                  [displayWith]="formatLabel"
-                  (change)="subShowAxisValues(sliderX.value, 0, 'slider')">
-                  <input matSliderThumb [(ngModel)]="AxisValues[0].value" #sliderX>
-                </mat-slider>        
-                <div class="buttonReset" (click)="subResetSliders(0)"><i class="material-symbols-outlined" height="20" width="20">Home</i></div>
-              </div> 
-          </div>
-
-          <div class="AxisX-container">
-            <div class ="AxisX-Content">
-              <span class="inline-field">
-                  <label class="label">min: </label>
-                  <input type="number"
-                        oninput="if (this.value.length > 6) this.value = this.value.slice(0, 6);" 
-                        onkeydown="return ['Backspace','Delete','ArrowLeft','ArrowRight','Tab'].includes(event.code) || /[0-9.]/.test(event.key)"
-                        (change)="subShowAxisMinValue(AxisValues[0].textMin, 0)" 
-                        [(ngModel)]="AxisValues[0].textMin">
-              </span>
-            </div>
-            <div class ="AxisX-Content">
-                <span class="inline-field">
-                  <label class="label">max: </label>
-                  <input type="number"
-                        oninput="if (this.value.length > 6) this.value = this.value.slice(0, 6);" 
-                        onkeydown="return ['Backspace','Delete','ArrowLeft','ArrowRight','Tab'].includes(event.code) || /[0-9.]/.test(event.key)" 
-                        (change)="subShowAxisValues(AxisValues[0].textMax, 0, 'input')"
-                        [(ngModel)]="AxisValues[0].textMax">
-              </span>
-            </div>  
-          </div>
           
-          @if(AxisValues[1].enabled) {
-            <div class="AxisY" style="text-align:center">Axes 1° Left
-              <div class="inline-slider"> 
-                <mat-slider
-                  class="matSlider"
-                  [min]="AxisValues[1].min"
-                  [max]="AxisValues[1].max"
-                  [step]="(AxisValues[1].max - AxisValues[1].min) / 100"
-                  showTickMarks
-                  discrete
-                  [displayWith]="formatLabel" 
-                  (change)="subShowAxisValues(sliderY1.value, 1, 'slider')">
-                  <input matSliderThumb [(ngModel)]="AxisValues[1].value" #sliderY1>
-                </mat-slider>        
-                <div class="buttonReset" (click)="subResetSliders(1)"><i class="material-symbols-outlined" height="20" width="20">Home</i></div>
-              </div>
-            </div>
-            
-            <div class="AxisY-container">
-              <div class ="AxisY-Content">
-                <span class="inline-field">
-                    <label class="label">min: </label>
-                    <input type="number" 
-                        oninput="if (this.value.length > 6) this.value = this.value.slice(0, 6);" 
-                        onkeydown="return ['Backspace','Delete','ArrowLeft','ArrowRight','Tab'].includes(event.code) || /[0-9.]/.test(event.key)" 
-                        (change)="subShowAxisMinValue(AxisValues[1].textMin, 1)" 
-                        [(ngModel)]="AxisValues[1].textMin">
-                </span>
-              </div>
-              <div class ="AxisY-Content">
-                <span class="inline-field">
-                    <label class="label">max: </label>
-                    <input type="number" 
-                        oninput="if (this.value.length > 6) this.value = this.value.slice(0, 6);" 
-                        onkeydown="return ['Backspace','Delete','ArrowLeft','ArrowRight','Tab'].includes(event.code) || /[0-9.]/.test(event.key)" 
-                        (change)="subShowAxisValues(AxisValues[1].textMax, 1, 'input')"
-                        [(ngModel)]="AxisValues[1].textMax">
-                </span>
-              </div>  
-            </div>
-          }
-
-          @if(AxisValues[2].enabled) {
-            <div class="AxisY" style="text-align:center">Axes 2° Left
-              <div class="inline-slider"> 
-                <mat-slider
-                  class="matSlider"
-                  [min]="AxisValues[2].min"
-                  [max]="AxisValues[2].max"
-                  [step]="(AxisValues[2].max - AxisValues[2].min) / 100"
-                  showTickMarks
-                  discrete
-                  [displayWith]="formatLabel"
-                  (change)="subShowAxisValues(sliderY2.value, 2, 'slider')">
-                  <input matSliderThumb [(ngModel)]="AxisValues[2].value" #sliderY2>
-                </mat-slider>        
-                <div class="buttonReset" (click)="subResetSliders(2)"><i class="material-symbols-outlined" height="20" width="20">Home</i></div>
-              </div>
-            </div> 
-
-            <div class="AxisY-container">
-              <div class ="AxisY-Content">
-                <span class="inline-field">
-                    <label class="label">min: </label>
-                    <input type="number" 
-                          oninput="if (this.value.length > 6) this.value = this.value.slice(0, 6);" 
-                          onkeydown="return ['Backspace','Delete','ArrowLeft','ArrowRight','Tab'].includes(event.code) || /[0-9.]/.test(event.key)" 
-                          (change)="subShowAxisMinValue(AxisValues[2].textMin, 2)" 
-                          [(ngModel)]="AxisValues[2].textMin">
-                </span>
-              </div>
-              <div class ="AxisY-Content">
-                <span class="inline-field">
-                    <label class="label">max: </label>
-                    <input type="number" 
-                          oninput="if (this.value.length > 6) this.value = this.value.slice(0, 6);" 
-                          onkeydown="return ['Backspace','Delete','ArrowLeft','ArrowRight','Tab'].includes(event.code) || /[0-9.]/.test(event.key)" 
-                          (change)="subShowAxisValues(AxisValues[2].textMax, 2, 'input')"
-                          [(ngModel)]="AxisValues[2].textMax">
-                </span>
-              </div>  
-            </div>
-          }
-
-          @if(AxisValues[3].enabled) {
-            <div class="AxisY" style="text-align:center">Axes 1° Right
-              <div class="inline-slider"> 
-                <mat-slider
-                  class="matSlider"
-                  [min]="AxisValues[3].min"
-                  [max]="AxisValues[3].max"
-                  [step]="(AxisValues[3].max - AxisValues[3].min) / 100"
-                  showTickMarks
-                  discrete
-                  [displayWith]="formatLabel"
-                  (change)="subShowAxisValues(sliderY3.value, 3, 'slider')">
-                  <input matSliderThumb [(ngModel)]="AxisValues[3].value" #sliderY3>
-                </mat-slider>        
-                <div class="buttonReset" (click)="subResetSliders(3)"><i class="material-symbols-outlined" height="20" width="20">Home</i></div>
-              </div>
-            </div> 
-
-            <div class="AxisY-container">
-              <div class ="AxisY-Content">
-                <span class="inline-field">
-                    <label class="label">min: </label>
-                    <input type="number" 
-                        oninput="if (this.value.length > 6) this.value = this.value.slice(0, 6);" 
-                        onkeydown="return ['Backspace','Delete','ArrowLeft','ArrowRight','Tab'].includes(event.code) || /[0-9.]/.test(event.key)" 
-                        (change)="subShowAxisMinValue(AxisValues[3].textMin, 3)" 
-                        [(ngModel)]="AxisValues[3].textMin">
-                </span>
-              </div>
-              <div class ="AxisY-Content">
-                <span class="inline-field">
-                    <label class="label">max: </label>
-                  <input type="number" 
-                        oninput="if (this.value.length > 6) this.value = this.value.slice(0, 6);" 
-                        onkeydown="return ['Backspace','Delete','ArrowLeft','ArrowRight','Tab'].includes(event.code) || /[0-9.]/.test(event.key)" 
-                        (change)="subShowAxisValues(AxisValues[3].textMax, 3, 'input')"
-                        [(ngModel)]="AxisValues[3].textMax">
-                </span>
-              </div>  
-            </div>      
-          }
-
-          
-        <div class ="AxisButtons">
-        
-          <div id="firstAxisButtons">
-          
-            <div class="AxisButton" (click)="LoadXYAxis('LoadXYAxis')">
-                @if(buttonpressed['LoadXYAxis'] === true ) 
-                  { <i class="material-symbols-outlined">done_outline</i> } @else 
-                  { <i class="material-symbols-outlined">upload</i>}Load Axis</div>
-
-              <div class="AxisButton" (click)="SaveXYAxis('SaveXYAxis')">
-                @if(buttonpressed['SaveXYAxis'] === true ) 
-                  { <i class="material-symbols-outlined">done_outline</i> } @else 
-                  { <i class="material-symbols-outlined">save</i>}Save Axis</div>               
-
-          </div>
-          
-          <div id="SecondAxisButtons">
-
-            <div class="AxisButton" (click)="ToggleLegend('ToggleLegend')">          
-                @if(buttonpressed['ToggleLegend'] === true ) 
-                  { <i class="material-symbols-outlined">done_outline</i> } @else 
-                  { <i class="material-symbols-outlined">stack</i>}Legend</div>
-            
-            <div class="AxisButton" (click)="ShowGrid('ShowGrid')">
-              @if(buttonpressed['ShowGrid'] === true ) 
-                { <i class="material-symbols-outlined">done_outline</i> } @else 
-                { <i class="material-symbols-outlined">grid_4x4</i>}Show Grid</div>
-              
-          </div>   
-
-        </div>
-
-        <div class="GraphButton"  (click)="ShowTestsExecution('ShowTestsExecution')">
-          @if(buttonpressed['ShowTestsExecution'] === true ) 
-          { <i class="material-symbols-outlined">done_outline</i> }
-          <span>Show Tests Execution</span>
-        </div>
-
-        <div class="selectbox">
-          <label id="labelMeasures">Tests :</label>
-          <select [(ngModel)]="measureSelected">
-            @for (item of measures; track $index) {
-                @for (value of item.values; track $index) {
-                  <option [value]="value"> {{value}} </option>
-                }
-            }
-          </select>
-        </div> 
-        
-        <div class="GraphButton" name="ShowPeaks" (click)="ShowPeaks('ShowPeaks')">
-          @if(buttonpressed['ShowPeaks'] === true ) 
-          { <i class="material-symbols-outlined">done_outline</i> }
-          <span>Show Peaks</span>
-        </div>    
-
-        <div class="GraphButton" name="ShowConstantValues" (click)="ShowConstantValues('ShowConstantValues')">
-          @if(buttonpressed['ShowConstantValues'] === true ) 
-          { <i class="material-symbols-outlined">done_outline</i> }
-          <span>Show Constant Values</span>
-        </div> 
-
-        <div class="GraphButton" name="ShowTestsAree" (click)="ShowTestsAree('ShowTestsAree')">
-          @if(buttonpressed['ShowTestsAree'] === true ) 
-          { <i class="material-symbols-outlined">done_outline</i> }
-          <span>Show Tests Aree</span>
-        </div>    
-        
-        <div class="slidetogle-container">
-          <div class="slidetoggle">
-            <mat-slide-toggle class="CursorToggle" [(ngModel)]="IsCursorsEnabled[0]" (change)="subCursorsEnabled(IsCursorsEnabled[0])">Cursors Enabled</mat-slide-toggle>
-          </div>
-
-          <div class="slidetoggle">
-            <mat-slide-toggle class="CursorToggle" [(ngModel)]="IsCursorsEnabled[1]" (change)="subCursorsMode(IsCursorsEnabled[1])" [disabled]="!IsCursorsEnabled[0]">Cursors Free</mat-slide-toggle>
-          </div>
-          
-        </div> 
-
-      </div> 
-
-    
     </div>
-
-    <div [hidden]="blnShowGraph">
+    }
+    @else {
       <div class="table-wrapper">
         
+        <div class="table-data-container">
+
+        </div>
+
+        <div class="table-info-container">
+          
+        </div>
+
       </div>
-    </div>     
-  
-  </div>
+    }
+
+  </div> 
 
 </div>

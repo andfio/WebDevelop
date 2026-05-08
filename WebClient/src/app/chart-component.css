@@ -57,7 +57,6 @@
     gap: 10px;       
 }
 
-.table-wrapper,
 .chart-wrapper-container {
   display: flex;
   flex-direction: row;
@@ -374,9 +373,36 @@ select {
 }
 
 .table-wrapper {
-  height: auto;
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  margin: 0px 5px;
+  gap: 5px;  
   border-radius: 6px;
   background: #f8f9fa;
   box-shadow: 0px 2px 8px rgba(0,0,0,0.15);
   box-sizing: border-box;
+  height: 92vh;
+}
+
+.table-data-container {
+  flex: 1 1 60%;
+  min-width: 0;
+  padding: 5px;
+  border-radius: 6px;
+  background: #f8f9fa;
+  box-shadow: 0px 2px 8px rgba(0,0,0,0.15);
+  box-sizing: border-box;
+  height: 100%;  
+}
+
+.table-info-container {
+  flex: 1 1 auto;
+  height: 100%;
+  padding: 5px;
+  border-radius: 6px;
+  background: #f8f9fa;
+  box-shadow: 0px 2px 8px rgba(0,0,0,0.15);
+  box-sizing: border-box;
+  overflow-y: auto;
 }
