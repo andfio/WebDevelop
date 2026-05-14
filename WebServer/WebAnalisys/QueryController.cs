@@ -499,6 +499,7 @@ namespace WebAnalisys.Controllers
                 sql += " WHERE UnitTypeID = " + parameters.UnitTypeID;
                 sql += " AND ComType = " + parameters.CommandType;
                 sql += " AND ComVisible = 1";
+                sql += " AND ComDescrShort != ''";
                 sql += " ORDER BY ComID";
 
                 using (var conn = new SqlConnection(connDBTestString))

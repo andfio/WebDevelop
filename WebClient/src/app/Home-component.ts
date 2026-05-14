@@ -347,9 +347,9 @@ export class HomeComponent {
     return result;
   }
   
-  subOnDetailPage(row: any) {
+  subOnDetailPage(rowData: any) {
     this.router.navigate(['/pagina-details'], {
-      state: { rowData: row, unitsInfo: this.unitsInfo, functionsInfo: this.functionsInfo, axesConfig: this.axesConfig }   
+      state: { rowData: rowData, unitsInfo: this.unitsInfo, functionsInfo: this.functionsInfo, axesConfig: this.axesConfig }   
     });
     this.state.SelectedRow = this.selectedRow;
   }

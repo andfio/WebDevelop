@@ -115,29 +115,6 @@
   padding-left: 25px;
 }
 
-/* .GraphInfo {
-  display: flex;
-  flex-direction: column;
-  border-radius: 6px;
-  background-color: whitesmoke;
-  box-shadow: 0px 2px 8px rgba(0,0,0,0.15);
-  box-sizing: border-box;
-  padding: 5px;
-  margin-top: 15px;
-  margin-bottom: 15px;
-  height: calc((85vh - 36vh) - 60px);
-  overflow-y: hidden;
-}
-
-.GraphInfo label {
-  font-family: Tahoma;
-  font-size: 10px;
-  font-weight: bold;
-  color: blue;
-  padding: 2px;
-  margin-left: 5px;
-} */
-
 .chart-wrapper {
   flex: 1 1 auto;
   min-width: 0;
@@ -367,7 +344,7 @@ select {
 
 .CursorToggle {
   font-family: Tahoma;
-  font-size: 14p;
+  font-size: 14px;
   font-weight: bold;
   color: rgb(186, 43, 43);
 }
@@ -394,6 +371,8 @@ select {
   box-shadow: 0px 2px 8px rgba(0,0,0,0.15);
   box-sizing: border-box;
   height: 100%;  
+  overflow-y: auto;
+  overflow-x: auto; 
 }
 
 .table-info-container {
@@ -405,4 +384,78 @@ select {
   box-shadow: 0px 2px 8px rgba(0,0,0,0.15);
   box-sizing: border-box;
   overflow-y: auto;
+}
+
+.table-chart {
+    border-collapse: collapse; 
+    margin: 10px;
+    table-layout: auto;
+    width: auto;
+}
+
+.table-chart thead tr,
+.table-chart thead th {
+    text-align: start;
+    font-family: "Tahoma";
+    font-size: 10px;
+    color: black;
+    background-color: silver;
+    border: 1px solid black;
+    height: 10px;
+    width: 60px;
+    min-width: 60px;
+    max-width: 60px;    
+}
+
+.table-chart tbody tr,
+.table-chart tbody td  {
+    text-align: center;
+    font-family: "Tahoma";
+    font-size: 10px;
+    color: black;
+    background-color: white;
+    border: 1px solid black;
+    height: 8px;
+    width: 60px;
+    min-width: 60px;
+    max-width: 60px;       
+}
+
+.time-column-header {
+    text-align: start;
+    font-family: "Tahoma";
+    font-size: 10px;
+    color: black;
+    background-color: silver ;
+    border: 1px solid black;
+    height: 10px;
+    width: 120px !important;
+    min-width: 120px !important;
+    max-width: 120px !important;      
+}
+
+.sec-column-header thead {
+    text-align: start;
+    font-family: "Tahoma";
+    font-size: 10px;
+    color: black;
+    background-color: silver;
+    border: 1px solid black;
+    height: 10px;
+    width: 60px !important;
+    min-width: 60px !important;
+    max-width: 60px !important;       
+}
+
+.sec-column-header tbody {
+    text-align: start;
+    font-family: "Tahoma";
+    font-size: 10px;
+    color: black;
+    background-color: white;
+    border: 1px solid black;
+    height: 10px;
+    width: 60px !important;
+    min-width: 60px !important;
+    max-width: 60px !important;       
 }

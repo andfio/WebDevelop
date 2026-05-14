@@ -17,7 +17,7 @@ import {
   ApexAnnotations
 } from "ng-apexcharts";
 import { NgApexchartsModule } from "ng-apexcharts";
-import { DataPoint } from "./chart-config";
+import { DataPoint, timeinfo, tablevalues } from "./chart-config";
 import { DialogContent } from './dialog-component';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSliderModule } from '@angular/material/slider';
@@ -51,6 +51,7 @@ import { Router } from '@angular/router';
   imports: [NgApexchartsModule, MatSliderModule, FormsModule, MatIconModule, MatMenuModule, MatButtonModule, MatSlideToggleModule]
 })
 export class ChartComponent {
+[x: string]: any;
   @ViewChild('chartObj') chartObj!: ApexChartComponent;
 
   public series: ApexAxisChartSeries = [];
@@ -156,7 +157,23 @@ export class ChartComponent {
       error: (err) => {
         console.error("ERRORE BACKEND:", err);
       }
-    });	   
+    });
+    this.tableheadertime();	   
+  }
+
+  timeinfo: timeinfo[] = [];
+  tableheadertime() { 
+    
+      this.timeinfo.push({
+        title: `ABS Time`,
+        description: `[hh:mm]-(ss.mm)`
+      },
+      {
+        title: `Time`,
+        description: `sec`
+      }
+    );
+    
   }
 
   ShowChart() {
@@ -554,6 +571,38 @@ export class ChartComponent {
 
     this.subLoadAxisConfig(this.KeyPlot);
     this.cd.detectChanges()
+  }
+
+  public subColumnValues(shortname: string): tablevalues {
+    let measures: tablevalues | null = null;
+    this.DataPoint.forEach(dp => {
+      for (let i=0; i < this.measuresinfo.length; i++) {
+        if (dp.name == shortname) {
+          measures = { color: dp.color, values: dp.measure };
+          break;
+        }
+      }
+    });
+    
+    if (measures == null) {
+        let values: number[] = [];
+        for (let i=0; i < this.DataPoint[0].time.length; i++) {
+          values.push(0);
+        }
+        measures = { color: "white", values: values };
+    }
+
+    return measures;
+  } 
+
+  subGetUM(measureID: number): string {
+    const measure = this.measuresinfo.find(m => m.measureID === measureID);
+    return measure ? measure.UM : "";
+  }
+
+  subGetShortname(measureID: number): string {
+    const measure = this.measuresinfo.find(m => m.measureID === measureID);
+    return measure ? measure.shortname : "";
   }
 
   buttonName: string = "Table"
@@ -1462,6 +1511,26 @@ export class ChartComponent {
     });
   }
 
+  convertSecondiToTime(a: number): string {
+    let tot_sec = a;
+    let tot_min = Math.floor(tot_sec / 60);
+    let tot_ore = Math.floor(tot_min / 60);
+
+    tot_sec = tot_sec - (tot_min * 60);
+    tot_min = tot_min - (tot_ore * 60);
+
+    // --- Formattazione dei secondi come "00.00"
+    const str_tot_sec = tot_sec.toFixed(2).padStart(5, "0");
+
+    // --- Formattazione minuti a 2 cifre
+    const str_tot_min = String(tot_min).padStart(2, "0");
+
+    // --- Le ore rimangono senza zeri iniziali (comportamento VB6 in questo caso)
+    const str_tot_ore = String(tot_ore).padStart(2, "0");
+
+    return `${str_tot_ore}:${str_tot_min} - (${str_tot_sec})`;
+  }
+
   @HostListener('window:resize')
   onResize() {
     this.updateChartHeight();
@@ -1471,7 +1540,6 @@ export class ChartComponent {
     this.router.navigate(['pagina-details']);
   }
 
-  ShowTableData() { 
-  }    
+
 
 }

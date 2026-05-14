@@ -22,6 +22,7 @@ background: any;
   constructor(private router: Router, private http: HttpClient, private dialog: MatDialog, private chartDialog: MatDialog, private detailsState: DetailsStateService) {}
   
   goBack() {
+    this.detailsState.rowData = undefined;
     this.router.navigate(['/']);
   }
 
@@ -51,6 +52,7 @@ background: any;
   measuresinfo: measuresinfo[] = [];
 
   ngOnInit() {
+
     if (this.detailsState.rowData !== undefined) {
       this.row = this.detailsState.rowData;
       this.unitsInfo = this.detailsState.unitsInfo;
@@ -62,7 +64,7 @@ background: any;
       this.unitsInfo = history.state.unitsInfo;
       this.functionsInfo = history.state.functionsInfo;
       this.axesConfig = history.state.axesConfig;
-    }
+    }  
 
     console.log("Riga ricevuta:", this.row);
     this.filtervalues['ID_Result'] = this.row['ID_Result'];

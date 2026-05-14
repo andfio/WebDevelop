@@ -42,23 +42,6 @@
             <label class="CursorX">Time: {{ CursorValues[2].x }}</label>
           </div>
           
-          <!-- <div class="GraphInfo">
-              @for(itemfield of rootfields; track $index) {
-                @if(itemfield.field !== "") {
-                  @if(itemfield.field !== "VIB") { 
-                    @if(rowData[itemfield.field] !== "") {
-                      <label class="labelInfo">{{itemfield.short}}: <span style="font-weight: normal;"> {{rowData[itemfield.field]}}</span></label> 
-                    }
-                    @else {
-                      <label class="labelInfo">{{itemfield.short}}: <span style="font-weight: normal;">--</span></label> 
-                    }
-                }
-                  @else { 
-                    <label class="labelInfo">VIB: <span style="font-weight: normal;">{{rowData[itemfield.field]}}</span></label> 
-                  } 
-                }  
-              }
-          </div>       -->
         </div>     
 
         <div class="chart-wrapper">
@@ -338,6 +321,97 @@
       <div class="table-wrapper">
         
         <div class="table-data-container">
+
+          <table class="table-chart">
+            <thead>
+              <tr>
+
+                @for(item of this.timeinfo; track $index) {
+                  @if($index === 0) {
+                  <th class="time-column-header">
+                    {{ item.title }}
+                  </th>
+                  }
+                  @else {
+                    <th class="sec-column-header">
+                      {{ item.title }} 
+                    </th>
+                  }
+
+                }
+
+                @for(headerItem of this.MeasureID; track $index) {
+                  @if(subGetShortname(headerItem) !== "") {
+                    <th>
+                    
+                      {{ subGetShortname(headerItem) }}
+                    
+                    </th>
+                  } 
+                }
+
+              </tr>  
+
+              <tr>
+                
+                @for(item of this.timeinfo; track $index) {
+                  @if($index === 0) {
+                    <th class="time-column-header">
+                      {{ item.description }}
+                    </th>
+                  }
+                  @else { 
+                    <th class="sec-column-header">
+                      {{ item.description }}
+                    </th>
+                  }
+                }
+
+                @for(headerItem of this.MeasureID; track $index) {
+                  @if(subGetUM(headerItem) !== "") {
+                    <th>
+                      {{ subGetUM(headerItem) }}
+                    </th> 
+                  }
+                }
+
+              </tr>
+            </thead>
+
+            <tbody>
+
+              @for(timeValue of this.DataPoint[0].time; track $index; let rowIndex = $index) {
+
+                <tr>
+
+                  <!-- Prima colonna -->
+                  <td class="time-column-header" [style.background-color]="'rgb(192, 192, 192)'">
+                    {{ convertSecondiToTime(timeValue) }}
+                  </td>
+
+                  <!-- Seconda colonna -->
+                  <td class="sec-column-header">
+                    {{ timeValue }}
+                  </td>
+
+                  <!-- Colonne misure -->
+                  @for(itmMeasure of this.MeasureID; track $index) {
+                    @if(subGetShortname(itmMeasure) !== "") {
+                      <td [style.background-color]="this.subColumnValues(this.subGetShortname(itmMeasure)).color">
+
+                      {{ this.subColumnValues(this.subGetShortname(itmMeasure)).values[rowIndex] }}                    
+                      
+                      </td>
+                    }
+                  }
+
+                </tr>
+
+              }
+
+            </tbody>
+
+          </table>
 
         </div>
 

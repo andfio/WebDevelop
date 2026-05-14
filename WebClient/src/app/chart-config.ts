@@ -95,3 +95,13 @@ export interface ChartData {
   MeasurID: number[];
   MeasurColl: number[][];
 }
+
+export interface timeinfo {
+  title: string;
+  description: string;
+}
+
+export interface tablevalues {
+  color: string;
+  values: number[];
+}
