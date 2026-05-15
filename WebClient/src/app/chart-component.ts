@@ -1540,6 +1540,30 @@ export class ChartComponent {
     this.router.navigate(['pagina-details']);
   }
 
+  // All'interno della classe del tuo componente
+  onTableScroll(event: Event): void {
+    const container = event.target as HTMLElement;
+    
+    // Posizione dello scroll orizzontale (asse X)
+    const scrollX = container.scrollLeft; 
+    
+    // Posizione dello scroll verticale (asse Y)
+    const scrollY = container.scrollTop;  
+
+    if (scrollY > 0) {
+      document.querySelectorAll('.table-chart').forEach(chart => {
+        (chart as HTMLElement).style.borderCollapse = 'separate';
+        (chart as HTMLElement).style.borderSpacing = '0px';
+        (chart as HTMLElement).style.border = '0px';
+      });
+    } else if (scrollY === 0)  {
+      document.querySelectorAll('.table-chart').forEach(chart => {
+        (chart as HTMLElement).style.borderCollapse = 'collapse';
+        (chart as HTMLElement).style.border = '1px';
+      });
+    }
+    this.cd.detectChanges();
+  }
 
 
 }
