@@ -589,7 +589,7 @@ export class ChartComponent {
         for (let i=0; i < this.DataPoint[0].time.length; i++) {
           values.push(0);
         }
-        measures = { color: "white", values: values };
+        measures = { color: "silver", values: values };
     }
 
     return measures;
