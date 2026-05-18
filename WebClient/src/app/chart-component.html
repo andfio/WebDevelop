@@ -3,7 +3,7 @@
     <div class="root-contenitor">
 
       <div class="button-container">
-          <div class="btn-goback" (click)="goBack()"><i class="material-symbols-outlined">home</i> Back </div>
+          <div class="btn-goback" (click)="goBack()"><i class="material-symbols-outlined">arrow_back</i> Back </div>
           <div class="btn-tableAndGraph" (click)="ShowPanel(buttonName)"><i class="material-symbols-outlined">{{ buttonIcon }}</i> {{ buttonName }} </div >
       </div>    
 
@@ -320,8 +320,9 @@
     @else {
       <div class="table-wrapper">
         
-        <div class="table-data-container">  <!-- (scroll)="onTableScroll($event)"> -->
- 
+        <div class="table-data-container"> 
+          
+          <div class="table-container">            
           <table class="table-chart">
             <thead>
               <tr>
@@ -417,6 +418,7 @@
             </tbody>
 
           </table>
+          </div>
 
         </div>
 

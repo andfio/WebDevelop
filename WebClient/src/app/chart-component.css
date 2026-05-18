@@ -371,8 +371,7 @@ select {
   box-sizing: border-box;
   height: 100%; 
   padding: 10px;
-  overflow-y: auto;
-  overflow-x: auto; 
+  overflow: hidden;
 }
 
 .table-info-container {
@@ -386,11 +385,11 @@ select {
   overflow-y: auto;
 }
 
-  .table-chart {
-    border-collapse: collapse; 
-    margin: 10px;
-    table-layout: auto;
-    width: auto;
+.table-chart {
+  border-collapse: separate; 
+  table-layout: auto;
+  border-spacing: 0px;
+  width: auto;
 }
 
 .table-chart thead tr,
@@ -400,7 +399,7 @@ select {
     font-size: 10px;
     color: black;
     background-color: silver;
-    border: 1px solid black;
+    border: 1px solid rgba(0,0,0,0.4);
     padding-left: 5px;
     height: 10px;
     width: 55px;
@@ -415,7 +414,7 @@ select {
     font-size: 10px;
     color: black;
     background-color: white;
-    border: 1px solid black;
+    border: 1px solid rgba(0,0,0,0.4);
     padding-right: 5px;
     height: 8px;
     width: 55px;
@@ -429,7 +428,7 @@ select {
     font-size: 10px;
     color: black;
     background-color: silver ;
-    border: 1px solid black;
+    border: 1px solid rgba(0,0,0,0.4);
     padding-left: 5px;
     height: 10px;
     width: 100px !important;
@@ -443,7 +442,7 @@ select {
     font-size: 10px;
     color: black;
     background-color: silver;
-    border: 1px solid black;
+    border: 1px solid rgba(0,0,0,0.4);
     padding-left : 5px;
     height: 10px;
     width: 55px !important;
@@ -457,10 +456,28 @@ select {
     font-size: 10px;
     color: black;
     background-color: white;
-    border: 1px solid black;
+    border: 1px solid rgba(0,0,0,0.4);
     height: 10px;
     width: 55px !important;
     min-width: 55px !important;
     max-width: 55px !important;       
 }
 
+.table-chart thead tr:first-child th {
+    position: sticky;
+    top: 0;
+    z-index: 11;
+}
+
+.table-chart thead tr:nth-child(2) th {
+    position: sticky;
+    top: 22px;
+    z-index: 10;
+}
+
+.table-container {
+  box-sizing: border-box;
+  overflow-y: auto;
+  overflow-x: auto; 
+  height: calc(100vh - 100px);  
+}
