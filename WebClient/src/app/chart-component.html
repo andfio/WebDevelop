@@ -424,6 +424,56 @@
 
         <div class="table-info-container">
           
+          <div class="table-info-wrapper">
+            <table class="table-root">
+
+              <thead>
+                <tr> 
+                  <th>Descrizione</th>
+                  <th>Informazione</th>
+                </tr>
+              </thead>
+
+              <tbody>
+                @for(itemData of this.tableData; track $index) {
+                  <tr>
+                    <td>{{ itemData.name }}</td>                 
+                    <td>
+                      @if(itemData.description !== "") {
+                         {{ itemData.value + " - "+ itemData.description }}
+                      } @else {
+                        {{ itemData.value }}
+                      }                      
+                    </td>
+                  </tr>
+                }
+              </tbody>
+            </table>
+            
+          </div>
+          <div class="table-info-details">
+            <!-- <table class="table-details">
+
+              <thead>
+                <tr> 
+                  <th>Nr.</th>
+                  <th>Description</th>
+                  <th>Result</th>
+                  <th>Start Sequence</th>
+                  <th>End Sequence</th>
+                </tr>
+              </thead>
+
+              <tbody>
+                @for(itemData of this.detailsFields; track $index) {
+                  <tr>
+                    <td>{{ subGetItemData(itemData) }}</td>
+                  </tr>
+                }
+              </tbody>
+            </table>             -->
+          </div>
+
         </div>
 
       </div>

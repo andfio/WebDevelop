@@ -17,7 +17,7 @@ import {
   ApexAnnotations
 } from "ng-apexcharts";
 import { NgApexchartsModule } from "ng-apexcharts";
-import { DataPoint, timeinfo, tablevalues } from "./chart-config";
+import { DataPoint, timeinfo, tablevalues, tabledata } from "./chart-config";
 import { DialogContent } from './dialog-component';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSliderModule } from '@angular/material/slider';
@@ -80,6 +80,8 @@ export class ChartComponent {
 
   rowData: any = {};
   rootfields: any[] = [];
+  tableData: any[] = [];
+  detailsFields: any[] = [];  
 
   chartSeries: any[] = []
   chartAxisOffSet: any[] = [];
@@ -100,8 +102,10 @@ export class ChartComponent {
   MeasurColl: number[][] = [];
 
   ngOnInit() {
-    this.rowData = history.state.rowData;
-    this.rootfields = history.state.rootFields;
+    this.rowData = this.buildrowData(history.state.rootData);
+    this.rootfields = this.buildrootFields(history.state.rootData);
+    this.tableData = this.buildtableData(history.state.rootData);
+    this.detailsFields = history.state.detailsFields;
     this.httpConfig = history.state.httpConfig;
     this.axesConfig = history.state.axesConfig;
 
@@ -110,8 +114,8 @@ export class ChartComponent {
     this.subInitChartSeries();
     this.subInitCursors();
 
-    let UnitTypeID = this.rowData[this.rootfields.find((x => x.field === 'UnitTypeID')).field];
-    this.KeyPlot = "Plot" + UnitTypeID.substring(0, UnitTypeID.indexOf("-") - 1);
+    let UnitTypeID = this.rowData[this.rootfields.find(x => x.field === 'UnitTypeID').field];
+    this.KeyPlot = "Plot" + UnitTypeID.toString();
 
     this.subPost();
   }
@@ -119,6 +123,38 @@ export class ChartComponent {
   ngAfterViewInit() {
     this.updateChartHeight();
   }
+
+  buildrowData(rootData: tabledata[]): { [key: string]: any } {
+    return rootData.reduce((acc, item) => {
+      acc[item.field] = item.value;
+      return acc;
+    }, {} as { [key: string]: any });
+  }
+
+  buildrootFields(rootData: tabledata[]): any[] {
+     return rootData.map((item) => {
+      return { name: item.name, field: item.field };
+    });
+  }
+
+  buildtableData(rootData: tabledata[]): any[] {
+    return rootData.map((item) => {
+      return { name: item.name, value: item.value, description: item.description };
+    });
+  }
+
+  subGetItemData(item: tabledata): string {
+    switch (item.field) {
+      case "ProgressiveGroup":
+      case "TestDescription":
+      case "TestResult":
+      case "StartEventTime":
+      case "EndEventTime":
+        return item.value.toString();
+      default:
+        return "";
+    }
+  }  
 
   subPost() {
     this.subParserMeasureData(this.KeyResult);
@@ -145,7 +181,7 @@ export class ChartComponent {
   subInitMeasuresInfo() {
     let UnitTypeIDSelected = this.rowData[this.rootfields.find((x => x.field === 'UnitTypeID')).field];
     const parameters = {
-      UnitTypeID: UnitTypeIDSelected.substring(0, UnitTypeIDSelected.indexOf("-") - 1),
+      UnitTypeID: UnitTypeIDSelected,
       CommandType: 1 //measures
     }
 
@@ -622,8 +658,7 @@ export class ChartComponent {
       this.buttonIcon = "monitoring"
     }
   }
-  
-  
+
   isAddPointAnnotation: boolean = false;
   subChartEvents() {
     this.chart = {

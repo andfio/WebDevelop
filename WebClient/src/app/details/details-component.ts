@@ -5,7 +5,7 @@ import { HttpClient } from '@angular/common/http';
 import { AppConfig, tableinfo, StructUnitsInfo, functionsinfo} from '../app.config.json';
 import { DialogContent } from '../dialog-component';
 import { MatDialog } from '@angular/material/dialog';
-import { AxesConfig, measuresinfo} from '../chart-config';
+import { AxesConfig, measuresinfo, tabledata } from '../chart-config';
 import { ChartSettingsComponent } from '../chart-settings-component';
 import { DetailsStateService } from '../DetailsState.Service';
 
@@ -586,7 +586,6 @@ background: any;
     });
   }
 
-  rowChart: any;
   subOnChartPage() {
     if (!this.axesConfig.Plots?.["Plot" + this.row["UnitTypeID"].toString()])  {
       if (!this.subShowGraphParams()) {
@@ -595,46 +594,92 @@ background: any;
     }
 
     let KeyResult = this.row["ID_Result"];
-    this.rowChart = this.subGetInformation();
+
+    let rootData: tabledata[] = this.subGetRootData();
+    let detailsData: tabledata[] = this.subGetDetailsData();
+
     this.router.navigate(['/pagina-chart'] , { state: { 
                                                         KeyResult: KeyResult,
-                                                        rowData: this.rowChart, 
-                                                        rootFields: this.columnsrootdetails, 
+                                                        rootData: rootData, 
+                                                        detailsData: detailsData, 
                                                         chartSeries: this.chartseries, 
                                                         axesConfig: this.axesConfig,
                                                         httpConfig: this.httpConfig } 
     });
   }
   
-  subGetInformation(): any {
-    let info: any = {};
-    let itemValue: any;
+  subGetRootData(): tabledata[] {
+    let info: tabledata[] = [];
+    let itemValue: tabledata = {} as tabledata;
     this.columnsrootdetails.forEach(col => {
         switch (col.field) {
         case "":
-            itemValue = "";
+            itemValue = { name: col.name, field: col.field, value: "", description: "" };
             break;
           case "LineID":
-            itemValue = this.row[col.field] + " - " + (this.unitsInfo.find(unit => unit.LineID === this.row[col.field])?.LineDescr ?? "not found");
+            itemValue = { name: col.name, field: col.field, value: this.row[col.field], description: (this.unitsInfo.find(unit => unit.LineID === this.row[col.field])?.LineDescr ?? "not found") };
             break;
          case "UnitTypeID":
             if (typeof this.row[col.field] === "string") {this.row[col.field] = Number(this.row[col.field].split('-')[0].trim());}            
-            itemValue = this.row[col.field] + " - " + (this.unitsInfo.find(unit => unit.UnitTypeID === this.row[col.field])?.UnitTypeDescr ?? "not found");
+            itemValue = { name: col.name, field: col.field, value: this.row[col.field], description: (this.unitsInfo.find(unit => unit.UnitTypeID === this.row[col.field])?.UnitTypeDescr ?? "not found") };
             break;
          case "UnitID":
             if (typeof this.row[col.field] === "string") {this.row[col.field] = Number(this.row[col.field].split('-')[0].trim());}
-            itemValue = this.row[col.field] + " - " + (this.unitsInfo.find(unit => unit.LineID === this.row["LineID"] && unit.UnitTypeID === this.row["UnitTypeID"] && unit.UnitID === this.row[col.field])?.UnitDescr ?? "not found");
+            itemValue = { name: col.name, field: col.field, value: this.row[col.field], description: (this.unitsInfo.find(unit => unit.LineID === this.row["LineID"] && unit.UnitTypeID === this.row["UnitTypeID"] && unit.UnitID === this.row[col.field])?.UnitDescr ?? "not found") };
             break;
 
           default:
-            itemValue = this.row[col.field];
+            itemValue = { name: col.name, field: col.field, value: this.row[col.field], description: "" };
             break;
         }
-        info[col.field]  = itemValue.toString().slice(0, 30) + (itemValue.toString().length > 30 ? "..." : ""); 
+        if (itemValue.name !== "" && itemValue.field !== "") {
+          info.push({ name: itemValue.name, field: itemValue.field, value: itemValue.value, description: itemValue.description.toString().slice(0, 30) + (itemValue.description.toString().length > 30 ? "..." : "") });
+        }
     });
     return info;
   }
+
+  subGetDetailsData(): tabledata[] {
+    let info: tabledata[] = []; 
+    let itemValue: tabledata = {} as tabledata; 
+
+    let testData: any; let f: any;
+    let CurrProgressiveGroup: number = 0;
+
+    for (testData of this.results)
+    {
+        if (CurrProgressiveGroup !== Number(testData['ProgressiveGroup'])) {
+          for (f of this.columnsdetails) {
+              
+              switch (f.field) {
+                case "ProgressiveGroup":
+                  itemValue = { name: f.name, field: f.field, value: testData[f.field], description: "" };
+                  break;
+                case "TestDescription":
+                  itemValue = { name: f.name, field: f.field, value: testData[f.field], description: "" };
+                  break;
+                case "TestResult":
+                  itemValue = { name: f.name, field: f.field, value: this.ResultDescription(testData[f.field]), description: "" };
+                  break;
+                case "StartEventTime":
+                case "EndEventTime":
+                  itemValue = { name: f.name, field: f.field, value: this.convertSecondiToTime(Number(testData[f.field])), description: "" };
+                  break;
+              }
+
+              if (itemValue.field !== "" && itemValue.name !== "") {
+                info.push({ name: itemValue.name, field: itemValue.field, value: itemValue.value.toString().slice(0, 20) + (itemValue.value.toString().length > 20 ? "..." : ""), description: itemValue.description.toString().slice(0, 30) + (itemValue.description.toString().length > 30 ? "..." : "") });
+              }
+          }
   
+          CurrProgressiveGroup = Number(testData['ProgressiveGroup']);  
+
+        }
+    }
+
+    return info;
+  }
+
   subShowGraphParams(): boolean {
     
     let parameters = {

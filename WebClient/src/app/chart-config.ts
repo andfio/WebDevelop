@@ -105,3 +105,11 @@ export interface tablevalues {
   color: string;
   values: number[];
 }
+
+export interface tabledata {
+  name: string;
+  field: string;
+  value: string;
+  description: string;
+}
+
