@@ -3,8 +3,20 @@
     flex-direction: column;
 }
 
+.panel-contenitor {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  gap: 10px;
+}
+
+.root-contenitor {
+    flex: 0 0 300px;
+    flex-direction: row;
+    gap: 5px; 
+}
+
 .button-container {
-    flex-grow: 1;
     display: flex;
     flex-direction: row;
     gap: 10px; 
@@ -13,7 +25,6 @@
     height: auto;
     margin: 10px 20px 5px 20px;
 }
-
 
 .btn-goback {
     display: flex;
@@ -55,6 +66,21 @@
     height: 40px;
     align-items: center ; 
     gap: 10px;       
+}
+
+.panel-graph-buttons {
+    flex: 1;
+    min-width: 0;
+    flex-direction: row;
+    align-items: start;  
+    height: 75px; 
+}
+
+.graph-buttons {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    gap: 5px; 
 }
 
 .chart-wrapper-container {
@@ -374,18 +400,6 @@ select {
   overflow: hidden;
 }
 
-.table-info-container {
-  flex: 1 1 auto;
-  flex-direction: column;
-  height: 100%;
-  padding: 5px;
-  border-radius: 6px;
-  background: #f8f9fa;
-  box-shadow: 0px 2px 8px rgba(0,0,0,0.15);
-  box-sizing: border-box;
-  overflow-y: auto;
-}
-
 .table-chart {
   border-collapse: separate; 
   table-layout: auto;
@@ -483,6 +497,18 @@ select {
   height: calc(100vh - 100px);  
 }
 
+.table-info-container {
+  flex: 1 1 auto;
+  flex-direction: column;
+  height: 100%;
+  padding: 5px;
+  border-radius: 6px;
+  background: #f8f9fa;
+  box-shadow: 0px 2px 8px rgba(0,0,0,0.15);
+  box-sizing: border-box;
+  overflow-y: auto;
+}
+
 .table-info-wrapper {
   box-sizing: border-box;
   overflow-y: auto;
@@ -535,3 +561,9 @@ select {
     max-width: 300px;
 }
 
+#buttonshow {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+  margin: 10px 0px;
+}

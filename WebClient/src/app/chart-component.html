@@ -1,13 +1,25 @@
 <div class="chart-header">
   
-    <div class="root-contenitor">
+  <div class="panel-contenitor">
 
-      <div class="button-container">
-          <div class="btn-goback" (click)="goBack()"><i class="material-symbols-outlined">arrow_back</i> Back </div>
-          <div class="btn-tableAndGraph" (click)="ShowPanel(buttonName)"><i class="material-symbols-outlined">{{ buttonIcon }}</i> {{ buttonName }} </div >
-      </div>    
+      <div class="root-contenitor">
 
-  </div> 
+          <div class="button-container">
+              <div class="btn-goback" (click)="goBack()"><i class="material-symbols-outlined">arrow_back</i> Back </div>
+              <div class="btn-tableAndGraph" (click)="ShowPanel(buttonName)"><i class="material-symbols-outlined">{{ buttonIcon }}</i> {{ buttonName }} </div >
+          </div> 
+
+      </div> 
+
+      @if(blnShowGraph) {
+      <div class="panel-graph-buttons">
+        <div class="graph-buttons">
+
+        </div>  
+      </div>
+      }
+
+  </div>
 
   <div class="chart-container">
   
@@ -323,108 +335,112 @@
         <div class="table-data-container"> 
           
           <div class="table-container">            
-          <table class="table-chart">
-            <thead>
-              <tr>
+              <table class="table-chart">
+                <thead>
+                  <tr>
 
-                @for(item of this.timeinfo; track $index) {
-                  @if($index === 0) {
-                  <th class="time-column-header">
-                    {{ item.title }}
-                  </th>
-                  }
-                  @else {
-                    <th class="sec-column-header">
-                      {{ item.title }} 
-                    </th>
-                  }
+                    @for(item of this.timeinfo; track $index) {
+                      @if($index === 0) {
+                      <th class="time-column-header">
+                        {{ item.title }}
+                      </th>
+                      }
+                      @else {
+                        <th class="sec-column-header">
+                          {{ item.title }} 
+                        </th>
+                      }
 
-                }
-
-                @for(headerItem of this.MeasureID; track $index) {
-                  @if(subGetShortname(headerItem) !== "") {
-                    <th [style.background-color]="this.subColumnValues(this.subGetShortname(headerItem)).color">
-                    
-                      {{ subGetShortname(headerItem) }}
-                    
-                    </th>
-                  } 
-                }
-
-              </tr>  
-
-              <tr>
-                
-                @for(item of this.timeinfo; track $index) {
-                  @if($index === 0) {
-                    <th class="time-column-header">
-                      {{ item.description }}
-                    </th>
-                  }
-                  @else { 
-                    <th class="sec-column-header">
-                      {{ item.description }}
-                    </th>
-                  }
-                }
-
-                @for(headerItem of this.MeasureID; track $index) {
-                  @if(subGetUM(headerItem) !== "") {
-                    <th [style.background-color]="this.subColumnValues(this.subGetShortname(headerItem)).color">
-                      {{ subGetUM(headerItem) }}
-                    </th> 
-                  }
-                  @else {
-                    @if(subGetShortname(headerItem) !== "") {
-                    <th [style.background-color]="this.subColumnValues(this.subGetShortname(headerItem)).color">
-                      {{ "" }}
-                    </th> 
                     }
-                  }  
-                }
 
-              </tr>
-            </thead>
-
-            <tbody>
-
-              @for(timeValue of this.DataPoint[0].time; track $index; let rowIndex = $index) {
-
-                <tr>
-
-                  <!-- Prima colonna -->
-                  <td class="time-column-header" [style.background-color]="'rgb(192, 192, 192)'" [style.text-align]="'center'">
-                    {{ convertSecondiToTime(timeValue) }}
-                  </td>
-
-                  <!-- Seconda colonna -->
-                  <td class="sec-column-header">
-                    {{ timeValue }}
-                  </td>
-
-                  <!-- Colonne misure -->
-                  @for(itmMeasure of this.MeasureID; track $index) {
-                    @if(subGetShortname(itmMeasure) !== "") {
-                    <td>
-                      {{ this.subColumnValues(this.subGetShortname(itmMeasure)).values[rowIndex].toFixed(2) }}                    
-                    </td>
+                    @for(headerItem of this.MeasureID; track $index) {
+                      @if(subGetShortname(headerItem) !== "") {
+                        <th [style.background-color]="this.subColumnValues(this.subGetShortname(headerItem)).color">
+                        
+                          {{ subGetShortname(headerItem) }}
+                        
+                        </th>
+                      } 
                     }
+
+                  </tr>  
+
+                  <tr>
+                    
+                    @for(item of this.timeinfo; track $index) {
+                      @if($index === 0) {
+                        <th class="time-column-header">
+                          {{ item.description }}
+                        </th>
+                      }
+                      @else { 
+                        <th class="sec-column-header">
+                          {{ item.description }}
+                        </th>
+                      }
+                    }
+
+                    @for(headerItem of this.MeasureID; track $index) {
+                      @if(subGetUM(headerItem) !== "") {
+                        <th [style.background-color]="this.subColumnValues(this.subGetShortname(headerItem)).color">
+                          {{ subGetUM(headerItem) }}
+                        </th> 
+                      }
+                      @else {
+                        @if(subGetShortname(headerItem) !== "") {
+                        <th [style.background-color]="this.subColumnValues(this.subGetShortname(headerItem)).color">
+                          {{ "" }}
+                        </th> 
+                        }
+                      }  
+                    }
+
+                  </tr>
+                </thead>
+
+                <tbody>
+
+                  @for(timeValue of this.DataPoint[0].time; track $index; let rowIndex = $index) {
+
+                    <tr>
+
+                      <!-- Prima colonna -->
+                      <td class="time-column-header" [style.background-color]="'rgb(192, 192, 192)'" [style.text-align]="'center'">
+                        {{ convertSecondiToTime(timeValue) }}
+                      </td>
+
+                      <!-- Seconda colonna -->
+                      <td class="sec-column-header">
+                        {{ timeValue }}
+                      </td>
+
+                      <!-- Colonne misure -->
+                      @for(itmMeasure of this.MeasureID; track $index) {
+                        @if(subGetShortname(itmMeasure) !== "") {
+                        <td>
+                          {{ this.subColumnValues(this.subGetShortname(itmMeasure)).values[rowIndex].toFixed(2) }}                    
+                        </td>
+                        }
+                      }
+
+                    </tr>
+
                   }
 
-                </tr>
+                </tbody>
 
-              }
-
-            </tbody>
-
-          </table>
+              </table>
           </div>
 
         </div>
 
         <div class="table-info-container">
-          
+
           <div class="table-info-wrapper">
+            <!-- <div class="buttonshow">
+                <i class="material-symbols-outlined"  height="20" width="20">Home</i>
+            </div>   -->
+            
             <table class="table-root">
 
               <thead>
@@ -451,6 +467,7 @@
             </table>
             
           </div>
+          
           <div class="table-info-details">
             <!-- <table class="table-details">
 
@@ -475,6 +492,7 @@
           </div>
 
         </div>
+
 
       </div>
     }
