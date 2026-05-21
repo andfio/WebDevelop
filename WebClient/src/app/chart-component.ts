@@ -43,12 +43,15 @@ import { ChartSettingsComponent } from './chart-settings-component';
 import { ChartData} from "./chart-config";
 //Router
 import { Router } from '@angular/router';
+//Tabella dettagli
+import {MatTooltipModule} from '@angular/material/tooltip';
+import {MatButtonToggleModule} from '@angular/material/button-toggle';
 
 @Component({
   selector: "app-chart",
   templateUrl: "./chart-component.html",
   styleUrls: ["./chart-component.css"],
-  imports: [NgApexchartsModule, MatSliderModule, FormsModule, MatIconModule, MatMenuModule, MatButtonModule, MatSlideToggleModule]
+  imports: [NgApexchartsModule, MatSliderModule, FormsModule, MatIconModule, MatMenuModule, MatButtonModule, MatSlideToggleModule, MatTooltipModule, MatButtonToggleModule]
 })
 export class ChartComponent {
 [x: string]: any;
@@ -639,6 +642,11 @@ export class ChartComponent {
   subGetShortname(measureID: number): string {
     const measure = this.measuresinfo.find(m => m.measureID === measureID);
     return measure ? measure.shortname : "";
+  }
+
+  showDetails: boolean = false;
+  toggleDetails() {
+    this.showDetails = !this.showDetails;
   }
 
   buttonName: string = "Table"

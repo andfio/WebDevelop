@@ -437,35 +437,47 @@
         <div class="table-info-container">
 
           <div class="table-info-wrapper">
-            <!-- <div class="buttonshow">
-                <i class="material-symbols-outlined"  height="20" width="20">Home</i>
-            </div>   -->
             
-            <table class="table-root">
+            <div class="button-wrapper">
+                
+                <table class="table-root">
 
-              <thead>
-                <tr> 
-                  <th>Descrizione</th>
-                  <th>Informazione</th>
-                </tr>
-              </thead>
+                  <thead>
+                    <tr> 
+                      <th>Descrizione</th>
+                      <th>Informazione</th>
+                    </tr>
+                  </thead>
 
-              <tbody>
-                @for(itemData of this.tableData; track $index) {
-                  <tr>
-                    <td>{{ itemData.name }}</td>                 
-                    <td>
-                      @if(itemData.description !== "") {
-                         {{ itemData.value + " - "+ itemData.description }}
-                      } @else {
-                        {{ itemData.value }}
-                      }                      
-                    </td>
-                  </tr>
-                }
-              </tbody>
-            </table>
-            
+                  <tbody>
+                    @for(itemData of this.tableData; track $index) {
+                      <tr>
+                        <td>{{ itemData.name }}</td>                 
+                        <td>
+                          @if(itemData.description !== "") {
+                            {{ itemData.value + " - "+ itemData.description }}
+                          } @else {
+                            {{ itemData.value }}
+                          }                      
+                        </td>
+                      </tr>
+                    }
+                  </tbody>
+                </table>
+
+                <div class="showDetailsButton" id="buttondetails"
+                        #tooltip="matTooltip" 
+                        [matTooltip]="showDetails ? 'Show Details' : 'Hide Details'"  
+                        (click)="toggleDetails()">
+                
+                  @if(showDetails) 
+                    { <i class="material-symbols-outlined" id="detailsIcon">visibility_off</i> }
+                  @else 
+                    { <i class="material-symbols-outlined" id="detailsIcon">visibility</i> }
+              </div>
+
+            </div>
+
           </div>
           
           <div class="table-info-details">

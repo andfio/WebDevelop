@@ -561,9 +561,33 @@ select {
     max-width: 300px;
 }
 
-#buttonshow {
+.button-wrapper {
   display: flex;
   flex-direction: row;
-  justify-content: flex-end;
-  margin: 10px 0px;
+  justify-content: space-between;
+}
+ 
+.showDetailsButton {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  border-radius: 12px 0px 0px 12px;  /* top-left | top-right | bottom-right | bottom-left */
+  background: silver;
+  box-shadow: 0px 2px 8px rgba(0,0,0,0.15);
+  box-sizing: border-box;  
+  width: 40px;
+  height: 40px;
+  margin: 0px;
+}
+
+.material-symbols-outlined#detailsIcon {
+  display: flex;
+  flex-direction: column;
+  align-items: center; 
+  padding-top: 5px; 
+}
+
+.table-info-wrapper#buttondetails {
+  padding: 0px; 
 }
