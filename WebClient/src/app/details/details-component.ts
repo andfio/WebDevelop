@@ -601,7 +601,7 @@ background: any;
     this.router.navigate(['/pagina-chart'] , { state: { 
                                                         KeyResult: KeyResult,
                                                         rootData: rootData, 
-                                                        detailsData: detailsData, 
+                                                        detailsFields: detailsData, 
                                                         chartSeries: this.chartseries, 
                                                         axesConfig: this.axesConfig,
                                                         httpConfig: this.httpConfig } 
@@ -641,7 +641,6 @@ background: any;
 
   subGetDetailsData(): tabledata[] {
     let info: tabledata[] = []; 
-    let itemValue: tabledata = {} as tabledata; 
 
     let testData: any; let f: any;
     let CurrProgressiveGroup: number = 0;
@@ -649,6 +648,9 @@ background: any;
     for (testData of this.results)
     {
         if (CurrProgressiveGroup !== Number(testData['ProgressiveGroup'])) {
+
+          let itemValue: tabledata = {} as tabledata; 
+
           for (f of this.columnsdetails) {
               
               switch (f.field) {
@@ -662,8 +664,13 @@ background: any;
                   itemValue = { name: f.name, field: f.field, value: this.ResultDescription(testData[f.field]), description: "" };
                   break;
                 case "StartEventTime":
+                  itemValue = { name: f.name, field: f.field, value: this.convertSecondiToTime(Number(testData[f.field])), description: "" };
+                  break;
                 case "EndEventTime":
                   itemValue = { name: f.name, field: f.field, value: this.convertSecondiToTime(Number(testData[f.field])), description: "" };
+                  break;
+                default:
+                  itemValue = { name: "", field: "", value: "", description: "" };
                   break;
               }
 

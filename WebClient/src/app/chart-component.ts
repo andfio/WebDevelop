@@ -146,17 +146,22 @@ export class ChartComponent {
     });
   }
 
+  currentProgressiveGroup: number = 0;
   subGetItemData(item: tabledata): string {
-    switch (item.field) {
-      case "ProgressiveGroup":
-      case "TestDescription":
-      case "TestResult":
-      case "StartEventTime":
-      case "EndEventTime":
-        return item.value.toString();
-      default:
-        return "";
+    let value: string = "";
+    if (item.field !== "ProgressiveGroup") {
+      switch (item.field) {
+        case "ProgressiveGroup":
+        case "TestDescription":
+        case "TestResult":
+        case "StartEventTime":
+        case "EndEventTime":
+          value = item.value.toString();
+      }
+            
+      this.currentProgressiveGroup = Number(item.value);
     }
+    return value;
   }  
 
   subPost() {

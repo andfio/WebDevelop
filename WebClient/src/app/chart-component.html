@@ -436,36 +436,77 @@
 
         <div class="table-info-container">
 
-          <div class="table-info-wrapper">
-            
-            <div class="button-wrapper">
-                
-                <table class="table-root">
+          <div class="button-wrapper">
+              
+              <div class="table-info-wrapper">
+
+                    <table class="table-root">
+
+                      <thead>
+                        <tr> 
+                          <th>Descrizione</th>
+                          <th>Informazione</th>
+                        </tr>
+                      </thead>
+
+                      <tbody>
+                        @for(itemData of this.tableData; track $index) {
+                          <tr>
+                            <td>{{ itemData.name }}</td>                 
+                            <td>
+                              @if(itemData.description !== "") {
+                                {{ itemData.value + " - "+ itemData.description }}
+                              } @else {
+                                {{ itemData.value }}
+                              }                      
+                            </td>
+                          </tr>
+                        }
+                      </tbody>
+                    </table>                
+                    
+              </div>
+              
+              <div class="table-info-details">
+                <table class="table-details">
 
                   <thead>
                     <tr> 
-                      <th>Descrizione</th>
-                      <th>Informazione</th>
+                      <th>Nr.</th>
+                      <th>Description</th>
+                      <th>Result</th>
+                      <th>Start Sequence</th>
+                      <th>End Sequence</th>
                     </tr>
                   </thead>
 
                   <tbody>
-                    @for(itemData of this.tableData; track $index) {
+                    @for(itemData of this.detailsFields; track $index) {
                       <tr>
-                        <td>{{ itemData.name }}</td>                 
-                        <td>
-                          @if(itemData.description !== "") {
-                            {{ itemData.value + " - "+ itemData.description }}
-                          } @else {
-                            {{ itemData.value }}
-                          }                      
-                        </td>
+                        @switch (itemData.field) {
+                          @case ("ProgressiveGroup") {
+                            <td>{{ itemData.value }}</td>
+                          }
+                          @case ("TestDescription") {
+                            <td>{{ itemData.value }}</td>
+                          }
+                          @case ("TestResult") {
+                            <td>{{ itemData.value }}</td>
+                          }
+                          @case ("StartEventTime") {
+                            <td>{{ itemData.value }}</td>
+                          }
+                          @case ("EndEventTime") {
+                            <td>{{ itemData.value }}</td>
+                          }
+                        }
                       </tr>
                     }
                   </tbody>
-                </table>
-
-                <div class="showDetailsButton" id="buttondetails"
+                </table>            
+              </div>
+          
+              <div class="DetailsButton" 
                         #tooltip="matTooltip" 
                         [matTooltip]="showDetails ? 'Show Details' : 'Hide Details'"  
                         (click)="toggleDetails()">
@@ -474,39 +515,13 @@
                     { <i class="material-symbols-outlined" id="detailsIcon">visibility_off</i> }
                   @else 
                     { <i class="material-symbols-outlined" id="detailsIcon">visibility</i> }
-              </div>
-
-            </div>
-
-          </div>
+              </div>            
           
-          <div class="table-info-details">
-            <!-- <table class="table-details">
-
-              <thead>
-                <tr> 
-                  <th>Nr.</th>
-                  <th>Description</th>
-                  <th>Result</th>
-                  <th>Start Sequence</th>
-                  <th>End Sequence</th>
-                </tr>
-              </thead>
-
-              <tbody>
-                @for(itemData of this.detailsFields; track $index) {
-                  <tr>
-                    <td>{{ subGetItemData(itemData) }}</td>
-                  </tr>
-                }
-              </tbody>
-            </table>             -->
           </div>
+        
+        </div>      
 
-        </div>
-
-
-      </div>
+      </div>      
     }
 
   </div> 
