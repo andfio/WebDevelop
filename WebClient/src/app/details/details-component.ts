@@ -22,8 +22,10 @@ background: any;
   constructor(private router: Router, private http: HttpClient, private dialog: MatDialog, private chartDialog: MatDialog, private detailsState: DetailsStateService) {}
   
   goBack() {
+    setTimeout(() => {
     this.detailsState.rowData = undefined;
     this.router.navigate(['/']);
+    }, 0); 
   }
 
   filters: AppConfig["filters"] = [];

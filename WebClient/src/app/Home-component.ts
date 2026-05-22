@@ -10,11 +10,12 @@ import { MatDialog } from '@angular/material/dialog';
 import { DialogContent } from './dialog-component';
 import { AxesConfig } from './chart-config';
 import { ChartSettingsComponent } from './chart-settings-component';
+import { MatProgressSpinner } from '@angular/material/progress-spinner';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [FormsModule, RouterOutlet],
+  imports: [FormsModule, RouterOutlet, MatProgressSpinner],
   templateUrl: './Home-component.html',
   styleUrls: ['./Home-component.css'],
 })
@@ -40,6 +41,8 @@ export class HomeComponent {
   buttonGraphDisabled: boolean = true;
   measuresinfo: measuresinfo[] = [];
 
+  showHourglass: boolean = false;
+
   ngOnInit() {
 
     if (this.state.results.length > 0) {
@@ -62,6 +65,7 @@ export class HomeComponent {
       this.totalsummary = this.state.totalsummary;
       this.httpconfig = this.state.httpconfig;
       this.axesConfig = this.state.axesConfig;
+      this.subEnableGraphButton();
       return; 
     }
 
@@ -203,11 +207,14 @@ export class HomeComponent {
       filters: this.fvalues,
       query: this.query  
     };
+    this.showHourglass = true;
     this.setBusy(true);
     this.http.post(this.httpconfig.baseurl + '/query', payload).subscribe({
       next: (data: any) => {
         // console.log("RISULTATO BACKEND:", data);
         this.results = data 
+        this.showHourglass = false;
+
 
         /* salva tutto per ricaricare da details */
         this.state.results = this.results;

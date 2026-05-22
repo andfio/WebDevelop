@@ -11,14 +11,15 @@ import {
   createBlockScrollStrategy,
   createGlobalPositionStrategy,
   createOverlayRef
-} from "./chunk-CBR6PICI.js";
+} from "./chunk-TAVAWXTL.js";
 import {
   CdkScrollable
 } from "./chunk-D3WAJTPI.js";
 import "./chunk-CMS626PX.js";
+import "./chunk-U2OPOBGA.js";
 import {
   _animationsDisabled
-} from "./chunk-ZDAUM7G6.js";
+} from "./chunk-UOZA7CEF.js";
 import "./chunk-5EG33CFQ.js";
 import {
   A11yModule,
@@ -30,7 +31,7 @@ import {
   _IdGenerator,
   _getFocusedElementPierceShadowDom,
   hasModifierKey
-} from "./chunk-PIQAJ75S.js";
+} from "./chunk-M7SAAHQS.js";
 import {
   Platform,
   coerceNumberProperty
