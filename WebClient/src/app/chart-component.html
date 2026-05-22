@@ -91,7 +91,7 @@
                     (change)="subShowAxisValues(sliderX.value, 0, 'slider')">
                     <input matSliderThumb [(ngModel)]="AxisValues[0].value" #sliderX>
                   </mat-slider>        
-                  <div class="buttonReset" (click)="subResetSliders(0)"><i class="material-symbols-outlined" height="20" width="20">Home</i></div>
+                  <div class="buttonReset" (click)="subResetSliders(0)"><i class="material-symbols-outlined" height="20" width="20">Refresh</i></div>
                 </div> 
             </div>
 
@@ -132,7 +132,7 @@
                     (change)="subShowAxisValues(sliderY1.value, 1, 'slider')">
                     <input matSliderThumb [(ngModel)]="AxisValues[1].value" #sliderY1>
                   </mat-slider>        
-                  <div class="buttonReset" (click)="subResetSliders(1)"><i class="material-symbols-outlined" height="20" width="20">Home</i></div>
+                  <div class="buttonReset" (click)="subResetSliders(1)"><i class="material-symbols-outlined" height="20" width="20">Refresh</i></div>
                 </div>
               </div>
               
@@ -174,7 +174,7 @@
                     (change)="subShowAxisValues(sliderY2.value, 2, 'slider')">
                     <input matSliderThumb [(ngModel)]="AxisValues[2].value" #sliderY2>
                   </mat-slider>        
-                  <div class="buttonReset" (click)="subResetSliders(2)"><i class="material-symbols-outlined" height="20" width="20">Home</i></div>
+                  <div class="buttonReset" (click)="subResetSliders(2)"><i class="material-symbols-outlined" height="20" width="20">Refresh</i></div>
                 </div>
               </div> 
 
@@ -216,7 +216,7 @@
                     (change)="subShowAxisValues(sliderY3.value, 3, 'slider')">
                     <input matSliderThumb [(ngModel)]="AxisValues[3].value" #sliderY3>
                   </mat-slider>        
-                  <div class="buttonReset" (click)="subResetSliders(3)"><i class="material-symbols-outlined" height="20" width="20">Home</i></div>
+                  <div class="buttonReset" (click)="subResetSliders(3)"><i class="material-symbols-outlined" height="20" width="20">Refresh</i></div>
                 </div>
               </div> 
 
@@ -332,7 +332,7 @@
     @else {
       <div class="table-wrapper">
         
-        <div class="table-data-container"> 
+        <div class="table-data-container" [style.flex]="hideDetails ? '1 1 100%' : '1 1 70%'"> 
           
           <div class="table-container">            
               <table class="table-chart">
@@ -434,92 +434,80 @@
 
         </div>
 
-        <div class="table-info-container">
+        <div class="table-info-container" [hidden]="hideDetails">
 
-          <div class="button-wrapper">
-              
-              <div class="table-info-wrapper">
+          <div class="table-info-wrapper">
 
-                    <table class="table-root">
-
-                      <thead>
-                        <tr> 
-                          <th>Descrizione</th>
-                          <th>Informazione</th>
-                        </tr>
-                      </thead>
-
-                      <tbody>
-                        @for(itemData of this.tableData; track $index) {
-                          <tr>
-                            <td>{{ itemData.name }}</td>                 
-                            <td>
-                              @if(itemData.description !== "") {
-                                {{ itemData.value + " - "+ itemData.description }}
-                              } @else {
-                                {{ itemData.value }}
-                              }                      
-                            </td>
-                          </tr>
-                        }
-                      </tbody>
-                    </table>                
-                    
-              </div>
-              
-              <div class="table-info-details">
-                <table class="table-details">
+                <table class="table-root">
 
                   <thead>
                     <tr> 
-                      <th>Nr.</th>
-                      <th>Description</th>
-                      <th>Result</th>
-                      <th>Start Sequence</th>
-                      <th>End Sequence</th>
+                      <th>Descrizione</th>
+                      <th>Informazione</th>
                     </tr>
                   </thead>
 
                   <tbody>
-                    @for(itemData of this.detailsFields; track $index) {
+                    @for(itemData of this.tableData; track $index) {
                       <tr>
-                        @switch (itemData.field) {
-                          @case ("ProgressiveGroup") {
-                            <td>{{ itemData.value }}</td>
-                          }
-                          @case ("TestDescription") {
-                            <td>{{ itemData.value }}</td>
-                          }
-                          @case ("TestResult") {
-                            <td>{{ itemData.value }}</td>
-                          }
-                          @case ("StartEventTime") {
-                            <td>{{ itemData.value }}</td>
-                          }
-                          @case ("EndEventTime") {
-                            <td>{{ itemData.value }}</td>
-                          }
-                        }
+                        <td>{{ itemData.name }}</td>                 
+                        <td>
+                          @if(itemData.description !== "") {
+                            {{ itemData.value + " - "+ itemData.description }}
+                          } @else {
+                            {{ itemData.value }}
+                          }                      
+                        </td>
                       </tr>
                     }
                   </tbody>
-                </table>            
-              </div>
-          
-              <div class="DetailsButton" 
-                        #tooltip="matTooltip" 
-                        [matTooltip]="showDetails ? 'Show Details' : 'Hide Details'"  
-                        (click)="toggleDetails()">
+                </table>                
                 
-                  @if(showDetails) 
-                    { <i class="material-symbols-outlined" id="detailsIcon">visibility_off</i> }
-                  @else 
-                    { <i class="material-symbols-outlined" id="detailsIcon">visibility</i> }
-              </div>            
+          </div>
           
+          <div class="table-info-details">
+            <table class="table-details">
+
+              <thead>
+                <tr> 
+                  <th>Nr.</th>
+                  <th>Description</th>
+                  <th>Result</th>
+                  <th>Start Sequence</th>
+                  <th>End Sequence</th>
+                </tr>
+              </thead>
+
+              <tbody>
+                @for(row of detailsRows; track $index) {
+                  <tr>
+                    <td>{{ row.nr }}</td>
+                    <td>{{ row.description }}</td>
+                    <td>{{ row.result }}</td>
+                    <td>{{ row.startSequence }}</td>
+                    <td>{{ row.endSequence }}</td>
+                  </tr>
+                }                    
+              </tbody>
+            </table>            
           </div>
         
-        </div>      
+        </div>
+        
+        <div class="button-wrapper">
+        
+          <div class="DetailsButton" 
+                    #tooltip="matTooltip" 
+                    [matTooltip]="hideDetails ? 'Show Details' : 'Hide Details'"  
+                    (click)="toggleDetails()">
+            
+              @if(hideDetails) 
+                { <i class="material-symbols-outlined" id="detailsIcon">arrow_back</i> }
+              @else 
+                { <i class="material-symbols-outlined" id="detailsIcon">arrow_forward</i> }
+          </div>  
+        
+        </div>
 
       </div>      
     }

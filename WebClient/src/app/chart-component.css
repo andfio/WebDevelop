@@ -376,6 +376,7 @@ select {
 }
 
 .table-wrapper {
+  position: relative;
   display: flex;
   flex-direction: row;
   align-items: flex-start;
@@ -386,10 +387,11 @@ select {
   box-shadow: 0px 2px 8px rgba(0,0,0,0.15);
   box-sizing: border-box;
   height: 92vh;
+  overflow: hidden;
 }
 
 .table-data-container {
-  flex: 1 1 60%;
+  flex: 1 1 70%;
   min-width: 0;
   border-radius: 6px;
   background: #f8f9fa;
@@ -517,12 +519,13 @@ select {
   overflow-y: auto;
   overflow-x: auto; 
   padding: 5px;
+  height: 360px;
 }
 
 .table-root {
   border-collapse: collapse; 
   table-layout: fixed;
-  width: 460px;
+  width: 520px;
 }
 
 .table-root thead th {
@@ -559,9 +562,9 @@ select {
 /* Seconda colonna */
 .table-root th:nth-child(2),
 .table-root td:nth-child(2) {
-    width: 300px;
-    min-width: 300px;
-    max-width: 300px;
+    width: 380px;
+    min-width: 380px;
+    max-width: 380px;
 }
 
 .table-info-details {
@@ -572,6 +575,7 @@ select {
   overflow-y: auto;
   overflow-x: auto; 
   padding: 5px;
+  height: 500px;
 }
 
 .table-details {
@@ -645,23 +649,32 @@ select {
 }
 
 .DetailsButton {
+  position: absolute;
+  top: 5px;
+  right: 5px;
+
   display: flex;
   flex-direction: row;
   align-items: center;
 
   border-radius: 12px 0px 0px 12px;  /* top-left | top-right | bottom-right | bottom-left */
-  background: silver;
+  background: blue;
+  color : white;
   box-shadow: 0px 2px 8px rgba(0,0,0,0.15);
   box-sizing: border-box;  
   width: 40px;
   height: 40px;
   margin: 0px;
+  
+  z-index: 20;
 }
 
 .material-symbols-outlined#detailsIcon {
   display: flex;
-  flex-direction: column;
-  align-items: center; 
-  padding-top: 5px; 
+  flex-direction: row;
+  justify-content: flex-end; 
+  padding: 5px 0px 5px 20px; /* top | right | bottom | left */
+  width: 10px;
+  height: 10px;  
 }
 

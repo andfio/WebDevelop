@@ -84,7 +84,7 @@ export class ChartComponent {
   rowData: any = {};
   rootfields: any[] = [];
   tableData: any[] = [];
-  detailsFields: any[] = [];  
+  detailsRows: any[] = []; 
 
   chartSeries: any[] = []
   chartAxisOffSet: any[] = [];
@@ -108,7 +108,7 @@ export class ChartComponent {
     this.rowData = this.buildrowData(history.state.rootData);
     this.rootfields = this.buildrootFields(history.state.rootData);
     this.tableData = this.buildtableData(history.state.rootData);
-    this.detailsFields = history.state.detailsFields;
+    this.detailsRows = this.buildDetailsRows(history.state.detailsFields);
     this.httpConfig = history.state.httpConfig;
     this.axesConfig = history.state.axesConfig;
 
@@ -146,22 +146,37 @@ export class ChartComponent {
     });
   }
 
-  currentProgressiveGroup: number = 0;
-  subGetItemData(item: tabledata): string {
-    let value: string = "";
-    if (item.field !== "ProgressiveGroup") {
+  buildDetailsRows(detailsFields: any[]): any[] {
+    const rows: any[] = [];
+    let currentRow: any = {};
+
+    for (const item of detailsFields) {
       switch (item.field) {
         case "ProgressiveGroup":
+          currentRow.nr = item.value;
+          break;
+
         case "TestDescription":
+          currentRow.description = item.value;
+          break;
+
         case "TestResult":
+          currentRow.result = item.value;
+          break;
+
         case "StartEventTime":
+          currentRow.startSequence = item.value;
+          break;
+
         case "EndEventTime":
-          value = item.value.toString();
+          currentRow.endSequence = item.value;
+          rows.push(currentRow);
+          currentRow = {};
+          break;
       }
-            
-      this.currentProgressiveGroup = Number(item.value);
     }
-    return value;
+
+    return rows;
   }  
 
   subPost() {
@@ -649,9 +664,9 @@ export class ChartComponent {
     return measure ? measure.shortname : "";
   }
 
-  showDetails: boolean = false;
+  hideDetails: boolean = false;
   toggleDetails() {
-    this.showDetails = !this.showDetails;
+    this.hideDetails = !this.hideDetails;
   }
 
   buttonName: string = "Table"
