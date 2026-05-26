@@ -113,3 +113,10 @@ export interface tabledata {
   description: string;
 }
 
+export interface tabledetails {
+  nr: string;
+  description: string;
+  result: string;
+  startSequence: string;
+  endSequence: string;
+}

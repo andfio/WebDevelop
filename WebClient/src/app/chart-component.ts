@@ -17,7 +17,7 @@ import {
   ApexAnnotations
 } from "ng-apexcharts";
 import { NgApexchartsModule } from "ng-apexcharts";
-import { DataPoint, timeinfo, tablevalues, tabledata } from "./chart-config";
+import { DataPoint, timeinfo, tablevalues } from "./chart-config";
 import { DialogContent } from './dialog-component';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSliderModule } from '@angular/material/slider';
@@ -46,12 +46,16 @@ import { Router } from '@angular/router';
 //Tabella dettagli
 import {MatTooltipModule} from '@angular/material/tooltip';
 import {MatButtonToggleModule} from '@angular/material/button-toggle';
+import {tabledata, tabledetails} from "./chart-config";
+//Tests Execution chart
+import  { TestsExecutionChartComponent } from './testsExecution/tests-chart-component';
+import { TestsExecutionChartDataService } from "./testsExecution/tests-chart-service";
 
 @Component({
   selector: "app-chart",
   templateUrl: "./chart-component.html",
   styleUrls: ["./chart-component.css"],
-  imports: [NgApexchartsModule, MatSliderModule, FormsModule, MatIconModule, MatMenuModule, MatButtonModule, MatSlideToggleModule, MatTooltipModule, MatButtonToggleModule]
+  imports: [NgApexchartsModule, MatSliderModule, FormsModule, MatIconModule, MatMenuModule, MatButtonModule, MatSlideToggleModule, MatTooltipModule, MatButtonToggleModule, TestsExecutionChartComponent]
 })
 export class ChartComponent {
 [x: string]: any;
@@ -74,7 +78,7 @@ export class ChartComponent {
   public legend: ApexLegend = {};
   public annotations: ApexAnnotations[] = []
 
-  constructor(private dialog: MatDialog, private cd: ChangeDetectorRef, private http: HttpClient, private chartDialog: MatDialog, private router: Router) { }
+  constructor(private dialog: MatDialog, private cd: ChangeDetectorRef, private http: HttpClient, private chartDialog: MatDialog, private router: Router, public testExecution: TestsExecutionChartDataService) { }
   
   chartData: ChartData = {
     MeasurID: [],
@@ -84,7 +88,7 @@ export class ChartComponent {
   rowData: any = {};
   rootfields: any[] = [];
   tableData: any[] = [];
-  detailsRows: any[] = []; 
+  detailsRows: tabledetails[] = []; 
 
   chartSeries: any[] = []
   chartAxisOffSet: any[] = [];
@@ -103,7 +107,8 @@ export class ChartComponent {
   KeyResult: string = "";
   MeasureID: number[] = [];
   MeasurColl: number[][] = [];
-
+  
+ 
   ngOnInit() {
     this.rowData = this.buildrowData(history.state.rootData);
     this.rootfields = this.buildrootFields(history.state.rootData);
@@ -111,6 +116,8 @@ export class ChartComponent {
     this.detailsRows = this.buildDetailsRows(history.state.detailsFields);
     this.httpConfig = history.state.httpConfig;
     this.axesConfig = history.state.axesConfig;
+
+    this.testExecution.detailsRows.set(this.buildDetailsChart(history.state.detailsFields));
 
     this.KeyResult = history.state.KeyResult;
     
@@ -165,11 +172,11 @@ export class ChartComponent {
           break;
 
         case "StartEventTime":
-          currentRow.startSequence = item.value;
+          currentRow.startSequence = this.convertSecondiToTime(Number(item.value));
           break;
 
         case "EndEventTime":
-          currentRow.endSequence = item.value;
+          currentRow.endSequence = this.convertSecondiToTime(Number(item.value));
           rows.push(currentRow);
           currentRow = {};
           break;
@@ -178,6 +185,39 @@ export class ChartComponent {
 
     return rows;
   }  
+
+  buildDetailsChart(detailsFields: any[]): any[] {
+    const rows: any[] = [];
+    let currentRow: any = {};
+
+    for (const item of detailsFields) {
+      switch (item.field) {
+        case "ProgressiveGroup":
+          currentRow.nr = item.value;
+          break;
+
+        case "TestDescription":
+          currentRow.description = item.value;
+          break;
+
+        case "TestResult":
+          currentRow.result = item.value;
+          break;
+
+        case "StartEventTime":
+          currentRow.startSequence = Number(item.value);
+          break;
+
+        case "EndEventTime":
+          currentRow.endSequence = Number(item.value);
+          rows.push(currentRow);
+          currentRow = {};
+          break;
+      }
+    }
+
+    return rows;
+  } 
 
   subPost() {
     this.subParserMeasureData(this.KeyResult);
@@ -1163,8 +1203,10 @@ export class ChartComponent {
     });
   }
   
+  showTestsExecution: boolean = false;
   ShowTestsExecution(button: string) {
     this.buttonpressed[button] = !this.buttonpressed[button];
+    this.showTestsExecution = this.buttonpressed[button];
   }
 
   ShowPeaks(button: string) {

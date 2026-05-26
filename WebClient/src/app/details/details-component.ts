@@ -666,10 +666,10 @@ background: any;
                   itemValue = { name: f.name, field: f.field, value: this.ResultDescription(testData[f.field]), description: "" };
                   break;
                 case "StartEventTime":
-                  itemValue = { name: f.name, field: f.field, value: this.convertSecondiToTime(Number(testData[f.field])), description: "" };
+                  itemValue = { name: f.name, field: f.field, value: testData[f.field], description: "" };
                   break;
                 case "EndEventTime":
-                  itemValue = { name: f.name, field: f.field, value: this.convertSecondiToTime(Number(testData[f.field])), description: "" };
+                  itemValue = { name: f.name, field: f.field, value: testData[f.field], description: "" };
                   break;
                 default:
                   itemValue = { name: "", field: "", value: "", description: "" };
