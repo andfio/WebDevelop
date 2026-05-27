@@ -77,7 +77,6 @@ export class TestsExecutionChartComponent implements AfterViewInit, OnDestroy {
   initChartData () {
     this.series = [
       {
-        name: 'Tests',
         data: this.detailsRows.map(row => ({
           x: row.description,
           y: [Number(row.startSequence), Number(row.endSequence)],
@@ -125,33 +124,57 @@ export class TestsExecutionChartComponent implements AfterViewInit, OnDestroy {
       show: false
     };
     this.dataLabels = {
-      enabled: true,        
-      style: {
-        fontFamily: 'Tahoma',
-        fontSize: '12px'
+      enabled: true,
+      textAnchor: 'start',
+      offsetX: 8,
+      formatter: (_val, opts) => {
+        const row = this.detailsRows[opts.dataPointIndex];
+        return row.nr + " - " + row.description;
       },
-      formatter: function(val, opts) {
-
-        const nomeSerie =
-          opts.w.config.series[opts.seriesIndex].name;
-
-        return nomeSerie + ": " + val;
-      }, 
-      offsetY: -15
+      style: {
+        fontSize: '8px',
+        fontFamily: 'Tahoma',
+        fontWeight: 500,
+        colors: ['#FFFFFF']
+      },
+      background: {
+        enabled: false
+      }
     };
+
     this.plotOptions = {
       bar: {
         horizontal: true,
-        barHeight: '100%',
+        barHeight: '60%',
         rangeBarGroupRows: false,
+        dataLabels: {
+          maxItems: this.detailsRows.length,
+          position: 'right',
+          orientation: 'horizontal',
+          hideOverflowingLabels: false
+        }
       }
     };
+    this.yaxis = [
+      {
+        labels: {
+          show: false
+        },
+        axisBorder: {
+          show: false
+        },
+        axisTicks: {
+          show: false
+        }
+      }
+    ];    
     this.xaxis = {
       type: "numeric",
       position: 'bottom',
       min: Number(this.detailsRows[0].startSequence),
-      max: Number(this.detailsRows[this.detailsRows.length - 1].endSequence),      
-      tickAmount: 20,
+      max: Number(this.detailsRows[this.detailsRows.length - 1].endSequence),
+      decimalsInFloat: 2,      
+      tickAmount: 20,         
       axisTicks: {
           show: true,
           borderType: 'solid',
@@ -171,18 +194,32 @@ export class TestsExecutionChartComponent implements AfterViewInit, OnDestroy {
         show: true,
         width: 1
       },
-      labels: {
-        style: {
-          colors: "#FFFFFF"
-        }
-      },
       title: {  
         text: "Time (s)",
         style: {
           color: "#FFFFFF"
         }
+      },
+      labels: {  
+        style: {
+          colors: "#FFFFFF"
+        }
       }  
     }; 
+    this.tooltip = {
+      custom: ({ seriesIndex, dataPointIndex, w }) => {
+        const point = w.config.series[seriesIndex].data[dataPointIndex];
+        const start = Number(point.y[0]).toFixed(2);
+        const end = Number(point.y[1]).toFixed(2);
+
+        return `
+          <div style="padding: 6px 8px;">
+            <div>${point.x}</div>
+            <div>${start} - ${end}</div>
+          </div>
+        `;
+      }
+    };  
   }
 
   ngAfterViewInit(): void {
@@ -212,6 +249,10 @@ export class TestsExecutionChartComponent implements AfterViewInit, OnDestroy {
     }
   } 
 
+  getTickAmount(): number {
+    return (Math.round(this.detailsRows[this.detailsRows.length - 1].endSequence * 5))
+  }
+
   private updateChartHeight(): void {
     const newHeight = this.getChartHeight();
 
@@ -230,6 +271,13 @@ export class TestsExecutionChartComponent implements AfterViewInit, OnDestroy {
   private getChartHeight(): number {
     return this.chartWrapper?.nativeElement.clientHeight || this.fallbackChartHeight;
   }
+
+  // getChartHeight(): number {
+  //   const rowHeight = 36;
+  //   const minHeight = this.chartWrapper?.nativeElement.clientHeight || this.fallbackChartHeight;
+
+  //   return Math.max(minHeight, this.detailsRows.length * rowHeight);
+  // }
 
 
   @HostListener('window:resize')

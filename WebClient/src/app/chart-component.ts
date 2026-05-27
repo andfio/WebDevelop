@@ -171,7 +171,7 @@ export class ChartComponent {
           currentRow.result = item.value;
           break;
 
-        case "StartEventTime":
+        case "StartStabTime":
           currentRow.startSequence = this.convertSecondiToTime(Number(item.value));
           break;
 
@@ -204,7 +204,7 @@ export class ChartComponent {
           currentRow.result = item.value;
           break;
 
-        case "StartEventTime":
+        case "StartStabTime":
           currentRow.startSequence = Number(item.value);
           break;
 

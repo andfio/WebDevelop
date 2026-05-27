@@ -278,7 +278,7 @@ background: any;
                     case "Result":
                       this.tableInfo.value = this.ResultDescription(itemRow[itemCol.field]);
                       break;
-                    case "StartEventTime":
+                    case "StartStabTime":
                     case "EndEventTime":
                       this.tableInfo.value = this.convertSecondiToTime(Number(itemRow[itemCol.field]));
                       break;
@@ -486,7 +486,7 @@ background: any;
             case "Result":
               columnValue = this.ResultDescription(itemRow[col.field]);
               break;
-            case "StartEventTime":
+            case "StartStabTime":
             case "EndEventTime":
               columnValue = this.convertSecondiToTime(Number(itemRow[col.field]));
               break;
@@ -665,7 +665,7 @@ background: any;
                 case "TestResult":
                   itemValue = { name: f.name, field: f.field, value: this.ResultDescription(testData[f.field]), description: "" };
                   break;
-                case "StartEventTime":
+                case "StartStabTime":
                   itemValue = { name: f.name, field: f.field, value: testData[f.field], description: "" };
                   break;
                 case "EndEventTime":
