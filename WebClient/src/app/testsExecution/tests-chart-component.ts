@@ -91,7 +91,7 @@ export class TestsExecutionChartComponent implements AfterViewInit, OnDestroy {
       redrawOnParentResize: true,
       redrawOnWindowResize: true,
       height: this.getChartHeight(),
-      width: '100%',
+      width: '90%',
       zoom: {
         type: "xy",
         enabled: true,
@@ -109,24 +109,37 @@ export class TestsExecutionChartComponent implements AfterViewInit, OnDestroy {
           zoomin: false,
           zoomout: false,
           pan: false,
-          reset: true 
+          reset: false, 
+          customIcons: [{
+            icon: '<i class="material-symbols-outlined">home</i>',
+            click: () => this.subResetZoom(),
+          }]           
         },
-        autoSelected: 'zoom' 
+        autoSelected: 'zoom',
       },
       animations: { 
         enabled: false
+      },
+      events: {
+        mounted: (chartContext: any) => {
+          requestAnimationFrame(() => this.fixOverflowingLabels(chartContext));
+        },
+        updated: (chartContext: any) => {
+          requestAnimationFrame(() => this.fixOverflowingLabels(chartContext));
+        }
       }
     };
     this.legend = {
       show: false
     };
     this.grid = {
-      show: false
+      show: false,
     };
     this.dataLabels = {
       enabled: true,
       textAnchor: 'start',
-      offsetX: 8,
+      offsetX:  0,
+      offsetY: -14,
       formatter: (_val, opts) => {
         const row = this.detailsRows[opts.dataPointIndex];
         return row.nr + " - " + row.description;
@@ -145,11 +158,11 @@ export class TestsExecutionChartComponent implements AfterViewInit, OnDestroy {
     this.plotOptions = {
       bar: {
         horizontal: true,
-        barHeight: '60%',
+        barHeight: '35%',
         rangeBarGroupRows: false,
         dataLabels: {
           maxItems: this.detailsRows.length,
-          position: 'right',
+          position: 'top',
           orientation: 'horizontal',
           hideOverflowingLabels: false
         }
@@ -264,20 +277,78 @@ export class TestsExecutionChartComponent implements AfterViewInit, OnDestroy {
     this.chartObj?.updateOptions({
       chart: {
         height: newHeight
-      }
+      },
     });
   }  
 
-  private getChartHeight(): number {
-    return this.chartWrapper?.nativeElement.clientHeight || this.fallbackChartHeight;
+  private fixOverflowingLabels(chartContext: any): void {
+    const svgEl: SVGElement | null = chartContext?.el?.querySelector('svg');
+    if (!svgEl) return;
+
+    const labels = svgEl.querySelectorAll<SVGTextElement>('.apexcharts-datalabels text');
+    if (labels.length === 0) return;
+
+    const globals   = chartContext?.w?.globals;
+    const plotLeft  = globals?.translateX ?? 0;
+    const plotWidth = globals?.gridWidth  ?? svgEl.getBoundingClientRect().width;
+    const plotRight = plotLeft + plotWidth;
+    const marginPx  = 6;
+    const labelOffset = 27;
+
+    // Usa globals per supportare anche lo zoom
+    const minX =  Number(this.detailsRows[0].startSequence);
+    const maxX =  Number(this.detailsRows[this.detailsRows.length - 1].endSequence);
+
+    labels.forEach((label, i) => {
+      const row = this.detailsRows[i];
+      if (!row) return;
+
+      const bbox = label.getBBox();
+      if (bbox.width === 0) return;     
+
+      // La label parte dall'inizio della barra (offsetX: 0)
+      const barStartPx = this.dataXToSvgPx(Number(row.startSequence), minX, maxX, plotLeft, plotWidth) - labelOffset;
+      const labelRight = barStartPx + bbox.width;
+
+      if (labelRight > plotRight - marginPx) {
+        // Sborda a destra: ancora la label al bordo destro della plot area
+        const newX = plotRight - bbox.width - marginPx;
+        label.setAttribute('x', String(newX));
+      } else {
+        // Posizione corretta: allineata all'inizio della barra
+        label.setAttribute('x', String(barStartPx)); 
+      }
+    });
   }
 
-  // getChartHeight(): number {
-  //   const rowHeight = 36;
-  //   const minHeight = this.chartWrapper?.nativeElement.clientHeight || this.fallbackChartHeight;
+  private dataXToSvgPx(
+    xValue: number,
+    minX: number,
+    maxX: number,
+    plotLeft: number,
+    plotWidth: number
+  ): number {
+    if (maxX === minX) return plotLeft;
+    return plotLeft + ((xValue - minX) / (maxX - minX)) * plotWidth;
+  }
 
-  //   return Math.max(minHeight, this.detailsRows.length * rowHeight);
-  // }
+  getChartHeight(): number {
+    const rowHeight = 30;
+    const minHeight = this.chartWrapper?.nativeElement.clientHeight || this.fallbackChartHeight;
+
+    return Math.max(minHeight, this.detailsRows.length * rowHeight);
+  }
+
+  subResetZoom(): any {
+    let options = this.chartObj?.updateOptions({
+      xaxis: {
+        ...this.xaxis,
+        min: Number(this.detailsRows[0].startSequence),
+        max: Number(this.detailsRows[this.detailsRows.length - 1].endSequence)
+        }
+    });
+    return options;
+  }
 
 
   @HostListener('window:resize')

@@ -677,7 +677,7 @@ background: any;
               }
 
               if (itemValue.field !== "" && itemValue.name !== "") {
-                info.push({ name: itemValue.name, field: itemValue.field, value: itemValue.value.toString().slice(0, 20) + (itemValue.value.toString().length > 20 ? "..." : ""), description: itemValue.description.toString().slice(0, 30) + (itemValue.description.toString().length > 30 ? "..." : "") });
+                info.push({ name: itemValue.name, field: itemValue.field, value: itemValue.value, description: itemValue.description});
               }
           }
   
