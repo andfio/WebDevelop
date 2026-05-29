@@ -1,28 +1,38 @@
 <div class="chart-header">
   
   <div class="panel-contenitor">
-
-      <div class="root-contenitor">
-
-          <div class="button-container">
-              <div class="btn-goback" (click)="goBack()"><i class="material-symbols-outlined">arrow_back</i> Back </div>
-              <div class="btn-tableAndGraph" (click)="ShowPanel(buttonName)"><i class="material-symbols-outlined">{{ buttonIcon }}</i> {{ buttonName }} </div >
-          </div> 
-
-      </div> 
+      
+    <mat-divider/>
+      <mat-toolbar>
+        <div class="toolbar-contenitor">
+          <button matMiniFab matTooltip="BACK" [style.background-color]="'#ff0000'" (click)="goBack()"><mat-icon>arrow_back</mat-icon></button>
+          <button matMiniFab matTooltip="Print" [style.background-color]="'#c0c0c0'" (click)="subPrintGraphAndData()"><mat-icon>print</mat-icon></button>
+          <button matMiniFab matTooltip="Table" [disabled]="!blnShowGraph" [style.background-color]="'#c0c0c0'" (click)="SetPanel()" ><mat-icon>table_chart</mat-icon></button>
+          <button matMiniFab matTooltip="Graph" [disabled]="blnShowGraph" [style.background-color]="'#c0c0c0'" (click)="SetPanel()" ><mat-icon>area_chart</mat-icon></button>
+        </div>  
+      </mat-toolbar>
+      <mat-divider/>         
 
       @if(blnShowGraph) {
-      <div class="panel-graph-buttons">
-        <div class="graph-buttons">
-          
-          <div class="GraphButton"  (click)="ShowTestsExecution('ShowTestsExecution')">
-            @if(buttonpressed['ShowTestsExecution'] === true ) 
-            { <i class="material-symbols-outlined">done_outline</i> }
-            <span>Show Tests Execution</span>
-          </div>
-
-        </div>  
-      </div>
+        
+        <mat-toolbar>
+          <div class="toolbar-graph-buttons">
+            <mat-form-field class="measure-select" appearance="outline" subscriptSizing="dynamic">
+            <mat-select [(ngModel)]="measureSelected" placeholder="Tests">
+              @for (item of this.MeasureID; track $index) {
+                @if(this.subGetShortname(item) !== "") {
+                  <mat-option [value]="this.subGetShortname(item)"> {{ this.subGetShortname(item) }} </mat-option>
+                }
+              }
+            </mat-select>
+            </mat-form-field>
+            <button mat-raised-button matTooltip="Show Peaks" [style.background-color]="'#c0c0c0'" (click)="ShowPeaks('ShowPeaks')"><mat-icon>planner_review</mat-icon>Show Peaks</button>
+            <button mat-raised-button matTooltip="Show Constant Values" [style.background-color]="'#c0c0c0'" (click)="ShowConstantValues('ShowConstantValues')"><mat-icon>legend_toggle</mat-icon>Show Constant Values</button>
+            <button mat-raised-button matTooltip="Show Tests Execution" [style.background-color]="'#c0c0c0'" (click)="ShowTestsExecution('ShowTestsExecution')" ><mat-icon>bolt</mat-icon>Show Tests Execution</button>
+          </div>  
+        </mat-toolbar>
+        <mat-divider/>
+        
       }
 
   </div>
@@ -283,35 +293,6 @@
             </div>   
 
           </div>
-
-          <div class="selectbox">
-            <label id="labelMeasures">Tests :</label>
-            <select [(ngModel)]="measureSelected">
-              @for (item of measures; track $index) {
-                  @for (value of item.values; track $index) {
-                    <option [value]="value"> {{value}} </option>
-                  }
-              }
-            </select>
-          </div> 
-          
-          <div class="GraphButton" name="ShowPeaks" (click)="ShowPeaks('ShowPeaks')">
-            @if(buttonpressed['ShowPeaks'] === true ) 
-            { <i class="material-symbols-outlined">done_outline</i> }
-            <span>Show Peaks</span>
-          </div>    
-
-          <div class="GraphButton" name="ShowConstantValues" (click)="ShowConstantValues('ShowConstantValues')">
-            @if(buttonpressed['ShowConstantValues'] === true ) 
-            { <i class="material-symbols-outlined">done_outline</i> }
-            <span>Show Constant Values</span>
-          </div> 
-
-          <div class="GraphButton" name="ShowTestsAree" (click)="ShowTestsAree('ShowTestsAree')">
-            @if(buttonpressed['ShowTestsAree'] === true ) 
-            { <i class="material-symbols-outlined">done_outline</i> }
-            <span>Show Tests Aree</span>
-          </div>    
           
           <div class="slidetogle-container">
             <div class="slidetoggle">

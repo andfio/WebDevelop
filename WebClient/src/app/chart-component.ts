@@ -32,6 +32,10 @@ import {
 import {MatIconModule} from '@angular/material/icon';
 import {MatMenuModule} from '@angular/material/menu';
 import {MatButtonModule} from '@angular/material/button';
+import {MatToolbarModule} from '@angular/material/toolbar';
+import {MatDividerModule} from '@angular/material/divider';
+import {MatSelectModule} from '@angular/material/select';
+import {MatFormFieldModule} from '@angular/material/form-field';
 //gestione cursori grafico
 import {MatSlideToggleModule} from '@angular/material/slide-toggle';
 //richieste http
@@ -48,14 +52,14 @@ import {MatTooltipModule} from '@angular/material/tooltip';
 import {MatButtonToggleModule} from '@angular/material/button-toggle';
 import {tabledata, tabledetails} from "./chart-config";
 //Tests Execution chart
-import  { TestsExecutionChartComponent } from './testsExecution/tests-chart-component';
-import { TestsExecutionChartDataService } from "./testsExecution/tests-chart-service";
+import {TestsExecutionChartComponent} from './testsExecution/tests-chart-component';
+import {TestsExecutionChartDataService} from "./testsExecution/tests-chart-service";
 
 @Component({
   selector: "app-chart",
   templateUrl: "./chart-component.html",
   styleUrls: ["./chart-component.css"],
-  imports: [NgApexchartsModule, MatSliderModule, FormsModule, MatIconModule, MatMenuModule, MatButtonModule, MatSlideToggleModule, MatTooltipModule, MatButtonToggleModule, TestsExecutionChartComponent]
+  imports: [NgApexchartsModule, MatSliderModule, FormsModule,MatDividerModule, MatSelectModule, MatFormFieldModule, MatIconModule, MatMenuModule, MatButtonModule, MatSlideToggleModule, MatTooltipModule, MatButtonToggleModule, MatToolbarModule, TestsExecutionChartComponent]
 })
 export class ChartComponent {
 [x: string]: any;
@@ -251,6 +255,7 @@ export class ChartComponent {
     this.http.post(this.httpConfig.baseurl + '/query/measuresinfo', parameters).subscribe({
       next: (data: any) => {
         this.measuresinfo = data;
+        this.subSetDefaultSelectedMeasure();
         this.ShowChart();
       },
       error: (err) => {
@@ -704,27 +709,19 @@ export class ChartComponent {
     return measure ? measure.shortname : "";
   }
 
+  subSetDefaultSelectedMeasure() {
+    const firstMeasureID = this.MeasureID.find(measureID => this.subGetShortname(measureID) !== "");
+    this.measureSelected = firstMeasureID !== undefined ? this.subGetShortname(firstMeasureID) : "";
+  }
+
   hideDetails: boolean = false;
   toggleDetails() {
     this.hideDetails = !this.hideDetails;
   }
 
-  buttonName: string = "Table"
-  buttonIcon: string = "table_chart";
   blnShowGraph: boolean = true;
-
-  ShowPanel(buttonName: string) {
-    if (buttonName == "Graph") {
-      this.blnShowGraph = true;
-      this.buttonName = "Table"
-      this.buttonIcon = "table_chart"
-    }
-    else
-    {
-      this.blnShowGraph = false;
-      this.buttonName = "Graph"
-      this.buttonIcon = "monitoring"
-    }
+  SetPanel() {
+      this.blnShowGraph = !this.blnShowGraph;
   }
 
   isAddPointAnnotation: boolean = false;
@@ -1288,6 +1285,10 @@ export class ChartComponent {
       yaxis: this.yaxis
     });
   
+  }
+
+  subPrintGraphAndData() {
+
   }
 
   subChartDialogShow() {

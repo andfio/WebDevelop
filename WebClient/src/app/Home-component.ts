@@ -82,7 +82,7 @@ export class HomeComponent {
           this.filterValues = this.subDefaultValues();
       },
       error: (err) => {
-        console.error('ERRORE CARICAMENTO JSON:', err);
+        console.error('Errore caricamento configurazione', err);
       }
     });
   }

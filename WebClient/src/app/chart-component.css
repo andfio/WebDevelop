@@ -5,67 +5,23 @@
 
 .panel-contenitor {
   display: flex;
+  flex-direction: column;
+}
+
+mat-toolbar.mat-toolbar-single-row {
+  height: 52px;
+  min-height: 52px;
+  padding: 0 6px;
+}
+
+.toolbar-contenitor {
+  display: flex;
   flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  margin: 5px;
   width: 100%;
-  gap: 10px;
-}
-
-.root-contenitor {
-    flex: 0 0 300px;
-    flex-direction: row;
-    gap: 5px; 
-}
-
-.button-container {
-    display: flex;
-    flex-direction: row;
-    gap: 10px; 
-    justify-content: flex-start;  
-    text-align: center;
-    height: auto;
-    margin: 10px 20px 5px 20px;
-}
-
-.btn-goback {
-    display: flex;
-    flex-direction: row;  
-    background-color: rgb(216, 12, 12);
-    color: white;
-    font-family: 'Tahoma';
-    font-size: 16px;
-    font-weight: bold;
-    padding: 5px 5px;
-    border: none;
-    border-radius: 6px;
-    cursor: pointer;
-    transition: background-color 0.2s ease;
-    box-shadow: 0px 1px 4px rgba(0,0,0,0.3);
-    margin-bottom: 5px;
-    width: 120px;
-    height: 40px;
-    align-items: center ; 
-    gap: 10px;   
-}
-
-.btn-tableAndGraph {
-    display: flex;
-    flex-direction: row;
-    background-color: #28a745;
-    color: white;
-    font-family: 'Tahoma';
-    font-size: 16px;
-    font-weight: bold;
-    padding: 5px 5px;
-    border: none;
-    border-radius: 6px;
-    cursor: pointer;
-    transition: background-color 0.2s ease;
-    box-shadow: 0px 1px 4px rgba(0,0,0,0.3);
-    margin-bottom: 5px;
-    width: 120px;
-    height: 40px;
-    align-items: center ; 
-    gap: 10px;       
 }
 
 .panel-graph-buttons {
@@ -76,11 +32,52 @@
     height: 75px; 
 }
 
-.graph-buttons {
-    display: flex;
-    flex-direction: row;
-    justify-content: flex-start;
-    gap: 5px; 
+.toolbar-graph-buttons {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 5px;
+  width: 100%;
+  font-family: 'Tahoma';
+  font-size: 14px;
+}
+
+.toolbar-graph-buttons .measure-select {
+  width: 180px;
+  font-family: inherit;
+  font-size: inherit;
+}
+
+:host ::ng-deep .toolbar-graph-buttons .measure-select .mat-mdc-text-field-wrapper {
+  height: 36px;
+  padding: 0 10px;
+}
+
+:host ::ng-deep .toolbar-graph-buttons .measure-select .mat-mdc-form-field-flex {
+  height: 36px;
+  align-items: center;
+}
+
+:host ::ng-deep .toolbar-graph-buttons .measure-select .mat-mdc-form-field-infix {
+  min-height: 36px;
+  height: 36px;
+  padding: 7px 0;
+}
+
+:host ::ng-deep .toolbar-graph-buttons .measure-select .mat-mdc-select,
+:host ::ng-deep .toolbar-graph-buttons .measure-select .mat-mdc-select-value,
+:host ::ng-deep .toolbar-graph-buttons .measure-select .mat-mdc-select-placeholder {
+  font-family: inherit;
+  font-size: inherit;
+  line-height: 20px;
+}
+
+.toolbar-graph-buttons button[mat-raised-button] {
+  height: 36px;
+  line-height: 36px;
+  white-space: nowrap;
+  font-family: inherit;
+  font-size: inherit;
 }
 
 .chart-wrapper-container {
@@ -93,7 +90,7 @@
 .CursorPoints {
   flex: 0 0 185px;
   margin: 5px 0px 0px 10px; /* top | right | bottom | left */
-  height: calc(92vh - 20px);
+  height: calc(90vh - 20px);
   overflow-y: hidden;
 }
 #cursortitle {
@@ -157,7 +154,7 @@
 .chart-details-container {
   flex: 0 0 260px;
   margin: 5px 10px 0px 0px; /* top | right | bottom | left */
-  height: calc(92vh - 20px);
+  height: calc(90vh - 20px);
   border-radius: 6px;
   background: #f8f9fa;
   box-shadow: 0px 2px 8px rgba(0,0,0,0.15);
@@ -295,67 +292,6 @@
 .AxisButton:hover {
   background-color: blue;
   cursor: pointer;
-}
-
-.GraphButton {
-  flex: 1;
-  height: 30px; 
-  border-radius: 6px;
-  background-color: #C0C0C0;
-  box-shadow: 0px 2px 8px rgba(0,0,0,0.15);
-  box-sizing: border-box;
-  font-family: 'Tahoma';
-  font-size: 14px;
-  font-weight: bold;
-  margin: 15px 5px;
-  display: flex;
-  flex-direction: row; 
-  align-items: center;
-  justify-content: center;
-  gap: 6px;  
-}
-
-.selectbox label {
-    font-family: 'Tahoma';
-    font-size: 14px;
-    font-weight: bold;
-    color: black;
-    width: fit-content;
-}
-
-.selectbox {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: center;
-  margin: 15px 5px;
-  gap: 4px;
-
-  padding-top: 20px;
-  border: none;               
-  border-top: 2px solid black;  
-  outline: none; 
-}
-
-select {
-    border: 1px solid #777;
-    border-radius: 6px;
-    background-color: white;
-
-    appearance: none;
-    -webkit-appearance: none;
-    -moz-appearance: none;
-
-    background-image: url("data:image/svg+xml;utf8,<svg fill='black' height='14' width='14' viewBox='0 0 24 24' xmlns='http://www.w3.org/2000/svg'><path d='M7 10l5 5 5-5z'/></svg>");
-    background-repeat: no-repeat;
-    background-position: right 8px center;
-
-    font-family: Tahoma;
-    font-size: 14px;
-    color: black;
-    margin-right: 5px;
-    height: 20px;
-    flex: 1;
 }
 
 .slidetogle-container {
@@ -682,7 +618,7 @@ select {
 .chart-testsExecution-container {
   display: flex;
   width: 100%;
-  height: calc(92vh - 20px);
+  height: calc(90vh - 20px);
   min-height: 500px;
   align-items: stretch;
 }

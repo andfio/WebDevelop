@@ -91,7 +91,7 @@ export class TestsExecutionChartComponent implements AfterViewInit, OnDestroy {
       redrawOnParentResize: true,
       redrawOnWindowResize: true,
       height: this.getChartHeight(),
-      width: '90%',
+      width: '100%',
       zoom: {
         type: "xy",
         enabled: true,
@@ -111,8 +111,10 @@ export class TestsExecutionChartComponent implements AfterViewInit, OnDestroy {
           pan: false,
           reset: false, 
           customIcons: [{
-            icon: '<i class="material-symbols-outlined">home</i>',
+            icon: '<i class="material-symbols-outlined" width="10" height="10">home</i>',
             click: () => this.subResetZoom(),
+            title: 'Home',
+            index: 1
           }]           
         },
         autoSelected: 'zoom',
@@ -125,8 +127,8 @@ export class TestsExecutionChartComponent implements AfterViewInit, OnDestroy {
           requestAnimationFrame(() => this.fixOverflowingLabels(chartContext));
         },
         updated: (chartContext: any) => {
-          requestAnimationFrame(() => this.fixOverflowingLabels(chartContext));
-        }
+          //requestAnimationFrame(() => this.fixOverflowingLabels(chartContext));  
+        }          
       }
     };
     this.legend = {
@@ -233,6 +235,10 @@ export class TestsExecutionChartComponent implements AfterViewInit, OnDestroy {
         `;
       }
     };  
+  }
+
+  subSetZoom () {
+
   }
 
   ngAfterViewInit(): void {
