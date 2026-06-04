@@ -120,3 +120,10 @@ export interface tabledetails {
   startSequence: string;
   endSequence: string;
 }
+
+export  enum  buttonsChart  {
+  Default = 'Default',
+  ShowPeaks = 'ShowPeaks',
+  ShowConstantValues = 'ShowConstantValues',
+  ShowTestsExecution = 'ShowTestsExecution'
+}

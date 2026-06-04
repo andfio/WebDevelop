@@ -14,7 +14,8 @@ import {
   ApexStroke,
   ApexGrid,
   ApexLegend,  
-  ApexAnnotations
+  ApexAnnotations,
+  PointAnnotations
 } from "ng-apexcharts";
 import { NgApexchartsModule } from "ng-apexcharts";
 import { DataPoint, timeinfo, tablevalues } from "./chart-config";
@@ -36,6 +37,7 @@ import {MatToolbarModule} from '@angular/material/toolbar';
 import {MatDividerModule} from '@angular/material/divider';
 import {MatSelectModule} from '@angular/material/select';
 import {MatFormFieldModule} from '@angular/material/form-field';
+import {buttonsChart} from "./chart-config";
 //gestione cursori grafico
 import {MatSlideToggleModule} from '@angular/material/slide-toggle';
 //richieste http
@@ -80,7 +82,7 @@ export class ChartComponent {
   public stroke: ApexStroke = {};
   public grid: ApexGrid = {};
   public legend: ApexLegend = {};
-  public annotations: ApexAnnotations[] = []
+  public annotations: ApexAnnotations = {};
 
   constructor(private dialog: MatDialog, private cd: ChangeDetectorRef, private http: HttpClient, private chartDialog: MatDialog, private router: Router, public testExecution: TestsExecutionChartDataService) { }
   
@@ -111,8 +113,9 @@ export class ChartComponent {
   KeyResult: string = "";
   MeasureID: number[] = [];
   MeasurColl: number[][] = [];
+
+  defaultMeasureIDs: number[] = [];
   
- 
   ngOnInit() {
     this.rowData = this.buildrowData(history.state.rootData);
     this.rootfields = this.buildrootFields(history.state.rootData);
@@ -252,16 +255,18 @@ export class ChartComponent {
       CommandType: 1 //measures
     }
 
+    setTimeout(() => {
     this.http.post(this.httpConfig.baseurl + '/query/measuresinfo', parameters).subscribe({
       next: (data: any) => {
         this.measuresinfo = data;
-        this.subSetDefaultSelectedMeasure();
         this.ShowChart();
+        this.defaultMeasureIDs = this.getDefaultMeasureIDs();
       },
       error: (err) => {
         console.error("ERRORE BACKEND:", err);
       }
     });
+    }, 0);
     this.tableheadertime();	   
   }
 
@@ -709,9 +714,21 @@ export class ChartComponent {
     return measure ? measure.shortname : "";
   }
 
-  subSetDefaultSelectedMeasure() {
-    const firstMeasureID = this.MeasureID.find(measureID => this.subGetShortname(measureID) !== "");
-    this.measureSelected = firstMeasureID !== undefined ? this.subGetShortname(firstMeasureID) : "";
+  subGetShortnameAxisY(measureID: number): string {
+        const measure = this.measuresinfo.find(m => m.measureID === measureID); 
+        return (measure ? this.AxisValues.find((axis) => axis.seriesName?.includes(measure.shortname)) ? measure.shortname : "" : "");
+  }
+
+  getDefaultMeasureIDs(): number[] {
+    let defaultMeasureIDs: number[] = [];
+     for (let i = 0; i < this.MeasureID.length; i++) {
+        if (this.subGetShortnameAxisY(this.MeasureID[i]) !== "") {
+          defaultMeasureIDs.push(this.MeasureID[i]);
+        }
+      }
+
+    this.measureSelected = defaultMeasureIDs.length > 0 ? this.subGetShortname(defaultMeasureIDs[0]) : "";  
+    return defaultMeasureIDs;
   }
 
   hideDetails: boolean = false;
@@ -819,7 +836,7 @@ export class ChartComponent {
 
     this.isAddPointAnnotation = true;
 
-    let annotation: ApexAnnotations = {}
+    let annotation: PointAnnotations = {}
     if (this.IsCursorsEnabled[1] == false) {
 
       annotation = {
@@ -834,7 +851,7 @@ export class ChartComponent {
           strokeColor: (curIndex == 0 ? '#FFFFFF' : "#FFFF00" ),
           shape: 'circle'
         }
-      } as ApexAnnotations;
+      } as PointAnnotations;
 
     }
     else
@@ -851,7 +868,7 @@ export class ChartComponent {
           strokeColor: (curIndex == 0 ? '#FFFFFF' : "#FFFF00" ),
           shape: 'circle'
         }
-      } as ApexAnnotations;
+      } as PointAnnotations;
     }  
 
     
@@ -1100,6 +1117,8 @@ export class ChartComponent {
   }
 
   buttonpressed: { [key: string]: boolean } = {}
+  buttonNames = buttonsChart;
+  
   LoadXYAxis(button: string) {
 
     this.http.post(this.httpConfig.baseurl + '/query/loadplots', null).subscribe({
@@ -1206,12 +1225,167 @@ export class ChartComponent {
     this.showTestsExecution = this.buttonpressed[button];
   }
 
+  measureSelected: string = '';
   ShowPeaks(button: string) {
     this.buttonpressed[button] = !this.buttonpressed[button];
+
+    if (!this.buttonpressed[button]) {
+      this.chartObj.updateOptions({
+        annotations: {
+          points: []
+        }
+      });
+      return;
+    }
+
+    let measures: number[] = this.DataPoint.find(dp => dp.name == this.measureSelected)?.measure || [];
+    if (measures.length == 0) { return }
+    let measureID: number = this.MeasureID.find(m => this.subGetShortname(m) == this.measureSelected) || -1; 
+
+    let currValue: number = 0;
+    let prevValue: number = 0;
+    let lastValue: number = 0;
+    let isPeak: boolean = false;
+    let points: PointAnnotations[] = [];
+    for(let x = 0; x < measures.length - 1; x++)
+    {
+
+        isPeak = false;
+
+        if ((this.DataPoint[0].time[x + 1] - this.DataPoint[0].time[x]) > 0 ) {
+          currValue = (measures[x + 1] - measures[x]) / (this.DataPoint[0].time[x + 1] - this.DataPoint[0].time[x])
+
+          if ((currValue < prevValue) && (currValue < 0 && prevValue > 0) ) {
+            isPeak = true;
+          }
+
+          if ((currValue > prevValue) && (currValue > 0 && prevValue < 0) ) {
+            isPeak = true;
+          }
+
+            if(isPeak == true && (lastValue < Number(measures[x].toFixed(3))) && (Math.abs(currValue - prevValue) > 0.2)) {
+
+              points.push({
+                x: this.DataPoint[0].time[x],  
+                y: Number(measures[x].toFixed(3)),
+                  yAxisIndex: this.subGetAxisIndex(measureID),
+                  seriesIndex: this.subGetSeriesIndex(measureID),
+                  label: {
+                    text: measures[x].toFixed(3).toString(),
+                    position: 'top',
+                    style: {
+                      color: this.subGetColorByPlot(measureID),
+                      background: "#000000",
+                      fontFamily: "Arial, sans-serif",
+                      fontSize: '10px',
+                    }
+                  }
+                }  
+              );    
+                
+              lastValue = Number(measures[x].toFixed(3));
+            } 
+          
+
+          prevValue = currValue;
+        }
+    }
+
+    this.chartObj.updateOptions({
+      annotations: {
+        points: points
+      }
+    });
+    this.cd.detectChanges()
   }
 
   ShowConstantValues(button: string) {
     this.buttonpressed[button] = !this.buttonpressed[button];
+
+    if (!this.buttonpressed[button]) {
+      this.chartObj.updateOptions({
+        annotations: {
+          points: []
+        }
+      });
+      return;
+    }
+
+    let measures: number[] = this.DataPoint.find(dp => dp.name == this.measureSelected)?.measure || [];
+    if (measures.length == 0) { return }
+    let measureID: number = this.MeasureID.find(m => this.subGetShortname(m) == this.measureSelected) || -1; 
+    let measureUM: string = this.subGetUM(measureID);
+
+    let currDiff: number = 0;
+    let currValue: number = 0;
+    let prevValue: number = 0;
+    let lastValue: number = 0;
+    let deltaValue: number = 0;
+    let labelText: string = "";
+    let points: PointAnnotations[] = [];
+    for(let x = 0; x < measures.length - 1; x++)
+    {
+
+        if ((this.DataPoint[0].time[x + 1] - this.DataPoint[0].time[x]) > 0 ) {
+          currDiff = (measures[x + 1] - measures[x]) / (this.DataPoint[0].time[x + 1] - this.DataPoint[0].time[x])
+
+          if(x > 0 && currDiff != prevValue && currDiff == 0) {
+            currValue = Number(measures[x].toFixed(3));
+
+            if (lastValue != 0) { 
+              deltaValue = currValue - lastValue;
+            }    
+
+            if(lastValue == 0 || Number(deltaValue.toFixed(3)) > 0.1) {
+
+              if (lastValue != 0) {
+                labelText = currValue + " " + measureUM + " (" + deltaValue.toFixed(3) + " " + measureUM + " )";
+              }
+              else
+              {
+                labelText = currValue + " " + measureUM;
+              }
+
+              lastValue = currValue;
+
+              points.push({
+                x: this.DataPoint[0].time[x],  
+                y: Number(measures[x].toFixed(3)),
+                  yAxisIndex: this.subGetAxisIndex(measureID),
+                  seriesIndex: this.subGetSeriesIndex(measureID),
+                  label: {
+                    text: labelText,
+                    position: 'top',
+                    style: {
+                      color: this.subGetColorByPlot(measureID),
+                      background: "#000000",
+                      fontFamily: "Arial, sans-serif",
+                      fontSize: '10px',
+                    }
+                  }
+                }
+              );    
+              
+            }
+            else
+            {
+              currDiff = 0;
+            }
+                
+          } 
+          
+          prevValue = currDiff;
+
+        }
+        
+    }
+
+    this.chartObj.updateOptions({
+      annotations: {
+        points: points
+      }
+    });
+    this.cd.detectChanges()
   }  
 
   ShowTestsAree(button: string) {
@@ -1287,6 +1461,39 @@ export class ChartComponent {
   
   }
 
+  subGetAxisIndex(measureID: number): number {
+
+    let seriesName: string = this.subGetShortname(measureID);
+
+    for (let index = 1; index < this.AxisValues.length; index++) {
+      if (this.AxisValues[index].enabled == true) {
+        if (this.AxisValues[index].seriesName.includes(seriesName)) {
+          return this.AxisValues[index].axisIndex;
+        }
+      }
+    }
+
+    return -1;
+  }
+
+  subGetSeriesIndex(measureID: number): number {
+
+    let seriesName: string = this.subGetShortname(measureID);
+
+    for (let index = 0; index < this.series.length; index++) {
+        if (this.series[index].name?.includes(seriesName)) {
+          return index;
+        }
+    }
+
+    return -1;
+  }
+
+  subGetColorByPlot(measureID: number): string {
+    let index = this.axesConfig.Plots[this.KeyPlot].Plot.indexOf(measureID);
+    return this.axesConfig.PlotColors[this.KeyPlot].Color[index];
+  }
+
   subPrintGraphAndData() {
 
   }
@@ -1334,9 +1541,6 @@ export class ChartComponent {
     const measure = this.measuresinfo.find(x => x.shortname === measureName);
     return measure ? measure.measureID : -99;
   }
-
-  measureSelected: string = '';
-  measures: any[] = [];
 
   IsCursorsEnabled: boolean[] = [false, false];
   subCursorsEnabled(checked: any) {

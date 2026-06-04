@@ -4,7 +4,7 @@
       
     <mat-divider/>
       <mat-toolbar>
-        <div class="toolbar-contenitor">
+        <div class="toolbar-contenitor" id="back-button">
           <button matMiniFab matTooltip="BACK" [style.background-color]="'#ff0000'" (click)="goBack()"><mat-icon>arrow_back</mat-icon></button>
           <button matMiniFab matTooltip="Print" [style.background-color]="'#c0c0c0'" (click)="subPrintGraphAndData()"><mat-icon>print</mat-icon></button>
           <button matMiniFab matTooltip="Table" [disabled]="!blnShowGraph" [style.background-color]="'#c0c0c0'" (click)="SetPanel()" ><mat-icon>table_chart</mat-icon></button>
@@ -18,17 +18,15 @@
         <mat-toolbar>
           <div class="toolbar-graph-buttons">
             <mat-form-field class="measure-select" appearance="outline" subscriptSizing="dynamic">
-            <mat-select [(ngModel)]="measureSelected" placeholder="Tests">
-              @for (item of this.MeasureID; track $index) {
-                @if(this.subGetShortname(item) !== "") {
-                  <mat-option [value]="this.subGetShortname(item)"> {{ this.subGetShortname(item) }} </mat-option>
-                }
+            <mat-select [(ngModel)]="measureSelected" >
+              @for (item of this.defaultMeasureIDs; track $index) {
+                <mat-option [value]="this.subGetShortname(item)" > {{ this.subGetShortname(item) }} </mat-option>
               }
             </mat-select>
             </mat-form-field>
-            <button mat-raised-button matTooltip="Show Peaks" [style.background-color]="'#c0c0c0'" (click)="ShowPeaks('ShowPeaks')"><mat-icon>planner_review</mat-icon>Show Peaks</button>
-            <button mat-raised-button matTooltip="Show Constant Values" [style.background-color]="'#c0c0c0'" (click)="ShowConstantValues('ShowConstantValues')"><mat-icon>legend_toggle</mat-icon>Show Constant Values</button>
-            <button mat-raised-button matTooltip="Show Tests Execution" [style.background-color]="'#c0c0c0'" (click)="ShowTestsExecution('ShowTestsExecution')" ><mat-icon>bolt</mat-icon>Show Tests Execution</button>
+            <button mat-raised-button matTooltip="Show Peaks" [style.background-color]="!buttonpressed[buttonNames.ShowPeaks] ? '#c0c0c0' : '#00ff00'" (click)="ShowPeaks(buttonNames.ShowPeaks)"><mat-icon>data_thresholding</mat-icon>Show Graph Peaks</button>
+            <button mat-raised-button matTooltip="Show Constant Values" [style.background-color]="!buttonpressed[buttonNames.ShowConstantValues] ? '#c0c0c0' : '#00ff00'" (click)="ShowConstantValues(buttonNames.ShowConstantValues)"><mat-icon>legend_toggle</mat-icon>Show Constant Values</button>
+            <button mat-raised-button matTooltip="Show Tests Execution" [style.background-color]="!buttonpressed[buttonNames.ShowTestsExecution] ? '#c0c0c0' : '#00ff00'" (click)="ShowTestsExecution(buttonNames.ShowTestsExecution)" ><mat-icon>bolt</mat-icon>Show Tests Execution</button>
           </div>  
         </mat-toolbar>
         <mat-divider/>
@@ -70,6 +68,17 @@
             }
             <label class="CursorX">Time: {{ CursorValues[2].x }}</label>
           </div>
+
+          <div class="slidetogle-container">
+            <div class="slidetoggle">
+              <mat-slide-toggle class="CursorToggle" [(ngModel)]="IsCursorsEnabled[0]" (change)="subCursorsEnabled(IsCursorsEnabled[0])">Cursors Enabled</mat-slide-toggle>
+            </div>
+
+            <div class="slidetoggle">
+              <mat-slide-toggle class="CursorToggle" [(ngModel)]="IsCursorsEnabled[1]" (change)="subCursorsMode(IsCursorsEnabled[1])" [disabled]="!IsCursorsEnabled[0]">Cursors Free</mat-slide-toggle>
+            </div>
+            
+          </div>           
           
         </div>     
 
@@ -293,17 +302,6 @@
             </div>   
 
           </div>
-          
-          <div class="slidetogle-container">
-            <div class="slidetoggle">
-              <mat-slide-toggle class="CursorToggle" [(ngModel)]="IsCursorsEnabled[0]" (change)="subCursorsEnabled(IsCursorsEnabled[0])">Cursors Enabled</mat-slide-toggle>
-            </div>
-
-            <div class="slidetoggle">
-              <mat-slide-toggle class="CursorToggle" [(ngModel)]="IsCursorsEnabled[1]" (change)="subCursorsMode(IsCursorsEnabled[1])" [disabled]="!IsCursorsEnabled[0]">Cursors Free</mat-slide-toggle>
-            </div>
-            
-          </div> 
 
         </div> 
       
