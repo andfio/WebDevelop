@@ -18,14 +18,14 @@
         <mat-toolbar>
           <div class="toolbar-graph-buttons">
             <mat-form-field class="measure-select" appearance="outline" subscriptSizing="dynamic">
-            <mat-select [(ngModel)]="measureSelected" >
+            <mat-select [(ngModel)]="measureSelected" [disabled]="buttonpressed[buttonNames.ShowTestsExecution]" >
               @for (item of this.defaultMeasureIDs; track $index) {
                 <mat-option [value]="this.subGetShortname(item)" > {{ this.subGetShortname(item) }} </mat-option>
               }
             </mat-select>
             </mat-form-field>
-            <button mat-raised-button matTooltip="Show Peaks" [style.background-color]="!buttonpressed[buttonNames.ShowPeaks] ? '#c0c0c0' : '#00ff00'" (click)="ShowPeaks(buttonNames.ShowPeaks)"><mat-icon>data_thresholding</mat-icon>Show Graph Peaks</button>
-            <button mat-raised-button matTooltip="Show Constant Values" [style.background-color]="!buttonpressed[buttonNames.ShowConstantValues] ? '#c0c0c0' : '#00ff00'" (click)="ShowConstantValues(buttonNames.ShowConstantValues)"><mat-icon>legend_toggle</mat-icon>Show Constant Values</button>
+            <button mat-raised-button matTooltip="Show Peaks" [disabled]="buttonpressed[buttonNames.ShowTestsExecution]" [style.background-color]="!buttonpressed[buttonNames.ShowPeaks] ? '#c0c0c0' : '#00ff00'" (click)="ShowPeaks(buttonNames.ShowPeaks)"><mat-icon>data_thresholding</mat-icon>Show Graph Peaks</button>
+            <button mat-raised-button matTooltip="Show Constant Values" [disabled]="buttonpressed[buttonNames.ShowTestsExecution]" [style.background-color]="!buttonpressed[buttonNames.ShowConstantValues] ? '#c0c0c0' : '#00ff00'" (click)="ShowConstantValues(buttonNames.ShowConstantValues)"><mat-icon>legend_toggle</mat-icon>Show Constant Values</button>
             <button mat-raised-button matTooltip="Show Tests Execution" [style.background-color]="!buttonpressed[buttonNames.ShowTestsExecution] ? '#c0c0c0' : '#00ff00'" (click)="ShowTestsExecution(buttonNames.ShowTestsExecution)" ><mat-icon>bolt</mat-icon>Show Tests Execution</button>
           </div>  
         </mat-toolbar>
@@ -75,7 +75,7 @@
             </div>
 
             <div class="slidetoggle">
-              <mat-slide-toggle class="CursorToggle" [(ngModel)]="IsCursorsEnabled[1]" (change)="subCursorsMode(IsCursorsEnabled[1])" [disabled]="!IsCursorsEnabled[0]">Cursors Free</mat-slide-toggle>
+              <mat-slide-toggle class="CursorToggle"  [(ngModel)]="IsCursorsEnabled[1]" [disabled]="!IsCursorsEnabled[0]" (change)="subCursorsMode(IsCursorsEnabled[1])" >Cursors Free</mat-slide-toggle>
             </div>
             
           </div>           
@@ -275,29 +275,15 @@
           
             <div id="firstAxisButtons">
             
-              <div class="AxisButton" (click)="LoadXYAxis('LoadXYAxis')">
-                  @if(buttonpressed['LoadXYAxis'] === true ) 
-                    { <i class="material-symbols-outlined">done_outline</i> } @else 
-                    { <i class="material-symbols-outlined">upload</i>}Load Axis</div>
-
-                <div class="AxisButton" (click)="SaveXYAxis('SaveXYAxis')">
-                  @if(buttonpressed['SaveXYAxis'] === true ) 
-                    { <i class="material-symbols-outlined">done_outline</i> } @else 
-                    { <i class="material-symbols-outlined">save</i>}Save Axis</div>               
+              <button matButton="elevated" matTooltip="Load Axis" class="AxisButton" [style.background-color]="!buttonpressed[buttonNames.LoadXYAxis] ? '#c0c0c0' : '#00ff00'" (click)="LoadXYAxis(buttonNames.LoadXYAxis)"><mat-icon>upload</mat-icon>Load Axis</button>
+              <button matButton="elevated" matTooltip="Save Axis" class="AxisButton" [style.background-color]="!buttonpressed[buttonNames.SaveXYAxis] ? '#c0c0c0' : '#00ff00'" (click)="SaveXYAxis(buttonNames.SaveXYAxis)"><mat-icon>save</mat-icon>Save Axis</button>
 
             </div>
             
             <div id="SecondAxisButtons">
 
-              <div class="AxisButton" (click)="ToggleLegend('ToggleLegend')">          
-                  @if(buttonpressed['ToggleLegend'] === true ) 
-                    { <i class="material-symbols-outlined">done_outline</i> } @else 
-                    { <i class="material-symbols-outlined">stack</i>}Legend</div>
-              
-              <div class="AxisButton" (click)="ShowGrid('ShowGrid')">
-                @if(buttonpressed['ShowGrid'] === true ) 
-                  { <i class="material-symbols-outlined">done_outline</i> } @else 
-                  { <i class="material-symbols-outlined">grid_4x4</i>}Show Grid</div>
+              <button matButton="elevated" matTooltip="Legend" class="AxisButton" [style.background-color]="!buttonpressed[buttonNames.ToggleLegend] ? '#c0c0c0' : '#00ff00'" (click)="ToggleLegend(buttonNames.ToggleLegend)"><mat-icon>list</mat-icon>Legend</button>
+              <button matButton="elevated" matTooltip="Show Grid" class="AxisButton"  [style.background-color]="!buttonpressed[buttonNames.ShowGrid] ? '#c0c0c0' : '#00ff00'" (click)="ShowGrid(buttonNames.ShowGrid)"><mat-icon>grid_4x4</mat-icon>Show Grid</button>
                 
             </div>   
 

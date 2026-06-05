@@ -123,6 +123,10 @@ export interface tabledetails {
 
 export  enum  buttonsChart  {
   Default = 'Default',
+  LoadXYAxis = 'LoadXYAxis',
+  SaveXYAxis = 'SaveXYAxis',
+  ToggleLegend = 'ToggleLegend',
+  ShowGrid = 'ShowGrid',
   ShowPeaks = 'ShowPeaks',
   ShowConstantValues = 'ShowConstantValues',
   ShowTestsExecution = 'ShowTestsExecution'

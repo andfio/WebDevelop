@@ -70,7 +70,7 @@ export class ChartComponent {
   public series: ApexAxisChartSeries = [];
   public chart: ApexChart = {
     type: 'area',       
-    height: 350
+    height: 350,
   };
   public dataLabels: ApexDataLabels = {};
   public markers: ApexMarkers = {};
@@ -130,6 +130,7 @@ export class ChartComponent {
     
     this.subInitChartSeries();
     this.subInitCursors();
+    this.subInitButtonsPressed();
 
     let UnitTypeID = this.rowData[this.rootfields.find(x => x.field === 'UnitTypeID').field];
     this.KeyPlot = "Plot" + UnitTypeID.toString();
@@ -333,6 +334,25 @@ export class ChartComponent {
           id: ""
         });
     }    
+  }
+
+  subInitButtonsPressed() {
+      Object.values(buttonsChart).forEach((value: string) => {
+      this.buttonpressed[value] = false;
+    });
+  }
+
+  subResetBtn(esclusion?: string[]) {
+    Object.values(buttonsChart).forEach((value: string) => {
+      if (esclusion != undefined) {
+        if (!esclusion.includes(value)) {
+          this.buttonpressed[value] = false;
+        }
+      }
+      else      {
+        this.buttonpressed[value] = false;
+      }
+    }); 
   }
 
   dates: any = [];
@@ -669,7 +689,7 @@ export class ChartComponent {
            return y;            
          },
          title: {
-           formatter: (seriesName: string) => seriesName + ": "
+           formatter: (seriesName: string) => (seriesName == undefined ? "" : seriesName + ": ")
          }
        }
      };
@@ -870,7 +890,7 @@ export class ChartComponent {
         }
       } as PointAnnotations;
     }  
-
+    console.log("ANNOTATION: ", annotation)
     
     this.chartObj.addPointAnnotation(annotation, true);
 
@@ -1223,6 +1243,7 @@ export class ChartComponent {
   ShowTestsExecution(button: string) {
     this.buttonpressed[button] = !this.buttonpressed[button];
     this.showTestsExecution = this.buttonpressed[button];
+     this.subResetBtn([button]);
   }
 
   measureSelected: string = '';
@@ -1237,6 +1258,7 @@ export class ChartComponent {
       });
       return;
     }
+    this.subResetBtn([button]);
 
     let measures: number[] = this.DataPoint.find(dp => dp.name == this.measureSelected)?.measure || [];
     if (measures.length == 0) { return }
@@ -1310,6 +1332,7 @@ export class ChartComponent {
       });
       return;
     }
+    this.subResetBtn([button]);
 
     let measures: number[] = this.DataPoint.find(dp => dp.name == this.measureSelected)?.measure || [];
     if (measures.length == 0) { return }
@@ -1387,10 +1410,6 @@ export class ChartComponent {
     });
     this.cd.detectChanges()
   }  
-
-  ShowTestsAree(button: string) {
-    this.buttonpressed[button] = !this.buttonpressed[button];
-  }
 
   subLoadAxisConfig(key: string) {
     if (this.axesConfig.AxesScale[key].Xmin == 0 && this.axesConfig.AxesScale[key].Xmax == 0) { return }
@@ -1545,8 +1564,19 @@ export class ChartComponent {
   IsCursorsEnabled: boolean[] = [false, false];
   subCursorsEnabled(checked: any) {
     if(checked == false) {
+      this.IsCursorsEnabled[1] = false;
       this.resetAnnotation();
       this.cursortype = true;
+    }
+    else {
+      if (this.buttonpressed[this.buttonNames.ShowPeaks] || this.buttonpressed[this.buttonNames.ShowConstantValues]) {
+        this.chartObj.updateOptions({
+          annotations: {
+            points: []
+          }
+        });
+      }
+      this.subResetBtn();
     }
   }
 
