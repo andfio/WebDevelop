@@ -71,11 +71,11 @@
 
           <div class="slidetogle-container">
             <div class="slidetoggle">
-              <mat-slide-toggle class="CursorToggle" [(ngModel)]="IsCursorsEnabled[0]" (change)="subCursorsEnabled(IsCursorsEnabled[0])">Cursors Enabled</mat-slide-toggle>
+              <mat-slide-toggle class="CursorToggle" [(ngModel)]="IsCursorsEnabled[0]" (change)="subCursorsEnabled(IsCursorsEnabled[0])">Cursors On/Off</mat-slide-toggle>
             </div>
 
             <div class="slidetoggle">
-              <mat-slide-toggle class="CursorToggle"  [(ngModel)]="IsCursorsEnabled[1]" [disabled]="!IsCursorsEnabled[0]" (change)="subCursorsMode(IsCursorsEnabled[1])" >Cursors Free</mat-slide-toggle>
+              <mat-slide-toggle class="CursorToggle"  [(ngModel)]="IsCursorsEnabled[1]" (change)="subCursorsFreeMode(IsCursorsEnabled[1])" >Cursors Free Mode</mat-slide-toggle>
             </div>
             
           </div>           
@@ -117,7 +117,7 @@
                     (change)="subShowAxisValues(sliderX.value, 0, 'slider')">
                     <input matSliderThumb [(ngModel)]="AxisValues[0].value" #sliderX>
                   </mat-slider>        
-                  <div class="buttonReset" (click)="subResetSliders(0)"><i class="material-symbols-outlined" height="20" width="20">Refresh</i></div>
+                  <div class="buttonReset" (click)="subResetSliders(0)"><mat-icon>autorenew</mat-icon></div>
                 </div> 
             </div>
 
@@ -158,7 +158,7 @@
                     (change)="subShowAxisValues(sliderY1.value, 1, 'slider')">
                     <input matSliderThumb [(ngModel)]="AxisValues[1].value" #sliderY1>
                   </mat-slider>        
-                  <div class="buttonReset" (click)="subResetSliders(1)"><i class="material-symbols-outlined" height="20" width="20">Refresh</i></div>
+                  <div class="buttonReset" (click)="subResetSliders(1)"><mat-icon>autorenew</mat-icon></div>
                 </div>
               </div>
               
@@ -200,7 +200,7 @@
                     (change)="subShowAxisValues(sliderY2.value, 2, 'slider')">
                     <input matSliderThumb [(ngModel)]="AxisValues[2].value" #sliderY2>
                   </mat-slider>        
-                  <div class="buttonReset" (click)="subResetSliders(2)"><i class="material-symbols-outlined" height="20" width="20">Refresh</i></div>
+                  <div class="buttonReset" (click)="subResetSliders(2)"><mat-icon>autorenew</mat-icon></div>
                 </div>
               </div> 
 
@@ -242,7 +242,7 @@
                     (change)="subShowAxisValues(sliderY3.value, 3, 'slider')">
                     <input matSliderThumb [(ngModel)]="AxisValues[3].value" #sliderY3>
                   </mat-slider>        
-                  <div class="buttonReset" (click)="subResetSliders(3)"><i class="material-symbols-outlined" height="20" width="20">Refresh</i></div>
+                  <div class="buttonReset" (click)="subResetSliders(3)"><mat-icon>autorenew</mat-icon></div>
                 </div>
               </div> 
 
@@ -452,11 +452,11 @@
               <tbody>
                 @for(row of detailsRows; track $index) {
                   <tr>
-                    <td>{{ row.nr }}</td>
-                    <td>{{ row.description }}</td>
-                    <td>{{ row.result }}</td>
-                    <td>{{ row.startSequence }}</td>
-                    <td>{{ row.endSequence }}</td>
+                    <td [style.text-align]="'center'">{{ row.nr }}</td>
+                    <td [style.text-align]="'start'" [style.font-size]="'10px'">{{ row.description }}</td>
+                    <td [style.text-align]="'center'">{{ row.result }}</td>
+                    <td [style.text-align]="'center'">{{ row.startSequence }}</td>
+                    <td [style.text-align]="'center'">{{ row.endSequence }}</td>
                   </tr>
                 }                    
               </tbody>

@@ -876,8 +876,9 @@ export class ChartComponent {
     }
     else
     {
+      let key: string = ("cursor-" + xValue?.toString().replace('.', '-') + "-" + yvalue?.toString().replace('.', '-'));
       annotation = {
-        id: `cursor-${xValue}-${yvalue}`,
+        id: key,
         x: xValue,
         y: yvalue,
         yAxisIndex: this.AxisValues[this.DataPoint[seriesIndex!].AxisType].axisIndex,
@@ -890,7 +891,6 @@ export class ChartComponent {
         }
       } as PointAnnotations;
     }  
-    console.log("ANNOTATION: ", annotation)
     
     this.chartObj.addPointAnnotation(annotation, true);
 
@@ -899,6 +899,7 @@ export class ChartComponent {
     }, 0);
 
     let cursor: any = {}
+    let key: string = ("cursor-" + xValue?.toString().replace('.', '-') + "-" + yvalue?.toString().replace('.', '-'));
     if (this.IsCursorsEnabled[1] == false) {
       cursor = { 
         x: Number(this.DataPoint[0].time[opts.dataPointIndex].toFixed(2)),
@@ -919,7 +920,7 @@ export class ChartComponent {
         color: this.DataPoint[seriesIndex!].color,
         pointX: xValue,
         pointY: yvalue,
-        id:`cursor-${xValue}-${yvalue}`,
+        id: key,
       } as CursorValues
     }
 
@@ -1514,7 +1515,28 @@ export class ChartComponent {
   }
 
   subPrintGraphAndData() {
+    this.chartObj.dataURI().then((res: { imgURI: string } | { blob: Blob }) => {
+      if ('imgURI' in res && typeof res.imgURI === 'string') {
+        const base64Only = res.imgURI.replace(/^data:image\/png;base64,/, '');
 
+        const payload = {
+          fileName: 'chart.png',
+          contentType: 'image/png',
+          imageBase64: base64Only,
+          measureID: this.MeasureID,
+          measuresInfo: this.measuresinfo,
+          measuresColl: this.MeasurColl,
+          headerData: this.tableData,
+          sequenceData: this.detailsRows
+        };
+
+        this.http.post(this.httpConfig.baseurl + '/query/printgraphdata', payload)
+          .subscribe({
+            next: (response) => console.log(response),
+            error: (err) => console.error(err)
+          });
+      };
+    });
   }
 
   subChartDialogShow() {
@@ -1569,6 +1591,10 @@ export class ChartComponent {
       this.cursortype = true;
     }
     else {
+      if (this.IsCursorsEnabled[1] == true && this.IsCursorsEnabled[0] == true) {
+        this.subCursorsFreeMode(true);
+      }
+
       if (this.buttonpressed[this.buttonNames.ShowPeaks] || this.buttonpressed[this.buttonNames.ShowConstantValues]) {
         this.chartObj.updateOptions({
           annotations: {
@@ -1580,7 +1606,8 @@ export class ChartComponent {
     }
   }
 
-  subCursorsMode(checked: any) {
+  subCursorsFreeMode(checked: any) {
+    if (this.IsCursorsEnabled[1] == true && this.IsCursorsEnabled[0] == false) { return }
     this.resetAnnotation();
     this.cursortype = false;
   }

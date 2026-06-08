@@ -213,15 +213,15 @@ mat-toolbar.mat-toolbar-single-row {
 .buttonReset {
     width: fit-content;
     height: fit-content;
-    background: black;
-    color: white;
+    background: silver;
+    color:blue;
     font-family: 'Tahoma';
     font-size: 20px;
     font-weight: bold;
     border-radius: 4px;
     padding: 2px;
     transition: 0.2s ease;
-    box-shadow: 0px 1px 4px rgba(0,0,0,0.3);
+    box-shadow: 0px 1px 4px silver;
 }
 
 .AxisX-container, .AxisY-container {
@@ -443,7 +443,7 @@ mat-toolbar.mat-toolbar-single-row {
   background: #f8f9fa;
   box-shadow: 0px 2px 8px rgba(0,0,0,0.15);
   box-sizing: border-box;
-  overflow-y: auto;
+  overflow: hidden;
 }
 
 .table-info-wrapper {
@@ -454,7 +454,7 @@ mat-toolbar.mat-toolbar-single-row {
   overflow-y: auto;
   overflow-x: auto; 
   padding: 5px;
-  height: 360px;
+  height: 40%;
 }
 
 .table-root {
@@ -510,7 +510,7 @@ mat-toolbar.mat-toolbar-single-row {
   overflow-y: auto;
   overflow-x: auto; 
   padding: 5px;
-  height: 500px;
+  height: 60%;
 }
 
 .table-details {
@@ -554,6 +554,11 @@ mat-toolbar.mat-toolbar-single-row {
     width: 180px;
     min-width: 180px;
     max-width: 180px;
+
+    /* il testo riempe la colonna e viene troncato se eccede con ...  */
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;    
 }
 
 .table-details th:nth-child(3),
@@ -580,7 +585,6 @@ mat-toolbar.mat-toolbar-single-row {
 .button-wrapper {
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
 }
 
 .DetailsButton {
@@ -606,9 +610,9 @@ mat-toolbar.mat-toolbar-single-row {
 
 .material-symbols-outlined#detailsIcon {
   display: flex;
-  flex-direction: row;
-  justify-content: flex-end; 
-  padding: 5px 0px 5px 20px; /* top | right | bottom | left */
+  flex-direction: column;
+  justify-content: center; 
+  padding: 5px 5px;
   width: 10px;
   height: 10px;  
 }

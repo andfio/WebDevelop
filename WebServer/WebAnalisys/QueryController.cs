@@ -13,7 +13,7 @@ using System.Text.Json.Serialization;
 using System.Text.Json.Nodes;
 using System.IO;
 using System.IO.Compression;
-
+using WebAnalisys.ExcelTools;
 
 
 namespace WebAnalisys.Controllers
@@ -642,6 +642,29 @@ namespace WebAnalisys.Controllers
 
             return Ok(new GraphData());
 
+        }
+
+        [HttpPost]
+        [Route("printgraphdata")]
+        public IHttpActionResult printgraphdata([FromBody] PrintDataPayload payload)
+        {
+
+            byte[] imageBytes = Convert.FromBase64String(payload.ImageBase64);
+
+            string filePath = Path.Combine(System.Web.Hosting.HostingEnvironment.MapPath("~/App_Data/" + payload.FileName));
+
+            System.IO.File.WriteAllBytes(filePath, imageBytes);
+
+            ExcelLibrary objExcel = new ExcelLibrary();
+            objExcel.NewPackage(payload.FileName);
+
+            if (objExcel.CreateReport(payload, filePath)) { 
+                return Ok(new { result = "OK", file = System.IO.File.ReadAllBytes(objExcel.filename) });
+            }
+            else
+            {
+                return Ok(new { result = "OK", file = "" });
+            }
         }
 
         private string Normalize(string key)

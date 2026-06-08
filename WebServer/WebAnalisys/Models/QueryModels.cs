@@ -86,6 +86,46 @@ namespace WebAnalisys.Models
 
         public List<float[]> MeasurColl { get; set; }
     }
+
+    public class measuresinfo
+    {
+        public int measureID { get; set; }
+        public string description { get; set; }
+        public string shortname { get; set; }
+        public string UM { get; set; }
+        public int offSet { get; set; }
+        public int axesposition { get; set; }
+        public int UnitTypeID { get; set; }
+    }
+
+    public class PrintDataPayload
+    {
+        public string FileName { get; set; } = string.Empty;
+        public string ContentType { get; set; } = string.Empty;
+        public string ImageBase64 { get; set; } = string.Empty;
+        public int[] MeasurID { get; set; }
+        public measuresinfo measuresinfo { get; set; } = new measuresinfo();
+        public List<float[]> MeasurColl { get; set; }
+        public headerData headerData { get; set; } = new headerData();
+        public sequenceData sequenceData { get; set; } = new sequenceData();
+    }
+
+    public class headerData
+    {
+        public string name { get; set; }
+        public string descrition { get; set; }
+        public string value { get; set; }
+    }
+
+    public class sequenceData
+    {
+        public string nr { get; set; }
+        public string description { get; set; }
+        public string result { get; set; }
+        public string startSequence { get; set; }
+        public string endSequence { get; set; }
+    }
+
 }
 
     
