@@ -35,6 +35,7 @@ background: any;
   columnsdetails: AppConfig["columnsdetails"] = [];
   columnsmeasuredetails: AppConfig["columnsmeasuredetails"] = [];
   columnsparametersdetails: AppConfig["columnsparametersdetails"] = [];
+  columnsprintheader: AppConfig["columnsprintheader"] = [];
   queryhome: AppConfig["query"] = {} as any;
   querydetails: AppConfig["querydetails"] = {} as any;
   chartseries: AppConfig["chartseries"] = {} as any;
@@ -81,6 +82,7 @@ background: any;
           this.columnsdetails = config.columnsdetails;
           this.columnsmeasuredetails = config.columnsmeasuredetails;
           this.columnsparametersdetails = config.columnsparametersdetails;
+          this.columnsprintheader = config.columnsprintheader;
           this.queryhome = config.query;
           this.querydetails = config.querydetails;
           this.chartseries = config.chartseries;
@@ -603,7 +605,8 @@ background: any;
     this.router.navigate(['/pagina-chart'] , { state: { 
                                                         KeyResult: KeyResult,
                                                         rootData: rootData, 
-                                                        detailsFields: detailsData, 
+                                                        detailsFields: detailsData,
+                                                        headerInfos: this.columnsprintheader, 
                                                         chartSeries: this.chartseries, 
                                                         axesConfig: this.axesConfig,
                                                         httpConfig: this.httpConfig } 

@@ -150,7 +150,7 @@ var _ChartComponent = class _ChartComponent {
     return __async(this, null, function* () {
       const {
         default: ApexCharts
-      } = yield import("./apexcharts.esm-LLZQWILR.js");
+      } = yield import("./apexcharts.esm-LGKWGYPR.js");
       window.ApexCharts ||= ApexCharts;
       if (this._destroyed) return;
       if (!this.isConnected) {

@@ -104,3 +104,4 @@ C:\Andrea Fiorentini\WebAnalisys\WebServer\WebAnalisys\bin\System.Text.Json.xml
 C:\Andrea Fiorentini\WebAnalisys\WebServer\WebAnalisys\bin\System.Threading.Tasks.Extensions.xml
 C:\Andrea Fiorentini\WebAnalisys\WebServer\WebAnalisys\bin\System.ValueTuple.xml
 C:\Andrea Fiorentini\WebAnalisys\WebServer\WebAnalisys\bin\System.IO.Compression.ZipFile.dll
+C:\Andrea Fiorentini\WebAnalisys\WebServer\WebAnalisys\bin\EPPlus.dll

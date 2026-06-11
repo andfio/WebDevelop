@@ -613,12 +613,12 @@ namespace WebAnalisys.Controllers
                                 lock (this)
                                 {
                                     byte[] fileData = (Byte[])reader["ACQData"];
-                                    string FileZip = System.Web.Hosting.HostingEnvironment.MapPath("~/App_Data/ACQFile.Zip");
-                                    string FileAcq = System.Web.Hosting.HostingEnvironment.MapPath("~/App_Data/ACQFile.ACQ");
+                                    string FileZip = System.Web.Hosting.HostingEnvironment.MapPath("~/Files/ACQFile.Zip");
+                                    string FileAcq = System.Web.Hosting.HostingEnvironment.MapPath("~/Files/ACQFile.ACQ");
 
                                     File.WriteAllBytes(FileZip, fileData); 
 
-                                    string destionationPath = UnZipFile(FileZip, System.Web.Hosting.HostingEnvironment.MapPath("~/App_Data/"));
+                                    string destionationPath = UnZipFile(FileZip, System.Web.Hosting.HostingEnvironment.MapPath("~/Files/"));
                                     if (destionationPath.Trim() != "")
                                     {
                                         binaryString = File.ReadAllText(FileAcq, System.Text.Encoding.Default );
@@ -651,7 +651,7 @@ namespace WebAnalisys.Controllers
 
             byte[] imageBytes = Convert.FromBase64String(payload.ImageBase64);
 
-            string filePath = Path.Combine(System.Web.Hosting.HostingEnvironment.MapPath("~/App_Data/" + payload.FileName));
+            string filePath = Path.Combine(System.Web.Hosting.HostingEnvironment.MapPath("~/Images/" + payload.FileName));
 
             System.IO.File.WriteAllBytes(filePath, imageBytes);
 
@@ -659,12 +659,14 @@ namespace WebAnalisys.Controllers
             objExcel.NewPackage(payload.FileName);
 
             if (objExcel.CreateReport(payload, filePath)) { 
-                return Ok(new { result = "OK", file = System.IO.File.ReadAllBytes(objExcel.filename) });
+                return Ok(new { result = "OK" });
             }
             else
             {
                 return Ok(new { result = "OK", file = "" });
             }
+            
+            
         }
 
         private string Normalize(string key)

@@ -414,6 +414,38 @@
       "field": "Value10"
     }
   ],
+  "columnsprintheader": [
+    {
+      "name": "Model Code",
+      "field": "Model Code"
+    },
+    {
+      "name": "Barcode",
+      "field": "SerialNumber"
+    },
+    {
+      "name": "Program",
+      "field": "Program Code"
+    },
+    {
+      "name": "Description",
+      "field": "Program Description"
+    },
+    {
+      "name": "Date Test",
+      "field": "Date Test"
+    },
+    {
+      "name": "Result",
+      "field": "Result",
+      "short": "Result"
+    },
+    {
+      "name": "Date Print",
+      "field": "Print",
+      "short": "Print"
+    }
+  ],  
   "query": {
     "select": "SELECT DISTINCT Tab_Headers.ID_Result, Tab_Headers.ModelCode, SerialNumber, DummyCode, ProgramCode, ProgramDescription, (Date_Time AT TIME ZONE 'UTC' AT TIME ZONE 'Central European Standard Time') As Date_Time, UnitID, UnitTypeID, LineID, Shift, Operator, Result, AbortCode ",
     "from": "FROM Tab_Headers INNER JOIN Tab_Tests ON Tab_Headers.ID_Result = Tab_Tests.ID_Result ",

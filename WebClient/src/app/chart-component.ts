@@ -95,6 +95,7 @@ export class ChartComponent {
   rootfields: any[] = [];
   tableData: any[] = [];
   detailsRows: tabledetails[] = []; 
+  headerInfos: any[] = [];
 
   chartSeries: any[] = []
   chartAxisOffSet: any[] = [];
@@ -121,6 +122,7 @@ export class ChartComponent {
     this.rootfields = this.buildrootFields(history.state.rootData);
     this.tableData = this.buildtableData(history.state.rootData);
     this.detailsRows = this.buildDetailsRows(history.state.detailsFields);
+    this.headerInfos = history.state.headerInfos;
     this.httpConfig = history.state.httpConfig;
     this.axesConfig = history.state.axesConfig;
 
@@ -1515,6 +1517,17 @@ export class ChartComponent {
   }
 
   subPrintGraphAndData() {
+  
+    this.subChangeGraphColors("#000000");
+  
+    this.chartObj.updateOptions({
+      chart: {
+        background: "#FFFFFF"
+      },
+      yaxis: this.yaxis,
+      xaxis: this.xaxis
+    });
+
     this.chartObj.dataURI().then((res: { imgURI: string } | { blob: Blob }) => {
       if ('imgURI' in res && typeof res.imgURI === 'string') {
         const base64Only = res.imgURI.replace(/^data:image\/png;base64,/, '');
@@ -1526,7 +1539,7 @@ export class ChartComponent {
           measureID: this.MeasureID,
           measuresInfo: this.measuresinfo,
           measuresColl: this.MeasurColl,
-          headerData: this.tableData,
+          headerData: this.subHeaderInformations(this.tableData),
           sequenceData: this.detailsRows
         };
 
@@ -1537,6 +1550,61 @@ export class ChartComponent {
           });
       };
     });
+
+    this.subChangeGraphColors("#FFFFFF");
+    this.chartObj?.updateOptions({
+      chart: {
+        background: "#000000"
+      },
+      yaxis: this.yaxis,
+      xaxis: this.xaxis
+    });
+  }
+
+  subChangeGraphColors(currColor: string) {
+    this.yaxis.forEach((item: ApexYAxis) => {      
+        item.axisTicks = item.axisTicks ?? {};
+        item.axisTicks.color = currColor;
+
+        item.axisBorder = item.axisBorder ?? {}; 
+        item.axisBorder.color = currColor;
+        
+        item.labels = item.labels ?? {};
+        item.labels.style = item.labels.style ?? {};
+        item.labels.style.colors = currColor;
+        
+        item.title = item.title ?? {};
+        item.title.style = item.title.style ?? {};
+        item.title.style.color = currColor;
+    })
+    
+    this.xaxis.axisTicks = this.xaxis.axisTicks ?? {};
+    this.xaxis.axisTicks.color = currColor
+
+    this.xaxis.axisBorder = this.xaxis.axisBorder ?? {};
+    this.xaxis.axisBorder.color = currColor
+
+    this.xaxis.labels =  this.xaxis.labels ?? {};
+    this.xaxis.labels.style =  this.xaxis.labels.style ?? {};
+    this.xaxis.labels.style.colors = currColor;
+
+    this.xaxis.title = this.xaxis.title ?? {};
+    this.xaxis.title.style =  this.xaxis.title.style ?? {};
+    this.xaxis.title.style.color = currColor;
+  }
+
+  subHeaderInformations(header: tabledata[]): any[] {
+    let r: any[] = [];
+    this.headerInfos.forEach(i => {
+      let itm = header.find(h => h.name == i.field) ?? null;
+      if (itm != null) {
+        r.push({name: i.name, value: itm.value, description: itm.description });
+      } 
+    })
+
+    r.push ({name: "Date Print", value: new Date().toISOString().replace("T", " ").replace("Z", " "), description: ""});
+
+    return r;
   }
 
   subChartDialogShow() {

@@ -106,8 +106,8 @@ namespace WebAnalisys.Models
         public int[] MeasurID { get; set; }
         public measuresinfo measuresinfo { get; set; } = new measuresinfo();
         public List<float[]> MeasurColl { get; set; }
-        public headerData headerData { get; set; } = new headerData();
-        public sequenceData sequenceData { get; set; } = new sequenceData();
+        public List<headerData> headerData { get; set; } = new List<headerData>();
+        public List<sequenceData> sequenceData { get; set; } = new List<sequenceData>();
     }
 
     public class headerData
