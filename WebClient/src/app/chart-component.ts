@@ -1536,9 +1536,11 @@ export class ChartComponent {
           fileName: 'chart.png',
           contentType: 'image/png',
           imageBase64: base64Only,
-          measureID: this.MeasureID,
+          MeasurID: this.MeasureID,
           measuresInfo: this.measuresinfo,
-          measuresColl: this.MeasurColl,
+          MeasurColl: this.MeasurColl,
+          seriesItems: this.subGetSeries(this.series),
+          axesConfig: this.axesConfig,
           headerData: this.subHeaderInformations(this.tableData),
           sequenceData: this.detailsRows
         };
@@ -1605,6 +1607,14 @@ export class ChartComponent {
     r.push ({name: "Date Print", value: new Date().toISOString().replace("T", " ").replace("Z", " "), description: ""});
 
     return r;
+  }
+  
+  subGetSeries(series: any[]): any[] {
+    let seriesItem: any[] = [];
+    for (let s = 0; s < series.length; s++) {
+      seriesItem.push(this.getMeasureID(this.series[s].name?.toString() ?? "") ?? -2);
+    }
+    return seriesItem;
   }
 
   subChartDialogShow() {

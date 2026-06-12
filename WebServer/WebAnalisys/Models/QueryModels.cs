@@ -104,8 +104,10 @@ namespace WebAnalisys.Models
         public string ContentType { get; set; } = string.Empty;
         public string ImageBase64 { get; set; } = string.Empty;
         public int[] MeasurID { get; set; }
-        public measuresinfo measuresinfo { get; set; } = new measuresinfo();
+        public List<measuresinfo> measuresinfo { get; set; } = new List<measuresinfo>();
         public List<float[]> MeasurColl { get; set; }
+        public int[] seriesItems { get; set; }
+        public AxesConfiguration axesConfig { get; set; } 
         public List<headerData> headerData { get; set; } = new List<headerData>();
         public List<sequenceData> sequenceData { get; set; } = new List<sequenceData>();
     }
@@ -125,6 +127,15 @@ namespace WebAnalisys.Models
         public string startSequence { get; set; }
         public string endSequence { get; set; }
     }
+
+    public class seriesItems
+    {
+        public string name { get; set; }
+        public string[] data { get; set; }
+        public string type { get; set; }
+        public string color { get; set; }
+    }
+
 
 }
 
