@@ -110,6 +110,7 @@ namespace WebAnalisys.Models
         public AxesConfiguration axesConfig { get; set; } 
         public List<headerData> headerData { get; set; } = new List<headerData>();
         public List<sequenceData> sequenceData { get; set; } = new List<sequenceData>();
+        public List<sequencesHeaders> sequencesHeaders { get; set; } = new List<sequencesHeaders>();
     }
 
     public class headerData
@@ -121,7 +122,7 @@ namespace WebAnalisys.Models
 
     public class sequenceData
     {
-        public string nr { get; set; }
+        public string SequenceNumber { get; set; }
         public string description { get; set; }
         public string result { get; set; }
         public string startSequence { get; set; }
@@ -134,6 +135,13 @@ namespace WebAnalisys.Models
         public string[] data { get; set; }
         public string type { get; set; }
         public string color { get; set; }
+    }
+
+    public class sequencesHeaders
+    {
+        public string name { get; set; }
+        public string field { get; set; }
+        public string size { get; set; }
     }
 
 

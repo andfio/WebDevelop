@@ -386,10 +386,10 @@
                       </td>
 
                       <!-- Colonne misure -->
-                      @for(itmMeasure of this.MeasureID; track $index) {
+                      @for(itmMeasure of this.MeasureID; track $index; let measureIndex = $index) {
                         @if(subGetShortname(itmMeasure) !== "") {
                         <td>
-                          {{ this.subColumnValues(this.subGetShortname(itmMeasure)).values[rowIndex].toFixed(2) }}                    
+                          {{ this.subColumnValues(this.subGetShortname(itmMeasure), measureIndex).values[rowIndex].toFixed(2) }}                    
                         </td>
                         }
                       }
@@ -452,7 +452,7 @@
               <tbody>
                 @for(row of detailsRows; track $index) {
                   <tr>
-                    <td [style.text-align]="'center'">{{ row.nr }}</td>
+                    <td [style.text-align]="'center'">{{ row.SequenceNumber }}</td>
                     <td [style.text-align]="'start'" [style.font-size]="'10px'">{{ row.description }}</td>
                     <td [style.text-align]="'center'">{{ row.result }}</td>
                     <td [style.text-align]="'center'">{{ row.startSequence }}</td>

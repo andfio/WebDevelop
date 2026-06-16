@@ -144,7 +144,7 @@ export class TestsExecutionChartComponent implements AfterViewInit, OnDestroy {
       offsetY: -14,
       formatter: (_val, opts) => {
         const row = this.detailsRows[opts.dataPointIndex];
-        return row.nr + " - " + row.description;
+        return row.SequenceNumber + " - " + row.description;
       },
       style: {
         fontSize: '8px',

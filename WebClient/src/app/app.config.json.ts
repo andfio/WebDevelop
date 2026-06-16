@@ -33,6 +33,10 @@ export interface ColumnsPrintHeader {
     field: string;
     short: string;
 }
+export interface ColumnsPrintSequence {
+    name: string;
+    field: string;
+}
 export interface queryfilters {
     filters: string;
     sql: string;
@@ -52,6 +56,7 @@ export interface AppConfig {
     columnsmeasuredetails: ColumnsMeasureDetails[];
     columnsparametersdetails: ColumnsParametersDetails[];
     columnsprintheader: ColumnsPrintHeader[]
+    columnsprintsequence: ColumnsPrintSequence[];
     query: structQuery;
     querydetails: structQuery;
     chartseries: chartseries;

@@ -9,7 +9,8 @@ using OfficeOpenXml.Drawing;
 using OfficeOpenXml.Style;
 using System.Runtime.InteropServices;
 using WebAnalisys.Models;
-
+using System.Collections.Generic;
+using System.Linq;
 
 namespace WebAnalisys.ExcelTools
 {
@@ -28,6 +29,7 @@ namespace WebAnalisys.ExcelTools
         private int numSeries;
 
         private int _currentRow;
+        private int _defaultCol;
         private PrintDataPayload _paramsData;
 
         public bool NewPackage(string filename)
@@ -70,7 +72,6 @@ namespace WebAnalisys.ExcelTools
                 //Margini e proprieta di stampa da assegnare al foglio creato.
                 ws.PrinterSettings.PaperSize = ePaperSize.A4;
                 ws.PrinterSettings.Orientation = eOrientation.Landscape;
-                ws.PrinterSettings.FitToPage = true;
 
                 ws.PrinterSettings.TopMargin = 0.25M;
                 ws.PrinterSettings.BottomMargin = 0.25M;
@@ -207,6 +208,11 @@ namespace WebAnalisys.ExcelTools
                         AddPicture(fileGraphName);
                     }
 
+                    ws = CreateSheet("Tests Execution");
+                    CreateReportTestsExecution();
+
+                    ws = CreateSheet("Table Measurers");
+                    CreateReportTableMeasures();
                 }
 
                 SavePackage();
@@ -223,7 +229,7 @@ namespace WebAnalisys.ExcelTools
         {
             try
             {
-                _currentRow = 2;
+                _currentRow = 1;
 
                 int firstRow = PrinterHeaderTitle(new string[2] { "Description", "Information" }, new int[2] { 30, 70 }, Color.Blue); 
                 int maxRows = _paramsData.headerData.Count;
@@ -273,9 +279,10 @@ namespace WebAnalisys.ExcelTools
                 ws.Cells[row, col++].Value = name;
             }
 
-            ws.Cells[row, 1, row, cols].Style.Font.Size = 14;
+            ws.Cells[row, 1, row, cols].Style.Font.Size = 12;
             ws.Cells[row, 1, row, cols].Style.Font.Name = "Tahoma";
             ws.Cells[row, 1, row, cols].Style.HorizontalAlignment = ExcelHorizontalAlignment.Left;
+            ws.Cells[row, 1, row, cols].Style.VerticalAlignment = ExcelVerticalAlignment.Center;
             ws.Cells[row, 1, row, cols].Style.Font.Color.SetColor(color);
             ws.Cells[row, 1, row, cols].Style.Border.Top.Style = ExcelBorderStyle.Thin;
             ws.Cells[row, 1, row, cols].Style.Border.Top.Color.SetColor(Color.Black);
@@ -295,6 +302,42 @@ namespace WebAnalisys.ExcelTools
             return row++;
         }
 
+        private int PrinterTitleTable(string[] columnsName, int[] columnsSize, string[] columnsColor)
+        {
+
+            int row = _currentRow;
+            int cols = columnsName.Length;
+
+            int col = 1;
+            foreach (string name in columnsName)
+            {
+                ws.Cells[row, col].Value = name;
+                ws.Column(col).Width = columnsSize[col - 1];
+                ws.Cells[row, col].Style.Fill.PatternType = ExcelFillStyle.Solid;
+                ws.Cells[row, col].Style.Fill.BackgroundColor.SetColor((ColorTranslator.FromHtml(columnsColor[col - 1])));
+                col++;
+            }
+
+            using (ExcelRange r = ws.Cells[row, 1, row, cols])
+            { 
+                r.Style.Font.Size = 10;
+                r.Style.Font.Name = "Tahoma";
+                r.Style.HorizontalAlignment = ExcelHorizontalAlignment.Left;
+                r.Style.VerticalAlignment = ExcelVerticalAlignment.Center;
+                r.Style.Font.Color.SetColor(Color.Black);
+                r.Style.Font.Bold = true;
+                r.Style.Border.Left.Style = ExcelBorderStyle.None;
+                //r.Style.Border.Left.Color.SetColor(Color.Black);
+                r.Style.Border.Right.Style = ExcelBorderStyle.None;
+                //r.Style.Border.Right.Color.SetColor(Color.Black);
+                r.Style.Border.BorderAround(ExcelBorderStyle.Thin, Color.Black);
+                r.Style.Border.BorderAround(ExcelBorderStyle.Thin, Color.Black);
+
+            }
+
+            return row++;
+        }
+
         private void PrinterHeaderLeggend(int columnStart, int columnEnd, string columnName, Color color)
         {
 
@@ -306,6 +349,7 @@ namespace WebAnalisys.ExcelTools
 
             ws.Cells[row,  columnStart, row, columnEnd].Style.Font.Size = 11;
             ws.Cells[row,  columnStart, row, columnEnd].Style.Font.Name = "Tahoma";
+            ws.Cells[row, columnStart, row, columnEnd].Style.Font.Bold = true;
             ws.Cells[row,  columnStart, row, columnEnd].Style.HorizontalAlignment = ExcelHorizontalAlignment.Left;
             ws.Cells[row, columnStart, row, columnEnd].Style.VerticalAlignment = ExcelVerticalAlignment.Center;
             ws.Cells[row,  columnStart, row, columnEnd].Style.Font.Color.SetColor(color);
@@ -324,89 +368,45 @@ namespace WebAnalisys.ExcelTools
 
         }
 
-        private int WriteSequenceDataTable(PrintDataPayload paramsData, int startRow)
+        private void CreateReportTestsExecution()
         {
-            if (paramsData == null || paramsData.sequenceData == null || paramsData.sequenceData.Count == 0)
+            try
             {
-                return startRow - 1;
-            }
+                string[] _cols = _paramsData.sequencesHeaders.Where(x => x.name != "").Select(x => x.name).ToArray();
+                int[] _size = _paramsData.sequencesHeaders.Where(x => x.size != "").Select(x => int.Parse(x.size)).ToArray();
 
-            WriteSequenceTableHeader(startRow);
+                _currentRow = 1;
+                PrinterHeaderTitle(_cols, _size, Color.Blue);
 
-            for (int i = 0; i < paramsData.sequenceData.Count; i++)
-            {
-                int row = startRow + 1 + i;
-                sequenceData item = paramsData.sequenceData[i];
-
-                ws.Cells[row, 1].Value = item != null ? item.nr : "";
-                ws.Cells[row, 2].Value = item != null ? item.description : "";
-                ws.Cells[row, 5].Value = item != null ? item.result : "";
-                ws.Cells[row, 6].Value = item != null ? item.startSequence : "";
-                ws.Cells[row, 8].Value = item != null ? item.endSequence : "";
-
-                ws.Cells[row, 2, row, 4].Merge = true;
-                ws.Cells[row, 6, row, 7].Merge = true;
-                ws.Cells[row, 8, row, 9].Merge = true;
-
-                using (ExcelRange rowRange = ws.Cells[row, 1, row, 9])
+                int maxRows = _paramsData.sequenceData.Count();
+                for (int rowIndex = 0; rowIndex < maxRows; rowIndex++)
                 {
-                    rowRange.Style.Border.Top.Style = ExcelBorderStyle.Thin;
-                    rowRange.Style.Border.Bottom.Style = ExcelBorderStyle.Thin;
-                    rowRange.Style.Border.Left.Style = ExcelBorderStyle.Thin;
-                    rowRange.Style.Border.Right.Style = ExcelBorderStyle.Thin;
-                    rowRange.Style.VerticalAlignment = ExcelVerticalAlignment.Center;
+                    int row = (_currentRow + rowIndex) + 1;
+                    ws.Row(row).Height = 20;
+
+                    ws.Cells[row, 1].Value = _paramsData.sequenceData[rowIndex].SequenceNumber;
+                    ws.Cells[row, 2].Value = _paramsData.sequenceData[rowIndex].description;
+                    ws.Cells[row, 3].Value = _paramsData.sequenceData[rowIndex].result.Split('-')[1];
+                    ws.Cells[row, 4].Value = _paramsData.sequenceData[rowIndex].startSequence;
+                    ws.Cells[row, 5].Value = _paramsData.sequenceData[rowIndex].endSequence;
                 }
 
-                ws.Cells[row, 1].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
-                ws.Cells[row, 2].Style.HorizontalAlignment = ExcelHorizontalAlignment.Left;
-                ws.Cells[row, 2].Style.WrapText = false;
-                ws.Cells[row, 5, row, 9].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
-                ws.Row(row).Height = 16;
+                _currentRow++;
+                using (ExcelRange r = ws.Cells[_currentRow, 1, (_currentRow + maxRows), 5])
+                {
+                    r.Style.Font.Size = 10;
+                    r.Style.Font.Name = "Tahoma";
+                    r.Style.Font.Color.SetColor(Color.Black);
+                    r.Style.HorizontalAlignment = ExcelHorizontalAlignment.Left;
+                    r.Style.VerticalAlignment = ExcelVerticalAlignment.Center;
+                    r.Worksheet.View.ShowGridLines = false;  
+                }
+                
             }
-
-            return startRow + paramsData.sequenceData.Count;
-        }
-
-        private void WriteSequenceTableHeader(int row)
-        {
-            ws.Cells[row, 1].Value = "Nr.";
-            ws.Cells[row, 2].Value = "Description";
-            ws.Cells[row, 5].Value = "Result";
-            ws.Cells[row, 6].Value = "Start Sequence";
-            ws.Cells[row, 8].Value = "End Sequence";
-
-            ws.Cells[row, 2, row, 4].Merge = true;
-            ws.Cells[row, 6, row, 7].Merge = true;
-            ws.Cells[row, 8, row, 9].Merge = true;
-
-            using (ExcelRange headerRange = ws.Cells[row, 1, row, 9])
+            catch (Exception ex)
             {
-                headerRange.Style.Font.Bold = true;
-                headerRange.Style.Font.Color.SetColor(Color.Black);
-                headerRange.Style.Fill.PatternType = ExcelFillStyle.Solid;
-                headerRange.Style.Fill.BackgroundColor.SetColor(Color.FromArgb(191, 191, 191));
-                headerRange.Style.HorizontalAlignment = ExcelHorizontalAlignment.Left;
-                headerRange.Style.VerticalAlignment = ExcelVerticalAlignment.Center;
-                headerRange.Style.Border.Top.Style = ExcelBorderStyle.Thin;
-                headerRange.Style.Border.Bottom.Style = ExcelBorderStyle.Thin;
-                headerRange.Style.Border.Left.Style = ExcelBorderStyle.Thin;
-                headerRange.Style.Border.Right.Style = ExcelBorderStyle.Thin;
+                Console.WriteLine(ex.Message);
             }
-
-            ws.Cells[row, 1].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
-            ws.Cells[row, 5, row, 9].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
-            ws.Row(row).Height = 18;
-        }
-
-        private void ApplyReportPrintSettings(int lastReportRow)
-        {
-            if (lastReportRow < 1)
-            {
-                lastReportRow = 1;
-            }
-
-            ws.PrinterSettings.PrintArea = ws.Cells[1, 1, lastReportRow, 9];
-            ws.PrinterSettings.HorizontalCentered = true;
         }
 
         private void AddPicture(string filename)
@@ -454,6 +454,8 @@ namespace WebAnalisys.ExcelTools
                             _currentRow++; 
                             ws.Cells[_currentRow, colsGraph].Style.Fill.PatternType = ExcelFillStyle.Solid;
                             ws.Cells[_currentRow, colsGraph].Style.Fill.BackgroundColor.SetColor(ColorTranslator.FromHtml(_color));
+                            ws.Cells[_currentRow, colsGraph].Style.Font.Color.SetColor(Color.White);
+                            ws.Cells[_currentRow, colsGraph].Style.Font.Bold = true;
                             ws.Cells[_currentRow, colsGraph].Style.HorizontalAlignment = ExcelHorizontalAlignment.Left;
                             ws.Cells[_currentRow, colsGraph + 1].Style.HorizontalAlignment = ExcelHorizontalAlignment.Left ;
                             ws.Cells[_currentRow, colsGraph].Value = measure.shortname + " (" + measure.UM + ")";
@@ -474,6 +476,183 @@ namespace WebAnalisys.ExcelTools
                 Console.WriteLine(ex.Message);
             }
 
+        }
+
+        private void CreateReportTableMeasures()
+        {
+            try
+            {
+                _defaultCol = 3;
+
+                string[] _columnsColor = new string[0];
+                string[] _columnsNameFirst = new string[0];
+                string[] _columnsNameSecond = new string[0];
+
+                if (!this.initializeTitleArray(ref _columnsNameFirst, ref _columnsNameSecond, ref _columnsColor)) { return; }
+
+                int _defaultSize = 10;
+                int[] _columnSize = new int[1];
+                _columnSize[0] = 20;
+
+                for (int i = 1; i < _columnsNameFirst.Length; i++)
+                {
+                    Array.Resize(ref _columnSize, i + 1);
+                    _columnSize[i] = _defaultSize;
+                }
+
+                _currentRow = 1; int _firstRow = _currentRow;
+                PrinterTitleTable(_columnsNameFirst, _columnSize, _columnsColor);
+
+                _currentRow++;
+                PrinterTitleTable(_columnsNameSecond, _columnSize, _columnsColor);
+
+                float[] timeValues = new float[0];
+                for (int r = 0; r < _paramsData.MeasurColl.Count(); r++)
+                {
+                    float[] _rowValues = _paramsData.MeasurColl[r];
+
+                    Array.Resize(ref timeValues, r + 1);
+                    timeValues[r] = _rowValues[0];
+                }
+
+                for (int rowIndex = 0; rowIndex < timeValues.Count(); rowIndex++)
+                {
+                    int row = (_currentRow + rowIndex) + 1;
+                    ws.Cells[row, 1].Value = ConvertSecondiToTime(timeValues[rowIndex]);
+                    ws.Cells[row, 2].Value = Math.Round(timeValues[rowIndex], 2).ToString("0.00");
+                }
+                
+                float[] dataPoints;
+                int _columnValue = 0; int col = _defaultCol;
+                foreach (int ID in _paramsData.MeasurID)
+                {
+                    int _measureIndex = _paramsData.measuresinfo.FindIndex(m => m.measureID == ID);
+                    if (_measureIndex != -1)
+                    {
+                        if (_paramsData.measuresinfo[_measureIndex].shortname.Trim() != "")
+                        {
+
+                            dataPoints = new float[0];
+
+                            for(int r = 0; r < _paramsData.MeasurColl.Count(); r++)
+                            {
+                                float[] _rowValues = _paramsData.MeasurColl[r];
+
+                                Array.Resize(ref dataPoints, r + 1);
+                                dataPoints[r] = _rowValues[_columnValue];
+                            }
+
+                            for (int rowIndex = 0; rowIndex < dataPoints.Count(); rowIndex++)
+                            {
+                                int row = (_currentRow + rowIndex) + 1;
+                                ws.Cells[row, col].Value = Math.Round(dataPoints[rowIndex], 2).ToString("0.00");
+                            }
+                            col++;
+                        }
+                    }
+
+                    _columnValue++;
+                }
+
+                _currentRow++;
+                int ToRow = (_currentRow + _paramsData.MeasurColl.Count());
+                int ToCol = _columnsNameFirst.Count();
+                using (ExcelRange r = ws.Cells[_currentRow, _defaultCol - 2, ToRow, ToCol])
+                {
+                    r.Style.HorizontalAlignment = ExcelHorizontalAlignment.Left;
+                    ws.Cells[_currentRow, _defaultCol - 2, ToRow, _defaultCol - 2].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
+                    r.Style.VerticalAlignment = ExcelVerticalAlignment.Center;
+                    r.Style.Font.Size = 10;
+                    r.Style.Font.Name = "Tahoma";
+                    r.Style.Font.Color.SetColor(Color.Black);
+                    r.Worksheet.View.ShowGridLines = false;
+                }
+
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+        }
+
+        private bool initializeTitleArray(ref string[] columnsNameFirst, ref string[] columnsNameSecond, ref string[] columnsColor)
+        {
+            try
+            {
+                int _columnIndex = 0;
+
+                Array.Resize(ref columnsColor, _columnIndex + 2);
+                Array.Resize(ref columnsNameFirst, _columnIndex + 2);
+                Array.Resize(ref columnsNameSecond, _columnIndex + 2);
+
+                columnsNameFirst[_columnIndex] = "ABS Time";
+                columnsNameSecond[_columnIndex] = "[hh:mm]-(ss..mm)";
+                columnsColor[_columnIndex] = ColorTranslator.ToHtml(Color.Silver);
+
+                _columnIndex = 1;
+
+                Array.Resize(ref columnsColor, _columnIndex + 1);
+                columnsNameFirst[_columnIndex] = "Time";
+                columnsNameSecond[_columnIndex] = "sec";
+                columnsColor[_columnIndex] = ColorTranslator.ToHtml(Color.Silver);
+
+                _columnIndex = 2;
+                foreach (int ID in _paramsData.MeasurID)
+                {
+                    int _measureIndex = _paramsData.measuresinfo.FindIndex(m => m.measureID == ID);
+                    if (_measureIndex != -1)
+                    {
+                        if (_paramsData.measuresinfo[_measureIndex].shortname.Trim() != "")
+                        {
+                            if (_paramsData.axesConfig.Plots.ContainsKey("Plot" + _paramsData.measuresinfo[0].UnitTypeID.ToString()))
+                            {
+                                Array.Resize(ref columnsColor, _columnIndex + 1);
+                                Array.Resize(ref columnsNameFirst, _columnIndex + 1);
+                                Array.Resize(ref columnsNameSecond, _columnIndex + 1);
+
+                                int _plotIndex = Array.FindIndex(_paramsData.axesConfig.Plots["Plot" + _paramsData.measuresinfo[0].UnitTypeID.ToString()].Plot, p => p == ID);
+                                if (_plotIndex != -1)
+                                {
+                                    string _colors = _paramsData.axesConfig.PlotColors["Plot" + _paramsData.measuresinfo[0].UnitTypeID.ToString()].Color[_plotIndex];
+                                    columnsColor[_columnIndex] = _colors;
+                                }
+                                else
+                                {
+                                    columnsColor[_columnIndex] = "#FFFFFF";
+                                }
+                            }
+
+                            columnsNameFirst[_columnIndex] = _paramsData.measuresinfo[_measureIndex].shortname.Trim();
+                            columnsNameSecond[_columnIndex] = _paramsData.measuresinfo[_measureIndex].UM.Trim();
+
+                            _columnIndex++;
+                        }
+                    }
+                }
+
+                return true;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                return false;
+            }
+        }
+
+        public string ConvertSecondiToTime(double a)
+        {
+            double tot_sec = a;
+            int tot_min = (int)Math.Floor(tot_sec / 60);
+            int tot_ore = (int)Math.Floor((double)tot_min / 60);
+
+            tot_sec = tot_sec - (tot_min * 60);
+            tot_min = tot_min - (tot_ore * 60);
+
+            string str_tot_sec = tot_sec.ToString("00.00");
+            string str_tot_min = tot_min.ToString("00");
+            string str_tot_ore = tot_ore.ToString("00");
+
+            return $"{str_tot_ore}:{str_tot_min} - ({str_tot_sec})";
         }
 
     }

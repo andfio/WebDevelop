@@ -36,6 +36,7 @@ background: any;
   columnsmeasuredetails: AppConfig["columnsmeasuredetails"] = [];
   columnsparametersdetails: AppConfig["columnsparametersdetails"] = [];
   columnsprintheader: AppConfig["columnsprintheader"] = [];
+  columnsprintsequence: AppConfig["columnsprintsequence"] = [];
   queryhome: AppConfig["query"] = {} as any;
   querydetails: AppConfig["querydetails"] = {} as any;
   chartseries: AppConfig["chartseries"] = {} as any;
@@ -83,6 +84,7 @@ background: any;
           this.columnsmeasuredetails = config.columnsmeasuredetails;
           this.columnsparametersdetails = config.columnsparametersdetails;
           this.columnsprintheader = config.columnsprintheader;
+          this.columnsprintsequence = config.columnsprintsequence;
           this.queryhome = config.query;
           this.querydetails = config.querydetails;
           this.chartseries = config.chartseries;
@@ -606,7 +608,8 @@ background: any;
                                                         KeyResult: KeyResult,
                                                         rootData: rootData, 
                                                         detailsFields: detailsData,
-                                                        headerInfos: this.columnsprintheader, 
+                                                        headerInfos: this.columnsprintheader,
+                                                        sequenceHeaders: this.columnsprintsequence, 
                                                         chartSeries: this.chartseries, 
                                                         axesConfig: this.axesConfig,
                                                         httpConfig: this.httpConfig } 

@@ -500,6 +500,7 @@ namespace WebAnalisys.Controllers
                 sql += " AND ComType = " + parameters.CommandType;
                 sql += " AND ComVisible = 1";
                 sql += " AND ComDescrShort != ''";
+                sql += " AND ComID != 0";
                 sql += " ORDER BY ComID";
 
                 using (var conn = new SqlConnection(connDBTestString))

@@ -445,6 +445,33 @@
       "field": "Print",
       "short": "Print"
     }
+  ],
+    "columnsprintsequence": [
+    {
+      "name": "Nr.",
+      "field": "ProgressiveGroup",
+      "size": "10"
+    },
+    {
+      "name": "Description",
+      "field": "TestDescription",
+      "size": "100"
+    },    
+    {
+      "name": "Result",
+      "field": "Result",
+      "size": "20"
+    },
+    {
+      "name": "Start Sequence",
+      "field": "StartStabTime",
+      "size": "20"
+    },
+    {
+      "name": "End Sequence",
+      "field": "EndEventTime",
+      "size": "20"
+    }            
   ],  
   "query": {
     "select": "SELECT DISTINCT Tab_Headers.ID_Result, Tab_Headers.ModelCode, SerialNumber, DummyCode, ProgramCode, ProgramDescription, (Date_Time AT TIME ZONE 'UTC' AT TIME ZONE 'Central European Standard Time') As Date_Time, UnitID, UnitTypeID, LineID, Shift, Operator, Result, AbortCode ",

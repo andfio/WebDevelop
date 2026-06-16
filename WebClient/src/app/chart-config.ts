@@ -114,7 +114,7 @@ export interface tabledata {
 }
 
 export interface tabledetails {
-  nr: string;
+  SequenceNumber: string;
   description: string;
   result: string;
   startSequence: string;

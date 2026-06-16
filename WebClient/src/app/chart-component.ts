@@ -96,6 +96,7 @@ export class ChartComponent {
   tableData: any[] = [];
   detailsRows: tabledetails[] = []; 
   headerInfos: any[] = [];
+  sequenceHeaders: any[] = [];
 
   chartSeries: any[] = []
   chartAxisOffSet: any[] = [];
@@ -123,6 +124,7 @@ export class ChartComponent {
     this.tableData = this.buildtableData(history.state.rootData);
     this.detailsRows = this.buildDetailsRows(history.state.detailsFields);
     this.headerInfos = history.state.headerInfos;
+    this.sequenceHeaders = history.state.sequenceHeaders;
     this.httpConfig = history.state.httpConfig;
     this.axesConfig = history.state.axesConfig;
 
@@ -163,14 +165,14 @@ export class ChartComponent {
     });
   }
 
-  buildDetailsRows(detailsFields: any[]): any[] {
-    const rows: any[] = [];
-    let currentRow: any = {};
+  buildDetailsRows(detailsFields: tabledata[]): any[] {
+    let rows: any[] = [];
+    let currentRow: tabledetails = {} as tabledetails;
 
-    for (const item of detailsFields) {
+    for (let item of detailsFields) {
       switch (item.field) {
         case "ProgressiveGroup":
-          currentRow.nr = item.value;
+          currentRow.SequenceNumber = item.value;
           break;
 
         case "TestDescription":
@@ -188,7 +190,7 @@ export class ChartComponent {
         case "EndEventTime":
           currentRow.endSequence = this.convertSecondiToTime(Number(item.value));
           rows.push(currentRow);
-          currentRow = {};
+          currentRow = {} as tabledetails;
           break;
       }
     }
@@ -203,7 +205,7 @@ export class ChartComponent {
     for (const item of detailsFields) {
       switch (item.field) {
         case "ProgressiveGroup":
-          currentRow.nr = item.value;
+          currentRow.SequenceNumber = item.value;
           break;
 
         case "TestDescription":
@@ -704,7 +706,7 @@ export class ChartComponent {
     this.cd.detectChanges()
   }
 
-  public subColumnValues(shortname: string): tablevalues {
+  public subColumnValues(shortname: string, measureIndex?: any): tablevalues {
     let measures: tablevalues | null = null;
     this.DataPoint.forEach(dp => {
       for (let i=0; i < this.measuresinfo.length; i++) {
@@ -717,10 +719,22 @@ export class ChartComponent {
     
     if (measures == null) {
         let values: number[] = [];
-        for (let i=0; i < this.DataPoint[0].time.length; i++) {
-          values.push(0);
+
+        if (measureIndex != undefined)
+        {
+            for(let r = 0; r < this.MeasurColl.length; r++ )
+            {
+              let float: number[] = this.MeasurColl[r];
+
+              values.push(float[measureIndex]);
+            }
+
+            measures = { color: "silver", values: values };
         }
-        measures = { color: "silver", values: values };
+        else
+        {
+           measures = { color: "silver", values: values };
+        }
     }
 
     return measures;
@@ -1542,7 +1556,8 @@ export class ChartComponent {
           seriesItems: this.subGetSeries(this.series),
           axesConfig: this.axesConfig,
           headerData: this.subHeaderInformations(this.tableData),
-          sequenceData: this.detailsRows
+          sequenceData: this.detailsRows,
+          sequencesHeaders: this.sequenceHeaders
         };
 
         this.http.post(this.httpConfig.baseurl + '/query/printgraphdata', payload)
