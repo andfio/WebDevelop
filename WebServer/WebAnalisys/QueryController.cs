@@ -45,17 +45,26 @@ namespace WebAnalisys.Controllers
 
         private QueryDefinition LoadQueryDefinition()
         {
-            // Path verso App_Data
-            var path = System.Web.Hosting.HostingEnvironment.MapPath("~/App_Data/appconfig.json");
+            try
+            {
+                // Path verso App_Data
+                var path = System.Web.Hosting.HostingEnvironment.MapPath("~/App_Data/appconfig.json");
 
-            // Legge il file
-            var json = System.IO.File.ReadAllText(path);
+                // Legge il file
+                var json = System.IO.File.ReadAllText(path);
 
-            // Prende solo la sezione "query"
-            var root = Newtonsoft.Json.Linq.JObject.Parse(json);
-            var query = root["query"].ToObject<QueryDefinition>();
+                // Prende solo la sezione "query"
+                var root = Newtonsoft.Json.Linq.JObject.Parse(json);
+                var query = root["query"].ToObject<QueryDefinition>();
 
-            return query;
+                return query;
+
+            }
+            catch (Exception ex)
+            {
+                ErrorLogger.LogException(ex);
+            }
+            return null;
         }
 
         [HttpPost]
@@ -132,7 +141,7 @@ namespace WebAnalisys.Controllers
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.Message);
+                ErrorLogger.LogException(ex);
             }
           
             return Ok(result);
@@ -317,7 +326,7 @@ namespace WebAnalisys.Controllers
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.Message);
+                ErrorLogger.LogException(ex);
             }
 
             return Ok(result);
@@ -359,7 +368,7 @@ namespace WebAnalisys.Controllers
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.Message);
+                ErrorLogger.LogException(ex);
             }
 
             return Ok(result);
@@ -399,7 +408,7 @@ namespace WebAnalisys.Controllers
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.Message);
+                ErrorLogger.LogException(ex);
             }
 
             return Ok(result);
@@ -439,7 +448,7 @@ namespace WebAnalisys.Controllers
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.Message);
+                ErrorLogger.LogException(ex);
             }
 
             return Ok(result);
@@ -479,7 +488,7 @@ namespace WebAnalisys.Controllers
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.Message);
+                ErrorLogger.LogException(ex);
             }
 
             return Ok(result);
@@ -525,12 +534,11 @@ namespace WebAnalisys.Controllers
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.Message);
+                ErrorLogger.LogException(ex);
             }
 
             return Ok(result);
         }
-
 
         [HttpPost]
         [Route("saveplots")]
@@ -553,6 +561,7 @@ namespace WebAnalisys.Controllers
             }
             catch (Exception ex)
             {
+                ErrorLogger.LogException(ex);
                 return Ok(new { success = false, message = ex.Message });
                 throw;
             }
@@ -579,6 +588,7 @@ namespace WebAnalisys.Controllers
             }
             catch (Exception ex)
             {
+                ErrorLogger.LogException(ex);
                 return Ok(new { success = false, message = ex.Message });
                 throw;
             }
@@ -638,6 +648,7 @@ namespace WebAnalisys.Controllers
             }
             catch (Exception ex)
             {
+                ErrorLogger.LogException(ex);
                 Console.WriteLine(ex.Message);
             }
 
@@ -649,25 +660,35 @@ namespace WebAnalisys.Controllers
         [Route("printgraphdata")]
         public IHttpActionResult printgraphdata([FromBody] PrintDataPayload payload)
         {
-
-            byte[] imageBytes = Convert.FromBase64String(payload.ImageBase64);
-
-            string filePath = Path.Combine(System.Web.Hosting.HostingEnvironment.MapPath("~/Images/" + payload.FileName));
-
-            System.IO.File.WriteAllBytes(filePath, imageBytes);
-
-            ExcelLibrary objExcel = new ExcelLibrary();
-            objExcel.NewPackage(payload.FileName);
-
-            if (objExcel.CreateReport(payload, filePath)) { 
-                return Ok(new { result = "OK" });
-            }
-            else
+            try
             {
-                return Ok(new { result = "OK", file = "" });
+                byte[] imageBytes = Convert.FromBase64String(payload.ImageBase64);
+
+                string filePath = Path.Combine(System.Web.Hosting.HostingEnvironment.MapPath("~/Images/" + payload.FileName));
+
+                System.IO.File.WriteAllBytes(filePath, imageBytes);
+
+                ExcelLibrary objExcel = new ExcelLibrary();
+                objExcel.NewPackage(payload.FileName);
+
+                if (objExcel.CreateReport(payload, filePath)) {
+
+                    string base64 = Convert.ToBase64String(objExcel.excelBytes);
+                    objExcel.excelBytes = new byte[0];
+
+                    return Ok(new { result = "OK", fileBase64 = base64, filename = ("Report-" + DateTime.Now.ToString("hhmmss") + ".xlsx") });
+                }
+                else
+                {
+                    return Ok(new { result = "ERROR", errorMessage = "Errore Creazione report" });
+                }
             }
-            
-            
+            catch (Exception ex)
+            {
+                ErrorLogger.LogException(ex);
+                return Ok(new { result = "ERROR", errorMessage = ex.Message });
+            }
+
         }
 
         private string Normalize(string key)

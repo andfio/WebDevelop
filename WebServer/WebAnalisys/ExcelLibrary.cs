@@ -31,6 +31,11 @@ namespace WebAnalisys.ExcelTools
         private int _currentRow;
         private int _defaultCol;
         private PrintDataPayload _paramsData;
+        private byte[] _excelBytes;
+        private ExcelPicture _imgGraph;
+        private Image _graphImage;
+        private MemoryStream _graphImageStream;
+
 
         public bool NewPackage(string filename)
         {
@@ -53,7 +58,7 @@ namespace WebAnalisys.ExcelTools
         {
             try
             {
-                string _file = Path.Combine(System.Web.Hosting.HostingEnvironment.MapPath("~/Files/" + ("Report-" + DateTime.Now.ToString("hhmmss")  + ".xls")  ));
+                string _file = Path.Combine(System.Web.Hosting.HostingEnvironment.MapPath("~/Files/" + ("Report-" + DateTime.Now.ToString("hhmmss")  + ".xlsx")  ));
                 _ep.SaveAs(new FileInfo(_file));
                 return true;
             }
@@ -63,7 +68,28 @@ namespace WebAnalisys.ExcelTools
             }
         }
 
-        private ExcelWorksheet CreateSheet(string sheetName)
+        public byte[] GetPackageBytes()
+        {
+            using (var ms = new MemoryStream())
+            {
+                _ep.SaveAs(ms);
+                return ms.ToArray();
+            }
+        }
+
+        public byte[] excelBytes
+        {
+            get {
+                return _excelBytes;
+            }
+            set
+            {
+                _excelBytes = value;
+            }
+        }
+
+
+        private ExcelWorksheet CreateSheet(string sheetName, eOrientation eOrientation, bool fitToPage, int fitToWitdth, int fitToHeight = 0)
         {
             try
             {
@@ -71,7 +97,10 @@ namespace WebAnalisys.ExcelTools
 
                 //Margini e proprieta di stampa da assegnare al foglio creato.
                 ws.PrinterSettings.PaperSize = ePaperSize.A4;
-                ws.PrinterSettings.Orientation = eOrientation.Landscape;
+                ws.PrinterSettings.Orientation = eOrientation;
+                ws.PrinterSettings.FitToPage = fitToPage;
+                ws.PrinterSettings.FitToWidth = fitToWitdth;
+                ws.PrinterSettings.FitToHeight = fitToHeight;
 
                 ws.PrinterSettings.TopMargin = 0.25M;
                 ws.PrinterSettings.BottomMargin = 0.25M;
@@ -202,25 +231,34 @@ namespace WebAnalisys.ExcelTools
 
                 if (ws == null)
                 {
-                    ws = CreateSheet("Graph");
+                    ws = CreateSheet("Graph", eOrientation.Landscape, true, 1);
                     if(CreateReportHeader() == true)
                     {
                         AddPicture(fileGraphName);
                     }
 
-                    ws = CreateSheet("Tests Execution");
+                    ws = CreateSheet("Tests Execution", eOrientation.Portrait, true, 1);
                     CreateReportTestsExecution();
 
-                    ws = CreateSheet("Table Measurers");
+                    ws = CreateSheet("Table Measurers", eOrientation.Landscape, true, 1, 0);
                     CreateReportTableMeasures();
                 }
 
-                SavePackage();
+                _excelBytes = GetPackageBytes();
                 ws = null;
+                _ep = null;
+                if (_imgGraph != null)
+                {
+                    _imgGraph.Dispose();
+                    _imgGraph = null;
+                }
+
+                DisposeGraphImage();
                 return true;
             }
             catch (Exception ex)
             {
+                DisposeGraphImage();
                 return false;
             }
         }
@@ -416,9 +454,13 @@ namespace WebAnalisys.ExcelTools
             {
                 int firstRow = 0;
 
-                Bitmap bmp = new Bitmap(filename);
-                int imgWidthPx = bmp.Width;   
-                int imgHeightPx = bmp.Height;  
+                DisposeGraphImage();
+                byte[] imageBytes = File.ReadAllBytes(filename);
+                _graphImageStream = new MemoryStream(imageBytes);
+                _graphImage = Image.FromStream(_graphImageStream);
+
+                int imgWidthPx = _graphImage.Width;   
+                int imgHeightPx = _graphImage.Height;  
 
                 const double colWidthPx = 98.0;   
                 const double rowHeightPx = 20.0;  
@@ -427,9 +469,9 @@ namespace WebAnalisys.ExcelTools
                 int rowsGraph = (int)Math.Ceiling(imgHeightPx / rowHeightPx);
 
                 _currentRow = _currentRow + 2;
-                ExcelPicture img = ws.Drawings.AddPicture("Chart", new FileInfo(filename));
-                img.SetPosition(_currentRow, -25, 0, 0);
-                img.SetSize(100);
+                _imgGraph = ws.Drawings.AddPicture("Chart", _graphImage);
+                _imgGraph.SetPosition(_currentRow, -25, 0, 0);
+                _imgGraph.SetSize(100);
 
                 PrinterHeaderLeggend(colsGraph, colsGraph + 1, "Legend", Color.Red);
 
@@ -476,6 +518,21 @@ namespace WebAnalisys.ExcelTools
                 Console.WriteLine(ex.Message);
             }
 
+        }
+
+        private void DisposeGraphImage()
+        {
+            if (_graphImage != null)
+            {
+                _graphImage.Dispose();
+                _graphImage = null;
+            }
+
+            if (_graphImageStream != null)
+            {
+                _graphImageStream.Dispose();
+                _graphImageStream = null;
+            }
         }
 
         private void CreateReportTableMeasures()
@@ -567,6 +624,7 @@ namespace WebAnalisys.ExcelTools
                     r.Style.Font.Color.SetColor(Color.Black);
                     r.Worksheet.View.ShowGridLines = false;
                 }
+
 
             }
             catch (Exception ex)

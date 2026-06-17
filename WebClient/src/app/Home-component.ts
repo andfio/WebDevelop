@@ -41,6 +41,8 @@ export class HomeComponent {
   buttonGraphDisabled: boolean = true;
   measuresinfo: measuresinfo[] = [];
 
+  errorMessage: string[] = [];
+
   showHourglass: boolean = false;
 
   ngOnInit() {
@@ -102,6 +104,7 @@ export class HomeComponent {
       },
       error: (err) => {
         console.error("ERRORE BACKEND:", err);
+        return;
       }
     });
     
@@ -111,6 +114,7 @@ export class HomeComponent {
       },
       error: (err) => {
         console.error("ERRORE BACKEND:", err);
+        return;
       }
     });	
     
@@ -120,6 +124,7 @@ export class HomeComponent {
       },
       error: (err) => {
         console.error("ERRORE BACKEND:", err);
+        return;
       }
     });
     
@@ -129,6 +134,7 @@ export class HomeComponent {
       },
       error: (err) => {
         console.error("ERRORE BACKEND:", err);
+        return;
       }
     });    
 
@@ -214,7 +220,7 @@ export class HomeComponent {
         // console.log("RISULTATO BACKEND:", data);
         this.results = data 
         this.showHourglass = false;
-
+        this.setBusy(false);
 
         /* salva tutto per ricaricare da details */
         this.state.results = this.results;
@@ -274,6 +280,7 @@ export class HomeComponent {
         this.state.axesConfig = this.axesConfig;          
       },
       error: (err) => {
+        this.showHourglass = false;
         console.error("ERRORE BACKEND:", err);
       }
     });
@@ -282,7 +289,6 @@ export class HomeComponent {
       this.fvalues[filter.name] = undefined;        
     });
 
-    this.setBusy(false);
   } 
 
   subTotalSummary(results: any[]): string {
@@ -585,7 +591,9 @@ export class HomeComponent {
         }
       },
       error: (err) => {
+        // this.showDialog(err.userMessage ?? 'Errore backend - post: loadplots', 'Errore');
         console.error("ERRORE BACKEND:", err);
+        return;
       }
     });	
   }

@@ -144,8 +144,9 @@ namespace WebAnalisys.Models
 
                 return true;
             }
-            catch
+            catch(Exception ex)
             {
+                ErrorLogger.LogException(ex);
                 return false;
             }
         }

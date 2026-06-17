@@ -1560,11 +1560,24 @@ export class ChartComponent {
           sequencesHeaders: this.sequenceHeaders
         };
 
-        this.http.post(this.httpConfig.baseurl + '/query/printgraphdata', payload)
-          .subscribe({
-            next: (response) => console.log(response),
-            error: (err) => console.error(err)
-          });
+        this.http.post<any>(this.httpConfig.baseurl + '/query/printgraphdata', payload).subscribe({
+          next: (res) => {
+            if (res.result = "OK") 
+            {
+              let byteArray = Uint8Array.from(atob(res.fileBase64), c => c.charCodeAt(0));
+              let blob = new Blob([byteArray], {
+                type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+              });
+              let url = window.URL.createObjectURL(blob);
+              let a = document.createElement('a');
+              a.href = url;
+              a.download = res.filename;
+              a.click();
+              window.URL.revokeObjectURL(url);
+            }
+          },
+          error: (err) => console.error(err)
+        });
       };
     });
 
