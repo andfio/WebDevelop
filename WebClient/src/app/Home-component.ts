@@ -103,6 +103,9 @@ export class HomeComponent {
 
       },
       error: (err) => {
+        if (err.name === 'TimeoutError') {
+          this.showDialog(err.userMessage, "Error");
+        }
         console.error("ERRORE BACKEND:", err);
         return;
       }

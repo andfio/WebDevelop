@@ -1,35 +1,61 @@
 import { HttpErrorResponse, HttpInterceptorFn } from '@angular/common/http';
-import { catchError, throwError } from 'rxjs';
+import { catchError, throwError, timeout  } from 'rxjs';
 
 export const httpErrorInterceptor: HttpInterceptorFn = (req, next) => {
   return next(req).pipe(
-    catchError((error: HttpErrorResponse) => {
-      let message = 'Errore imprevisto';
+    timeout(10000),
+    catchError((error: HttpErrorResponse | Error) => {
 
-      if (error.status === 0) {
+      if ((error as any)?.name === 'TimeoutError') {
+        const message = 'Il backend non ha risposto entro il tempo massimo.';
+
+        console.error('TIMEOUT HTTP:', {
+          url: req.url,
+          message,
+          originalError: error
+        });
+
+        return throwError(() => ({
+          name: 'TimeoutError',
+          url: req.url,
+          status: 0,
+          message,
+          userMessage: message,
+          originalError: error
+        }));
+      }
+      
+      let message = 'Errore imprevisto';
+      const httpError = error as HttpErrorResponse;
+
+      if (httpError.status === 0) {
         message = 'Backend non raggiungibile o problema di rete';
-      } else if (error.status === 400) {
+      } else if (httpError.status === 400) {
         message = 'Richiesta non valida';
-      } else if (error.status === 401) {
+      } else if (httpError.status === 401) {
         message = 'Sessione non autorizzata';
-      } else if (error.status === 403) {
+      } else if (httpError.status === 403) {
         message = 'Accesso negato';
-      } else if (error.status === 404) {
+      } else if (httpError.status === 404) {
         message = 'Risorsa non trovata';
-      } else if (error.status >= 500) {
+      } else if (httpError.status >= 500) {
         message = 'Errore interno del server';
       }
 
       console.error('ERRORE HTTP CENTRALIZZATO:', {
         url: req.url,
-        status: error.status,
+        status: httpError.status,
         message,
         originalError: error
       });
 
       return throwError(() => ({
-        ...error,
-        userMessage: message
+        name: 'HttpError',
+        url: req.url,
+        status: httpError.status,
+        message,
+        userMessage: message,
+        originalError: error
       }));
     })
   );
