@@ -11,6 +11,8 @@ import { DialogContent } from './dialog-component';
 import { AxesConfig } from './chart-config';
 import { ChartSettingsComponent } from './chart-settings-component';
 import { MatProgressSpinner } from '@angular/material/progress-spinner';
+import { titleprogressBar } from './app.config.json'
+import { defer, finalize, forkJoin, map, retry, timer, timeout, throwError } from 'rxjs';
 
 @Component({
   selector: 'app-root',
@@ -41,9 +43,9 @@ export class HomeComponent {
   buttonGraphDisabled: boolean = true;
   measuresinfo: measuresinfo[] = [];
 
-  errorMessage: string[] = [];
-
   showHourglass: boolean = false;
+
+  titleprogressBar: string = "";
 
   ngOnInit() {
 
@@ -90,58 +92,77 @@ export class HomeComponent {
   }
 
   subPost() {
-    this.http.post(this.httpconfig.baseurl + '/query/informations', null).subscribe({
-      next: (data: any) => {
-        data.forEach((itemUnit: StructUnitsInfo) => {
-          this.unitsInfo.push(itemUnit);
-        });
+    this.setBusy(true);
+
+    defer(() =>
+      forkJoin({
+        informations: this.http.post<any[]>(this.httpconfig.baseurl + '/query/informations', null),
+        modelsInfo: this.http.post<any[]>(this.httpconfig.baseurl + '/query/modelsinfo', null),
+        abortCodeInfo: this.http.post<any[]>(this.httpconfig.baseurl + '/query/abortcodeinfo', null),
+        functionsInfo: this.http.post<any[]>(this.httpconfig.baseurl + '/query/functionsinfo', null),
+        axesConfig: this.http.post<any>(this.httpconfig.baseurl + '/query/loadplots', null),
+      }).pipe(
+        timeout(5000),
+        map(data => {
+          if (
+            !Array.isArray(data.informations) ||
+            !Array.isArray(data.modelsInfo) ||
+            !Array.isArray(data.abortCodeInfo) ||
+            !Array.isArray(data.functionsInfo) 
+          ) {
+            throw new Error('Risposta backend non valida');
+          }          
+          
+          if (
+            data.informations.length === 0 ||
+            data.modelsInfo.length === 0 ||
+            data.abortCodeInfo.length === 0 ||
+            data.functionsInfo.length === 0 
+          ) {
+            throw new Error('Risposta backend non valida');
+          }
+
+          return data;
+        })
+      )
+    ).pipe(
+      retry({
+        count: Number(this.httpconfig.numretry),
+        delay: (error, retryCount) => {
+          this.showHourglass = true;
+          this.titleprogressBar = titleprogressBar.httpRetry + retryCount.toString();
+          console.warn(`Backend non disponibile. Tentativo ${retryCount}.`, error);
+          return timer(5000);
+        }
+      }),
+      finalize(() => {
+        this.showHourglass = false;
+        this.setBusy(false);
+      })
+    ).subscribe({
+      next: (data) => {       
+        this.unitsInfo = data.informations;
+        this.modelsInfo = data.modelsInfo;
+        this.abortcodeinfo = data.abortCodeInfo;
+        this.functionsInfo = data.functionsInfo;
+        if(data.axesConfig.success==true) {
+          this.axesConfig = data.axesConfig.config;
+        }         
 
         this.filterValues = this.subDefaultValues();
-
         this.linesItem = this.subLoadInfo("LineID");
-        this.unitTypesItem =this.subLoadInfo("UnitTypeID");
+        this.unitTypesItem = this.subLoadInfo("UnitTypeID");
 
+        this.showHourglass = false;
+        this.setBusy(false);
       },
       error: (err) => {
-        if (err.name === 'TimeoutError') {
-          this.showDialog(err.userMessage, "Error");
-        }
+        this.showDialog("Restore failed. Please contact the administrator!", "Error");
         console.error("ERRORE BACKEND:", err);
-        return;
+        this.showHourglass = false;
+        this.setBusy(false);
       }
     });
-    
-    this.http.post(this.httpconfig.baseurl + '/query/modelsinfo', null).subscribe({
-      next: (data: any) => {
-        this.modelsInfo = data;
-      },
-      error: (err) => {
-        console.error("ERRORE BACKEND:", err);
-        return;
-      }
-    });	
-    
-    this.http.post(this.httpconfig.baseurl + '/query/abortcodeinfo', null).subscribe({
-      next: (data: any) => {
-        this.abortcodeinfo = data;
-      },
-      error: (err) => {
-        console.error("ERRORE BACKEND:", err);
-        return;
-      }
-    });
-    
-    this.http.post(this.httpconfig.baseurl + '/query/functionsinfo', null).subscribe({
-      next: (data: any) => {
-        this.functionsInfo = data;
-      },
-      error: (err) => {
-        console.error("ERRORE BACKEND:", err);
-        return;
-      }
-    });    
-
-    this.subInitAxesConfig();
   }
   
   DateFormatFrom: string = new Date().toISOString().slice(0,10) + "T00:00";
@@ -217,11 +238,15 @@ export class HomeComponent {
       query: this.query  
     };
     this.showHourglass = true;
+    this.titleprogressBar = titleprogressBar.search;
     this.setBusy(true);
     this.http.post(this.httpconfig.baseurl + '/query', payload).subscribe({
       next: (data: any) => {
-        // console.log("RISULTATO BACKEND:", data);
         this.results = data 
+
+        if (this.results.length === 0) {
+          throw new Error('Risposta backend non valida');
+        }  
         this.showHourglass = false;
         this.setBusy(false);
 
@@ -284,6 +309,7 @@ export class HomeComponent {
       },
       error: (err) => {
         this.showHourglass = false;
+        this.showDialog(err.userMessage, "Error");
         console.error("ERRORE BACKEND:", err);
       }
     });
@@ -578,27 +604,6 @@ export class HomeComponent {
 
   setBusy(isBusy: boolean) {
     document.body.classList.toggle('busy', isBusy);
-  }
-
-  subInitAxesConfig() {
-    this.http.post(this.httpconfig.baseurl + '/query/loadplots', null).subscribe({
-      next: (data: any) => {
-        if(data.success==true) {
-          this.axesConfig = data.config;
-        } 
-        else {
-          if (data.message == "NO_FILE")
-          {
-            console.warn("No plot configuration file found.");
-          };
-        }
-      },
-      error: (err) => {
-        // this.showDialog(err.userMessage ?? 'Errore backend - post: loadplots', 'Errore');
-        console.error("ERRORE BACKEND:", err);
-        return;
-      }
-    });	
   }
 
   subShowGraphParams() {

@@ -17,11 +17,12 @@
 
   @if (showHourglass) {
     <div class="progress-spinner-wrapper">
-        <h2 class="progress-title">Please wait, searching...</h2>
+        <div class="progress-title">{{ titleprogressBar }}</div>
 
         <mat-progress-spinner
             class="progress-spinner"
             mode="indeterminate"
+            diameter=100
             [value]="40">
         </mat-progress-spinner>
 

@@ -1,0 +1,1061 @@
+--------------------------------------------------
+Date: 2026-06-18 15:36:05
+Caller Method: functionsinfo
+Caller File: C:\Andrea Fiorentini\WebAnalisys\WebServer\WebAnalisys\QueryController.cs
+Caller Line: 491
+Error Method: System.Data.ProviderBase.DbConnectionFactory.TryGetConnection
+Error File: 
+Error Line: 0
+Exception Type: System.InvalidOperationException
+Message: Timeout scaduto. Il tempo disponibile è scaduto prima di aver ottenuto la connessione dal pool.  Ciò potrebbe essere accaduto perché tutte le connessioni dal pool erano in uso ed era già stata raggiunta la dimensione massima del pool.
+Source: System.Data
+StackTrace:
+   in System.Data.ProviderBase.DbConnectionFactory.TryGetConnection(DbConnection owningConnection, TaskCompletionSource`1 retry, DbConnectionOptions userOptions, DbConnectionInternal oldConnection, DbConnectionInternal& connection)
+   in System.Data.ProviderBase.DbConnectionInternal.TryOpenConnectionInternal(DbConnection outerConnection, DbConnectionFactory connectionFactory, TaskCompletionSource`1 retry, DbConnectionOptions userOptions)
+   in System.Data.ProviderBase.DbConnectionClosed.TryOpenConnection(DbConnection outerConnection, DbConnectionFactory connectionFactory, TaskCompletionSource`1 retry, DbConnectionOptions userOptions)
+   in System.Data.SqlClient.SqlConnection.TryOpenInner(TaskCompletionSource`1 retry)
+   in System.Data.SqlClient.SqlConnection.TryOpen(TaskCompletionSource`1 retry)
+   in System.Data.SqlClient.SqlConnection.Open()
+   in WebAnalisys.Controllers.QueryController.functionsinfo(Object obj) in C:\Andrea Fiorentini\WebAnalisys\WebServer\WebAnalisys\QueryController.cs:riga 472
+--------------------------------------------------
+Date: 2026-06-18 15:36:05
+Caller Method: modelsinfo
+Caller File: C:\Andrea Fiorentini\WebAnalisys\WebServer\WebAnalisys\QueryController.cs
+Caller Line: 411
+Error Method: System.Data.ProviderBase.DbConnectionFactory.TryGetConnection
+Error File: 
+Error Line: 0
+Exception Type: System.InvalidOperationException
+Message: Timeout scaduto. Il tempo disponibile è scaduto prima di aver ottenuto la connessione dal pool.  Ciò potrebbe essere accaduto perché tutte le connessioni dal pool erano in uso ed era già stata raggiunta la dimensione massima del pool.
+Source: System.Data
+StackTrace:
+   in System.Data.ProviderBase.DbConnectionFactory.TryGetConnection(DbConnection owningConnection, TaskCompletionSource`1 retry, DbConnectionOptions userOptions, DbConnectionInternal oldConnection, DbConnectionInternal& connection)
+   in System.Data.ProviderBase.DbConnectionInternal.TryOpenConnectionInternal(DbConnection outerConnection, DbConnectionFactory connectionFactory, TaskCompletionSource`1 retry, DbConnectionOptions userOptions)
+   in System.Data.ProviderBase.DbConnectionClosed.TryOpenConnection(DbConnection outerConnection, DbConnectionFactory connectionFactory, TaskCompletionSource`1 retry, DbConnectionOptions userOptions)
+   in System.Data.SqlClient.SqlConnection.TryOpenInner(TaskCompletionSource`1 retry)
+   in System.Data.SqlClient.SqlConnection.TryOpen(TaskCompletionSource`1 retry)
+   in System.Data.SqlClient.SqlConnection.Open()
+   in WebAnalisys.Controllers.QueryController.modelsinfo(Object obj) in C:\Andrea Fiorentini\WebAnalisys\WebServer\WebAnalisys\QueryController.cs:riga 392
+--------------------------------------------------
+Date: 2026-06-18 15:36:05
+Caller Method: Informations
+Caller File: C:\Andrea Fiorentini\WebAnalisys\WebServer\WebAnalisys\QueryController.cs
+Caller Line: 371
+Error Method: System.Data.ProviderBase.DbConnectionFactory.TryGetConnection
+Error File: 
+Error Line: 0
+Exception Type: System.InvalidOperationException
+Message: Timeout scaduto. Il tempo disponibile è scaduto prima di aver ottenuto la connessione dal pool.  Ciò potrebbe essere accaduto perché tutte le connessioni dal pool erano in uso ed era già stata raggiunta la dimensione massima del pool.
+Source: System.Data
+StackTrace:
+   in System.Data.ProviderBase.DbConnectionFactory.TryGetConnection(DbConnection owningConnection, TaskCompletionSource`1 retry, DbConnectionOptions userOptions, DbConnectionInternal oldConnection, DbConnectionInternal& connection)
+   in System.Data.ProviderBase.DbConnectionInternal.TryOpenConnectionInternal(DbConnection outerConnection, DbConnectionFactory connectionFactory, TaskCompletionSource`1 retry, DbConnectionOptions userOptions)
+   in System.Data.ProviderBase.DbConnectionClosed.TryOpenConnection(DbConnection outerConnection, DbConnectionFactory connectionFactory, TaskCompletionSource`1 retry, DbConnectionOptions userOptions)
+   in System.Data.SqlClient.SqlConnection.TryOpenInner(TaskCompletionSource`1 retry)
+   in System.Data.SqlClient.SqlConnection.TryOpen(TaskCompletionSource`1 retry)
+   in System.Data.SqlClient.SqlConnection.Open()
+   in WebAnalisys.Controllers.QueryController.Informations(Object obj) in C:\Andrea Fiorentini\WebAnalisys\WebServer\WebAnalisys\QueryController.cs:riga 352
+--------------------------------------------------
+Date: 2026-06-18 15:36:05
+Caller Method: Informations
+Caller File: C:\Andrea Fiorentini\WebAnalisys\WebServer\WebAnalisys\QueryController.cs
+Caller Line: 371
+Error Method: System.Data.ProviderBase.DbConnectionPool.TryGetConnection
+Error File: 
+Error Line: 0
+Exception Type: System.Data.SqlClient.SqlException
+Message: Si è verificato un errore di rete o specifico dell'istanza mentre si cercava di stabilire una connessione con SQL Server. Il server non è stato trovato o non è accessibile. Verificare che il nome dell'istanza sia corretto e che SQL Server sia configurato in modo da consentire connessioni remote. (provider: TCP Provider, error: 0 - Tempo di attesa scaduto.)
+Source: .Net SqlClient Data Provider
+StackTrace:
+   in System.Data.ProviderBase.DbConnectionPool.TryGetConnection(DbConnection owningObject, UInt32 waitForMultipleObjectsTimeout, Boolean allowCreate, Boolean onlyOneCheckConnection, DbConnectionOptions userOptions, DbConnectionInternal& connection)
+   in System.Data.ProviderBase.DbConnectionPool.TryGetConnection(DbConnection owningObject, TaskCompletionSource`1 retry, DbConnectionOptions userOptions, DbConnectionInternal& connection)
+   in System.Data.ProviderBase.DbConnectionFactory.TryGetConnection(DbConnection owningConnection, TaskCompletionSource`1 retry, DbConnectionOptions userOptions, DbConnectionInternal oldConnection, DbConnectionInternal& connection)
+   in System.Data.ProviderBase.DbConnectionInternal.TryOpenConnectionInternal(DbConnection outerConnection, DbConnectionFactory connectionFactory, TaskCompletionSource`1 retry, DbConnectionOptions userOptions)
+   in System.Data.ProviderBase.DbConnectionClosed.TryOpenConnection(DbConnection outerConnection, DbConnectionFactory connectionFactory, TaskCompletionSource`1 retry, DbConnectionOptions userOptions)
+   in System.Data.SqlClient.SqlConnection.TryOpenInner(TaskCompletionSource`1 retry)
+   in System.Data.SqlClient.SqlConnection.TryOpen(TaskCompletionSource`1 retry)
+   in System.Data.SqlClient.SqlConnection.Open()
+   in WebAnalisys.Controllers.QueryController.Informations(Object obj) in C:\Andrea Fiorentini\WebAnalisys\WebServer\WebAnalisys\QueryController.cs:riga 352
+InnerException Type: System.ComponentModel.Win32Exception
+InnerException Message: Tempo di attesa scaduto
+InnerException StackTrace:
+
+--------------------------------------------------
+Date: 2026-06-18 15:36:08
+Caller Method: functionsinfo
+Caller File: C:\Andrea Fiorentini\WebAnalisys\WebServer\WebAnalisys\QueryController.cs
+Caller Line: 491
+Error Method: System.Data.ProviderBase.DbConnectionPool.TryGetConnection
+Error File: 
+Error Line: 0
+Exception Type: System.Data.SqlClient.SqlException
+Message: Si è verificato un errore di rete o specifico dell'istanza mentre si cercava di stabilire una connessione con SQL Server. Il server non è stato trovato o non è accessibile. Verificare che il nome dell'istanza sia corretto e che SQL Server sia configurato in modo da consentire connessioni remote. (provider: TCP Provider, error: 0 - Tempo di attesa scaduto.)
+Source: .Net SqlClient Data Provider
+StackTrace:
+   in System.Data.ProviderBase.DbConnectionPool.TryGetConnection(DbConnection owningObject, UInt32 waitForMultipleObjectsTimeout, Boolean allowCreate, Boolean onlyOneCheckConnection, DbConnectionOptions userOptions, DbConnectionInternal& connection)
+   in System.Data.ProviderBase.DbConnectionPool.TryGetConnection(DbConnection owningObject, TaskCompletionSource`1 retry, DbConnectionOptions userOptions, DbConnectionInternal& connection)
+   in System.Data.ProviderBase.DbConnectionFactory.TryGetConnection(DbConnection owningConnection, TaskCompletionSource`1 retry, DbConnectionOptions userOptions, DbConnectionInternal oldConnection, DbConnectionInternal& connection)
+   in System.Data.ProviderBase.DbConnectionInternal.TryOpenConnectionInternal(DbConnection outerConnection, DbConnectionFactory connectionFactory, TaskCompletionSource`1 retry, DbConnectionOptions userOptions)
+   in System.Data.ProviderBase.DbConnectionClosed.TryOpenConnection(DbConnection outerConnection, DbConnectionFactory connectionFactory, TaskCompletionSource`1 retry, DbConnectionOptions userOptions)
+   in System.Data.SqlClient.SqlConnection.TryOpenInner(TaskCompletionSource`1 retry)
+   in System.Data.SqlClient.SqlConnection.TryOpen(TaskCompletionSource`1 retry)
+   in System.Data.SqlClient.SqlConnection.Open()
+   in WebAnalisys.Controllers.QueryController.functionsinfo(Object obj) in C:\Andrea Fiorentini\WebAnalisys\WebServer\WebAnalisys\QueryController.cs:riga 472
+InnerException Type: System.ComponentModel.Win32Exception
+InnerException Message: Tempo di attesa scaduto
+InnerException StackTrace:
+
+--------------------------------------------------
+Date: 2026-06-18 15:36:08
+Caller Method: modelsinfo
+Caller File: C:\Andrea Fiorentini\WebAnalisys\WebServer\WebAnalisys\QueryController.cs
+Caller Line: 411
+Error Method: System.Data.ProviderBase.DbConnectionPool.TryGetConnection
+Error File: 
+Error Line: 0
+Exception Type: System.Data.SqlClient.SqlException
+Message: Si è verificato un errore di rete o specifico dell'istanza mentre si cercava di stabilire una connessione con SQL Server. Il server non è stato trovato o non è accessibile. Verificare che il nome dell'istanza sia corretto e che SQL Server sia configurato in modo da consentire connessioni remote. (provider: TCP Provider, error: 0 - Tempo di attesa scaduto.)
+Source: .Net SqlClient Data Provider
+StackTrace:
+   in System.Data.ProviderBase.DbConnectionPool.TryGetConnection(DbConnection owningObject, UInt32 waitForMultipleObjectsTimeout, Boolean allowCreate, Boolean onlyOneCheckConnection, DbConnectionOptions userOptions, DbConnectionInternal& connection)
+   in System.Data.ProviderBase.DbConnectionPool.TryGetConnection(DbConnection owningObject, TaskCompletionSource`1 retry, DbConnectionOptions userOptions, DbConnectionInternal& connection)
+   in System.Data.ProviderBase.DbConnectionFactory.TryGetConnection(DbConnection owningConnection, TaskCompletionSource`1 retry, DbConnectionOptions userOptions, DbConnectionInternal oldConnection, DbConnectionInternal& connection)
+   in System.Data.ProviderBase.DbConnectionInternal.TryOpenConnectionInternal(DbConnection outerConnection, DbConnectionFactory connectionFactory, TaskCompletionSource`1 retry, DbConnectionOptions userOptions)
+   in System.Data.ProviderBase.DbConnectionClosed.TryOpenConnection(DbConnection outerConnection, DbConnectionFactory connectionFactory, TaskCompletionSource`1 retry, DbConnectionOptions userOptions)
+   in System.Data.SqlClient.SqlConnection.TryOpenInner(TaskCompletionSource`1 retry)
+   in System.Data.SqlClient.SqlConnection.TryOpen(TaskCompletionSource`1 retry)
+   in System.Data.SqlClient.SqlConnection.Open()
+   in WebAnalisys.Controllers.QueryController.modelsinfo(Object obj) in C:\Andrea Fiorentini\WebAnalisys\WebServer\WebAnalisys\QueryController.cs:riga 392
+InnerException Type: System.ComponentModel.Win32Exception
+InnerException Message: Tempo di attesa scaduto
+InnerException StackTrace:
+
+--------------------------------------------------
+Date: 2026-06-18 15:36:08
+Caller Method: abortcodeinfo
+Caller File: C:\Andrea Fiorentini\WebAnalisys\WebServer\WebAnalisys\QueryController.cs
+Caller Line: 451
+Error Method: System.Data.SqlClient.SqlInternalConnectionTds..ctor
+Error File: 
+Error Line: 0
+Exception Type: System.Data.SqlClient.SqlException
+Message: Si è verificato un errore di rete o specifico dell'istanza mentre si cercava di stabilire una connessione con SQL Server. Il server non è stato trovato o non è accessibile. Verificare che il nome dell'istanza sia corretto e che SQL Server sia configurato in modo da consentire connessioni remote. (provider: TCP Provider, error: 0 - Tempo di attesa scaduto.)
+Source: .Net SqlClient Data Provider
+StackTrace:
+   in System.Data.SqlClient.SqlInternalConnectionTds..ctor(DbConnectionPoolIdentity identity, SqlConnectionString connectionOptions, SqlCredential credential, Object providerInfo, String newPassword, SecureString newSecurePassword, Boolean redirectedUserInstance, SqlConnectionString userConnectionOptions, SessionData reconnectSessionData, DbConnectionPool pool, String accessToken, Boolean applyTransientFaultHandling, SqlAuthenticationProviderManager sqlAuthProviderManager)
+   in System.Data.SqlClient.SqlConnectionFactory.CreateConnection(DbConnectionOptions options, DbConnectionPoolKey poolKey, Object poolGroupProviderInfo, DbConnectionPool pool, DbConnection owningConnection, DbConnectionOptions userOptions)
+   in System.Data.ProviderBase.DbConnectionFactory.CreatePooledConnection(DbConnectionPool pool, DbConnection owningObject, DbConnectionOptions options, DbConnectionPoolKey poolKey, DbConnectionOptions userOptions)
+   in System.Data.ProviderBase.DbConnectionPool.CreateObject(DbConnection owningObject, DbConnectionOptions userOptions, DbConnectionInternal oldConnection)
+   in System.Data.ProviderBase.DbConnectionPool.UserCreateRequest(DbConnection owningObject, DbConnectionOptions userOptions, DbConnectionInternal oldConnection)
+   in System.Data.ProviderBase.DbConnectionPool.TryGetConnection(DbConnection owningObject, UInt32 waitForMultipleObjectsTimeout, Boolean allowCreate, Boolean onlyOneCheckConnection, DbConnectionOptions userOptions, DbConnectionInternal& connection)
+   in System.Data.ProviderBase.DbConnectionPool.TryGetConnection(DbConnection owningObject, TaskCompletionSource`1 retry, DbConnectionOptions userOptions, DbConnectionInternal& connection)
+   in System.Data.ProviderBase.DbConnectionFactory.TryGetConnection(DbConnection owningConnection, TaskCompletionSource`1 retry, DbConnectionOptions userOptions, DbConnectionInternal oldConnection, DbConnectionInternal& connection)
+   in System.Data.ProviderBase.DbConnectionInternal.TryOpenConnectionInternal(DbConnection outerConnection, DbConnectionFactory connectionFactory, TaskCompletionSource`1 retry, DbConnectionOptions userOptions)
+   in System.Data.ProviderBase.DbConnectionClosed.TryOpenConnection(DbConnection outerConnection, DbConnectionFactory connectionFactory, TaskCompletionSource`1 retry, DbConnectionOptions userOptions)
+   in System.Data.SqlClient.SqlConnection.TryOpenInner(TaskCompletionSource`1 retry)
+   in System.Data.SqlClient.SqlConnection.TryOpen(TaskCompletionSource`1 retry)
+   in System.Data.SqlClient.SqlConnection.Open()
+   in WebAnalisys.Controllers.QueryController.abortcodeinfo(Object obj) in C:\Andrea Fiorentini\WebAnalisys\WebServer\WebAnalisys\QueryController.cs:riga 432
+InnerException Type: System.ComponentModel.Win32Exception
+InnerException Message: Tempo di attesa scaduto
+InnerException StackTrace:
+
+--------------------------------------------------
+Date: 2026-06-18 15:36:08
+Caller Method: functionsinfo
+Caller File: C:\Andrea Fiorentini\WebAnalisys\WebServer\WebAnalisys\QueryController.cs
+Caller Line: 491
+Error Method: System.Data.ProviderBase.DbConnectionPool.TryGetConnection
+Error File: 
+Error Line: 0
+Exception Type: System.Data.SqlClient.SqlException
+Message: Si è verificato un errore di rete o specifico dell'istanza mentre si cercava di stabilire una connessione con SQL Server. Il server non è stato trovato o non è accessibile. Verificare che il nome dell'istanza sia corretto e che SQL Server sia configurato in modo da consentire connessioni remote. (provider: TCP Provider, error: 0 - Tempo di attesa scaduto.)
+Source: .Net SqlClient Data Provider
+StackTrace:
+   in System.Data.ProviderBase.DbConnectionPool.TryGetConnection(DbConnection owningObject, UInt32 waitForMultipleObjectsTimeout, Boolean allowCreate, Boolean onlyOneCheckConnection, DbConnectionOptions userOptions, DbConnectionInternal& connection)
+   in System.Data.ProviderBase.DbConnectionPool.TryGetConnection(DbConnection owningObject, TaskCompletionSource`1 retry, DbConnectionOptions userOptions, DbConnectionInternal& connection)
+   in System.Data.ProviderBase.DbConnectionFactory.TryGetConnection(DbConnection owningConnection, TaskCompletionSource`1 retry, DbConnectionOptions userOptions, DbConnectionInternal oldConnection, DbConnectionInternal& connection)
+   in System.Data.ProviderBase.DbConnectionInternal.TryOpenConnectionInternal(DbConnection outerConnection, DbConnectionFactory connectionFactory, TaskCompletionSource`1 retry, DbConnectionOptions userOptions)
+   in System.Data.ProviderBase.DbConnectionClosed.TryOpenConnection(DbConnection outerConnection, DbConnectionFactory connectionFactory, TaskCompletionSource`1 retry, DbConnectionOptions userOptions)
+   in System.Data.SqlClient.SqlConnection.TryOpenInner(TaskCompletionSource`1 retry)
+   in System.Data.SqlClient.SqlConnection.TryOpen(TaskCompletionSource`1 retry)
+   in System.Data.SqlClient.SqlConnection.Open()
+   in WebAnalisys.Controllers.QueryController.functionsinfo(Object obj) in C:\Andrea Fiorentini\WebAnalisys\WebServer\WebAnalisys\QueryController.cs:riga 472
+InnerException Type: System.ComponentModel.Win32Exception
+InnerException Message: Tempo di attesa scaduto
+InnerException StackTrace:
+
+--------------------------------------------------
+Date: 2026-06-18 15:36:08
+Caller Method: Informations
+Caller File: C:\Andrea Fiorentini\WebAnalisys\WebServer\WebAnalisys\QueryController.cs
+Caller Line: 371
+Error Method: System.Data.ProviderBase.DbConnectionPool.TryGetConnection
+Error File: 
+Error Line: 0
+Exception Type: System.Data.SqlClient.SqlException
+Message: Si è verificato un errore di rete o specifico dell'istanza mentre si cercava di stabilire una connessione con SQL Server. Il server non è stato trovato o non è accessibile. Verificare che il nome dell'istanza sia corretto e che SQL Server sia configurato in modo da consentire connessioni remote. (provider: TCP Provider, error: 0 - Tempo di attesa scaduto.)
+Source: .Net SqlClient Data Provider
+StackTrace:
+   in System.Data.ProviderBase.DbConnectionPool.TryGetConnection(DbConnection owningObject, UInt32 waitForMultipleObjectsTimeout, Boolean allowCreate, Boolean onlyOneCheckConnection, DbConnectionOptions userOptions, DbConnectionInternal& connection)
+   in System.Data.ProviderBase.DbConnectionPool.TryGetConnection(DbConnection owningObject, TaskCompletionSource`1 retry, DbConnectionOptions userOptions, DbConnectionInternal& connection)
+   in System.Data.ProviderBase.DbConnectionFactory.TryGetConnection(DbConnection owningConnection, TaskCompletionSource`1 retry, DbConnectionOptions userOptions, DbConnectionInternal oldConnection, DbConnectionInternal& connection)
+   in System.Data.ProviderBase.DbConnectionInternal.TryOpenConnectionInternal(DbConnection outerConnection, DbConnectionFactory connectionFactory, TaskCompletionSource`1 retry, DbConnectionOptions userOptions)
+   in System.Data.ProviderBase.DbConnectionClosed.TryOpenConnection(DbConnection outerConnection, DbConnectionFactory connectionFactory, TaskCompletionSource`1 retry, DbConnectionOptions userOptions)
+   in System.Data.SqlClient.SqlConnection.TryOpenInner(TaskCompletionSource`1 retry)
+   in System.Data.SqlClient.SqlConnection.TryOpen(TaskCompletionSource`1 retry)
+   in System.Data.SqlClient.SqlConnection.Open()
+   in WebAnalisys.Controllers.QueryController.Informations(Object obj) in C:\Andrea Fiorentini\WebAnalisys\WebServer\WebAnalisys\QueryController.cs:riga 352
+InnerException Type: System.ComponentModel.Win32Exception
+InnerException Message: Tempo di attesa scaduto
+InnerException StackTrace:
+
+--------------------------------------------------
+Date: 2026-06-18 15:36:08
+Caller Method: modelsinfo
+Caller File: C:\Andrea Fiorentini\WebAnalisys\WebServer\WebAnalisys\QueryController.cs
+Caller Line: 411
+Error Method: System.Data.ProviderBase.DbConnectionPool.TryGetConnection
+Error File: 
+Error Line: 0
+Exception Type: System.Data.SqlClient.SqlException
+Message: Si è verificato un errore di rete o specifico dell'istanza mentre si cercava di stabilire una connessione con SQL Server. Il server non è stato trovato o non è accessibile. Verificare che il nome dell'istanza sia corretto e che SQL Server sia configurato in modo da consentire connessioni remote. (provider: TCP Provider, error: 0 - Tempo di attesa scaduto.)
+Source: .Net SqlClient Data Provider
+StackTrace:
+   in System.Data.ProviderBase.DbConnectionPool.TryGetConnection(DbConnection owningObject, UInt32 waitForMultipleObjectsTimeout, Boolean allowCreate, Boolean onlyOneCheckConnection, DbConnectionOptions userOptions, DbConnectionInternal& connection)
+   in System.Data.ProviderBase.DbConnectionPool.TryGetConnection(DbConnection owningObject, TaskCompletionSource`1 retry, DbConnectionOptions userOptions, DbConnectionInternal& connection)
+   in System.Data.ProviderBase.DbConnectionFactory.TryGetConnection(DbConnection owningConnection, TaskCompletionSource`1 retry, DbConnectionOptions userOptions, DbConnectionInternal oldConnection, DbConnectionInternal& connection)
+   in System.Data.ProviderBase.DbConnectionInternal.TryOpenConnectionInternal(DbConnection outerConnection, DbConnectionFactory connectionFactory, TaskCompletionSource`1 retry, DbConnectionOptions userOptions)
+   in System.Data.ProviderBase.DbConnectionClosed.TryOpenConnection(DbConnection outerConnection, DbConnectionFactory connectionFactory, TaskCompletionSource`1 retry, DbConnectionOptions userOptions)
+   in System.Data.SqlClient.SqlConnection.TryOpenInner(TaskCompletionSource`1 retry)
+   in System.Data.SqlClient.SqlConnection.TryOpen(TaskCompletionSource`1 retry)
+   in System.Data.SqlClient.SqlConnection.Open()
+   in WebAnalisys.Controllers.QueryController.modelsinfo(Object obj) in C:\Andrea Fiorentini\WebAnalisys\WebServer\WebAnalisys\QueryController.cs:riga 392
+InnerException Type: System.ComponentModel.Win32Exception
+InnerException Message: Tempo di attesa scaduto
+InnerException StackTrace:
+
+--------------------------------------------------
+Date: 2026-06-18 15:36:08
+Caller Method: abortcodeinfo
+Caller File: C:\Andrea Fiorentini\WebAnalisys\WebServer\WebAnalisys\QueryController.cs
+Caller Line: 451
+Error Method: System.Data.ProviderBase.DbConnectionPool.TryGetConnection
+Error File: 
+Error Line: 0
+Exception Type: System.Data.SqlClient.SqlException
+Message: Si è verificato un errore di rete o specifico dell'istanza mentre si cercava di stabilire una connessione con SQL Server. Il server non è stato trovato o non è accessibile. Verificare che il nome dell'istanza sia corretto e che SQL Server sia configurato in modo da consentire connessioni remote. (provider: TCP Provider, error: 0 - Tempo di attesa scaduto.)
+Source: .Net SqlClient Data Provider
+StackTrace:
+   in System.Data.ProviderBase.DbConnectionPool.TryGetConnection(DbConnection owningObject, UInt32 waitForMultipleObjectsTimeout, Boolean allowCreate, Boolean onlyOneCheckConnection, DbConnectionOptions userOptions, DbConnectionInternal& connection)
+   in System.Data.ProviderBase.DbConnectionPool.TryGetConnection(DbConnection owningObject, TaskCompletionSource`1 retry, DbConnectionOptions userOptions, DbConnectionInternal& connection)
+   in System.Data.ProviderBase.DbConnectionFactory.TryGetConnection(DbConnection owningConnection, TaskCompletionSource`1 retry, DbConnectionOptions userOptions, DbConnectionInternal oldConnection, DbConnectionInternal& connection)
+   in System.Data.ProviderBase.DbConnectionInternal.TryOpenConnectionInternal(DbConnection outerConnection, DbConnectionFactory connectionFactory, TaskCompletionSource`1 retry, DbConnectionOptions userOptions)
+   in System.Data.ProviderBase.DbConnectionClosed.TryOpenConnection(DbConnection outerConnection, DbConnectionFactory connectionFactory, TaskCompletionSource`1 retry, DbConnectionOptions userOptions)
+   in System.Data.SqlClient.SqlConnection.TryOpenInner(TaskCompletionSource`1 retry)
+   in System.Data.SqlClient.SqlConnection.TryOpen(TaskCompletionSource`1 retry)
+   in System.Data.SqlClient.SqlConnection.Open()
+   in WebAnalisys.Controllers.QueryController.abortcodeinfo(Object obj) in C:\Andrea Fiorentini\WebAnalisys\WebServer\WebAnalisys\QueryController.cs:riga 432
+InnerException Type: System.ComponentModel.Win32Exception
+InnerException Message: Tempo di attesa scaduto
+InnerException StackTrace:
+
+--------------------------------------------------
+Date: 2026-06-18 15:36:08
+Caller Method: abortcodeinfo
+Caller File: C:\Andrea Fiorentini\WebAnalisys\WebServer\WebAnalisys\QueryController.cs
+Caller Line: 451
+Error Method: System.Data.ProviderBase.DbConnectionPool.TryGetConnection
+Error File: 
+Error Line: 0
+Exception Type: System.Data.SqlClient.SqlException
+Message: Si è verificato un errore di rete o specifico dell'istanza mentre si cercava di stabilire una connessione con SQL Server. Il server non è stato trovato o non è accessibile. Verificare che il nome dell'istanza sia corretto e che SQL Server sia configurato in modo da consentire connessioni remote. (provider: TCP Provider, error: 0 - Tempo di attesa scaduto.)
+Source: .Net SqlClient Data Provider
+StackTrace:
+   in System.Data.ProviderBase.DbConnectionPool.TryGetConnection(DbConnection owningObject, UInt32 waitForMultipleObjectsTimeout, Boolean allowCreate, Boolean onlyOneCheckConnection, DbConnectionOptions userOptions, DbConnectionInternal& connection)
+   in System.Data.ProviderBase.DbConnectionPool.TryGetConnection(DbConnection owningObject, TaskCompletionSource`1 retry, DbConnectionOptions userOptions, DbConnectionInternal& connection)
+   in System.Data.ProviderBase.DbConnectionFactory.TryGetConnection(DbConnection owningConnection, TaskCompletionSource`1 retry, DbConnectionOptions userOptions, DbConnectionInternal oldConnection, DbConnectionInternal& connection)
+   in System.Data.ProviderBase.DbConnectionInternal.TryOpenConnectionInternal(DbConnection outerConnection, DbConnectionFactory connectionFactory, TaskCompletionSource`1 retry, DbConnectionOptions userOptions)
+   in System.Data.ProviderBase.DbConnectionClosed.TryOpenConnection(DbConnection outerConnection, DbConnectionFactory connectionFactory, TaskCompletionSource`1 retry, DbConnectionOptions userOptions)
+   in System.Data.SqlClient.SqlConnection.TryOpenInner(TaskCompletionSource`1 retry)
+   in System.Data.SqlClient.SqlConnection.TryOpen(TaskCompletionSource`1 retry)
+   in System.Data.SqlClient.SqlConnection.Open()
+   in WebAnalisys.Controllers.QueryController.abortcodeinfo(Object obj) in C:\Andrea Fiorentini\WebAnalisys\WebServer\WebAnalisys\QueryController.cs:riga 432
+InnerException Type: System.ComponentModel.Win32Exception
+InnerException Message: Tempo di attesa scaduto
+InnerException StackTrace:
+
+--------------------------------------------------
+Date: 2026-06-18 15:36:26
+Caller Method: modelsinfo
+Caller File: C:\Andrea Fiorentini\WebAnalisys\WebServer\WebAnalisys\QueryController.cs
+Caller Line: 411
+Error Method: System.Data.ProviderBase.DbConnectionFactory.TryGetConnection
+Error File: 
+Error Line: 0
+Exception Type: System.InvalidOperationException
+Message: Timeout scaduto. Il tempo disponibile è scaduto prima di aver ottenuto la connessione dal pool.  Ciò potrebbe essere accaduto perché tutte le connessioni dal pool erano in uso ed era già stata raggiunta la dimensione massima del pool.
+Source: System.Data
+StackTrace:
+   in System.Data.ProviderBase.DbConnectionFactory.TryGetConnection(DbConnection owningConnection, TaskCompletionSource`1 retry, DbConnectionOptions userOptions, DbConnectionInternal oldConnection, DbConnectionInternal& connection)
+   in System.Data.ProviderBase.DbConnectionInternal.TryOpenConnectionInternal(DbConnection outerConnection, DbConnectionFactory connectionFactory, TaskCompletionSource`1 retry, DbConnectionOptions userOptions)
+   in System.Data.ProviderBase.DbConnectionClosed.TryOpenConnection(DbConnection outerConnection, DbConnectionFactory connectionFactory, TaskCompletionSource`1 retry, DbConnectionOptions userOptions)
+   in System.Data.SqlClient.SqlConnection.TryOpenInner(TaskCompletionSource`1 retry)
+   in System.Data.SqlClient.SqlConnection.TryOpen(TaskCompletionSource`1 retry)
+   in System.Data.SqlClient.SqlConnection.Open()
+   in WebAnalisys.Controllers.QueryController.modelsinfo(Object obj) in C:\Andrea Fiorentini\WebAnalisys\WebServer\WebAnalisys\QueryController.cs:riga 392
+--------------------------------------------------
+Date: 2026-06-18 15:36:27
+Caller Method: abortcodeinfo
+Caller File: C:\Andrea Fiorentini\WebAnalisys\WebServer\WebAnalisys\QueryController.cs
+Caller Line: 451
+Error Method: System.Data.ProviderBase.DbConnectionFactory.TryGetConnection
+Error File: 
+Error Line: 0
+Exception Type: System.InvalidOperationException
+Message: Timeout scaduto. Il tempo disponibile è scaduto prima di aver ottenuto la connessione dal pool.  Ciò potrebbe essere accaduto perché tutte le connessioni dal pool erano in uso ed era già stata raggiunta la dimensione massima del pool.
+Source: System.Data
+StackTrace:
+   in System.Data.ProviderBase.DbConnectionFactory.TryGetConnection(DbConnection owningConnection, TaskCompletionSource`1 retry, DbConnectionOptions userOptions, DbConnectionInternal oldConnection, DbConnectionInternal& connection)
+   in System.Data.ProviderBase.DbConnectionInternal.TryOpenConnectionInternal(DbConnection outerConnection, DbConnectionFactory connectionFactory, TaskCompletionSource`1 retry, DbConnectionOptions userOptions)
+   in System.Data.ProviderBase.DbConnectionClosed.TryOpenConnection(DbConnection outerConnection, DbConnectionFactory connectionFactory, TaskCompletionSource`1 retry, DbConnectionOptions userOptions)
+   in System.Data.SqlClient.SqlConnection.TryOpenInner(TaskCompletionSource`1 retry)
+   in System.Data.SqlClient.SqlConnection.TryOpen(TaskCompletionSource`1 retry)
+   in System.Data.SqlClient.SqlConnection.Open()
+   in WebAnalisys.Controllers.QueryController.abortcodeinfo(Object obj) in C:\Andrea Fiorentini\WebAnalisys\WebServer\WebAnalisys\QueryController.cs:riga 432
+--------------------------------------------------
+Date: 2026-06-18 15:36:27
+Caller Method: functionsinfo
+Caller File: C:\Andrea Fiorentini\WebAnalisys\WebServer\WebAnalisys\QueryController.cs
+Caller Line: 491
+Error Method: System.Data.ProviderBase.DbConnectionFactory.TryGetConnection
+Error File: 
+Error Line: 0
+Exception Type: System.InvalidOperationException
+Message: Timeout scaduto. Il tempo disponibile è scaduto prima di aver ottenuto la connessione dal pool.  Ciò potrebbe essere accaduto perché tutte le connessioni dal pool erano in uso ed era già stata raggiunta la dimensione massima del pool.
+Source: System.Data
+StackTrace:
+   in System.Data.ProviderBase.DbConnectionFactory.TryGetConnection(DbConnection owningConnection, TaskCompletionSource`1 retry, DbConnectionOptions userOptions, DbConnectionInternal oldConnection, DbConnectionInternal& connection)
+   in System.Data.ProviderBase.DbConnectionInternal.TryOpenConnectionInternal(DbConnection outerConnection, DbConnectionFactory connectionFactory, TaskCompletionSource`1 retry, DbConnectionOptions userOptions)
+   in System.Data.ProviderBase.DbConnectionClosed.TryOpenConnection(DbConnection outerConnection, DbConnectionFactory connectionFactory, TaskCompletionSource`1 retry, DbConnectionOptions userOptions)
+   in System.Data.SqlClient.SqlConnection.TryOpenInner(TaskCompletionSource`1 retry)
+   in System.Data.SqlClient.SqlConnection.TryOpen(TaskCompletionSource`1 retry)
+   in System.Data.SqlClient.SqlConnection.Open()
+   in WebAnalisys.Controllers.QueryController.functionsinfo(Object obj) in C:\Andrea Fiorentini\WebAnalisys\WebServer\WebAnalisys\QueryController.cs:riga 472
+--------------------------------------------------
+Date: 2026-06-18 15:36:27
+Caller Method: functionsinfo
+Caller File: C:\Andrea Fiorentini\WebAnalisys\WebServer\WebAnalisys\QueryController.cs
+Caller Line: 491
+Error Method: System.Data.ProviderBase.DbConnectionPool.TryGetConnection
+Error File: 
+Error Line: 0
+Exception Type: System.Data.SqlClient.SqlException
+Message: Si è verificato un errore di rete o specifico dell'istanza mentre si cercava di stabilire una connessione con SQL Server. Il server non è stato trovato o non è accessibile. Verificare che il nome dell'istanza sia corretto e che SQL Server sia configurato in modo da consentire connessioni remote. (provider: TCP Provider, error: 0 - Tempo di attesa scaduto.)
+Source: .Net SqlClient Data Provider
+StackTrace:
+   in System.Data.ProviderBase.DbConnectionPool.TryGetConnection(DbConnection owningObject, UInt32 waitForMultipleObjectsTimeout, Boolean allowCreate, Boolean onlyOneCheckConnection, DbConnectionOptions userOptions, DbConnectionInternal& connection)
+   in System.Data.ProviderBase.DbConnectionPool.TryGetConnection(DbConnection owningObject, TaskCompletionSource`1 retry, DbConnectionOptions userOptions, DbConnectionInternal& connection)
+   in System.Data.ProviderBase.DbConnectionFactory.TryGetConnection(DbConnection owningConnection, TaskCompletionSource`1 retry, DbConnectionOptions userOptions, DbConnectionInternal oldConnection, DbConnectionInternal& connection)
+   in System.Data.ProviderBase.DbConnectionInternal.TryOpenConnectionInternal(DbConnection outerConnection, DbConnectionFactory connectionFactory, TaskCompletionSource`1 retry, DbConnectionOptions userOptions)
+   in System.Data.ProviderBase.DbConnectionClosed.TryOpenConnection(DbConnection outerConnection, DbConnectionFactory connectionFactory, TaskCompletionSource`1 retry, DbConnectionOptions userOptions)
+   in System.Data.SqlClient.SqlConnection.TryOpenInner(TaskCompletionSource`1 retry)
+   in System.Data.SqlClient.SqlConnection.TryOpen(TaskCompletionSource`1 retry)
+   in System.Data.SqlClient.SqlConnection.Open()
+   in WebAnalisys.Controllers.QueryController.functionsinfo(Object obj) in C:\Andrea Fiorentini\WebAnalisys\WebServer\WebAnalisys\QueryController.cs:riga 472
+InnerException Type: System.ComponentModel.Win32Exception
+InnerException Message: Tempo di attesa scaduto
+InnerException StackTrace:
+
+--------------------------------------------------
+Date: 2026-06-18 15:36:27
+Caller Method: modelsinfo
+Caller File: C:\Andrea Fiorentini\WebAnalisys\WebServer\WebAnalisys\QueryController.cs
+Caller Line: 411
+Error Method: System.Data.ProviderBase.DbConnectionPool.TryGetConnection
+Error File: 
+Error Line: 0
+Exception Type: System.Data.SqlClient.SqlException
+Message: Si è verificato un errore di rete o specifico dell'istanza mentre si cercava di stabilire una connessione con SQL Server. Il server non è stato trovato o non è accessibile. Verificare che il nome dell'istanza sia corretto e che SQL Server sia configurato in modo da consentire connessioni remote. (provider: TCP Provider, error: 0 - Tempo di attesa scaduto.)
+Source: .Net SqlClient Data Provider
+StackTrace:
+   in System.Data.ProviderBase.DbConnectionPool.TryGetConnection(DbConnection owningObject, UInt32 waitForMultipleObjectsTimeout, Boolean allowCreate, Boolean onlyOneCheckConnection, DbConnectionOptions userOptions, DbConnectionInternal& connection)
+   in System.Data.ProviderBase.DbConnectionPool.TryGetConnection(DbConnection owningObject, TaskCompletionSource`1 retry, DbConnectionOptions userOptions, DbConnectionInternal& connection)
+   in System.Data.ProviderBase.DbConnectionFactory.TryGetConnection(DbConnection owningConnection, TaskCompletionSource`1 retry, DbConnectionOptions userOptions, DbConnectionInternal oldConnection, DbConnectionInternal& connection)
+   in System.Data.ProviderBase.DbConnectionInternal.TryOpenConnectionInternal(DbConnection outerConnection, DbConnectionFactory connectionFactory, TaskCompletionSource`1 retry, DbConnectionOptions userOptions)
+   in System.Data.ProviderBase.DbConnectionClosed.TryOpenConnection(DbConnection outerConnection, DbConnectionFactory connectionFactory, TaskCompletionSource`1 retry, DbConnectionOptions userOptions)
+   in System.Data.SqlClient.SqlConnection.TryOpenInner(TaskCompletionSource`1 retry)
+   in System.Data.SqlClient.SqlConnection.TryOpen(TaskCompletionSource`1 retry)
+   in System.Data.SqlClient.SqlConnection.Open()
+   in WebAnalisys.Controllers.QueryController.modelsinfo(Object obj) in C:\Andrea Fiorentini\WebAnalisys\WebServer\WebAnalisys\QueryController.cs:riga 392
+InnerException Type: System.ComponentModel.Win32Exception
+InnerException Message: Tempo di attesa scaduto
+InnerException StackTrace:
+
+--------------------------------------------------
+Date: 2026-06-18 15:36:27
+Caller Method: Informations
+Caller File: C:\Andrea Fiorentini\WebAnalisys\WebServer\WebAnalisys\QueryController.cs
+Caller Line: 371
+Error Method: System.Data.SqlClient.SqlInternalConnectionTds..ctor
+Error File: 
+Error Line: 0
+Exception Type: System.Data.SqlClient.SqlException
+Message: Si è verificato un errore di rete o specifico dell'istanza mentre si cercava di stabilire una connessione con SQL Server. Il server non è stato trovato o non è accessibile. Verificare che il nome dell'istanza sia corretto e che SQL Server sia configurato in modo da consentire connessioni remote. (provider: TCP Provider, error: 0 - Tempo di attesa scaduto.)
+Source: .Net SqlClient Data Provider
+StackTrace:
+   in System.Data.SqlClient.SqlInternalConnectionTds..ctor(DbConnectionPoolIdentity identity, SqlConnectionString connectionOptions, SqlCredential credential, Object providerInfo, String newPassword, SecureString newSecurePassword, Boolean redirectedUserInstance, SqlConnectionString userConnectionOptions, SessionData reconnectSessionData, DbConnectionPool pool, String accessToken, Boolean applyTransientFaultHandling, SqlAuthenticationProviderManager sqlAuthProviderManager)
+   in System.Data.SqlClient.SqlConnectionFactory.CreateConnection(DbConnectionOptions options, DbConnectionPoolKey poolKey, Object poolGroupProviderInfo, DbConnectionPool pool, DbConnection owningConnection, DbConnectionOptions userOptions)
+   in System.Data.ProviderBase.DbConnectionFactory.CreatePooledConnection(DbConnectionPool pool, DbConnection owningObject, DbConnectionOptions options, DbConnectionPoolKey poolKey, DbConnectionOptions userOptions)
+   in System.Data.ProviderBase.DbConnectionPool.CreateObject(DbConnection owningObject, DbConnectionOptions userOptions, DbConnectionInternal oldConnection)
+   in System.Data.ProviderBase.DbConnectionPool.UserCreateRequest(DbConnection owningObject, DbConnectionOptions userOptions, DbConnectionInternal oldConnection)
+   in System.Data.ProviderBase.DbConnectionPool.TryGetConnection(DbConnection owningObject, UInt32 waitForMultipleObjectsTimeout, Boolean allowCreate, Boolean onlyOneCheckConnection, DbConnectionOptions userOptions, DbConnectionInternal& connection)
+   in System.Data.ProviderBase.DbConnectionPool.TryGetConnection(DbConnection owningObject, TaskCompletionSource`1 retry, DbConnectionOptions userOptions, DbConnectionInternal& connection)
+   in System.Data.ProviderBase.DbConnectionFactory.TryGetConnection(DbConnection owningConnection, TaskCompletionSource`1 retry, DbConnectionOptions userOptions, DbConnectionInternal oldConnection, DbConnectionInternal& connection)
+   in System.Data.ProviderBase.DbConnectionInternal.TryOpenConnectionInternal(DbConnection outerConnection, DbConnectionFactory connectionFactory, TaskCompletionSource`1 retry, DbConnectionOptions userOptions)
+   in System.Data.ProviderBase.DbConnectionClosed.TryOpenConnection(DbConnection outerConnection, DbConnectionFactory connectionFactory, TaskCompletionSource`1 retry, DbConnectionOptions userOptions)
+   in System.Data.SqlClient.SqlConnection.TryOpenInner(TaskCompletionSource`1 retry)
+   in System.Data.SqlClient.SqlConnection.TryOpen(TaskCompletionSource`1 retry)
+   in System.Data.SqlClient.SqlConnection.Open()
+   in WebAnalisys.Controllers.QueryController.Informations(Object obj) in C:\Andrea Fiorentini\WebAnalisys\WebServer\WebAnalisys\QueryController.cs:riga 352
+InnerException Type: System.ComponentModel.Win32Exception
+InnerException Message: Tempo di attesa scaduto
+InnerException StackTrace:
+
+--------------------------------------------------
+Date: 2026-06-18 15:36:27
+Caller Method: abortcodeinfo
+Caller File: C:\Andrea Fiorentini\WebAnalisys\WebServer\WebAnalisys\QueryController.cs
+Caller Line: 451
+Error Method: System.Data.ProviderBase.DbConnectionPool.TryGetConnection
+Error File: 
+Error Line: 0
+Exception Type: System.Data.SqlClient.SqlException
+Message: Si è verificato un errore di rete o specifico dell'istanza mentre si cercava di stabilire una connessione con SQL Server. Il server non è stato trovato o non è accessibile. Verificare che il nome dell'istanza sia corretto e che SQL Server sia configurato in modo da consentire connessioni remote. (provider: TCP Provider, error: 0 - Tempo di attesa scaduto.)
+Source: .Net SqlClient Data Provider
+StackTrace:
+   in System.Data.ProviderBase.DbConnectionPool.TryGetConnection(DbConnection owningObject, UInt32 waitForMultipleObjectsTimeout, Boolean allowCreate, Boolean onlyOneCheckConnection, DbConnectionOptions userOptions, DbConnectionInternal& connection)
+   in System.Data.ProviderBase.DbConnectionPool.TryGetConnection(DbConnection owningObject, TaskCompletionSource`1 retry, DbConnectionOptions userOptions, DbConnectionInternal& connection)
+   in System.Data.ProviderBase.DbConnectionFactory.TryGetConnection(DbConnection owningConnection, TaskCompletionSource`1 retry, DbConnectionOptions userOptions, DbConnectionInternal oldConnection, DbConnectionInternal& connection)
+   in System.Data.ProviderBase.DbConnectionInternal.TryOpenConnectionInternal(DbConnection outerConnection, DbConnectionFactory connectionFactory, TaskCompletionSource`1 retry, DbConnectionOptions userOptions)
+   in System.Data.ProviderBase.DbConnectionClosed.TryOpenConnection(DbConnection outerConnection, DbConnectionFactory connectionFactory, TaskCompletionSource`1 retry, DbConnectionOptions userOptions)
+   in System.Data.SqlClient.SqlConnection.TryOpenInner(TaskCompletionSource`1 retry)
+   in System.Data.SqlClient.SqlConnection.TryOpen(TaskCompletionSource`1 retry)
+   in System.Data.SqlClient.SqlConnection.Open()
+   in WebAnalisys.Controllers.QueryController.abortcodeinfo(Object obj) in C:\Andrea Fiorentini\WebAnalisys\WebServer\WebAnalisys\QueryController.cs:riga 432
+InnerException Type: System.ComponentModel.Win32Exception
+InnerException Message: Tempo di attesa scaduto
+InnerException StackTrace:
+
+--------------------------------------------------
+Date: 2026-06-18 15:36:27
+Caller Method: Informations
+Caller File: C:\Andrea Fiorentini\WebAnalisys\WebServer\WebAnalisys\QueryController.cs
+Caller Line: 371
+Error Method: System.Data.ProviderBase.DbConnectionPool.TryGetConnection
+Error File: 
+Error Line: 0
+Exception Type: System.Data.SqlClient.SqlException
+Message: Si è verificato un errore di rete o specifico dell'istanza mentre si cercava di stabilire una connessione con SQL Server. Il server non è stato trovato o non è accessibile. Verificare che il nome dell'istanza sia corretto e che SQL Server sia configurato in modo da consentire connessioni remote. (provider: TCP Provider, error: 0 - Tempo di attesa scaduto.)
+Source: .Net SqlClient Data Provider
+StackTrace:
+   in System.Data.ProviderBase.DbConnectionPool.TryGetConnection(DbConnection owningObject, UInt32 waitForMultipleObjectsTimeout, Boolean allowCreate, Boolean onlyOneCheckConnection, DbConnectionOptions userOptions, DbConnectionInternal& connection)
+   in System.Data.ProviderBase.DbConnectionPool.TryGetConnection(DbConnection owningObject, TaskCompletionSource`1 retry, DbConnectionOptions userOptions, DbConnectionInternal& connection)
+   in System.Data.ProviderBase.DbConnectionFactory.TryGetConnection(DbConnection owningConnection, TaskCompletionSource`1 retry, DbConnectionOptions userOptions, DbConnectionInternal oldConnection, DbConnectionInternal& connection)
+   in System.Data.ProviderBase.DbConnectionInternal.TryOpenConnectionInternal(DbConnection outerConnection, DbConnectionFactory connectionFactory, TaskCompletionSource`1 retry, DbConnectionOptions userOptions)
+   in System.Data.ProviderBase.DbConnectionClosed.TryOpenConnection(DbConnection outerConnection, DbConnectionFactory connectionFactory, TaskCompletionSource`1 retry, DbConnectionOptions userOptions)
+   in System.Data.SqlClient.SqlConnection.TryOpenInner(TaskCompletionSource`1 retry)
+   in System.Data.SqlClient.SqlConnection.TryOpen(TaskCompletionSource`1 retry)
+   in System.Data.SqlClient.SqlConnection.Open()
+   in WebAnalisys.Controllers.QueryController.Informations(Object obj) in C:\Andrea Fiorentini\WebAnalisys\WebServer\WebAnalisys\QueryController.cs:riga 352
+InnerException Type: System.ComponentModel.Win32Exception
+InnerException Message: Tempo di attesa scaduto
+InnerException StackTrace:
+
+--------------------------------------------------
+Date: 2026-06-18 15:36:31
+Caller Method: Informations
+Caller File: C:\Andrea Fiorentini\WebAnalisys\WebServer\WebAnalisys\QueryController.cs
+Caller Line: 371
+Error Method: System.Data.ProviderBase.DbConnectionPool.TryGetConnection
+Error File: 
+Error Line: 0
+Exception Type: System.Data.SqlClient.SqlException
+Message: Si è verificato un errore di rete o specifico dell'istanza mentre si cercava di stabilire una connessione con SQL Server. Il server non è stato trovato o non è accessibile. Verificare che il nome dell'istanza sia corretto e che SQL Server sia configurato in modo da consentire connessioni remote. (provider: TCP Provider, error: 0 - Tempo di attesa scaduto.)
+Source: .Net SqlClient Data Provider
+StackTrace:
+   in System.Data.ProviderBase.DbConnectionPool.TryGetConnection(DbConnection owningObject, UInt32 waitForMultipleObjectsTimeout, Boolean allowCreate, Boolean onlyOneCheckConnection, DbConnectionOptions userOptions, DbConnectionInternal& connection)
+   in System.Data.ProviderBase.DbConnectionPool.TryGetConnection(DbConnection owningObject, TaskCompletionSource`1 retry, DbConnectionOptions userOptions, DbConnectionInternal& connection)
+   in System.Data.ProviderBase.DbConnectionFactory.TryGetConnection(DbConnection owningConnection, TaskCompletionSource`1 retry, DbConnectionOptions userOptions, DbConnectionInternal oldConnection, DbConnectionInternal& connection)
+   in System.Data.ProviderBase.DbConnectionInternal.TryOpenConnectionInternal(DbConnection outerConnection, DbConnectionFactory connectionFactory, TaskCompletionSource`1 retry, DbConnectionOptions userOptions)
+   in System.Data.ProviderBase.DbConnectionClosed.TryOpenConnection(DbConnection outerConnection, DbConnectionFactory connectionFactory, TaskCompletionSource`1 retry, DbConnectionOptions userOptions)
+   in System.Data.SqlClient.SqlConnection.TryOpenInner(TaskCompletionSource`1 retry)
+   in System.Data.SqlClient.SqlConnection.TryOpen(TaskCompletionSource`1 retry)
+   in System.Data.SqlClient.SqlConnection.Open()
+   in WebAnalisys.Controllers.QueryController.Informations(Object obj) in C:\Andrea Fiorentini\WebAnalisys\WebServer\WebAnalisys\QueryController.cs:riga 352
+InnerException Type: System.ComponentModel.Win32Exception
+InnerException Message: Tempo di attesa scaduto
+InnerException StackTrace:
+
+--------------------------------------------------
+Date: 2026-06-18 15:36:32
+Caller Method: modelsinfo
+Caller File: C:\Andrea Fiorentini\WebAnalisys\WebServer\WebAnalisys\QueryController.cs
+Caller Line: 411
+Error Method: System.Data.ProviderBase.DbConnectionPool.TryGetConnection
+Error File: 
+Error Line: 0
+Exception Type: System.Data.SqlClient.SqlException
+Message: Si è verificato un errore di rete o specifico dell'istanza mentre si cercava di stabilire una connessione con SQL Server. Il server non è stato trovato o non è accessibile. Verificare che il nome dell'istanza sia corretto e che SQL Server sia configurato in modo da consentire connessioni remote. (provider: TCP Provider, error: 0 - Tempo di attesa scaduto.)
+Source: .Net SqlClient Data Provider
+StackTrace:
+   in System.Data.ProviderBase.DbConnectionPool.TryGetConnection(DbConnection owningObject, UInt32 waitForMultipleObjectsTimeout, Boolean allowCreate, Boolean onlyOneCheckConnection, DbConnectionOptions userOptions, DbConnectionInternal& connection)
+   in System.Data.ProviderBase.DbConnectionPool.TryGetConnection(DbConnection owningObject, TaskCompletionSource`1 retry, DbConnectionOptions userOptions, DbConnectionInternal& connection)
+   in System.Data.ProviderBase.DbConnectionFactory.TryGetConnection(DbConnection owningConnection, TaskCompletionSource`1 retry, DbConnectionOptions userOptions, DbConnectionInternal oldConnection, DbConnectionInternal& connection)
+   in System.Data.ProviderBase.DbConnectionInternal.TryOpenConnectionInternal(DbConnection outerConnection, DbConnectionFactory connectionFactory, TaskCompletionSource`1 retry, DbConnectionOptions userOptions)
+   in System.Data.ProviderBase.DbConnectionClosed.TryOpenConnection(DbConnection outerConnection, DbConnectionFactory connectionFactory, TaskCompletionSource`1 retry, DbConnectionOptions userOptions)
+   in System.Data.SqlClient.SqlConnection.TryOpenInner(TaskCompletionSource`1 retry)
+   in System.Data.SqlClient.SqlConnection.TryOpen(TaskCompletionSource`1 retry)
+   in System.Data.SqlClient.SqlConnection.Open()
+   in WebAnalisys.Controllers.QueryController.modelsinfo(Object obj) in C:\Andrea Fiorentini\WebAnalisys\WebServer\WebAnalisys\QueryController.cs:riga 392
+InnerException Type: System.ComponentModel.Win32Exception
+InnerException Message: Tempo di attesa scaduto
+InnerException StackTrace:
+
+--------------------------------------------------
+Date: 2026-06-18 15:36:32
+Caller Method: functionsinfo
+Caller File: C:\Andrea Fiorentini\WebAnalisys\WebServer\WebAnalisys\QueryController.cs
+Caller Line: 491
+Error Method: System.Data.ProviderBase.DbConnectionPool.TryGetConnection
+Error File: 
+Error Line: 0
+Exception Type: System.Data.SqlClient.SqlException
+Message: Si è verificato un errore di rete o specifico dell'istanza mentre si cercava di stabilire una connessione con SQL Server. Il server non è stato trovato o non è accessibile. Verificare che il nome dell'istanza sia corretto e che SQL Server sia configurato in modo da consentire connessioni remote. (provider: TCP Provider, error: 0 - Tempo di attesa scaduto.)
+Source: .Net SqlClient Data Provider
+StackTrace:
+   in System.Data.ProviderBase.DbConnectionPool.TryGetConnection(DbConnection owningObject, UInt32 waitForMultipleObjectsTimeout, Boolean allowCreate, Boolean onlyOneCheckConnection, DbConnectionOptions userOptions, DbConnectionInternal& connection)
+   in System.Data.ProviderBase.DbConnectionPool.TryGetConnection(DbConnection owningObject, TaskCompletionSource`1 retry, DbConnectionOptions userOptions, DbConnectionInternal& connection)
+   in System.Data.ProviderBase.DbConnectionFactory.TryGetConnection(DbConnection owningConnection, TaskCompletionSource`1 retry, DbConnectionOptions userOptions, DbConnectionInternal oldConnection, DbConnectionInternal& connection)
+   in System.Data.ProviderBase.DbConnectionInternal.TryOpenConnectionInternal(DbConnection outerConnection, DbConnectionFactory connectionFactory, TaskCompletionSource`1 retry, DbConnectionOptions userOptions)
+   in System.Data.ProviderBase.DbConnectionClosed.TryOpenConnection(DbConnection outerConnection, DbConnectionFactory connectionFactory, TaskCompletionSource`1 retry, DbConnectionOptions userOptions)
+   in System.Data.SqlClient.SqlConnection.TryOpenInner(TaskCompletionSource`1 retry)
+   in System.Data.SqlClient.SqlConnection.TryOpen(TaskCompletionSource`1 retry)
+   in System.Data.SqlClient.SqlConnection.Open()
+   in WebAnalisys.Controllers.QueryController.functionsinfo(Object obj) in C:\Andrea Fiorentini\WebAnalisys\WebServer\WebAnalisys\QueryController.cs:riga 472
+InnerException Type: System.ComponentModel.Win32Exception
+InnerException Message: Tempo di attesa scaduto
+InnerException StackTrace:
+
+--------------------------------------------------
+Date: 2026-06-18 15:36:32
+Caller Method: abortcodeinfo
+Caller File: C:\Andrea Fiorentini\WebAnalisys\WebServer\WebAnalisys\QueryController.cs
+Caller Line: 451
+Error Method: System.Data.ProviderBase.DbConnectionPool.TryGetConnection
+Error File: 
+Error Line: 0
+Exception Type: System.Data.SqlClient.SqlException
+Message: Si è verificato un errore di rete o specifico dell'istanza mentre si cercava di stabilire una connessione con SQL Server. Il server non è stato trovato o non è accessibile. Verificare che il nome dell'istanza sia corretto e che SQL Server sia configurato in modo da consentire connessioni remote. (provider: TCP Provider, error: 0 - Tempo di attesa scaduto.)
+Source: .Net SqlClient Data Provider
+StackTrace:
+   in System.Data.ProviderBase.DbConnectionPool.TryGetConnection(DbConnection owningObject, UInt32 waitForMultipleObjectsTimeout, Boolean allowCreate, Boolean onlyOneCheckConnection, DbConnectionOptions userOptions, DbConnectionInternal& connection)
+   in System.Data.ProviderBase.DbConnectionPool.TryGetConnection(DbConnection owningObject, TaskCompletionSource`1 retry, DbConnectionOptions userOptions, DbConnectionInternal& connection)
+   in System.Data.ProviderBase.DbConnectionFactory.TryGetConnection(DbConnection owningConnection, TaskCompletionSource`1 retry, DbConnectionOptions userOptions, DbConnectionInternal oldConnection, DbConnectionInternal& connection)
+   in System.Data.ProviderBase.DbConnectionInternal.TryOpenConnectionInternal(DbConnection outerConnection, DbConnectionFactory connectionFactory, TaskCompletionSource`1 retry, DbConnectionOptions userOptions)
+   in System.Data.ProviderBase.DbConnectionClosed.TryOpenConnection(DbConnection outerConnection, DbConnectionFactory connectionFactory, TaskCompletionSource`1 retry, DbConnectionOptions userOptions)
+   in System.Data.SqlClient.SqlConnection.TryOpenInner(TaskCompletionSource`1 retry)
+   in System.Data.SqlClient.SqlConnection.TryOpen(TaskCompletionSource`1 retry)
+   in System.Data.SqlClient.SqlConnection.Open()
+   in WebAnalisys.Controllers.QueryController.abortcodeinfo(Object obj) in C:\Andrea Fiorentini\WebAnalisys\WebServer\WebAnalisys\QueryController.cs:riga 432
+InnerException Type: System.ComponentModel.Win32Exception
+InnerException Message: Tempo di attesa scaduto
+InnerException StackTrace:
+
+--------------------------------------------------
+Date: 2026-06-18 15:36:52
+Caller Method: modelsinfo
+Caller File: C:\Andrea Fiorentini\WebAnalisys\WebServer\WebAnalisys\QueryController.cs
+Caller Line: 411
+Error Method: System.Data.ProviderBase.DbConnectionFactory.TryGetConnection
+Error File: 
+Error Line: 0
+Exception Type: System.InvalidOperationException
+Message: Timeout scaduto. Il tempo disponibile è scaduto prima di aver ottenuto la connessione dal pool.  Ciò potrebbe essere accaduto perché tutte le connessioni dal pool erano in uso ed era già stata raggiunta la dimensione massima del pool.
+Source: System.Data
+StackTrace:
+   in System.Data.ProviderBase.DbConnectionFactory.TryGetConnection(DbConnection owningConnection, TaskCompletionSource`1 retry, DbConnectionOptions userOptions, DbConnectionInternal oldConnection, DbConnectionInternal& connection)
+   in System.Data.ProviderBase.DbConnectionInternal.TryOpenConnectionInternal(DbConnection outerConnection, DbConnectionFactory connectionFactory, TaskCompletionSource`1 retry, DbConnectionOptions userOptions)
+   in System.Data.ProviderBase.DbConnectionClosed.TryOpenConnection(DbConnection outerConnection, DbConnectionFactory connectionFactory, TaskCompletionSource`1 retry, DbConnectionOptions userOptions)
+   in System.Data.SqlClient.SqlConnection.TryOpenInner(TaskCompletionSource`1 retry)
+   in System.Data.SqlClient.SqlConnection.TryOpen(TaskCompletionSource`1 retry)
+   in System.Data.SqlClient.SqlConnection.Open()
+   in WebAnalisys.Controllers.QueryController.modelsinfo(Object obj) in C:\Andrea Fiorentini\WebAnalisys\WebServer\WebAnalisys\QueryController.cs:riga 392
+--------------------------------------------------
+Date: 2026-06-18 15:36:52
+Caller Method: functionsinfo
+Caller File: C:\Andrea Fiorentini\WebAnalisys\WebServer\WebAnalisys\QueryController.cs
+Caller Line: 491
+Error Method: System.Data.ProviderBase.DbConnectionFactory.TryGetConnection
+Error File: 
+Error Line: 0
+Exception Type: System.InvalidOperationException
+Message: Timeout scaduto. Il tempo disponibile è scaduto prima di aver ottenuto la connessione dal pool.  Ciò potrebbe essere accaduto perché tutte le connessioni dal pool erano in uso ed era già stata raggiunta la dimensione massima del pool.
+Source: System.Data
+StackTrace:
+   in System.Data.ProviderBase.DbConnectionFactory.TryGetConnection(DbConnection owningConnection, TaskCompletionSource`1 retry, DbConnectionOptions userOptions, DbConnectionInternal oldConnection, DbConnectionInternal& connection)
+   in System.Data.ProviderBase.DbConnectionInternal.TryOpenConnectionInternal(DbConnection outerConnection, DbConnectionFactory connectionFactory, TaskCompletionSource`1 retry, DbConnectionOptions userOptions)
+   in System.Data.ProviderBase.DbConnectionClosed.TryOpenConnection(DbConnection outerConnection, DbConnectionFactory connectionFactory, TaskCompletionSource`1 retry, DbConnectionOptions userOptions)
+   in System.Data.SqlClient.SqlConnection.TryOpenInner(TaskCompletionSource`1 retry)
+   in System.Data.SqlClient.SqlConnection.TryOpen(TaskCompletionSource`1 retry)
+   in System.Data.SqlClient.SqlConnection.Open()
+   in WebAnalisys.Controllers.QueryController.functionsinfo(Object obj) in C:\Andrea Fiorentini\WebAnalisys\WebServer\WebAnalisys\QueryController.cs:riga 472
+--------------------------------------------------
+Date: 2026-06-18 15:36:52
+Caller Method: abortcodeinfo
+Caller File: C:\Andrea Fiorentini\WebAnalisys\WebServer\WebAnalisys\QueryController.cs
+Caller Line: 451
+Error Method: System.Data.ProviderBase.DbConnectionFactory.TryGetConnection
+Error File: 
+Error Line: 0
+Exception Type: System.InvalidOperationException
+Message: Timeout scaduto. Il tempo disponibile è scaduto prima di aver ottenuto la connessione dal pool.  Ciò potrebbe essere accaduto perché tutte le connessioni dal pool erano in uso ed era già stata raggiunta la dimensione massima del pool.
+Source: System.Data
+StackTrace:
+   in System.Data.ProviderBase.DbConnectionFactory.TryGetConnection(DbConnection owningConnection, TaskCompletionSource`1 retry, DbConnectionOptions userOptions, DbConnectionInternal oldConnection, DbConnectionInternal& connection)
+   in System.Data.ProviderBase.DbConnectionInternal.TryOpenConnectionInternal(DbConnection outerConnection, DbConnectionFactory connectionFactory, TaskCompletionSource`1 retry, DbConnectionOptions userOptions)
+   in System.Data.ProviderBase.DbConnectionClosed.TryOpenConnection(DbConnection outerConnection, DbConnectionFactory connectionFactory, TaskCompletionSource`1 retry, DbConnectionOptions userOptions)
+   in System.Data.SqlClient.SqlConnection.TryOpenInner(TaskCompletionSource`1 retry)
+   in System.Data.SqlClient.SqlConnection.TryOpen(TaskCompletionSource`1 retry)
+   in System.Data.SqlClient.SqlConnection.Open()
+   in WebAnalisys.Controllers.QueryController.abortcodeinfo(Object obj) in C:\Andrea Fiorentini\WebAnalisys\WebServer\WebAnalisys\QueryController.cs:riga 432
+--------------------------------------------------
+Date: 2026-06-18 15:36:52
+Caller Method: functionsinfo
+Caller File: C:\Andrea Fiorentini\WebAnalisys\WebServer\WebAnalisys\QueryController.cs
+Caller Line: 491
+Error Method: System.Data.ProviderBase.DbConnectionPool.TryGetConnection
+Error File: 
+Error Line: 0
+Exception Type: System.Data.SqlClient.SqlException
+Message: Si è verificato un errore di rete o specifico dell'istanza mentre si cercava di stabilire una connessione con SQL Server. Il server non è stato trovato o non è accessibile. Verificare che il nome dell'istanza sia corretto e che SQL Server sia configurato in modo da consentire connessioni remote. (provider: TCP Provider, error: 0 - Tempo di attesa scaduto.)
+Source: .Net SqlClient Data Provider
+StackTrace:
+   in System.Data.ProviderBase.DbConnectionPool.TryGetConnection(DbConnection owningObject, UInt32 waitForMultipleObjectsTimeout, Boolean allowCreate, Boolean onlyOneCheckConnection, DbConnectionOptions userOptions, DbConnectionInternal& connection)
+   in System.Data.ProviderBase.DbConnectionPool.TryGetConnection(DbConnection owningObject, TaskCompletionSource`1 retry, DbConnectionOptions userOptions, DbConnectionInternal& connection)
+   in System.Data.ProviderBase.DbConnectionFactory.TryGetConnection(DbConnection owningConnection, TaskCompletionSource`1 retry, DbConnectionOptions userOptions, DbConnectionInternal oldConnection, DbConnectionInternal& connection)
+   in System.Data.ProviderBase.DbConnectionInternal.TryOpenConnectionInternal(DbConnection outerConnection, DbConnectionFactory connectionFactory, TaskCompletionSource`1 retry, DbConnectionOptions userOptions)
+   in System.Data.ProviderBase.DbConnectionClosed.TryOpenConnection(DbConnection outerConnection, DbConnectionFactory connectionFactory, TaskCompletionSource`1 retry, DbConnectionOptions userOptions)
+   in System.Data.SqlClient.SqlConnection.TryOpenInner(TaskCompletionSource`1 retry)
+   in System.Data.SqlClient.SqlConnection.TryOpen(TaskCompletionSource`1 retry)
+   in System.Data.SqlClient.SqlConnection.Open()
+   in WebAnalisys.Controllers.QueryController.functionsinfo(Object obj) in C:\Andrea Fiorentini\WebAnalisys\WebServer\WebAnalisys\QueryController.cs:riga 472
+InnerException Type: System.ComponentModel.Win32Exception
+InnerException Message: Tempo di attesa scaduto
+InnerException StackTrace:
+
+--------------------------------------------------
+Date: 2026-06-18 15:36:52
+Caller Method: modelsinfo
+Caller File: C:\Andrea Fiorentini\WebAnalisys\WebServer\WebAnalisys\QueryController.cs
+Caller Line: 411
+Error Method: System.Data.ProviderBase.DbConnectionPool.TryGetConnection
+Error File: 
+Error Line: 0
+Exception Type: System.Data.SqlClient.SqlException
+Message: Si è verificato un errore di rete o specifico dell'istanza mentre si cercava di stabilire una connessione con SQL Server. Il server non è stato trovato o non è accessibile. Verificare che il nome dell'istanza sia corretto e che SQL Server sia configurato in modo da consentire connessioni remote. (provider: TCP Provider, error: 0 - Tempo di attesa scaduto.)
+Source: .Net SqlClient Data Provider
+StackTrace:
+   in System.Data.ProviderBase.DbConnectionPool.TryGetConnection(DbConnection owningObject, UInt32 waitForMultipleObjectsTimeout, Boolean allowCreate, Boolean onlyOneCheckConnection, DbConnectionOptions userOptions, DbConnectionInternal& connection)
+   in System.Data.ProviderBase.DbConnectionPool.TryGetConnection(DbConnection owningObject, TaskCompletionSource`1 retry, DbConnectionOptions userOptions, DbConnectionInternal& connection)
+   in System.Data.ProviderBase.DbConnectionFactory.TryGetConnection(DbConnection owningConnection, TaskCompletionSource`1 retry, DbConnectionOptions userOptions, DbConnectionInternal oldConnection, DbConnectionInternal& connection)
+   in System.Data.ProviderBase.DbConnectionInternal.TryOpenConnectionInternal(DbConnection outerConnection, DbConnectionFactory connectionFactory, TaskCompletionSource`1 retry, DbConnectionOptions userOptions)
+   in System.Data.ProviderBase.DbConnectionClosed.TryOpenConnection(DbConnection outerConnection, DbConnectionFactory connectionFactory, TaskCompletionSource`1 retry, DbConnectionOptions userOptions)
+   in System.Data.SqlClient.SqlConnection.TryOpenInner(TaskCompletionSource`1 retry)
+   in System.Data.SqlClient.SqlConnection.TryOpen(TaskCompletionSource`1 retry)
+   in System.Data.SqlClient.SqlConnection.Open()
+   in WebAnalisys.Controllers.QueryController.modelsinfo(Object obj) in C:\Andrea Fiorentini\WebAnalisys\WebServer\WebAnalisys\QueryController.cs:riga 392
+InnerException Type: System.ComponentModel.Win32Exception
+InnerException Message: Tempo di attesa scaduto
+InnerException StackTrace:
+
+--------------------------------------------------
+Date: 2026-06-18 15:36:52
+Caller Method: abortcodeinfo
+Caller File: C:\Andrea Fiorentini\WebAnalisys\WebServer\WebAnalisys\QueryController.cs
+Caller Line: 451
+Error Method: System.Data.ProviderBase.DbConnectionPool.TryGetConnection
+Error File: 
+Error Line: 0
+Exception Type: System.Data.SqlClient.SqlException
+Message: Si è verificato un errore di rete o specifico dell'istanza mentre si cercava di stabilire una connessione con SQL Server. Il server non è stato trovato o non è accessibile. Verificare che il nome dell'istanza sia corretto e che SQL Server sia configurato in modo da consentire connessioni remote. (provider: TCP Provider, error: 0 - Tempo di attesa scaduto.)
+Source: .Net SqlClient Data Provider
+StackTrace:
+   in System.Data.ProviderBase.DbConnectionPool.TryGetConnection(DbConnection owningObject, UInt32 waitForMultipleObjectsTimeout, Boolean allowCreate, Boolean onlyOneCheckConnection, DbConnectionOptions userOptions, DbConnectionInternal& connection)
+   in System.Data.ProviderBase.DbConnectionPool.TryGetConnection(DbConnection owningObject, TaskCompletionSource`1 retry, DbConnectionOptions userOptions, DbConnectionInternal& connection)
+   in System.Data.ProviderBase.DbConnectionFactory.TryGetConnection(DbConnection owningConnection, TaskCompletionSource`1 retry, DbConnectionOptions userOptions, DbConnectionInternal oldConnection, DbConnectionInternal& connection)
+   in System.Data.ProviderBase.DbConnectionInternal.TryOpenConnectionInternal(DbConnection outerConnection, DbConnectionFactory connectionFactory, TaskCompletionSource`1 retry, DbConnectionOptions userOptions)
+   in System.Data.ProviderBase.DbConnectionClosed.TryOpenConnection(DbConnection outerConnection, DbConnectionFactory connectionFactory, TaskCompletionSource`1 retry, DbConnectionOptions userOptions)
+   in System.Data.SqlClient.SqlConnection.TryOpenInner(TaskCompletionSource`1 retry)
+   in System.Data.SqlClient.SqlConnection.TryOpen(TaskCompletionSource`1 retry)
+   in System.Data.SqlClient.SqlConnection.Open()
+   in WebAnalisys.Controllers.QueryController.abortcodeinfo(Object obj) in C:\Andrea Fiorentini\WebAnalisys\WebServer\WebAnalisys\QueryController.cs:riga 432
+InnerException Type: System.ComponentModel.Win32Exception
+InnerException Message: Tempo di attesa scaduto
+InnerException StackTrace:
+
+--------------------------------------------------
+Date: 2026-06-18 15:36:52
+Caller Method: Informations
+Caller File: C:\Andrea Fiorentini\WebAnalisys\WebServer\WebAnalisys\QueryController.cs
+Caller Line: 371
+Error Method: System.Data.SqlClient.SqlInternalConnectionTds..ctor
+Error File: 
+Error Line: 0
+Exception Type: System.Data.SqlClient.SqlException
+Message: Si è verificato un errore di rete o specifico dell'istanza mentre si cercava di stabilire una connessione con SQL Server. Il server non è stato trovato o non è accessibile. Verificare che il nome dell'istanza sia corretto e che SQL Server sia configurato in modo da consentire connessioni remote. (provider: TCP Provider, error: 0 - Tempo di attesa scaduto.)
+Source: .Net SqlClient Data Provider
+StackTrace:
+   in System.Data.SqlClient.SqlInternalConnectionTds..ctor(DbConnectionPoolIdentity identity, SqlConnectionString connectionOptions, SqlCredential credential, Object providerInfo, String newPassword, SecureString newSecurePassword, Boolean redirectedUserInstance, SqlConnectionString userConnectionOptions, SessionData reconnectSessionData, DbConnectionPool pool, String accessToken, Boolean applyTransientFaultHandling, SqlAuthenticationProviderManager sqlAuthProviderManager)
+   in System.Data.SqlClient.SqlConnectionFactory.CreateConnection(DbConnectionOptions options, DbConnectionPoolKey poolKey, Object poolGroupProviderInfo, DbConnectionPool pool, DbConnection owningConnection, DbConnectionOptions userOptions)
+   in System.Data.ProviderBase.DbConnectionFactory.CreatePooledConnection(DbConnectionPool pool, DbConnection owningObject, DbConnectionOptions options, DbConnectionPoolKey poolKey, DbConnectionOptions userOptions)
+   in System.Data.ProviderBase.DbConnectionPool.CreateObject(DbConnection owningObject, DbConnectionOptions userOptions, DbConnectionInternal oldConnection)
+   in System.Data.ProviderBase.DbConnectionPool.UserCreateRequest(DbConnection owningObject, DbConnectionOptions userOptions, DbConnectionInternal oldConnection)
+   in System.Data.ProviderBase.DbConnectionPool.TryGetConnection(DbConnection owningObject, UInt32 waitForMultipleObjectsTimeout, Boolean allowCreate, Boolean onlyOneCheckConnection, DbConnectionOptions userOptions, DbConnectionInternal& connection)
+   in System.Data.ProviderBase.DbConnectionPool.TryGetConnection(DbConnection owningObject, TaskCompletionSource`1 retry, DbConnectionOptions userOptions, DbConnectionInternal& connection)
+   in System.Data.ProviderBase.DbConnectionFactory.TryGetConnection(DbConnection owningConnection, TaskCompletionSource`1 retry, DbConnectionOptions userOptions, DbConnectionInternal oldConnection, DbConnectionInternal& connection)
+   in System.Data.ProviderBase.DbConnectionInternal.TryOpenConnectionInternal(DbConnection outerConnection, DbConnectionFactory connectionFactory, TaskCompletionSource`1 retry, DbConnectionOptions userOptions)
+   in System.Data.ProviderBase.DbConnectionClosed.TryOpenConnection(DbConnection outerConnection, DbConnectionFactory connectionFactory, TaskCompletionSource`1 retry, DbConnectionOptions userOptions)
+   in System.Data.SqlClient.SqlConnection.TryOpenInner(TaskCompletionSource`1 retry)
+   in System.Data.SqlClient.SqlConnection.TryOpen(TaskCompletionSource`1 retry)
+   in System.Data.SqlClient.SqlConnection.Open()
+   in WebAnalisys.Controllers.QueryController.Informations(Object obj) in C:\Andrea Fiorentini\WebAnalisys\WebServer\WebAnalisys\QueryController.cs:riga 352
+InnerException Type: System.ComponentModel.Win32Exception
+InnerException Message: Tempo di attesa scaduto
+InnerException StackTrace:
+
+--------------------------------------------------
+Date: 2026-06-18 15:36:52
+Caller Method: Informations
+Caller File: C:\Andrea Fiorentini\WebAnalisys\WebServer\WebAnalisys\QueryController.cs
+Caller Line: 371
+Error Method: System.Data.ProviderBase.DbConnectionPool.TryGetConnection
+Error File: 
+Error Line: 0
+Exception Type: System.Data.SqlClient.SqlException
+Message: Si è verificato un errore di rete o specifico dell'istanza mentre si cercava di stabilire una connessione con SQL Server. Il server non è stato trovato o non è accessibile. Verificare che il nome dell'istanza sia corretto e che SQL Server sia configurato in modo da consentire connessioni remote. (provider: TCP Provider, error: 0 - Tempo di attesa scaduto.)
+Source: .Net SqlClient Data Provider
+StackTrace:
+   in System.Data.ProviderBase.DbConnectionPool.TryGetConnection(DbConnection owningObject, UInt32 waitForMultipleObjectsTimeout, Boolean allowCreate, Boolean onlyOneCheckConnection, DbConnectionOptions userOptions, DbConnectionInternal& connection)
+   in System.Data.ProviderBase.DbConnectionPool.TryGetConnection(DbConnection owningObject, TaskCompletionSource`1 retry, DbConnectionOptions userOptions, DbConnectionInternal& connection)
+   in System.Data.ProviderBase.DbConnectionFactory.TryGetConnection(DbConnection owningConnection, TaskCompletionSource`1 retry, DbConnectionOptions userOptions, DbConnectionInternal oldConnection, DbConnectionInternal& connection)
+   in System.Data.ProviderBase.DbConnectionInternal.TryOpenConnectionInternal(DbConnection outerConnection, DbConnectionFactory connectionFactory, TaskCompletionSource`1 retry, DbConnectionOptions userOptions)
+   in System.Data.ProviderBase.DbConnectionClosed.TryOpenConnection(DbConnection outerConnection, DbConnectionFactory connectionFactory, TaskCompletionSource`1 retry, DbConnectionOptions userOptions)
+   in System.Data.SqlClient.SqlConnection.TryOpenInner(TaskCompletionSource`1 retry)
+   in System.Data.SqlClient.SqlConnection.TryOpen(TaskCompletionSource`1 retry)
+   in System.Data.SqlClient.SqlConnection.Open()
+   in WebAnalisys.Controllers.QueryController.Informations(Object obj) in C:\Andrea Fiorentini\WebAnalisys\WebServer\WebAnalisys\QueryController.cs:riga 352
+InnerException Type: System.ComponentModel.Win32Exception
+InnerException Message: Tempo di attesa scaduto
+InnerException StackTrace:
+
+--------------------------------------------------
+Date: 2026-06-18 15:36:57
+Caller Method: Informations
+Caller File: C:\Andrea Fiorentini\WebAnalisys\WebServer\WebAnalisys\QueryController.cs
+Caller Line: 371
+Error Method: System.Data.ProviderBase.DbConnectionPool.TryGetConnection
+Error File: 
+Error Line: 0
+Exception Type: System.Data.SqlClient.SqlException
+Message: Si è verificato un errore di rete o specifico dell'istanza mentre si cercava di stabilire una connessione con SQL Server. Il server non è stato trovato o non è accessibile. Verificare che il nome dell'istanza sia corretto e che SQL Server sia configurato in modo da consentire connessioni remote. (provider: TCP Provider, error: 0 - Tempo di attesa scaduto.)
+Source: .Net SqlClient Data Provider
+StackTrace:
+   in System.Data.ProviderBase.DbConnectionPool.TryGetConnection(DbConnection owningObject, UInt32 waitForMultipleObjectsTimeout, Boolean allowCreate, Boolean onlyOneCheckConnection, DbConnectionOptions userOptions, DbConnectionInternal& connection)
+   in System.Data.ProviderBase.DbConnectionPool.TryGetConnection(DbConnection owningObject, TaskCompletionSource`1 retry, DbConnectionOptions userOptions, DbConnectionInternal& connection)
+   in System.Data.ProviderBase.DbConnectionFactory.TryGetConnection(DbConnection owningConnection, TaskCompletionSource`1 retry, DbConnectionOptions userOptions, DbConnectionInternal oldConnection, DbConnectionInternal& connection)
+   in System.Data.ProviderBase.DbConnectionInternal.TryOpenConnectionInternal(DbConnection outerConnection, DbConnectionFactory connectionFactory, TaskCompletionSource`1 retry, DbConnectionOptions userOptions)
+   in System.Data.ProviderBase.DbConnectionClosed.TryOpenConnection(DbConnection outerConnection, DbConnectionFactory connectionFactory, TaskCompletionSource`1 retry, DbConnectionOptions userOptions)
+   in System.Data.SqlClient.SqlConnection.TryOpenInner(TaskCompletionSource`1 retry)
+   in System.Data.SqlClient.SqlConnection.TryOpen(TaskCompletionSource`1 retry)
+   in System.Data.SqlClient.SqlConnection.Open()
+   in WebAnalisys.Controllers.QueryController.Informations(Object obj) in C:\Andrea Fiorentini\WebAnalisys\WebServer\WebAnalisys\QueryController.cs:riga 352
+InnerException Type: System.ComponentModel.Win32Exception
+InnerException Message: Tempo di attesa scaduto
+InnerException StackTrace:
+
+--------------------------------------------------
+Date: 2026-06-18 15:36:57
+Caller Method: functionsinfo
+Caller File: C:\Andrea Fiorentini\WebAnalisys\WebServer\WebAnalisys\QueryController.cs
+Caller Line: 491
+Error Method: System.Data.ProviderBase.DbConnectionPool.TryGetConnection
+Error File: 
+Error Line: 0
+Exception Type: System.Data.SqlClient.SqlException
+Message: Si è verificato un errore di rete o specifico dell'istanza mentre si cercava di stabilire una connessione con SQL Server. Il server non è stato trovato o non è accessibile. Verificare che il nome dell'istanza sia corretto e che SQL Server sia configurato in modo da consentire connessioni remote. (provider: TCP Provider, error: 0 - Tempo di attesa scaduto.)
+Source: .Net SqlClient Data Provider
+StackTrace:
+   in System.Data.ProviderBase.DbConnectionPool.TryGetConnection(DbConnection owningObject, UInt32 waitForMultipleObjectsTimeout, Boolean allowCreate, Boolean onlyOneCheckConnection, DbConnectionOptions userOptions, DbConnectionInternal& connection)
+   in System.Data.ProviderBase.DbConnectionPool.TryGetConnection(DbConnection owningObject, TaskCompletionSource`1 retry, DbConnectionOptions userOptions, DbConnectionInternal& connection)
+   in System.Data.ProviderBase.DbConnectionFactory.TryGetConnection(DbConnection owningConnection, TaskCompletionSource`1 retry, DbConnectionOptions userOptions, DbConnectionInternal oldConnection, DbConnectionInternal& connection)
+   in System.Data.ProviderBase.DbConnectionInternal.TryOpenConnectionInternal(DbConnection outerConnection, DbConnectionFactory connectionFactory, TaskCompletionSource`1 retry, DbConnectionOptions userOptions)
+   in System.Data.ProviderBase.DbConnectionClosed.TryOpenConnection(DbConnection outerConnection, DbConnectionFactory connectionFactory, TaskCompletionSource`1 retry, DbConnectionOptions userOptions)
+   in System.Data.SqlClient.SqlConnection.TryOpenInner(TaskCompletionSource`1 retry)
+   in System.Data.SqlClient.SqlConnection.TryOpen(TaskCompletionSource`1 retry)
+   in System.Data.SqlClient.SqlConnection.Open()
+   in WebAnalisys.Controllers.QueryController.functionsinfo(Object obj) in C:\Andrea Fiorentini\WebAnalisys\WebServer\WebAnalisys\QueryController.cs:riga 472
+InnerException Type: System.ComponentModel.Win32Exception
+InnerException Message: Tempo di attesa scaduto
+InnerException StackTrace:
+
+--------------------------------------------------
+Date: 2026-06-18 15:36:57
+Caller Method: modelsinfo
+Caller File: C:\Andrea Fiorentini\WebAnalisys\WebServer\WebAnalisys\QueryController.cs
+Caller Line: 411
+Error Method: System.Data.ProviderBase.DbConnectionPool.TryGetConnection
+Error File: 
+Error Line: 0
+Exception Type: System.Data.SqlClient.SqlException
+Message: Si è verificato un errore di rete o specifico dell'istanza mentre si cercava di stabilire una connessione con SQL Server. Il server non è stato trovato o non è accessibile. Verificare che il nome dell'istanza sia corretto e che SQL Server sia configurato in modo da consentire connessioni remote. (provider: TCP Provider, error: 0 - Tempo di attesa scaduto.)
+Source: .Net SqlClient Data Provider
+StackTrace:
+   in System.Data.ProviderBase.DbConnectionPool.TryGetConnection(DbConnection owningObject, UInt32 waitForMultipleObjectsTimeout, Boolean allowCreate, Boolean onlyOneCheckConnection, DbConnectionOptions userOptions, DbConnectionInternal& connection)
+   in System.Data.ProviderBase.DbConnectionPool.TryGetConnection(DbConnection owningObject, TaskCompletionSource`1 retry, DbConnectionOptions userOptions, DbConnectionInternal& connection)
+   in System.Data.ProviderBase.DbConnectionFactory.TryGetConnection(DbConnection owningConnection, TaskCompletionSource`1 retry, DbConnectionOptions userOptions, DbConnectionInternal oldConnection, DbConnectionInternal& connection)
+   in System.Data.ProviderBase.DbConnectionInternal.TryOpenConnectionInternal(DbConnection outerConnection, DbConnectionFactory connectionFactory, TaskCompletionSource`1 retry, DbConnectionOptions userOptions)
+   in System.Data.ProviderBase.DbConnectionClosed.TryOpenConnection(DbConnection outerConnection, DbConnectionFactory connectionFactory, TaskCompletionSource`1 retry, DbConnectionOptions userOptions)
+   in System.Data.SqlClient.SqlConnection.TryOpenInner(TaskCompletionSource`1 retry)
+   in System.Data.SqlClient.SqlConnection.TryOpen(TaskCompletionSource`1 retry)
+   in System.Data.SqlClient.SqlConnection.Open()
+   in WebAnalisys.Controllers.QueryController.modelsinfo(Object obj) in C:\Andrea Fiorentini\WebAnalisys\WebServer\WebAnalisys\QueryController.cs:riga 392
+InnerException Type: System.ComponentModel.Win32Exception
+InnerException Message: Tempo di attesa scaduto
+InnerException StackTrace:
+
+--------------------------------------------------
+Date: 2026-06-18 15:36:57
+Caller Method: abortcodeinfo
+Caller File: C:\Andrea Fiorentini\WebAnalisys\WebServer\WebAnalisys\QueryController.cs
+Caller Line: 451
+Error Method: System.Data.ProviderBase.DbConnectionPool.TryGetConnection
+Error File: 
+Error Line: 0
+Exception Type: System.Data.SqlClient.SqlException
+Message: Si è verificato un errore di rete o specifico dell'istanza mentre si cercava di stabilire una connessione con SQL Server. Il server non è stato trovato o non è accessibile. Verificare che il nome dell'istanza sia corretto e che SQL Server sia configurato in modo da consentire connessioni remote. (provider: TCP Provider, error: 0 - Tempo di attesa scaduto.)
+Source: .Net SqlClient Data Provider
+StackTrace:
+   in System.Data.ProviderBase.DbConnectionPool.TryGetConnection(DbConnection owningObject, UInt32 waitForMultipleObjectsTimeout, Boolean allowCreate, Boolean onlyOneCheckConnection, DbConnectionOptions userOptions, DbConnectionInternal& connection)
+   in System.Data.ProviderBase.DbConnectionPool.TryGetConnection(DbConnection owningObject, TaskCompletionSource`1 retry, DbConnectionOptions userOptions, DbConnectionInternal& connection)
+   in System.Data.ProviderBase.DbConnectionFactory.TryGetConnection(DbConnection owningConnection, TaskCompletionSource`1 retry, DbConnectionOptions userOptions, DbConnectionInternal oldConnection, DbConnectionInternal& connection)
+   in System.Data.ProviderBase.DbConnectionInternal.TryOpenConnectionInternal(DbConnection outerConnection, DbConnectionFactory connectionFactory, TaskCompletionSource`1 retry, DbConnectionOptions userOptions)
+   in System.Data.ProviderBase.DbConnectionClosed.TryOpenConnection(DbConnection outerConnection, DbConnectionFactory connectionFactory, TaskCompletionSource`1 retry, DbConnectionOptions userOptions)
+   in System.Data.SqlClient.SqlConnection.TryOpenInner(TaskCompletionSource`1 retry)
+   in System.Data.SqlClient.SqlConnection.TryOpen(TaskCompletionSource`1 retry)
+   in System.Data.SqlClient.SqlConnection.Open()
+   in WebAnalisys.Controllers.QueryController.abortcodeinfo(Object obj) in C:\Andrea Fiorentini\WebAnalisys\WebServer\WebAnalisys\QueryController.cs:riga 432
+InnerException Type: System.ComponentModel.Win32Exception
+InnerException Message: Tempo di attesa scaduto
+InnerException StackTrace:
+
+--------------------------------------------------
+Date: 2026-06-18 15:37:02
+Caller Method: Informations
+Caller File: C:\Andrea Fiorentini\WebAnalisys\WebServer\WebAnalisys\QueryController.cs
+Caller Line: 371
+Error Method: System.Data.ProviderBase.DbConnectionPool.TryGetConnection
+Error File: 
+Error Line: 0
+Exception Type: System.Data.SqlClient.SqlException
+Message: Si è verificato un errore di rete o specifico dell'istanza mentre si cercava di stabilire una connessione con SQL Server. Il server non è stato trovato o non è accessibile. Verificare che il nome dell'istanza sia corretto e che SQL Server sia configurato in modo da consentire connessioni remote. (provider: TCP Provider, error: 0 - Tempo di attesa scaduto.)
+Source: .Net SqlClient Data Provider
+StackTrace:
+   in System.Data.ProviderBase.DbConnectionPool.TryGetConnection(DbConnection owningObject, UInt32 waitForMultipleObjectsTimeout, Boolean allowCreate, Boolean onlyOneCheckConnection, DbConnectionOptions userOptions, DbConnectionInternal& connection)
+   in System.Data.ProviderBase.DbConnectionPool.TryGetConnection(DbConnection owningObject, TaskCompletionSource`1 retry, DbConnectionOptions userOptions, DbConnectionInternal& connection)
+   in System.Data.ProviderBase.DbConnectionFactory.TryGetConnection(DbConnection owningConnection, TaskCompletionSource`1 retry, DbConnectionOptions userOptions, DbConnectionInternal oldConnection, DbConnectionInternal& connection)
+   in System.Data.ProviderBase.DbConnectionInternal.TryOpenConnectionInternal(DbConnection outerConnection, DbConnectionFactory connectionFactory, TaskCompletionSource`1 retry, DbConnectionOptions userOptions)
+   in System.Data.ProviderBase.DbConnectionClosed.TryOpenConnection(DbConnection outerConnection, DbConnectionFactory connectionFactory, TaskCompletionSource`1 retry, DbConnectionOptions userOptions)
+   in System.Data.SqlClient.SqlConnection.TryOpenInner(TaskCompletionSource`1 retry)
+   in System.Data.SqlClient.SqlConnection.TryOpen(TaskCompletionSource`1 retry)
+   in System.Data.SqlClient.SqlConnection.Open()
+   in WebAnalisys.Controllers.QueryController.Informations(Object obj) in C:\Andrea Fiorentini\WebAnalisys\WebServer\WebAnalisys\QueryController.cs:riga 352
+InnerException Type: System.ComponentModel.Win32Exception
+InnerException Message: Tempo di attesa scaduto
+InnerException StackTrace:
+
+--------------------------------------------------
+Date: 2026-06-18 15:37:02
+Caller Method: abortcodeinfo
+Caller File: C:\Andrea Fiorentini\WebAnalisys\WebServer\WebAnalisys\QueryController.cs
+Caller Line: 451
+Error Method: System.Data.ProviderBase.DbConnectionPool.TryGetConnection
+Error File: 
+Error Line: 0
+Exception Type: System.Data.SqlClient.SqlException
+Message: Si è verificato un errore di rete o specifico dell'istanza mentre si cercava di stabilire una connessione con SQL Server. Il server non è stato trovato o non è accessibile. Verificare che il nome dell'istanza sia corretto e che SQL Server sia configurato in modo da consentire connessioni remote. (provider: TCP Provider, error: 0 - Tempo di attesa scaduto.)
+Source: .Net SqlClient Data Provider
+StackTrace:
+   in System.Data.ProviderBase.DbConnectionPool.TryGetConnection(DbConnection owningObject, UInt32 waitForMultipleObjectsTimeout, Boolean allowCreate, Boolean onlyOneCheckConnection, DbConnectionOptions userOptions, DbConnectionInternal& connection)
+   in System.Data.ProviderBase.DbConnectionPool.TryGetConnection(DbConnection owningObject, TaskCompletionSource`1 retry, DbConnectionOptions userOptions, DbConnectionInternal& connection)
+   in System.Data.ProviderBase.DbConnectionFactory.TryGetConnection(DbConnection owningConnection, TaskCompletionSource`1 retry, DbConnectionOptions userOptions, DbConnectionInternal oldConnection, DbConnectionInternal& connection)
+   in System.Data.ProviderBase.DbConnectionInternal.TryOpenConnectionInternal(DbConnection outerConnection, DbConnectionFactory connectionFactory, TaskCompletionSource`1 retry, DbConnectionOptions userOptions)
+   in System.Data.ProviderBase.DbConnectionClosed.TryOpenConnection(DbConnection outerConnection, DbConnectionFactory connectionFactory, TaskCompletionSource`1 retry, DbConnectionOptions userOptions)
+   in System.Data.SqlClient.SqlConnection.TryOpenInner(TaskCompletionSource`1 retry)
+   in System.Data.SqlClient.SqlConnection.TryOpen(TaskCompletionSource`1 retry)
+   in System.Data.SqlClient.SqlConnection.Open()
+   in WebAnalisys.Controllers.QueryController.abortcodeinfo(Object obj) in C:\Andrea Fiorentini\WebAnalisys\WebServer\WebAnalisys\QueryController.cs:riga 432
+InnerException Type: System.ComponentModel.Win32Exception
+InnerException Message: Tempo di attesa scaduto
+InnerException StackTrace:
+
+--------------------------------------------------
+Date: 2026-06-18 15:37:03
+Caller Method: modelsinfo
+Caller File: C:\Andrea Fiorentini\WebAnalisys\WebServer\WebAnalisys\QueryController.cs
+Caller Line: 411
+Error Method: System.Data.ProviderBase.DbConnectionPool.TryGetConnection
+Error File: 
+Error Line: 0
+Exception Type: System.Data.SqlClient.SqlException
+Message: Si è verificato un errore di rete o specifico dell'istanza mentre si cercava di stabilire una connessione con SQL Server. Il server non è stato trovato o non è accessibile. Verificare che il nome dell'istanza sia corretto e che SQL Server sia configurato in modo da consentire connessioni remote. (provider: TCP Provider, error: 0 - Tempo di attesa scaduto.)
+Source: .Net SqlClient Data Provider
+StackTrace:
+   in System.Data.ProviderBase.DbConnectionPool.TryGetConnection(DbConnection owningObject, UInt32 waitForMultipleObjectsTimeout, Boolean allowCreate, Boolean onlyOneCheckConnection, DbConnectionOptions userOptions, DbConnectionInternal& connection)
+   in System.Data.ProviderBase.DbConnectionPool.TryGetConnection(DbConnection owningObject, TaskCompletionSource`1 retry, DbConnectionOptions userOptions, DbConnectionInternal& connection)
+   in System.Data.ProviderBase.DbConnectionFactory.TryGetConnection(DbConnection owningConnection, TaskCompletionSource`1 retry, DbConnectionOptions userOptions, DbConnectionInternal oldConnection, DbConnectionInternal& connection)
+   in System.Data.ProviderBase.DbConnectionInternal.TryOpenConnectionInternal(DbConnection outerConnection, DbConnectionFactory connectionFactory, TaskCompletionSource`1 retry, DbConnectionOptions userOptions)
+   in System.Data.ProviderBase.DbConnectionClosed.TryOpenConnection(DbConnection outerConnection, DbConnectionFactory connectionFactory, TaskCompletionSource`1 retry, DbConnectionOptions userOptions)
+   in System.Data.SqlClient.SqlConnection.TryOpenInner(TaskCompletionSource`1 retry)
+   in System.Data.SqlClient.SqlConnection.TryOpen(TaskCompletionSource`1 retry)
+   in System.Data.SqlClient.SqlConnection.Open()
+   in WebAnalisys.Controllers.QueryController.modelsinfo(Object obj) in C:\Andrea Fiorentini\WebAnalisys\WebServer\WebAnalisys\QueryController.cs:riga 392
+InnerException Type: System.ComponentModel.Win32Exception
+InnerException Message: Tempo di attesa scaduto
+InnerException StackTrace:
+
+--------------------------------------------------
+Date: 2026-06-18 15:37:03
+Caller Method: functionsinfo
+Caller File: C:\Andrea Fiorentini\WebAnalisys\WebServer\WebAnalisys\QueryController.cs
+Caller Line: 491
+Error Method: System.Data.ProviderBase.DbConnectionPool.TryGetConnection
+Error File: 
+Error Line: 0
+Exception Type: System.Data.SqlClient.SqlException
+Message: Si è verificato un errore di rete o specifico dell'istanza mentre si cercava di stabilire una connessione con SQL Server. Il server non è stato trovato o non è accessibile. Verificare che il nome dell'istanza sia corretto e che SQL Server sia configurato in modo da consentire connessioni remote. (provider: TCP Provider, error: 0 - Tempo di attesa scaduto.)
+Source: .Net SqlClient Data Provider
+StackTrace:
+   in System.Data.ProviderBase.DbConnectionPool.TryGetConnection(DbConnection owningObject, UInt32 waitForMultipleObjectsTimeout, Boolean allowCreate, Boolean onlyOneCheckConnection, DbConnectionOptions userOptions, DbConnectionInternal& connection)
+   in System.Data.ProviderBase.DbConnectionPool.TryGetConnection(DbConnection owningObject, TaskCompletionSource`1 retry, DbConnectionOptions userOptions, DbConnectionInternal& connection)
+   in System.Data.ProviderBase.DbConnectionFactory.TryGetConnection(DbConnection owningConnection, TaskCompletionSource`1 retry, DbConnectionOptions userOptions, DbConnectionInternal oldConnection, DbConnectionInternal& connection)
+   in System.Data.ProviderBase.DbConnectionInternal.TryOpenConnectionInternal(DbConnection outerConnection, DbConnectionFactory connectionFactory, TaskCompletionSource`1 retry, DbConnectionOptions userOptions)
+   in System.Data.ProviderBase.DbConnectionClosed.TryOpenConnection(DbConnection outerConnection, DbConnectionFactory connectionFactory, TaskCompletionSource`1 retry, DbConnectionOptions userOptions)
+   in System.Data.SqlClient.SqlConnection.TryOpenInner(TaskCompletionSource`1 retry)
+   in System.Data.SqlClient.SqlConnection.TryOpen(TaskCompletionSource`1 retry)
+   in System.Data.SqlClient.SqlConnection.Open()
+   in WebAnalisys.Controllers.QueryController.functionsinfo(Object obj) in C:\Andrea Fiorentini\WebAnalisys\WebServer\WebAnalisys\QueryController.cs:riga 472
+InnerException Type: System.ComponentModel.Win32Exception
+InnerException Message: Tempo di attesa scaduto
+InnerException StackTrace:
+
+--------------------------------------------------
+Date: 2026-06-18 15:37:08
+Caller Method: Informations
+Caller File: C:\Andrea Fiorentini\WebAnalisys\WebServer\WebAnalisys\QueryController.cs
+Caller Line: 371
+Error Method: System.Data.ProviderBase.DbConnectionPool.TryGetConnection
+Error File: 
+Error Line: 0
+Exception Type: System.Data.SqlClient.SqlException
+Message: Si è verificato un errore di rete o specifico dell'istanza mentre si cercava di stabilire una connessione con SQL Server. Il server non è stato trovato o non è accessibile. Verificare che il nome dell'istanza sia corretto e che SQL Server sia configurato in modo da consentire connessioni remote. (provider: TCP Provider, error: 0 - Tempo di attesa scaduto.)
+Source: .Net SqlClient Data Provider
+StackTrace:
+   in System.Data.ProviderBase.DbConnectionPool.TryGetConnection(DbConnection owningObject, UInt32 waitForMultipleObjectsTimeout, Boolean allowCreate, Boolean onlyOneCheckConnection, DbConnectionOptions userOptions, DbConnectionInternal& connection)
+   in System.Data.ProviderBase.DbConnectionPool.TryGetConnection(DbConnection owningObject, TaskCompletionSource`1 retry, DbConnectionOptions userOptions, DbConnectionInternal& connection)
+   in System.Data.ProviderBase.DbConnectionFactory.TryGetConnection(DbConnection owningConnection, TaskCompletionSource`1 retry, DbConnectionOptions userOptions, DbConnectionInternal oldConnection, DbConnectionInternal& connection)
+   in System.Data.ProviderBase.DbConnectionInternal.TryOpenConnectionInternal(DbConnection outerConnection, DbConnectionFactory connectionFactory, TaskCompletionSource`1 retry, DbConnectionOptions userOptions)
+   in System.Data.ProviderBase.DbConnectionClosed.TryOpenConnection(DbConnection outerConnection, DbConnectionFactory connectionFactory, TaskCompletionSource`1 retry, DbConnectionOptions userOptions)
+   in System.Data.SqlClient.SqlConnection.TryOpenInner(TaskCompletionSource`1 retry)
+   in System.Data.SqlClient.SqlConnection.TryOpen(TaskCompletionSource`1 retry)
+   in System.Data.SqlClient.SqlConnection.Open()
+   in WebAnalisys.Controllers.QueryController.Informations(Object obj) in C:\Andrea Fiorentini\WebAnalisys\WebServer\WebAnalisys\QueryController.cs:riga 352
+InnerException Type: System.ComponentModel.Win32Exception
+InnerException Message: Tempo di attesa scaduto
+InnerException StackTrace:
+
+--------------------------------------------------
+Date: 2026-06-18 15:37:08
+Caller Method: modelsinfo
+Caller File: C:\Andrea Fiorentini\WebAnalisys\WebServer\WebAnalisys\QueryController.cs
+Caller Line: 411
+Error Method: System.Data.ProviderBase.DbConnectionPool.TryGetConnection
+Error File: 
+Error Line: 0
+Exception Type: System.Data.SqlClient.SqlException
+Message: Si è verificato un errore di rete o specifico dell'istanza mentre si cercava di stabilire una connessione con SQL Server. Il server non è stato trovato o non è accessibile. Verificare che il nome dell'istanza sia corretto e che SQL Server sia configurato in modo da consentire connessioni remote. (provider: TCP Provider, error: 0 - Tempo di attesa scaduto.)
+Source: .Net SqlClient Data Provider
+StackTrace:
+   in System.Data.ProviderBase.DbConnectionPool.TryGetConnection(DbConnection owningObject, UInt32 waitForMultipleObjectsTimeout, Boolean allowCreate, Boolean onlyOneCheckConnection, DbConnectionOptions userOptions, DbConnectionInternal& connection)
+   in System.Data.ProviderBase.DbConnectionPool.TryGetConnection(DbConnection owningObject, TaskCompletionSource`1 retry, DbConnectionOptions userOptions, DbConnectionInternal& connection)
+   in System.Data.ProviderBase.DbConnectionFactory.TryGetConnection(DbConnection owningConnection, TaskCompletionSource`1 retry, DbConnectionOptions userOptions, DbConnectionInternal oldConnection, DbConnectionInternal& connection)
+   in System.Data.ProviderBase.DbConnectionInternal.TryOpenConnectionInternal(DbConnection outerConnection, DbConnectionFactory connectionFactory, TaskCompletionSource`1 retry, DbConnectionOptions userOptions)
+   in System.Data.ProviderBase.DbConnectionClosed.TryOpenConnection(DbConnection outerConnection, DbConnectionFactory connectionFactory, TaskCompletionSource`1 retry, DbConnectionOptions userOptions)
+   in System.Data.SqlClient.SqlConnection.TryOpenInner(TaskCompletionSource`1 retry)
+   in System.Data.SqlClient.SqlConnection.TryOpen(TaskCompletionSource`1 retry)
+   in System.Data.SqlClient.SqlConnection.Open()
+   in WebAnalisys.Controllers.QueryController.modelsinfo(Object obj) in C:\Andrea Fiorentini\WebAnalisys\WebServer\WebAnalisys\QueryController.cs:riga 392
+InnerException Type: System.ComponentModel.Win32Exception
+InnerException Message: Tempo di attesa scaduto
+InnerException StackTrace:
+
+--------------------------------------------------
+Date: 2026-06-18 15:37:08
+Caller Method: functionsinfo
+Caller File: C:\Andrea Fiorentini\WebAnalisys\WebServer\WebAnalisys\QueryController.cs
+Caller Line: 491
+Error Method: System.Data.ProviderBase.DbConnectionPool.TryGetConnection
+Error File: 
+Error Line: 0
+Exception Type: System.Data.SqlClient.SqlException
+Message: Si è verificato un errore di rete o specifico dell'istanza mentre si cercava di stabilire una connessione con SQL Server. Il server non è stato trovato o non è accessibile. Verificare che il nome dell'istanza sia corretto e che SQL Server sia configurato in modo da consentire connessioni remote. (provider: TCP Provider, error: 0 - Tempo di attesa scaduto.)
+Source: .Net SqlClient Data Provider
+StackTrace:
+   in System.Data.ProviderBase.DbConnectionPool.TryGetConnection(DbConnection owningObject, UInt32 waitForMultipleObjectsTimeout, Boolean allowCreate, Boolean onlyOneCheckConnection, DbConnectionOptions userOptions, DbConnectionInternal& connection)
+   in System.Data.ProviderBase.DbConnectionPool.TryGetConnection(DbConnection owningObject, TaskCompletionSource`1 retry, DbConnectionOptions userOptions, DbConnectionInternal& connection)
+   in System.Data.ProviderBase.DbConnectionFactory.TryGetConnection(DbConnection owningConnection, TaskCompletionSource`1 retry, DbConnectionOptions userOptions, DbConnectionInternal oldConnection, DbConnectionInternal& connection)
+   in System.Data.ProviderBase.DbConnectionInternal.TryOpenConnectionInternal(DbConnection outerConnection, DbConnectionFactory connectionFactory, TaskCompletionSource`1 retry, DbConnectionOptions userOptions)
+   in System.Data.ProviderBase.DbConnectionClosed.TryOpenConnection(DbConnection outerConnection, DbConnectionFactory connectionFactory, TaskCompletionSource`1 retry, DbConnectionOptions userOptions)
+   in System.Data.SqlClient.SqlConnection.TryOpenInner(TaskCompletionSource`1 retry)
+   in System.Data.SqlClient.SqlConnection.TryOpen(TaskCompletionSource`1 retry)
+   in System.Data.SqlClient.SqlConnection.Open()
+   in WebAnalisys.Controllers.QueryController.functionsinfo(Object obj) in C:\Andrea Fiorentini\WebAnalisys\WebServer\WebAnalisys\QueryController.cs:riga 472
+InnerException Type: System.ComponentModel.Win32Exception
+InnerException Message: Tempo di attesa scaduto
+InnerException StackTrace:
+
+--------------------------------------------------
+Date: 2026-06-18 15:37:08
+Caller Method: abortcodeinfo
+Caller File: C:\Andrea Fiorentini\WebAnalisys\WebServer\WebAnalisys\QueryController.cs
+Caller Line: 451
+Error Method: System.Data.ProviderBase.DbConnectionPool.TryGetConnection
+Error File: 
+Error Line: 0
+Exception Type: System.Data.SqlClient.SqlException
+Message: Si è verificato un errore di rete o specifico dell'istanza mentre si cercava di stabilire una connessione con SQL Server. Il server non è stato trovato o non è accessibile. Verificare che il nome dell'istanza sia corretto e che SQL Server sia configurato in modo da consentire connessioni remote. (provider: TCP Provider, error: 0 - Tempo di attesa scaduto.)
+Source: .Net SqlClient Data Provider
+StackTrace:
+   in System.Data.ProviderBase.DbConnectionPool.TryGetConnection(DbConnection owningObject, UInt32 waitForMultipleObjectsTimeout, Boolean allowCreate, Boolean onlyOneCheckConnection, DbConnectionOptions userOptions, DbConnectionInternal& connection)
+   in System.Data.ProviderBase.DbConnectionPool.TryGetConnection(DbConnection owningObject, TaskCompletionSource`1 retry, DbConnectionOptions userOptions, DbConnectionInternal& connection)
+   in System.Data.ProviderBase.DbConnectionFactory.TryGetConnection(DbConnection owningConnection, TaskCompletionSource`1 retry, DbConnectionOptions userOptions, DbConnectionInternal oldConnection, DbConnectionInternal& connection)
+   in System.Data.ProviderBase.DbConnectionInternal.TryOpenConnectionInternal(DbConnection outerConnection, DbConnectionFactory connectionFactory, TaskCompletionSource`1 retry, DbConnectionOptions userOptions)
+   in System.Data.ProviderBase.DbConnectionClosed.TryOpenConnection(DbConnection outerConnection, DbConnectionFactory connectionFactory, TaskCompletionSource`1 retry, DbConnectionOptions userOptions)
+   in System.Data.SqlClient.SqlConnection.TryOpenInner(TaskCompletionSource`1 retry)
+   in System.Data.SqlClient.SqlConnection.TryOpen(TaskCompletionSource`1 retry)
+   in System.Data.SqlClient.SqlConnection.Open()
+   in WebAnalisys.Controllers.QueryController.abortcodeinfo(Object obj) in C:\Andrea Fiorentini\WebAnalisys\WebServer\WebAnalisys\QueryController.cs:riga 432
+InnerException Type: System.ComponentModel.Win32Exception
+InnerException Message: Tempo di attesa scaduto
+InnerException StackTrace:
+

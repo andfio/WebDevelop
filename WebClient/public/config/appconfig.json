@@ -506,7 +506,8 @@
     ]
   },
   "httpconfig": {
-    "baseurl": "http://localhost:61694/api"
+    "baseurl": "http://localhost:61694/api",
+    "numretry": "10"
   },
   "chartseries": { 
     "axistypes": "0;2;3;4",

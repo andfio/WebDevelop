@@ -6,6 +6,7 @@ export interface Filters {
 }
 export interface httpconfig {
     baseurl: string;
+    numretry: string;
 }
 export interface Columns {
     name: string;
@@ -94,4 +95,9 @@ export interface chartseries {
     axistypes: string;
     axisposition: string;
     axisregulatoroffset: string;
+}
+
+export enum titleprogressBar {
+    search = 'Please wait, searching...',
+    httpRetry = 'Server not available. \n\r Recovery attempt in progress...'
 }
