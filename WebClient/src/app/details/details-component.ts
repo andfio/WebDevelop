@@ -109,6 +109,10 @@ background: any;
         // console.log("RISULTATO BACKEND:", data);
         this.results = data; 
 
+        if(!Array.isArray(this.results)) {
+           throw new Error('Risposta backend non valida');
+        }
+
         this.detailsState.rowData = this.row;
         this.detailsState.unitsInfo = this.unitsInfo;
         this.detailsState.functionsInfo = this.functionsInfo;
@@ -118,6 +122,7 @@ background: any;
         this.subShowIcon();
       },
       error: (err) => {
+        this.showDialog(err.userMessage, "Error");
         console.error("ERRORE BACKEND DETAILS:", err);
       }
     });
@@ -707,12 +712,16 @@ background: any;
       next: (data: any) => {
         console.log("MEASURES INFO:", data);
         this.measuresinfo = data;
+        if(!Array.isArray(this.measuresinfo)) {
+           throw new Error('Risposta backend non valida');
+        }
         if (!this.subChartDialogShow()) {
           configSaved = false;
         }
         configSaved = true;
       },
       error: (err) => {
+        this.showDialog(err.userMessage, "Error");
         console.error("ERRORE BACKEND:", err);
         configSaved = false;
       }

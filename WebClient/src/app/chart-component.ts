@@ -117,6 +117,8 @@ export class ChartComponent {
   MeasurColl: number[][] = [];
 
   defaultMeasureIDs: number[] = [];
+
+  sleep = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
   
   ngOnInit() {
     this.rowData = this.buildrowData(history.state.rootData);
@@ -242,12 +244,24 @@ export class ChartComponent {
 
     this.http.post(this.httpConfig.baseurl + '/query/acquisitionstring', payload).subscribe({
       next: (data: any) => {
+
         this.chartData = data;
         this.MeasureID = this.chartData.MeasurID;
         this.MeasurColl = this.chartData.MeasurColl;
+
+        if(!Array.isArray(this.MeasureID) || !Array.isArray(this.MeasurColl)) {
+           throw new Error('Risposta backend non valida');
+        }
+        if (this.MeasureID.length === 0)
+        {
+          this.showDialog("Chart not available: No measurements were acquired in this result.", "Message")
+          return;
+        }
+
         this.subInitMeasuresInfo();
       },
       error: (err) => {
+        this.showDialog(err.userMessage, "Error");
         console.error("ERRORE BACKEND:", err);
       }
     });	 
@@ -264,10 +278,14 @@ export class ChartComponent {
     this.http.post(this.httpConfig.baseurl + '/query/measuresinfo', parameters).subscribe({
       next: (data: any) => {
         this.measuresinfo = data;
+        if(!Array.isArray(this.measuresinfo)) {
+           throw new Error('Risposta backend non valida');
+        }
         this.ShowChart();
         this.defaultMeasureIDs = this.getDefaultMeasureIDs();
       },
       error: (err) => {
+        this.showDialog(err.userMessage, "Error");
         console.error("ERRORE BACKEND:", err);
       }
     });
@@ -1530,7 +1548,12 @@ export class ChartComponent {
     return this.axesConfig.PlotColors[this.KeyPlot].Color[index];
   }
 
-  subPrintGraphAndData() {
+  async subPrintGraphAndData() {
+
+    if (!this.blnShowGraph) {
+      this.blnShowGraph = true;
+      await this.sleep(1000);
+    }
   
     this.subChangeGraphColors("#000000");
   
@@ -1574,6 +1597,10 @@ export class ChartComponent {
               a.download = res.filename;
               a.click();
               window.URL.revokeObjectURL(url);
+            }
+            else
+            {
+              this.showDialog("Failed to print chart.\n\r" + res.errorMessage, "Error");
             }
           },
           error: (err) => console.error(err)

@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ErrorHandler } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { AppConfig, filterValues, Filters, StructUnitsInfo, modelsinfo, abortcodeinfo, functionsinfo} from './app.config.json';
 import { measuresinfo } from './chart-config';
@@ -564,8 +564,9 @@ export class HomeComponent {
   }
 
   subExportCSV() {
+
     if (this.results.length == 0) {
-      this.showDialog("No data to export!", "Export Error");
+      this.showDialog("No data to export!", "Message");
       return;
     }
 
@@ -620,9 +621,15 @@ export class HomeComponent {
       next: (data: any) => {
         console.log("MEASURES INFO:", data);
         this.measuresinfo = data;
+        
+        if(!Array.isArray(this.measuresinfo)) {
+           throw new Error('Risposta backend non valida');
+        }
+
         this.subChartDialogShow();
       },
       error: (err) => {
+        this.showDialog(err.userMessage, "Error");
         console.error("ERRORE BACKEND:", err);
       }
     });	
