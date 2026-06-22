@@ -35,15 +35,14 @@ namespace WebAnalisys.ExcelTools
         private ExcelPicture _imgGraph;
         private Image _graphImage;
         private MemoryStream _graphImageStream;
+        private string _printMode;
 
 
-        public bool NewPackage(string filename)
+        public bool NewPackage(string filename, string printMode)
         {
             try
             {
-                FileInfo f = new FileInfo(filename);
-                if (f.Exists == true) f.Delete();
-
+                _printMode = printMode;
                 _ep = new ExcelPackage();
                 return true;
             }
@@ -231,17 +230,44 @@ namespace WebAnalisys.ExcelTools
 
                 if (ws == null)
                 {
-                    ws = CreateSheet("Graph", eOrientation.Landscape, true, 1);
-                    if(CreateReportHeader() == true)
+                    switch (_printMode)
                     {
-                        AddPicture(fileGraphName);
+                        case "All":
+                            ws = CreateSheet("Graph", eOrientation.Landscape, true, 1);
+
+                            if (CreateReportHeader() == true)
+                            {
+                                AddPicture(fileGraphName);
+                            }
+
+                            ws = CreateSheet("Tests Execution", eOrientation.Portrait, true, 1);
+                            CreateReportTestsExecution();
+
+                            ws = CreateSheet("Table Measurers", eOrientation.Landscape, true, 1, 0);
+                            CreateReportTableMeasures();
+
+                            break;
+
+                        case "Graph":
+                            ws = CreateSheet("Graph", eOrientation.Landscape, true, 1);
+
+                            if (CreateReportHeader() == true)
+                            {
+                                AddPicture(fileGraphName);
+                            }
+                            break;
+
+                        case "Table":
+                            ws = CreateSheet("Tests Execution", eOrientation.Portrait, true, 1);
+                            CreateReportHeader();
+                            CreateReportTestsExecution();
+
+                            ws = CreateSheet("Table Measurers", eOrientation.Landscape, true, 1, 0);
+                            CreateReportHeader();
+                            CreateReportTableMeasures();
+                                                        
+                            break;
                     }
-
-                    ws = CreateSheet("Tests Execution", eOrientation.Portrait, true, 1);
-                    CreateReportTestsExecution();
-
-                    ws = CreateSheet("Table Measurers", eOrientation.Landscape, true, 1, 0);
-                    CreateReportTableMeasures();
                 }
 
                 _excelBytes = GetPackageBytes();

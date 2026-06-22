@@ -669,7 +669,7 @@ namespace WebAnalisys.Controllers
                 System.IO.File.WriteAllBytes(filePath, imageBytes);
 
                 ExcelLibrary objExcel = new ExcelLibrary();
-                objExcel.NewPackage(payload.FileName);
+                objExcel.NewPackage(payload.FileName, payload.PrintMode);
 
                 if (objExcel.CreateReport(payload, filePath)) {
 

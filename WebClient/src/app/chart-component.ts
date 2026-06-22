@@ -763,6 +763,11 @@ export class ChartComponent {
     return measure ? measure.UM : "";
   }
 
+  subGetDescription(measureID: number): string {
+    const measure = this.measuresinfo.find(m => m.measureID === measureID);
+    return measure ? measure.description : "";
+  }  
+
   subGetShortname(measureID: number): string {
     const measure = this.measuresinfo.find(m => m.measureID === measureID);
     return measure ? measure.shortname : "";
@@ -1548,31 +1553,61 @@ export class ChartComponent {
     return this.axesConfig.PlotColors[this.KeyPlot].Color[index];
   }
 
-  async subPrintGraphAndData() {
+  payload = {} as any;
+  async subPrintGraphAndData(printMode: string) {
+    
+    switch (printMode)  {
+      case 'All':
+      case 'Graph':
+        this.subChangeGraphColors("#000000");
+      
+        this.chartObj.updateOptions({
+          chart: {
+            background: "#FFFFFF"
+          },
+          yaxis: this.yaxis,
+          xaxis: this.xaxis
+        });      
 
-    if (!this.blnShowGraph) {
-      this.blnShowGraph = true;
-      await this.sleep(1000);
-    }
-  
-    this.subChangeGraphColors("#000000");
-  
-    this.chartObj.updateOptions({
-      chart: {
-        background: "#FFFFFF"
-      },
-      yaxis: this.yaxis,
-      xaxis: this.xaxis
-    });
+        const res = await this.chartObj.dataURI();
 
-    this.chartObj.dataURI().then((res: { imgURI: string } | { blob: Blob }) => {
-      if ('imgURI' in res && typeof res.imgURI === 'string') {
-        const base64Only = res.imgURI.replace(/^data:image\/png;base64,/, '');
+        if ('imgURI' in res && typeof res.imgURI === 'string') {
+          const base64Only = res.imgURI.replace(/^data:image\/png;base64,/, '');
 
-        const payload = {
-          fileName: 'chart.png',
-          contentType: 'image/png',
-          imageBase64: base64Only,
+          this.payload = {
+            printMode: printMode,
+            fileName: 'chart.png',
+            contentType: 'image/png',
+            imageBase64: base64Only,
+            MeasurID: this.MeasureID,
+            measuresInfo: this.measuresinfo,
+            MeasurColl: this.MeasurColl,
+            seriesItems: this.subGetSeries(this.series),
+            axesConfig: this.axesConfig,
+            headerData: this.subHeaderInformations(this.tableData),
+            sequenceData: this.detailsRows,
+            sequencesHeaders: this.sequenceHeaders
+          };
+          this.subPostPrint();
+        };
+    
+        this.subChangeGraphColors("#FFFFFF");
+        this.chartObj?.updateOptions({
+          chart: {
+            background: "#000000"
+          },
+          yaxis: this.yaxis,
+          xaxis: this.xaxis
+        });
+        break;
+
+      case "Table":
+    
+        this.payload = {
+          printMode: printMode,
+          fileName: '',
+          contentType: '',
+          imageBase64: '',
           MeasurID: this.MeasureID,
           measuresInfo: this.measuresinfo,
           MeasurColl: this.MeasurColl,
@@ -1582,39 +1617,34 @@ export class ChartComponent {
           sequenceData: this.detailsRows,
           sequencesHeaders: this.sequenceHeaders
         };
-
-        this.http.post<any>(this.httpConfig.baseurl + '/query/printgraphdata', payload).subscribe({
-          next: (res) => {
-            if (res.result = "OK") 
-            {
-              let byteArray = Uint8Array.from(atob(res.fileBase64), c => c.charCodeAt(0));
-              let blob = new Blob([byteArray], {
-                type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
-              });
-              let url = window.URL.createObjectURL(blob);
-              let a = document.createElement('a');
-              a.href = url;
-              a.download = res.filename;
-              a.click();
-              window.URL.revokeObjectURL(url);
-            }
-            else
-            {
-              this.showDialog("Failed to print chart.\n\r" + res.errorMessage, "Error");
-            }
-          },
-          error: (err) => console.error(err)
-        });
-      };
-    });
-
-    this.subChangeGraphColors("#FFFFFF");
-    this.chartObj?.updateOptions({
-      chart: {
-        background: "#000000"
+        this.subPostPrint();
+        break;
+    }
+  }
+  
+  subPostPrint() {
+    this.http.post<any>(this.httpConfig.baseurl + '/query/printgraphdata', this.payload).subscribe({
+      next: (res) => {
+        if (res.result === "OK") 
+        {
+          let byteArray = Uint8Array.from(atob(res.fileBase64), c => c.charCodeAt(0));
+          let blob = new Blob([byteArray], {
+            type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+          });
+          let url = window.URL.createObjectURL(blob);
+          let a = document.createElement('a');
+          a.href = url;
+          a.download = res.filename;
+          a.click();
+          window.URL.revokeObjectURL(url);
+          this.payload = {};
+        }
+        else
+        {
+          this.showDialog("Failed to print chart.\n\r" + res.errorMessage, "Error");
+        }
       },
-      yaxis: this.yaxis,
-      xaxis: this.xaxis
+      error: (err) => console.error(err)
     });
   }
 

@@ -6,7 +6,12 @@
       <mat-toolbar>
         <div class="toolbar-contenitor" id="back-button">
           <button matMiniFab matTooltip="BACK" [style.background-color]="'#ff0000'" (click)="goBack()"><mat-icon>arrow_back</mat-icon></button>
-          <button matMiniFab matTooltip="Print" [style.background-color]="'#c0c0c0'" (click)="subPrintGraphAndData()"><mat-icon>print</mat-icon></button>
+          <button matMiniFab [matMenuTriggerFor]="menu" matTooltip="Print" [style.background-color]="'#c0c0c0'"><mat-icon>print</mat-icon></button>
+          <mat-menu #menu="matMenu">
+            <button mat-menu-item (click)="subPrintGraphAndData('All')">Print All <mat-icon>assignment_globe</mat-icon></button>
+            <button mat-menu-item (click)="subPrintGraphAndData('Graph')">Print Graph <mat-icon>table_chart</mat-icon></button>
+            <button mat-menu-item (click)="subPrintGraphAndData('Table')">Print Table <mat-icon>area_chart</mat-icon></button>
+          </mat-menu>
           <button matMiniFab matTooltip="Table" [disabled]="!blnShowGraph" [style.background-color]="'#c0c0c0'" (click)="SetPanel()" ><mat-icon>table_chart</mat-icon></button>
           <button matMiniFab matTooltip="Graph" [disabled]="blnShowGraph" [style.background-color]="'#c0c0c0'" (click)="SetPanel()" ><mat-icon>area_chart</mat-icon></button>
         </div>  
@@ -20,7 +25,7 @@
             <mat-form-field class="measure-select" appearance="outline" subscriptSizing="dynamic">
             <mat-select [(ngModel)]="measureSelected" [disabled]="buttonpressed[buttonNames.ShowTestsExecution]" >
               @for (item of this.defaultMeasureIDs; track $index) {
-                <mat-option [value]="this.subGetShortname(item)" > {{ this.subGetShortname(item) }} </mat-option>
+                <mat-option [value]="this.subGetShortname(item)" > {{ this.subGetDescription(item) + ' (' + this.subGetShortname(item) + ')' }} </mat-option>
               }
             </mat-select>
             </mat-form-field>
