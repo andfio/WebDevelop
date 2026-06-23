@@ -9,13 +9,12 @@ using OfficeOpenXml.Drawing;
 using OfficeOpenXml.Style;
 using System.Runtime.InteropServices;
 using WebAnalisys.Models;
-using System.Collections.Generic;
 using System.Linq;
 
 namespace WebAnalisys.ExcelTools
 {
-    
-    public class ExcelLibrary //: iExcelLibrary 
+
+    public class ExcelLibrary
     {
         private const decimal _oneinches = 0.393701M; // = 1 cm 
         private const double _onepixel = 37.795276d;  // = 1 cm 
@@ -36,6 +35,8 @@ namespace WebAnalisys.ExcelTools
         private Image _graphImage;
         private MemoryStream _graphImageStream;
         private string _printMode;
+        private byte[] _headerImage;
+        private imgPosition _imgPosition;
 
 
         public bool NewPackage(string filename, string printMode)
@@ -46,22 +47,22 @@ namespace WebAnalisys.ExcelTools
                 _ep = new ExcelPackage();
                 return true;
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 return false;
             }
         }
 
-        
+
         public bool SavePackage()
         {
             try
             {
-                string _file = Path.Combine(System.Web.Hosting.HostingEnvironment.MapPath("~/Files/" + ("Report-" + DateTime.Now.ToString("hhmmss")  + ".xlsx")  ));
+                string _file = Path.Combine(System.Web.Hosting.HostingEnvironment.MapPath("~/Files/" + ("Report-" + DateTime.Now.ToString("hhmmss") + ".xlsx")));
                 _ep.SaveAs(new FileInfo(_file));
                 return true;
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 return false;
             }
@@ -111,13 +112,13 @@ namespace WebAnalisys.ExcelTools
 
                 return ws;
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 return null;
             }
         }
 
-        
+
         public bool AddChart(int row, int column)
         {
             chartRow = row;
@@ -156,7 +157,7 @@ namespace WebAnalisys.ExcelTools
             }
         }
 
-        
+
         public bool AddSeries(string seriesAddress, string seriesLabel)
         {
             try
@@ -174,7 +175,7 @@ namespace WebAnalisys.ExcelTools
 
             return false;
         }
-            
+
         private ExcelChartSerie AddSeries(ExcelChart wsChart, string sheetName, string seriesAddress, string seriesLabel)
         {
             try
@@ -184,12 +185,12 @@ namespace WebAnalisys.ExcelTools
                 ExcelRangeBase rangeSerie = ws.Cells[seriesAddress];
 
                 ExcelLineChartSerie wsSeries = (ExcelLineChartSerie)wsChart.Series.Add(rangeSerie, rangeLabel);
-                
+
                 string serieName = seriesAddress.Substring(0, 1) + "1";
 
                 wsChart.Series[numSeries].Header = ws.Cells[serieName].Value.ToString();
 
-                wsChart.Series[numSeries].XSeries = seriesLabel;                             
+                wsChart.Series[numSeries].XSeries = seriesLabel;
 
                 numSeries++;
 
@@ -201,7 +202,7 @@ namespace WebAnalisys.ExcelTools
             }
         }
 
-        
+
         public void ResetPackage()
         {
             try
@@ -212,12 +213,12 @@ namespace WebAnalisys.ExcelTools
                 chartSerie = null;
                 numSeries = 0;
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
             }
         }
 
-        public bool CreateReport(PrintDataPayload paramsData, string fileGraphName )
+        public bool CreateReport(PrintDataPayload paramsData, string fileGraphName)
         {
             try
             {
@@ -235,8 +236,11 @@ namespace WebAnalisys.ExcelTools
                         case "All":
                             ws = CreateSheet("Graph", eOrientation.Landscape, true, 1);
 
-                            if (CreateReportHeader() == true)
+                            _currentRow = 1;
+                            _headerImage = CreateReportHeaderImage();
+                            if (_headerImage.Length != 0)
                             {
+                                _currentRow += PasteHeaderToSheet(_headerImage).row;
                                 AddPicture(fileGraphName);
                             }
 
@@ -265,7 +269,7 @@ namespace WebAnalisys.ExcelTools
                             ws = CreateSheet("Table Measurers", eOrientation.Landscape, true, 1, 0);
                             CreateReportHeader();
                             CreateReportTableMeasures();
-                                                        
+
                             break;
                     }
                 }
@@ -295,7 +299,7 @@ namespace WebAnalisys.ExcelTools
             {
                 _currentRow = 1;
 
-                int firstRow = PrinterHeaderTitle(new string[2] { "Description", "Information" }, new int[2] { 30, 70 }, Color.Blue); 
+                int firstRow = PrinterHeaderTitle(new string[2] { "Description", "Information" }, new int[2] { 30, 70 }, Color.Blue);
                 int maxRows = _paramsData.headerData.Count;
 
                 for (int rowIndex = 0; rowIndex < maxRows; rowIndex++)
@@ -304,7 +308,7 @@ namespace WebAnalisys.ExcelTools
                     ws.Row(row).Height = 20;
 
                     ws.Cells[row, 1].Value = _paramsData.headerData[rowIndex].name;
-                    if (_paramsData.headerData[rowIndex].descrition != null) { 
+                    if (_paramsData.headerData[rowIndex].descrition != null) {
                         ws.Cells[row, 2].Value = _paramsData.headerData[rowIndex].value + " - " + _paramsData.headerData[rowIndex].descrition;
                     }
                     else
@@ -321,14 +325,90 @@ namespace WebAnalisys.ExcelTools
 
                 _currentRow = (firstRow + maxRows);
 
-            return true;
+                return true;
             }
             catch (Exception ex)
             {
                 Console.WriteLine(ex.Message);
             }
             return false;
+        }
 
+        private byte[] CreateReportHeaderImage()
+        {
+            const int descriptionWidth = 240;
+            const int informationWidth = 560;
+            const int rowHeight = 24;
+            const int padding = 3;
+
+            int dataRows = _paramsData.headerData.Count;
+            int rows = dataRows + 1;
+            int width = descriptionWidth + informationWidth;
+            int height = rows * rowHeight;
+
+            using (Bitmap bitmap = new Bitmap(width, height))
+            using (Graphics graphics = Graphics.FromImage(bitmap))
+            using (Font headerFont = new Font("Tahoma", 12, FontStyle.Regular))
+            using (Font bodyFont = new Font("Tahoma", 12, FontStyle.Regular))
+            using (Pen borderPen = new Pen(Color.Black))
+            using (Brush whiteBrush = new SolidBrush(Color.White))
+            using (Brush headerBrush = new SolidBrush(Color.Blue))
+            using (Brush bodyBrush = new SolidBrush(Color.Black))
+            using (MemoryStream stream = new MemoryStream())
+            {
+                graphics.Clear(Color.White);
+                graphics.TextRenderingHint = System.Drawing.Text.TextRenderingHint.ClearTypeGridFit;
+
+                graphics.FillRectangle(whiteBrush, new Rectangle(0, 0, width, rowHeight));
+                DrawHeaderImageCell(graphics, "Description", headerFont, headerBrush, whiteBrush, borderPen, new Rectangle(0, 0, descriptionWidth, rowHeight), padding, StringAlignment.Center, false);
+                DrawHeaderImageCell(graphics, "Information", headerFont, headerBrush, whiteBrush, borderPen, new Rectangle(descriptionWidth, 0, informationWidth, rowHeight), padding, StringAlignment.Center, false);
+                graphics.DrawLine(borderPen, 0, 1, width - 1, 1);
+                graphics.DrawLine(borderPen, 0, rowHeight - 1, width - 1, rowHeight - 1);
+
+                for (int rowIndex = 0; rowIndex < dataRows; rowIndex++)
+                {
+                    int y = (rowIndex + 1) * rowHeight;
+                    string description = _paramsData.headerData[rowIndex].name;
+                    string information = _paramsData.headerData[rowIndex].value;
+
+                    if (_paramsData.headerData[rowIndex].descrition != null)
+                    {
+                        information += " - " + _paramsData.headerData[rowIndex].descrition;
+                    }
+
+                    DrawHeaderImageCell(graphics, description, bodyFont, bodyBrush, whiteBrush, borderPen, new Rectangle(0, y, descriptionWidth, rowHeight), padding, StringAlignment.Far, false);
+                    DrawHeaderImageCell(graphics, information, bodyFont, bodyBrush, whiteBrush, borderPen, new Rectangle(descriptionWidth, y, informationWidth, rowHeight), padding, StringAlignment.Far, false);
+                }
+
+                bitmap.Save(stream, System.Drawing.Imaging.ImageFormat.Png);
+                return stream.ToArray();
+            }
+        }
+
+        private void DrawHeaderImageCell(Graphics graphics, string text, Font font, Brush textBrush, Brush backgroundBrush, Pen borderPen, Rectangle bounds, int padding, StringAlignment verticalAlignment, bool drawBorder)
+        {
+            graphics.FillRectangle(backgroundBrush, bounds);
+
+            if (drawBorder)
+            {
+                graphics.DrawRectangle(borderPen, bounds);
+            }
+
+            Rectangle textBounds = new Rectangle(
+                bounds.Left + padding,
+                bounds.Top + padding / 2,
+                bounds.Width - (padding * 2),
+                bounds.Height - padding);
+
+            using (StringFormat format = new StringFormat())
+            {
+                format.Alignment = StringAlignment.Near;
+                format.LineAlignment = verticalAlignment;
+                format.Trimming = StringTrimming.EllipsisCharacter;
+                format.FormatFlags = StringFormatFlags.LineLimit;
+
+                graphics.DrawString(text ?? string.Empty, font, textBrush, textBounds, format);
+            }
         }
 
         private int PrinterHeaderTitle(string[] columnsName, int[] columnsSize, Color color)
@@ -338,8 +418,8 @@ namespace WebAnalisys.ExcelTools
             int cols = columnsName.Length;
 
             int col = 1;
-            foreach(string name in columnsName)
-            { 
+            foreach (string name in columnsName)
+            {
                 ws.Cells[row, col++].Value = name;
             }
 
@@ -359,7 +439,7 @@ namespace WebAnalisys.ExcelTools
             ws.Row(row).Height = 20;
 
             col = 1;
-            foreach(int size in columnsSize) { 
+            foreach (int size in columnsSize) {
                 ws.Column(col++).Width = size;
             }
 
@@ -383,7 +463,7 @@ namespace WebAnalisys.ExcelTools
             }
 
             using (ExcelRange r = ws.Cells[row, 1, row, cols])
-            { 
+            {
                 r.Style.Font.Size = 10;
                 r.Style.Font.Name = "Tahoma";
                 r.Style.HorizontalAlignment = ExcelHorizontalAlignment.Left;
@@ -407,24 +487,24 @@ namespace WebAnalisys.ExcelTools
 
             int row = _currentRow;
 
-            ws.Cells[row,  columnStart, row, columnEnd].Merge = true;
+            ws.Cells[row, columnStart, row, columnEnd].Merge = true;
 
-            ws.Cells[row,  columnStart, row, columnEnd].Value = columnName;
+            ws.Cells[row, columnStart, row, columnEnd].Value = columnName;
 
-            ws.Cells[row,  columnStart, row, columnEnd].Style.Font.Size = 11;
-            ws.Cells[row,  columnStart, row, columnEnd].Style.Font.Name = "Tahoma";
+            ws.Cells[row, columnStart, row, columnEnd].Style.Font.Size = 11;
+            ws.Cells[row, columnStart, row, columnEnd].Style.Font.Name = "Tahoma";
             ws.Cells[row, columnStart, row, columnEnd].Style.Font.Bold = true;
-            ws.Cells[row,  columnStart, row, columnEnd].Style.HorizontalAlignment = ExcelHorizontalAlignment.Left;
+            ws.Cells[row, columnStart, row, columnEnd].Style.HorizontalAlignment = ExcelHorizontalAlignment.Left;
             ws.Cells[row, columnStart, row, columnEnd].Style.VerticalAlignment = ExcelVerticalAlignment.Center;
-            ws.Cells[row,  columnStart, row, columnEnd].Style.Font.Color.SetColor(color);
-            ws.Cells[row,  columnStart, row, columnEnd].Style.Border.Top.Style = ExcelBorderStyle.Thin;
-            ws.Cells[row,  columnStart, row, columnEnd].Style.Border.Top.Color.SetColor(Color.Black);
-            ws.Cells[row,  columnStart, row, columnEnd].Style.Border.Bottom.Style = ExcelBorderStyle.Thin;
-            ws.Cells[row,  columnStart, row, columnEnd].Style.Border.Bottom.Color.SetColor(Color.Black);
-            ws.Cells[row,  columnStart, row, columnEnd].Style.Border.BorderAround(ExcelBorderStyle.Thin, Color.Black);
-            ws.Cells[row,  columnStart, row, columnEnd].Style.Border.BorderAround(ExcelBorderStyle.Thin, Color.Black);
-            ws.Cells[row,  columnStart, row, columnEnd].Style.Border.Left.Style = ExcelBorderStyle.None;
-            ws.Cells[row,  columnStart, row, columnEnd].Style.Border.Right.Style = ExcelBorderStyle.None;
+            ws.Cells[row, columnStart, row, columnEnd].Style.Font.Color.SetColor(color);
+            ws.Cells[row, columnStart, row, columnEnd].Style.Border.Top.Style = ExcelBorderStyle.Thin;
+            ws.Cells[row, columnStart, row, columnEnd].Style.Border.Top.Color.SetColor(Color.Black);
+            ws.Cells[row, columnStart, row, columnEnd].Style.Border.Bottom.Style = ExcelBorderStyle.Thin;
+            ws.Cells[row, columnStart, row, columnEnd].Style.Border.Bottom.Color.SetColor(Color.Black);
+            ws.Cells[row, columnStart, row, columnEnd].Style.Border.BorderAround(ExcelBorderStyle.Thin, Color.Black);
+            ws.Cells[row, columnStart, row, columnEnd].Style.Border.BorderAround(ExcelBorderStyle.Thin, Color.Black);
+            ws.Cells[row, columnStart, row, columnEnd].Style.Border.Left.Style = ExcelBorderStyle.None;
+            ws.Cells[row, columnStart, row, columnEnd].Style.Border.Right.Style = ExcelBorderStyle.None;
             ws.Row(row).Height = 20;
 
             ws.Column(columnStart).Width = 15;
@@ -463,9 +543,9 @@ namespace WebAnalisys.ExcelTools
                     r.Style.Font.Color.SetColor(Color.Black);
                     r.Style.HorizontalAlignment = ExcelHorizontalAlignment.Left;
                     r.Style.VerticalAlignment = ExcelVerticalAlignment.Center;
-                    r.Worksheet.View.ShowGridLines = false;  
+                    r.Worksheet.View.ShowGridLines = false;
                 }
-                
+
             }
             catch (Exception ex)
             {
@@ -485,13 +565,13 @@ namespace WebAnalisys.ExcelTools
                 _graphImageStream = new MemoryStream(imageBytes);
                 _graphImage = Image.FromStream(_graphImageStream);
 
-                int imgWidthPx = _graphImage.Width;   
-                int imgHeightPx = _graphImage.Height;  
+                int imgWidthPx = _graphImage.Width;
+                int imgHeightPx = _graphImage.Height;
 
-                const double colWidthPx = 98.0;   
-                const double rowHeightPx = 20.0;  
+                const double colWidthPx = 58.0;
+                const double rowHeightPx = 20.0;
 
-                int colsGraph = (int)Math.Ceiling(imgWidthPx / colWidthPx) ;
+                int colsGraph = (int)Math.Ceiling(imgWidthPx / colWidthPx);
                 int rowsGraph = (int)Math.Ceiling(imgHeightPx / rowHeightPx);
 
                 _currentRow = _currentRow + 2;
@@ -505,7 +585,7 @@ namespace WebAnalisys.ExcelTools
                 foreach (var itm in _paramsData.seriesItems) {
 
 
-                    if (_paramsData.measuresinfo.Exists(m => m.measureID == itm)) { 
+                    if (_paramsData.measuresinfo.Exists(m => m.measureID == itm)) {
                         measure = _paramsData.measuresinfo.Find(m => m.measureID == itm);
                     }
                     else
@@ -516,16 +596,16 @@ namespace WebAnalisys.ExcelTools
                     if (measure != null)
                     {
                         int _plotIndex = Array.FindIndex<int>(_paramsData.axesConfig.Plots["Plot" + measure.UnitTypeID.ToString()].Plot, (m) => m == measure.measureID);
-                        if (_plotIndex != -1) { 
+                        if (_plotIndex != -1) {
                             string _color = _paramsData.axesConfig.PlotColors["Plot" + measure.UnitTypeID.ToString()].Color[_plotIndex];
 
-                            _currentRow++; 
+                            _currentRow++;
                             ws.Cells[_currentRow, colsGraph].Style.Fill.PatternType = ExcelFillStyle.Solid;
                             ws.Cells[_currentRow, colsGraph].Style.Fill.BackgroundColor.SetColor(ColorTranslator.FromHtml(_color));
                             ws.Cells[_currentRow, colsGraph].Style.Font.Color.SetColor(Color.White);
                             ws.Cells[_currentRow, colsGraph].Style.Font.Bold = true;
                             ws.Cells[_currentRow, colsGraph].Style.HorizontalAlignment = ExcelHorizontalAlignment.Left;
-                            ws.Cells[_currentRow, colsGraph + 1].Style.HorizontalAlignment = ExcelHorizontalAlignment.Left ;
+                            ws.Cells[_currentRow, colsGraph + 1].Style.HorizontalAlignment = ExcelHorizontalAlignment.Left;
                             ws.Cells[_currentRow, colsGraph].Value = measure.shortname + " (" + measure.UM + ")";
                             ws.Cells[_currentRow, colsGraph + 1].Value = measure.description;
 
@@ -535,8 +615,8 @@ namespace WebAnalisys.ExcelTools
                 }
 
                 firstRow++;
-                ws.Cells[firstRow, colsGraph, (_currentRow - firstRow) + 2, colsGraph + 1].Style.Font.Size = 12;
-                ws.Cells[firstRow, colsGraph, (_currentRow - firstRow) + 2, colsGraph + 1].Style.Font.Name = "Tahoma";
+                ws.Cells[firstRow, colsGraph, _currentRow + 1, colsGraph + 1].Style.Font.Size = 12;
+                ws.Cells[firstRow, colsGraph, _currentRow + 1, colsGraph + 1].Style.Font.Name = "Tahoma";
 
             }
             catch (Exception ex)
@@ -544,6 +624,39 @@ namespace WebAnalisys.ExcelTools
                 Console.WriteLine(ex.Message);
             }
 
+        }
+
+        private imgPosition PasteHeaderToSheet(byte[] imageBytes)
+        {
+
+            try
+            {
+                _imgPosition = new imgPosition();
+
+                DisposeGraphImage();
+                _graphImageStream = new MemoryStream(imageBytes);
+                _graphImage = Image.FromStream(_graphImageStream);
+
+                int imgWidthPx = _graphImage.Width;
+                int imgHeightPx = _graphImage.Height;
+
+                const double colWidthPx = 58.0;
+                const double rowHeightPx = 20.0;
+
+                _imgPosition.col = (int)Math.Ceiling(imgWidthPx / colWidthPx);
+                _imgPosition.row = (int)Math.Ceiling(imgHeightPx / rowHeightPx);
+
+                _imgGraph = ws.Drawings.AddPicture("table", _graphImage);
+                _imgGraph.SetPosition(_currentRow, -20, 0, 0);
+                _imgGraph.SetSize(100);
+
+                return _imgPosition;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+            return _imgPosition;
         }
 
         private void DisposeGraphImage()
@@ -604,7 +717,7 @@ namespace WebAnalisys.ExcelTools
                     ws.Cells[row, 1].Value = ConvertSecondiToTime(timeValues[rowIndex]);
                     ws.Cells[row, 2].Value = Math.Round(timeValues[rowIndex], 2).ToString("0.00");
                 }
-                
+
                 float[] dataPoints;
                 int _columnValue = 0; int col = _defaultCol;
                 foreach (int ID in _paramsData.MeasurID)
@@ -617,7 +730,7 @@ namespace WebAnalisys.ExcelTools
 
                             dataPoints = new float[0];
 
-                            for(int r = 0; r < _paramsData.MeasurColl.Count(); r++)
+                            for (int r = 0; r < _paramsData.MeasurColl.Count(); r++)
                             {
                                 float[] _rowValues = _paramsData.MeasurColl[r];
 
@@ -739,5 +852,69 @@ namespace WebAnalisys.ExcelTools
             return $"{str_tot_ore}:{str_tot_min} - ({str_tot_sec})";
         }
 
+        private byte[] DrawTableToImage(string[,] values, Color[,] backgroundColors)
+        {
+            int rows = values.GetLength(0);
+            int cols = values.GetLength(1);
+
+            int cellWidth = 120;
+            int cellHeight = 28;
+            int width = cols * cellWidth;
+            int height = rows * cellHeight;
+
+            using (Bitmap bitmap = new Bitmap(width, height))
+            using (Graphics g = Graphics.FromImage(bitmap))
+            using (Font font = new Font("Tahoma", 10))
+            using (Pen borderPen = new Pen(Color.LightGray))
+            using (Brush textBrush = new SolidBrush(Color.Black))
+            using (MemoryStream ms = new MemoryStream())
+            {
+                g.Clear(Color.White);
+                g.TextRenderingHint = System.Drawing.Text.TextRenderingHint.ClearTypeGridFit;
+
+                for (int row = 0; row < rows; row++)
+                {
+                    for (int col = 0; col < cols; col++)
+                    {
+                        Rectangle rect = new Rectangle(
+                            col * cellWidth,
+                            row * cellHeight,
+                            cellWidth,
+                            cellHeight
+                        );
+
+                        Color backColor = backgroundColors != null
+                            ? backgroundColors[row, col]
+                            : Color.White;
+
+                        using (Brush backBrush = new SolidBrush(backColor))
+                        {
+                            g.FillRectangle(backBrush, rect);
+                        }
+
+                        g.DrawRectangle(borderPen, rect);
+
+                        Rectangle textRect = new Rectangle(
+                            rect.X + 5,
+                            rect.Y + 4,
+                            rect.Width - 10,
+                            rect.Height - 8
+                        );
+
+                        g.DrawString(values[row, col] ?? "", font, textBrush, textRect);
+                    }
+                }
+
+                bitmap.Save(ms, System.Drawing.Imaging.ImageFormat.Png);
+                return ms.ToArray();
+            }
+        }
+
+    }
+
+    public struct imgPosition
+    {
+        public int col { get; set; }
+        public int row { get; set; }
     }
 }

@@ -1,0 +1,36 @@
+--------------------------------------------------
+Date: 2026-06-22 16:51:34
+Caller Method: printgraphdata
+Caller File: C:\Andrea Fiorentini\WebAnalisys\WebServer\WebAnalisys\QueryController.cs
+Caller Line: 688
+Error Method: System.IO.__Error.WinIOError
+Error File: 
+Error Line: 0
+Exception Type: System.IO.DirectoryNotFoundException
+Message: Impossibile trovare una parte del percorso 'C:\Andrea Fiorentini\WebAnalisys\WebServer\WebAnalisys\Images\'.
+Source: mscorlib
+StackTrace:
+   in System.IO.__Error.WinIOError(Int32 errorCode, String maybeFullPath)
+   in System.IO.FileStream.Init(String path, FileMode mode, FileAccess access, Int32 rights, Boolean useRights, FileShare share, Int32 bufferSize, FileOptions options, SECURITY_ATTRIBUTES secAttrs, String msgPath, Boolean bFromProxy, Boolean useLongPath, Boolean checkHost)
+   in System.IO.FileStream..ctor(String path, FileMode mode, FileAccess access, FileShare share, Int32 bufferSize, FileOptions options, String msgPath, Boolean bFromProxy, Boolean useLongPath, Boolean checkHost)
+   in System.IO.File.InternalWriteAllBytes(String path, Byte[] bytes, Boolean checkHost)
+   in System.IO.File.WriteAllBytes(String path, Byte[] bytes)
+   in WebAnalisys.Controllers.QueryController.printgraphdata(PrintDataPayload payload) in C:\Andrea Fiorentini\WebAnalisys\WebServer\WebAnalisys\QueryController.cs:riga 669
+--------------------------------------------------
+Date: 2026-06-22 16:55:59
+Caller Method: printgraphdata
+Caller File: C:\Andrea Fiorentini\WebAnalisys\WebServer\WebAnalisys\QueryController.cs
+Caller Line: 688
+Error Method: System.IO.__Error.WinIOError
+Error File: 
+Error Line: 0
+Exception Type: System.IO.DirectoryNotFoundException
+Message: Impossibile trovare una parte del percorso 'C:\Andrea Fiorentini\WebAnalisys\WebServer\WebAnalisys\Images\'.
+Source: mscorlib
+StackTrace:
+   in System.IO.__Error.WinIOError(Int32 errorCode, String maybeFullPath)
+   in System.IO.FileStream.Init(String path, FileMode mode, FileAccess access, Int32 rights, Boolean useRights, FileShare share, Int32 bufferSize, FileOptions options, SECURITY_ATTRIBUTES secAttrs, String msgPath, Boolean bFromProxy, Boolean useLongPath, Boolean checkHost)
+   in System.IO.FileStream..ctor(String path, FileMode mode, FileAccess access, FileShare share, Int32 bufferSize, FileOptions options, String msgPath, Boolean bFromProxy, Boolean useLongPath, Boolean checkHost)
+   in System.IO.File.InternalWriteAllBytes(String path, Byte[] bytes, Boolean checkHost)
+   in System.IO.File.WriteAllBytes(String path, Byte[] bytes)
+   in WebAnalisys.Controllers.QueryController.printgraphdata(PrintDataPayload payload) in C:\Andrea Fiorentini\WebAnalisys\WebServer\WebAnalisys\QueryController.cs:riga 669

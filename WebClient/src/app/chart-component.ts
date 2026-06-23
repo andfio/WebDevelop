@@ -1559,6 +1559,11 @@ export class ChartComponent {
     switch (printMode)  {
       case 'All':
       case 'Graph':
+        if (!this.blnShowGraph) {
+          this.blnShowGraph = true;
+          await this.sleep(1000);
+        }
+        
         this.subChangeGraphColors("#000000");
       
         this.chartObj.updateOptions({
