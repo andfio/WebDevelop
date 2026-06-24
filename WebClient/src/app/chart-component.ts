@@ -56,6 +56,8 @@ import {tabledata, tabledetails} from "./chart-config";
 //Tests Execution chart
 import {TestsExecutionChartComponent} from './testsExecution/tests-chart-component';
 import {TestsExecutionChartDataService} from "./testsExecution/tests-chart-service";
+//goBack
+import { DetailsStateService } from './DetailsState.Service';
 
 @Component({
   selector: "app-chart",
@@ -84,7 +86,7 @@ export class ChartComponent {
   public legend: ApexLegend = {};
   public annotations: ApexAnnotations = {};
 
-  constructor(private dialog: MatDialog, private cd: ChangeDetectorRef, private http: HttpClient, private chartDialog: MatDialog, private router: Router, public testExecution: TestsExecutionChartDataService) { }
+  constructor(private dialog: MatDialog, private cd: ChangeDetectorRef, private http: HttpClient, private chartDialog: MatDialog, private router: Router, public testExecution: TestsExecutionChartDataService, private detailsState: DetailsStateService) { }
   
   chartData: ChartData = {
     MeasurID: [],
@@ -1290,7 +1292,13 @@ export class ChartComponent {
   ShowPeaks(button: string) {
     this.buttonpressed[button] = !this.buttonpressed[button];
 
-    if (!this.buttonpressed[button]) {
+    this.subResetAxis()
+    this.chartObj.updateOptions({
+      xaxis: this.xaxis,
+      yaxis: this.yaxis
+    });
+
+    if (!this.buttonpressed[button]) {      
       this.chartObj.updateOptions({
         annotations: {
           points: []
@@ -1363,6 +1371,12 @@ export class ChartComponent {
 
   ShowConstantValues(button: string) {
     this.buttonpressed[button] = !this.buttonpressed[button];
+
+    this.subResetAxis()
+    this.chartObj.updateOptions({
+      xaxis: this.xaxis,
+      yaxis: this.yaxis
+    });
 
     if (!this.buttonpressed[button]) {
       this.chartObj.updateOptions({
@@ -1449,7 +1463,25 @@ export class ChartComponent {
       }
     });
     this.cd.detectChanges()
-  }  
+  }
+  
+  subResetAxis()
+  {
+    this.AxisValues.forEach(axis => {
+      if (axis.enabled == true) {
+        let index = axis.axisIndex;
+        if (index === 0) {
+          this.xaxis.min != axis.DefaultMin;
+          this.xaxis.max = axis.DefaultMax;
+          }
+        else 
+        {
+          this.yaxis[index].min = axis.DefaultMin;
+          this.yaxis[index].max = axis.DefaultMax;
+        }
+      }  
+    })
+  }
 
   subLoadAxisConfig(key: string) {
     if (this.axesConfig.AxesScale[key].Xmin == 0 && this.axesConfig.AxesScale[key].Xmax == 0) { return }
@@ -1683,6 +1715,83 @@ export class ChartComponent {
     this.xaxis.title = this.xaxis.title ?? {};
     this.xaxis.title.style =  this.xaxis.title.style ?? {};
     this.xaxis.title.style.color = currColor;
+  }
+
+  subExportData()
+  {
+    let headerContent: string = "Description" + '\t' + "Information" + '\n';
+    let rowsContent: string = this.tableData.map(info => {
+      if(info.description !== "")
+      {
+        return info.name + '\t' + info.value + " - "+ info.description
+      }
+      else
+      {
+         return info.name + '\t' + info.value
+      }
+    } ).join('\n') + '\n\n';
+
+    let sequenceHeader: string = this.sequenceHeaders.map(info => info.name).join('\t') + '\n';
+
+    let sequenceData: string = this.detailsRows.map(info => {
+        return info.SequenceNumber + '\t' + info.description + '\t' + info.result + '\t' + info.startSequence + '\t' + info.endSequence
+    }).join('\n') + '\n\n';
+
+
+    let timeHeaderFirst: string = this.timeinfo.map(info => info.title).join('\t'); 
+
+    let measureHeaderFirst: string = "";
+    this.MeasureID.forEach(headerItem => {
+      if(this.subGetShortname(headerItem) !== "") {
+        measureHeaderFirst += this.subGetShortname(headerItem) + '\t'
+      }  
+    });
+
+    measureHeaderFirst = timeHeaderFirst + measureHeaderFirst + '\n';
+
+    let timeHeaderSecond: string = this.timeinfo.map(info => info.description).join('\t'); 
+
+    let measureHeaderSecond: string = "";
+    this.MeasureID.forEach(headerItem => {
+      if(this.subGetUM(headerItem) !== "") {
+        measureHeaderSecond += this.subGetUM(headerItem) + '\t'
+      }
+      else
+      {
+         measureHeaderSecond += "" + '\t'
+      }  
+    });
+
+    measureHeaderSecond = timeHeaderSecond + '\t' + measureHeaderSecond + '\n';
+
+    let measureHeaders: string = measureHeaderFirst + measureHeaderSecond;
+
+    let measuresData: string = ""; let rowIndex: number = 0;
+    this.DataPoint[0].time.forEach(timevalue => {
+
+      let rowData: string = ""; let measureIndex: number = 0;
+      this.MeasureID.forEach(itmMeasure => {
+        if(this.subGetShortname(itmMeasure) !== "") {
+          rowData += this.subColumnValues(this.subGetShortname(itmMeasure), measureIndex).values[rowIndex].toFixed(2) + '\t';
+        }
+        measureIndex++;
+      })
+
+      measuresData += this.convertSecondiToTime(timevalue) + '\t' + timevalue.toString() + '\t' + rowData + '\n'
+      rowIndex++;
+    })
+
+    let csvContent: string = headerContent + rowsContent + sequenceHeader + sequenceData + measureHeaders + measuresData;
+
+    let blob = new Blob([csvContent], { type: 'text/tab-separated-values;charset=utf-8;' });
+    let link = document.createElement("a");
+    let url = URL.createObjectURL(blob);
+    link.setAttribute("href", url);
+    link.setAttribute("download", "Export-Data-" + new Date().toISOString().slice(0, 10) + ".txt");
+    link.style.visibility = 'hidden';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
   }
 
   subHeaderInformations(header: tabledata[]): any[] {
@@ -2072,6 +2181,7 @@ export class ChartComponent {
   }
 
   goBack() {
+    this.detailsState.axesConfig = this.axesConfig;
     this.router.navigate(['pagina-details']);
   }
 

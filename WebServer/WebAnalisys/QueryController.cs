@@ -662,11 +662,15 @@ namespace WebAnalisys.Controllers
         {
             try
             {
-                byte[] imageBytes = Convert.FromBase64String(payload.ImageBase64);
+                string filePath = "";
+                if (payload.PrintMode != "Table")
+                { 
+                    byte[] imageBytes = Convert.FromBase64String(payload.ImageBase64);                
 
-                string filePath = Path.Combine(System.Web.Hosting.HostingEnvironment.MapPath("~/Images/" + payload.FileName));
+                    filePath = Path.Combine(System.Web.Hosting.HostingEnvironment.MapPath("~/Images/" + payload.FileName));
 
-                System.IO.File.WriteAllBytes(filePath, imageBytes);
+                    System.IO.File.WriteAllBytes(filePath, imageBytes);
+                }
 
                 ExcelLibrary objExcel = new ExcelLibrary();
                 objExcel.NewPackage(payload.FileName, payload.PrintMode);

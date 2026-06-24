@@ -9,9 +9,10 @@
           <button matMiniFab [matMenuTriggerFor]="menu" matTooltip="Print" [style.background-color]="'#c0c0c0'"><mat-icon>print</mat-icon></button>
           <mat-menu #menu="matMenu">
             <button mat-menu-item (click)="subPrintGraphAndData('All')">Print All <mat-icon>assignment_globe</mat-icon></button>
-            <button mat-menu-item (click)="subPrintGraphAndData('Graph')">Print Graph <mat-icon>table_chart</mat-icon></button>
-            <button mat-menu-item (click)="subPrintGraphAndData('Table')">Print Table <mat-icon>area_chart</mat-icon></button>
+            <button mat-menu-item (click)="subPrintGraphAndData('Graph')">Print Graph <mat-icon>area_chart</mat-icon></button>
+            <button mat-menu-item (click)="subPrintGraphAndData('Table')">Print Table <mat-icon>table_chart</mat-icon></button>
           </mat-menu>
+          <button matMiniFab matTooltip="Export" [style.background-color]="'#c0c0c0'" (click)="subExportData()"><mat-icon>list_alt</mat-icon></button>
           <button matMiniFab matTooltip="Table" [disabled]="!blnShowGraph" [style.background-color]="'#c0c0c0'" (click)="SetPanel()" ><mat-icon>table_chart</mat-icon></button>
           <button matMiniFab matTooltip="Graph" [disabled]="blnShowGraph" [style.background-color]="'#c0c0c0'" (click)="SetPanel()" ><mat-icon>area_chart</mat-icon></button>
         </div>  
