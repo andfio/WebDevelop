@@ -2,7 +2,7 @@
     <mat-toolbar>
         <div class="button-container">
             <button matFab extended [style.background-color]="'#ff0000'" (click)="goBack()">Back<mat-icon>arrow_back</mat-icon></button>
-            <button matFab extended [style.background-color]="'#28a745'" (click)="subOnChartPage()">Graph<mat-icon>insert_chart</mat-icon></button>
+            <button matFab extended [disabled]="this.subCheckGraphEnabled()" [style.background-color]="'#28a745'" (click)="subOnChartPage()">Graph<mat-icon>insert_chart</mat-icon></button>
             <button matFab extended [style.background-color]="'#28a745'" (click)="exportDetails()">Export<mat-icon fontSet="material-symbols-outlined">file_export</mat-icon></button>
         </div>    
     </mat-toolbar>

@@ -1,6 +1,8 @@
 #logo {
-    display: block;
-    padding: 10px 5px 0px 5px; /* top | right | bottom | left */
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 5px 0px 5px;
 }
 
 #logo-left {
@@ -9,7 +11,6 @@
 
 #logo-right {
     display: inline-flex;
-    margin-left: 80%;
 }
 
 #labelnome {
@@ -222,6 +223,11 @@ select {
     background-color: #357bc8;
 }
 
+.btn-graphconfig:disabled {
+    background-color: gray;
+    color: white;
+}
+
 .btn-export:hover {
     background-color: #357bc8;
 }
@@ -294,6 +300,11 @@ select {
     background-color: #4a90e2;
 }
 
+.styled-table tr.selected td {
+    color: white;
+}
+
+
 .styled-table tr:hover {
     cursor: pointer;
 }
@@ -316,7 +327,7 @@ select {
 
 /* CONTENITORE POPUP */
 .popup-container{
-  height: popupheight;
+  height: var(--popup-h);
   width: 100%;
 
   background: #fff;

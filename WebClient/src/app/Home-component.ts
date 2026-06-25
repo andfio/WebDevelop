@@ -607,6 +607,8 @@ export class HomeComponent {
     document.body.classList.toggle('busy', isBusy);
   }
 
+  sleep = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
+
   subShowGraphParams() {
     
     if (this.filterValues['Unit Type'] === undefined || this.filterValues['Unit Type'] === '%') { return }
@@ -625,8 +627,15 @@ export class HomeComponent {
         if(!Array.isArray(this.measuresinfo)) {
            throw new Error('Risposta backend non valida');
         }
-
-        this.subChartDialogShow();
+        if (this.measuresinfo.length !== 0)
+        {
+          this.subChartDialogShow();
+        }
+        else {
+          setTimeout(() => {
+            this.buttonGraphDisabled = true;  
+          }, 2000);
+        }
       },
       error: (err) => {
         this.showDialog(err.userMessage, "Error");

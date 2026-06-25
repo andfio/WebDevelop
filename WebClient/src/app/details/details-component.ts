@@ -602,6 +602,14 @@ background: any;
     });
   }
 
+  subCheckGraphEnabled(): boolean {
+    // if (this.measuresinfo.length === 0)
+    // {
+    //   return true;
+    // }
+    return false;
+  }
+
   subOnChartPage() {
     if (!this.axesConfig.Plots?.["Plot" + this.row["UnitTypeID"].toString()])  {
       if (!this.subShowGraphParams()) {

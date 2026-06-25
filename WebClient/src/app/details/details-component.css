@@ -58,10 +58,10 @@ mat-toolbar.mat-toolbar-single-row {
   --mat-fab-extended-container-height: 40px;
   --mat-fab-extended-label-text-size: 20px;
   color: white;
-  font-size: 20px;
+  font-size: 16px;
   width: 120px;
-  height: 36px;
-  min-height: 36px;
+  height: 30px;
+  min-height: 30px;
   line-height: 20px;
   padding: 0 12px;
 }
@@ -74,6 +74,12 @@ mat-toolbar.mat-toolbar-single-row {
   width: 24px;
   height: 24px;
   line-height: 24px;
+}
+
+.button-container button[matFab]:disabled,
+.button-container button[matFab].mat-mdc-button-disabled {
+  background-color: grey !important;
+  color: white;
 }
 
 :host ::ng-deep .button-container .mat-mdc-extended-fab .mdc-button__label {
