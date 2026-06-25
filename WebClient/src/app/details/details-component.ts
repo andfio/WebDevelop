@@ -8,11 +8,16 @@ import { MatDialog } from '@angular/material/dialog';
 import { AxesConfig, measuresinfo, tabledata } from '../chart-config';
 import { ChartSettingsComponent } from '../chart-settings-component';
 import { DetailsStateService } from '../DetailsState.Service';
+import {MatIconModule} from '@angular/material/icon';
+import {MatMenuModule} from '@angular/material/menu';
+import {MatButtonModule} from '@angular/material/button';
+import {MatToolbarModule} from '@angular/material/toolbar';
+import {MatDividerModule} from '@angular/material/divider';
 
 @Component({
   selector: 'app-details',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, MatDividerModule, MatIconModule, MatMenuModule, MatButtonModule, MatToolbarModule],
   templateUrl: './details.component.html',
   styleUrls: ['./details-component.css']
 })

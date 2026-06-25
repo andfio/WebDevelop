@@ -1,14 +1,15 @@
-<div class="tables-container">
-
-    <div class="root-contenitor">
-
+<div class="root-contenitor">
+    <mat-toolbar>
         <div class="button-container">
-            <div class="btn-goback" (click)="goBack()"><i class="material-symbols-outlined">arrow_back</i> Home </div>
-            <div class="btn-export" (click)="exportDetails()"><i class="material-symbols-outlined">file_export</i> Export </div >
-            <div class="btn-graphShow" (click)="subOnChartPage()"><i class="material-symbols-outlined">insert_chart</i> Graph </div >    
+            <button matFab extended [style.background-color]="'#ff0000'" (click)="goBack()">Back<mat-icon>arrow_back</mat-icon></button>
+            <button matFab extended [style.background-color]="'#28a745'" (click)="subOnChartPage()">Graph<mat-icon>insert_chart</mat-icon></button>
+            <button matFab extended [style.background-color]="'#28a745'" (click)="exportDetails()">Export<mat-icon fontSet="material-symbols-outlined">file_export</mat-icon></button>
         </div>    
+    </mat-toolbar>
+</div>
+<mat-divider></mat-divider>
 
-    </div>    
+<div class="tables-container">
 
     <!-- CONTENITORE A DUE COLONNE -->
     <div class="tables-flex">     
