@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
-import { AppConfig, tableinfo, StructUnitsInfo, functionsinfo} from '../app.config.json';
+import { AppConfig, tableinfo, StructUnitsInfo, functionsinfo, visionImges} from '../app.config.json';
 import { DialogContent } from '../dialog-component';
 import { MatDialog } from '@angular/material/dialog';
 import { AxesConfig, measuresinfo, tabledata } from '../chart-config';
@@ -45,6 +45,7 @@ background: any;
   queryhome: AppConfig["query"] = {} as any;
   querydetails: AppConfig["querydetails"] = {} as any;
   chartseries: AppConfig["chartseries"] = {} as any;
+  visionImages: visionImges = {};
 
   filtervalues: { [key: string]: any } = {};
   row: any;
@@ -95,6 +96,7 @@ background: any;
           this.chartseries = config.chartseries;
           
           this.sendToBackend();
+
       },
       error: (err) => {
         console.error('ERRORE CARICAMENTO JSON:', err);
@@ -118,10 +120,14 @@ background: any;
            throw new Error('Risposta backend non valida');
         }
 
+        this.subLoadVisionImages();
+
         this.detailsState.rowData = this.row;
         this.detailsState.unitsInfo = this.unitsInfo;
         this.detailsState.functionsInfo = this.functionsInfo;
         this.detailsState.axesConfig = this.axesConfig;
+
+        this.subLoadMeasuresInfo();
 
         this.subShowRoot();
         this.subShowIcon();
@@ -133,6 +139,54 @@ background: any;
     });
 
     this.filtervalues['ID_Result'] = undefined;        
+  }
+
+  subLoadVisionImages() {
+      let parameters = {
+        ID_Result: this.row["ID_Result"]
+      }
+      
+      this.http.post(this.httpConfig.baseurl + '/query/loadvisionimages', parameters).subscribe({
+        next: (data: any) => {
+
+          this.visionImages = data;
+          if (typeof this.visionImages !== 'object' )
+          {
+            throw new Error('Vision images not valid.')
+          }
+          
+        },
+        error: (err) => {
+          this.showDialog(err.userMessage, "Error");
+          console.error("ERRORE BACKEND:", err);
+        }
+      });	
+  }
+
+  subLoadMeasuresInfo() {
+    
+    setTimeout(() => {
+      let parameters = {
+        UnitTypeID: this.row["UnitTypeID"],
+        CommandType: 1
+      }
+      
+      this.http.post(this.httpConfig.baseurl + '/query/measuresinfo', parameters).subscribe({
+        next: (data: any) => {
+          console.log("MEASURES INFO:", data);
+          this.measuresinfo = data;
+          
+          if(!Array.isArray(this.measuresinfo)) {
+            throw new Error('Risposta backend non valida');
+          }
+
+        },
+        error: (err) => {
+          this.showDialog(err.userMessage, "Error");
+          console.error("ERRORE BACKEND:", err);
+        }
+      });	
+    }, 0);
   }
 
   currProgressiveGroup: number = 0;
@@ -603,17 +657,20 @@ background: any;
   }
 
   subCheckGraphEnabled(): boolean {
-    // if (this.measuresinfo.length === 0)
-    // {
-    //   return true;
-    // }
-    return false;
+      if (this.measuresinfo.length === 0)
+      {
+        return true;
+      }
+      return false;
   }
 
   subOnChartPage() {
     if (!this.axesConfig.Plots?.["Plot" + this.row["UnitTypeID"].toString()])  {
-      if (!this.subShowGraphParams()) {
-        return;
+      if (this.measuresinfo.length !== 0)
+      {
+        if (!this.subShowGraphParams()) {
+          return;
+        }
       }
     }
 
@@ -714,31 +771,12 @@ background: any;
   }
 
   subShowGraphParams(): boolean {
-    
-    let parameters = {
-      UnitTypeID: this.row["UnitTypeID"],
-      CommandType: 1
-    }
-
+ 
     let configSaved = false;
-    this.http.post(this.httpConfig.baseurl + '/query/measuresinfo', parameters).subscribe({
-      next: (data: any) => {
-        console.log("MEASURES INFO:", data);
-        this.measuresinfo = data;
-        if(!Array.isArray(this.measuresinfo)) {
-           throw new Error('Risposta backend non valida');
-        }
-        if (!this.subChartDialogShow()) {
-          configSaved = false;
-        }
-        configSaved = true;
-      },
-      error: (err) => {
-        this.showDialog(err.userMessage, "Error");
-        console.error("ERRORE BACKEND:", err);
-        configSaved = false;
-      }
-    });	
+
+    if (this.subChartDialogShow()) {
+      configSaved = true;
+    }    
 
     setTimeout(() => {
       return configSaved;

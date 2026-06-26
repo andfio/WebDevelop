@@ -695,6 +695,68 @@ namespace WebAnalisys.Controllers
 
         }
 
+        [HttpPost]
+        [Route("loadvisionimages")]
+        public IHttpActionResult loadvisionimages([FromBody] InputField payload)
+        {
+            var result = new Dictionary<string, Dictionary<string, string>>();
+
+            string connDBResultString = ConfigurationManager.ConnectionStrings["DBResults"].ConnectionString;
+
+            try
+            {
+                string id = payload.ID_Result;
+
+                string sql = "SELECT ProgressiveGroup, ProgressiveTest, ProgressiveVision, VisionType, VisionName, VisionData FROM Tab_Vision WHERE ID_Result = '" + id + "'";
+
+                using (var conn = new SqlConnection(connDBResultString))
+                using (var cmd = new SqlCommand(sql, conn))
+                {
+                    conn.Open();
+                    var reader = cmd.ExecuteReader();
+
+                    Dictionary<string, string> testImages;
+                    
+                    while (reader.Read())
+                    {
+                        testImages = new Dictionary<string, string>();
+                        switch (reader["VisionType"].ToString())
+                        {
+                            case "0":
+                                testImages.Add(reader["ProgressiveVision"].ToString(), reader["VisionName"].ToString());
+                                break;
+
+                            case "1":
+                                if (!reader.IsDBNull(6))
+                                {
+                                    testImages.Add(reader["ProgressiveVision"].ToString(), reader.GetStream(6).ToString());
+                                }
+                                break;
+                        }
+
+                        string key = (reader["ProgressiveGroup"].ToString() + ";" + reader["ProgressiveTest"].ToString());
+                        if (!result.ContainsKey(key))
+                        {
+                            result.Add(key, testImages);
+                        }
+                        else
+                        {
+                            result[key] = testImages;
+                        }
+                        
+                    }
+
+                }
+
+            }
+            catch (Exception ex)
+            {
+                ErrorLogger.LogException(ex);
+            }
+
+            return Ok(result);
+        }
+        
         private string Normalize(string key)
         {
             return key.Replace(" ", "").Replace("-", "");

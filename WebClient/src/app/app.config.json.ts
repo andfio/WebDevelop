@@ -101,3 +101,11 @@ export enum titleprogressBar {
     search = 'Please wait, searching...',
     httpRetry = 'Server not available. \n\r Recovery attempt in progress...'
 }
+
+export interface visionData {
+    [key: string]: string;
+}
+
+export interface visionImges {
+    [key: string]: visionData;
+}

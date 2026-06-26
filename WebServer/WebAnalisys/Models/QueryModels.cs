@@ -146,7 +146,6 @@ namespace WebAnalisys.Models
         public string size { get; set; }
     }
 
-
 }
 
     
