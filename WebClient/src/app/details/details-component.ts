@@ -431,7 +431,7 @@ background: any;
                           }
                       }
 
-                      if (itemRow['V'] != "") {
+                      if (itemRow['V'] != undefined && itemRow['V'] != "") {
                           this.tableInfo.description = "Descr.";
                           this.tableInfo.value = itemRow['ComDescr'];
                           this.detailsData.push({ description: this.tableInfo.description, value: this.tableInfo.value, bgColor: "#FFFFFF", textColor: "#0d0080"})

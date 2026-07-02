@@ -161,134 +161,164 @@ namespace WebAnalisys.Controllers
                 if (payload == null)
                     return BadRequest("Payload non valido.");
 
-                var filters = payload.Filters;
-                var queryDef = payload.Query;
-
-                // Costruisce la query SQL
-                string sql = queryDef.Select + " " +
-                             queryDef.From + " " +
-                             queryDef.Where;
-
-                foreach (var cond in queryDef.Conditions)
-                {
-                    if (filters.ContainsKey(cond.Filter))
-                    {
-                        sql += " " + cond.Sql;
-
-                    }
-                }
-
-                sql += " ORDER BY ProgressiveGroup";
-
                 var details = new List<Dictionary<string, object>>();
 
                 using (var conn = new SqlConnection(connDBResultsString))
-                using (var cmd = new SqlCommand(sql, conn))
                 {
-                    // Parametri SQL
-                    foreach (var f in filters)
+
+                    var filters = payload.Filters;
+                    var queryDef = payload.Query;
+
+                    // Costruisce la query SQL
+                    string sql = queryDef.Select + " " +
+                                 queryDef.From + " " +
+                                 queryDef.Where;
+
+                    foreach (var cond in queryDef.Conditions)
                     {
-                        string param = "@" + Normalize(f.Key);
-                        string value = f.Value.ToString();
-                        
-                        cmd.Parameters.AddWithValue(param, value);
+                        if (filters.ContainsKey(cond.Filter))
+                        {
+                            sql += " " + cond.Sql;
+
+                        }
                     }
 
-                    conn.Open();
-                    var reader = cmd.ExecuteReader();
+                    sql += " ORDER BY ProgressiveGroup";
 
-                    while (reader.Read())
+                    using (var cmd = new SqlCommand(sql, conn))
                     {
-                        var row = new Dictionary<string, object>();
-                        var pars = new List<string>();
-
-                        for (int i = 0; i < reader.FieldCount; i++)
+                        // Parametri SQL
+                        foreach (var f in filters)
                         {
-                            row.Add(reader.GetName(i), reader.GetValue(i));
+                            string param = "@" + Normalize(f.Key);
+                            string value = f.Value.ToString();
 
-                            //System.Diagnostics.Debug.WriteLine(
-                            //    "Field=" + reader.GetName(i) + " Valore=" + reader.GetValue(i)
-                            //);
-                            if (reader.GetName(i) == "TestType")
-                            {
-
-                                int testType = 1;
-                                if (!reader.IsDBNull(i))
-                                {
-                                    testType = int.Parse(reader["TestType"].ToString());
-                                }
-
-                                int fieldPosition = reader.GetOrdinal("VisionName");
-
-                                switch (testType)
-                                {
-                                    case 1:
-                                        row.Add("M", reader["ProgressiveMeasure"].ToString());
-                                        row.Add("TestDescr", "");
-                                        row.Add("UM", "");
-                                        row.Add("TestRes", reader["ErrorMeasure"].ToString());
-                                        row.Add("Min", reader["MinSet"].ToString());
-                                        row.Add("Value", reader["AnalogueValue"].ToString());
-                                        row.Add("Max", reader["MaxSet"].ToString());
-                                        row.Add("Name", reader["StoreName"].ToString());
-                                        row.Add("LimitMin", reader["MinLimit"].ToString());
-                                        row.Add("LimitMax", reader["MaxLimit"].ToString());
-                                        break;
-
-                                    default:
-                                        
-                                        if (reader["Params"].ToString().Trim() != "")
-                                        {
-                                            string values = reader["Params"].ToString().Trim();
-                                            pars = values.Split(';').ToList<string>();
-                                        }
-
-                                        row.Add("P", reader["TestCode"].ToString());
-                                        row.Add("TestDescr", reader["Descr"].ToString());
-                                        row.Add("TestRes", reader["TestResult"].ToString());
-                                        for(int iPar = 1; iPar <= 10; iPar++)
-                                        {
-                                            if (iPar < pars.Count)
-                                            {
-                                                row.Add("Descr" + iPar.ToString(), "");
-                                                row.Add("UM" + iPar.ToString(), "");
-                                                row.Add("Valore" + iPar.ToString(), pars[iPar - 1]);
-                                            }
-                                            else
-                                            {
-                                                row.Add("Descr" + iPar.ToString(), "?");
-                                                row.Add("UM" + iPar.ToString(), "?");
-                                                row.Add("Valore" + iPar.ToString(), "?");
-                                            }
-                                        }
-
-                                        if (reader.IsDBNull(fieldPosition))
-                                        {
-                                            row.Add("V", reader["TestCode"].ToString());
-                                            row.Add("ComDescr", "");
-                                            row.Add("ProgressiveTest", reader["ProgressiveTest"].ToString());
-                                            row.Add("ProgressiveVision", reader["ProgressiveVision"].ToString());
-                                            row.Add("VisionType", reader["VisionType"].ToString());
-                                            row.Add("VisionName", reader["VisionName"].ToString());
-                                            row.Add("VisionData", reader["VisionData"].ToString());
-                                        }
-
-                                        break;
-                                }
-                                break;
-                            }
+                            cmd.Parameters.AddWithValue(param, value);
                         }
 
-                        details.Add(row);
+                        conn.Open();
+                        var reader = cmd.ExecuteReader();
+
+                        while (reader.Read())
+                        {
+                            var row = new Dictionary<string, object>();
+                            var pars = new List<string>();
+
+                            for (int i = 0; i < reader.FieldCount; i++)
+                            {
+                                row.Add(reader.GetName(i), reader.GetValue(i));
+
+                                //System.Diagnostics.Debug.WriteLine(
+                                //    "Field=" + reader.GetName(i) + " Valore=" + reader.GetValue(i)
+                                //);
+                                if (reader.GetName(i) == "TestType")
+                                {
+
+                                    int testType = 1;
+                                    if (!reader.IsDBNull(i))
+                                    {
+                                        testType = int.Parse(reader["TestType"].ToString());
+                                    }
+
+
+                                    switch (testType)
+                                    {
+                                        case 1:
+                                            row.Add("M", reader["ProgressiveMeasure"].ToString());
+                                            row.Add("TestDescr", "");
+                                            row.Add("UM", "");
+                                            row.Add("TestRes", reader["ErrorMeasure"].ToString());
+                                            row.Add("Min", reader["MinSet"].ToString());
+                                            row.Add("Value", reader["AnalogueValue"].ToString());
+                                            row.Add("Max", reader["MaxSet"].ToString());
+                                            row.Add("Name", reader["StoreName"].ToString());
+                                            row.Add("LimitMin", reader["MinLimit"].ToString());
+                                            row.Add("LimitMax", reader["MaxLimit"].ToString());
+                                            break;
+
+                                        default:
+
+                                            if (reader["Params"].ToString().Trim() != "")
+                                            {
+                                                string values = reader["Params"].ToString().Trim();
+                                                pars = values.Split(';').ToList<string>();
+                                            }
+
+                                            row.Add("P", reader["TestCode"].ToString());
+                                            row.Add("TestDescr", reader["Descr"].ToString());
+                                            row.Add("TestRes", reader["TestResult"].ToString());
+                                            for (int iPar = 1; iPar <= 10; iPar++)
+                                            {
+                                                if (iPar < pars.Count)
+                                                {
+                                                    row.Add("Descr" + iPar.ToString(), "");
+                                                    row.Add("UM" + iPar.ToString(), "");
+                                                    row.Add("Valore" + iPar.ToString(), pars[iPar - 1]);
+                                                }
+                                                else
+                                                {
+                                                    row.Add("Descr" + iPar.ToString(), "?");
+                                                    row.Add("UM" + iPar.ToString(), "?");
+                                                    row.Add("Valore" + iPar.ToString(), "?");
+                                                }
+                                            }
+
+                                            break;
+                                    }
+                                    break;
+                                }
+                            }
+
+                            details.Add(row);
+                        }
+                    }
+                    conn.Close();
+
+                    sql = "SELECT Tab_Vision.ProgressiveGroup, ProgressiveTest, ProgressiveVision, VisionType, VisionName, VisionData, Tab_Tests.TestType FROM Tab_Tests LEFT JOIN Tab_Vision ON (Tab_Tests.ID_Result = Tab_Vision.ID_Result AND Tab_Tests.ProgressiveGroup = Tab_Vision.ProgressiveGroup)  WHERE Tab_Vision.ID_Result = @ID_Result";
+
+                    using (var cmdVision = new SqlCommand(sql, conn))
+                    {
+
+                        conn.Open();
+
+                        cmdVision.Parameters.AddWithValue("@ID_Result", filters["ID_Result"]);
+                        var r = cmdVision.ExecuteReader();
+
+                        if (r.HasRows)
+                        {
+
+                            while (r.Read())
+                            {
+
+                                int index = details.FindIndex(item =>
+                                {
+                                    object progressiveGroup;
+                                    return item.TryGetValue("ProgressiveGroup", out progressiveGroup) &&
+                                            progressiveGroup.ToString() == r["ProgressiveGroup"].ToString();
+                                });
+
+                                var row = details[index];
+                                row.Add("V", r["TestType"].ToString());
+                                row.Add("ComDescr", "");
+                                row.Add("ProgressiveTest", r["ProgressiveTest"].ToString());
+                                row.Add("ProgressiveVision", r["ProgressiveVision"].ToString());
+                                row.Add("VisionType", r["VisionType"].ToString());
+                                row.Add("VisionName", r["VisionName"].ToString());
+                                row.Add("VisionData", r["VisionData"].ToString());
+
+                            }
+                        }
                     }
                 }
 
                 using (var conn = new SqlConnection(connDBTestString))
                 {
                     conn.Open();
+
+                    string sql = "";
                     foreach (Dictionary<string, object> itemList in details)
                     {
-                        var row = new Dictionary<string, object>();
+                        var row = new Dictionary<string, object>(); 
                         foreach (var itemRow in itemList.ToList()) //foreach (KeyValuePair<string, object> itemRow in itemList )
                         {
 
@@ -301,6 +331,11 @@ namespace WebAnalisys.Controllers
                                     case "M":                                         
                                         sql = "SELECT ComDescr, UM FROM Commands ";                                        
                                         sql = sql + "WHERE UnitTypeID=" + row["UnitTypeID"].ToString() + " AND ComID=" + itemRow.Value.ToString() + " AND ComType= 1";
+                                        break;
+
+                                    case "V":
+                                        sql = "SELECT ComDescr, UM FROM Commands ";
+                                        sql = sql + "WHERE UnitTypeID=" + row["UnitTypeID"].ToString() + " AND ComID=" + itemRow.Value.ToString() + " AND ComType= 3";
                                         break;
 
                                     default:
@@ -333,7 +368,7 @@ namespace WebAnalisys.Controllers
                                                     }
                                                     else
                                                     {
-                                                        itemList["ComDescr"] = reader["Descr"].ToString().Trim();
+                                                        itemList["ComDescr"] = reader["ComDescr"].ToString().Trim();
                                                     }
                                                     break;
                                             }
