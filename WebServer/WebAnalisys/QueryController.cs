@@ -206,10 +206,19 @@ namespace WebAnalisys.Controllers
                         {
                             row.Add(reader.GetName(i), reader.GetValue(i));
 
+                            //System.Diagnostics.Debug.WriteLine(
+                            //    "Field=" + reader.GetName(i) + " Valore=" + reader.GetValue(i)
+                            //);
                             if (reader.GetName(i) == "TestType")
                             {
 
-                                int testType = int.Parse(reader["TestType"].ToString());
+                                int testType = 1;
+                                if (!reader.IsDBNull(i))
+                                {
+                                    testType = int.Parse(reader["TestType"].ToString());
+                                }
+
+                                int fieldPosition = reader.GetOrdinal("VisionName");
 
                                 switch (testType)
                                 {
@@ -227,13 +236,14 @@ namespace WebAnalisys.Controllers
                                         break;
 
                                     default:
-                                        if(reader["Params"].ToString().Trim() != "")
+                                        
+                                        if (reader["Params"].ToString().Trim() != "")
                                         {
                                             string values = reader["Params"].ToString().Trim();
                                             pars = values.Split(';').ToList<string>();
                                         }
 
-                                        row.Add("P", testType.ToString());
+                                        row.Add("P", reader["TestCode"].ToString());
                                         row.Add("TestDescr", reader["Descr"].ToString());
                                         row.Add("TestRes", reader["TestResult"].ToString());
                                         for(int iPar = 1; iPar <= 10; iPar++)
@@ -251,7 +261,18 @@ namespace WebAnalisys.Controllers
                                                 row.Add("Valore" + iPar.ToString(), "?");
                                             }
                                         }
-                                        
+
+                                        if (reader.IsDBNull(fieldPosition))
+                                        {
+                                            row.Add("V", reader["TestCode"].ToString());
+                                            row.Add("ComDescr", "");
+                                            row.Add("ProgressiveTest", reader["ProgressiveTest"].ToString());
+                                            row.Add("ProgressiveVision", reader["ProgressiveVision"].ToString());
+                                            row.Add("VisionType", reader["VisionType"].ToString());
+                                            row.Add("VisionName", reader["VisionName"].ToString());
+                                            row.Add("VisionData", reader["VisionData"].ToString());
+                                        }
+
                                         break;
                                 }
                                 break;
@@ -273,7 +294,7 @@ namespace WebAnalisys.Controllers
 
                             row.Add(itemRow.Key, itemRow.Value);
 
-                            if (itemRow.Key == "P" || itemRow.Key == "M")
+                            if (itemRow.Key == "P" || itemRow.Key == "M" || itemRow.Key == "V")
                             {
                                 switch (itemRow.Key)
                                 {
@@ -305,9 +326,15 @@ namespace WebAnalisys.Controllers
                                                     break;
 
                                                 default:
-                                                    itemList["Descr" + iPar.ToString()] = reader["Descr"].ToString().Trim();
-                                                    itemList["UM" + iPar.ToString()] = reader["UM"].ToString().Trim();
-                                                    iPar++;
+                                                    if (itemRow.Key == "P") { 
+                                                        itemList["Descr" + iPar.ToString()] = reader["Descr"].ToString().Trim();
+                                                        itemList["UM" + iPar.ToString()] = reader["UM"].ToString().Trim();
+                                                        iPar++;
+                                                    }
+                                                    else
+                                                    {
+                                                        itemList["ComDescr"] = reader["Descr"].ToString().Trim();
+                                                    }
                                                     break;
                                             }
 

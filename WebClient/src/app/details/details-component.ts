@@ -113,7 +113,7 @@ background: any;
     
     this.http.post(this.httpConfig.baseurl + '/query/details', payload).subscribe({
       next: (data: any) => {
-        // console.log("RISULTATO BACKEND:", data);
+        console.log("RISULTATO BACKEND:", data);
         this.results = data; 
 
         if(!Array.isArray(this.results)) {
@@ -327,6 +327,7 @@ background: any;
 
   subShowTestDetails(item: any)
   {
+    try {
     this.detailsData = []; // pulizia
     let itemCol: any;
     let itemRow: any;
@@ -411,23 +412,35 @@ background: any;
                       break;
                           
                     default:
+                      if (itemRow['P'] != "") {
+                          this.tableInfo.description = "Descr.";
+                          this.tableInfo.value = itemRow['TestDescr'];
+                          this.detailsData.push({ description: this.tableInfo.description, value: this.tableInfo.value, bgColor: "#FFFFFF", textColor: "#0d0080"})
 
-                      this.tableInfo.description = "Descr.";
-                      this.tableInfo.value = itemRow['TestDescr'];
-                      this.detailsData.push({ description: this.tableInfo.description, value: this.tableInfo.value, bgColor: "#FFFFFF", textColor: "#0d0080"})
+                          this.tableInfo.description = "Result";
+                          this.tableInfo.value = this.ResultDescription(itemRow['TestRes']);
+                          this.detailsData.push({ description: this.tableInfo.description, value: this.tableInfo.value, bgColor: "#FFFFFF", textColor: "#0d0080"})  
 
-                      this.tableInfo.description = "Result";
-                      this.tableInfo.value = this.ResultDescription(itemRow['TestRes']);
-                      this.detailsData.push({ description: this.tableInfo.description, value: this.tableInfo.value, bgColor: "#FFFFFF", textColor: "#0d0080"})  
-
-                      for (let iPar: number = 1; iPar <= 10; iPar++) {
-                          
-                          if (itemRow["Valore" + iPar.toString()] !== "?") {
-                            this.tableInfo.description = (itemRow["Descr" + iPar.toString()] !== "" ? itemRow["Descr" + iPar.toString()] : "Parameter" + iPar.toString());
-                            this.tableInfo.value = itemRow["Valore" + iPar.toString()] + " " + itemRow["UM" + iPar.toString()];
-                            this.detailsData.push({ description: this.tableInfo.description, value: this.tableInfo.value, bgColor: "#FFFFFF", textColor: "#0d0080"});
+                          for (let iPar: number = 1; iPar <= 10; iPar++) {
+                              
+                              if (itemRow["Valore" + iPar.toString()] !== "?") {
+                                this.tableInfo.description = (itemRow["Descr" + iPar.toString()] !== "" ? itemRow["Descr" + iPar.toString()] : "Parameter" + iPar.toString());
+                                this.tableInfo.value = itemRow["Valore" + iPar.toString()] + " " + itemRow["UM" + iPar.toString()];
+                                this.detailsData.push({ description: this.tableInfo.description, value: this.tableInfo.value, bgColor: "#FFFFFF", textColor: "#0d0080"});
+                              }
                           }
-                      }                    
+                      }
+
+                      if (itemRow['V'] != "") {
+                          this.tableInfo.description = "Descr.";
+                          this.tableInfo.value = itemRow['ComDescr'];
+                          this.detailsData.push({ description: this.tableInfo.description, value: this.tableInfo.value, bgColor: "#FFFFFF", textColor: "#0d0080"})
+
+                          this.tableInfo.description = "File";
+                          this.tableInfo.value = itemRow['VisionName'];
+                          this.detailsData.push({ description: this.tableInfo.description, value: this.tableInfo.value, bgColor: "#FFFFFF", textColor: "#0d0080"})                          
+                      }
+                      
                       break;
                   }
                   
@@ -435,7 +448,12 @@ background: any;
           }
       }
     }
+    }
+    catch(err)  {
+      console.error("Errore durante la visualizzazione dei dettagli del test: " + err);
+    }
   }
+  
 
   ResultDescription(res: string): any {
     let result: any = "";
