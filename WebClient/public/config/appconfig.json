@@ -495,7 +495,7 @@
     ]
   },
   "querydetails": {
-    "select": "SELECT Tab_Headers.UnitTypeID, Tab_Tests.ProgressiveGroup, StartStabTime, EndEventTime, TestResult, TestDescription, FunctionCode, Tab_Tests.TestTimeOut,  Tab_Tests.TestType, Tab_Test_Details.TestType AS TestCode, Tab_Test_Details.Result, Descr, Params, Tab_Measures.ProgressiveMeasure, ErrorMeasure, MinSet, MaxSet, AnalogueValue, StoreName, MinLimit, MaxLimit ",
+    "select": "SELECT Tab_Headers.UnitTypeID, Tab_Tests.ProgressiveGroup, Tab_Test_Details.ProgressiveTest, StartStabTime, EndEventTime, TestResult, TestDescription, FunctionCode, Tab_Tests.TestTimeOut, Tab_Tests.TestType, Tab_Test_Details.TestType AS TestCode, Tab_Test_Details.Result, Descr, Params, Tab_Measures.ProgressiveMeasure, ErrorMeasure, MinSet, MaxSet, AnalogueValue, StoreName, MinLimit, MaxLimit ",
     "from": "FROM Tab_Headers LEFT JOIN Tab_Tests ON (Tab_Headers.ID_Result = Tab_Tests.ID_Result) LEFT JOIN Tab_Test_Details ON (Tab_Tests.ID_Result = Tab_Test_Details.ID_Result AND Tab_Tests.ProgressiveGroup = Tab_Test_Details.ProgressiveGroup) LEFT JOIN Tab_Measures ON (Tab_Tests.ID_Result = Tab_Measures.ID_Result AND Tab_Tests.ProgressiveGroup = Tab_Measures.ProgressiveGroup) ",
     "where": "WHERE ",
     "conditions": [

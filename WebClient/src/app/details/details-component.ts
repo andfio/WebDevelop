@@ -431,14 +431,17 @@ background: any;
                           }
                       }
 
+                      let _numVisionFiles: number = 0;
                       if (itemRow['V'] != undefined && itemRow['V'] != "") {
-                          this.tableInfo.description = "Descr.";
-                          this.tableInfo.value = itemRow['ComDescr'];
-                          this.detailsData.push({ description: this.tableInfo.description, value: this.tableInfo.value, bgColor: "#FFFFFF", textColor: "#0d0080"})
-
-                          this.tableInfo.description = "File";
-                          this.tableInfo.value = itemRow['VisionName'];
-                          this.detailsData.push({ description: this.tableInfo.description, value: this.tableInfo.value, bgColor: "#FFFFFF", textColor: "#0d0080"})                          
+                          _numVisionFiles = Number(itemRow['V']);
+                          for (let iVis: number = 1; iVis <= _numVisionFiles; iVis++) {
+                              if (itemRow["Vision" + iVis.toString()] !== "?") {
+                                this.tableInfo.description = "Descr. (File)";
+                                this.tableInfo.value = "Vision Test" + " " + itemRow['ProgressiveTest'] + " - Images " + iVis.toString() +  " (" + itemRow['VisionName' + iVis.toString()] + ")";
+                                this.detailsData.push({ description: this.tableInfo.description, value: this.tableInfo.value, bgColor: "#FFFFFF", textColor: "#0d0080"}) 
+                              }
+                          }
+                         
                       }
                       
                       break;

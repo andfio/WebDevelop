@@ -289,23 +289,35 @@ namespace WebAnalisys.Controllers
 
                             while (r.Read())
                             {
-
                                 int index = details.FindIndex(item =>
                                 {
-                                    object progressiveGroup;
-                                    return item.TryGetValue("ProgressiveGroup", out progressiveGroup) &&
-                                            progressiveGroup.ToString() == r["ProgressiveGroup"].ToString();
+
+                                    if (item["ProgressiveGroup"].ToString() == r["ProgressiveGroup"].ToString() && item["ProgressiveTest"].ToString() == r["ProgressiveTest"].ToString())
+                                    {
+                                        return true;
+                                    }
+
+                                    return false;
                                 });
 
-                                var row = details[index];
-                                row.Add("V", r["TestType"].ToString());
-                                row.Add("ComDescr", "");
-                                row.Add("ProgressiveTest", r["ProgressiveTest"].ToString());
-                                row.Add("ProgressiveVision", r["ProgressiveVision"].ToString());
-                                row.Add("VisionType", r["VisionType"].ToString());
-                                row.Add("VisionName", r["VisionName"].ToString());
-                                row.Add("VisionData", r["VisionData"].ToString());
+                                if (index != -1)
+                                {
+                                    string _progressiveVision = r["ProgressiveVision"].ToString();
 
+                                    var row = details[index];
+
+                                    if (!row.ContainsKey("V")) { 
+                                        row.Add("V", _progressiveVision);
+                                    }
+                                    else
+                                    {
+                                        row["V"] = _progressiveVision;
+                                    }
+
+                                    row.Add("VisionType" + _progressiveVision, r["VisionType"].ToString());
+                                    row.Add("VisionName" + _progressiveVision, r["VisionName"].ToString());
+                                    row.Add("VisionData" + _progressiveVision, r["VisionData"].ToString());
+                                }
                             }
                         }
                     }
@@ -324,18 +336,13 @@ namespace WebAnalisys.Controllers
 
                             row.Add(itemRow.Key, itemRow.Value);
 
-                            if (itemRow.Key == "P" || itemRow.Key == "M" || itemRow.Key == "V")
+                            if (itemRow.Key == "P" || itemRow.Key == "M")
                             {
                                 switch (itemRow.Key)
                                 {
                                     case "M":                                         
                                         sql = "SELECT ComDescr, UM FROM Commands ";                                        
                                         sql = sql + "WHERE UnitTypeID=" + row["UnitTypeID"].ToString() + " AND ComID=" + itemRow.Value.ToString() + " AND ComType= 1";
-                                        break;
-
-                                    case "V":
-                                        sql = "SELECT ComDescr, UM FROM Commands ";
-                                        sql = sql + "WHERE UnitTypeID=" + row["UnitTypeID"].ToString() + " AND ComID=" + itemRow.Value.ToString() + " AND ComType= 3";
                                         break;
 
                                     default:
@@ -366,10 +373,7 @@ namespace WebAnalisys.Controllers
                                                         itemList["UM" + iPar.ToString()] = reader["UM"].ToString().Trim();
                                                         iPar++;
                                                     }
-                                                    else
-                                                    {
-                                                        itemList["ComDescr"] = reader["ComDescr"].ToString().Trim();
-                                                    }
+
                                                     break;
                                             }
 
