@@ -102,10 +102,3 @@ export enum titleprogressBar {
     httpRetry = 'Server not available. \n\r Recovery attempt in progress...'
 }
 
-export interface visionData {
-    [key: string]: string;
-}
-
-export interface visionImges {
-    [key: string]: visionData;
-}

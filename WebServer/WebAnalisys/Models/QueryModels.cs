@@ -146,6 +146,11 @@ namespace WebAnalisys.Models
         public string size { get; set; }
     }
 
+    public class VisionImages
+    {
+        public string imagesfile { get; set; }
+    }
+
 }
 
     

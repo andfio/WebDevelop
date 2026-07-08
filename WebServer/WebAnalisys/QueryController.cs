@@ -21,6 +21,9 @@ namespace WebAnalisys.Controllers
     [RoutePrefix("api/query")]
     public class QueryController : ApiController
     {
+
+        private readonly string imageFolder = @"C:\Users\Public\LiveDataPath\";
+
         // GET api/<controller>
         public IEnumerable<string> Get()
         {
@@ -316,7 +319,15 @@ namespace WebAnalisys.Controllers
 
                                     row.Add("VisionType" + _progressiveVision, r["VisionType"].ToString());
                                     row.Add("VisionName" + _progressiveVision, r["VisionName"].ToString());
-                                    row.Add("VisionData" + _progressiveVision, r["VisionData"].ToString());
+
+                                    if (r["VisionType"].ToString() == "1")
+                                    { 
+                                        row.Add("VisionData" + _progressiveVision, (byte[])r["VisionData"]);
+                                    }
+                                    else
+                                    {
+                                        row.Add("VisionData" + _progressiveVision, "");
+                                    }
                                 }
                             }
                         }
@@ -761,68 +772,48 @@ namespace WebAnalisys.Controllers
 
         }
 
-        [HttpPost]
-        [Route("loadvisionimages")]
-        public IHttpActionResult loadvisionimages([FromBody] InputField payload)
+        [HttpGet]
+        [Route("images/{*fileName}")]
+        public HttpResponseMessage GetImage(string fileName)
         {
-            var result = new Dictionary<string, Dictionary<string, string>>();
-
-            string connDBResultString = ConfigurationManager.ConnectionStrings["DBResults"].ConnectionString;
-
             try
             {
-                string id = payload.ID_Result;
+                if (string.IsNullOrWhiteSpace(fileName))
+                    return new HttpResponseMessage(HttpStatusCode.BadRequest);
 
-                string sql = "SELECT ProgressiveGroup, ProgressiveTest, ProgressiveVision, VisionType, VisionName, VisionData FROM Tab_Vision WHERE ID_Result = '" + id + "'";
+                var rootPath = Path.GetFullPath(imageFolder);
+                var normalizedFileName = fileName.Replace('/', Path.DirectorySeparatorChar);
+                var path = Path.GetFullPath(Path.Combine(rootPath, normalizedFileName));
 
-                using (var conn = new SqlConnection(connDBResultString))
-                using (var cmd = new SqlCommand(sql, conn))
+                if (!path.StartsWith(rootPath, StringComparison.OrdinalIgnoreCase))
                 {
-                    conn.Open();
-                    var reader = cmd.ExecuteReader();
-
-                    Dictionary<string, string> testImages;
-                    
-                    while (reader.Read())
-                    {
-                        testImages = new Dictionary<string, string>();
-                        switch (reader["VisionType"].ToString())
-                        {
-                            case "0":
-                                testImages.Add(reader["ProgressiveVision"].ToString(), reader["VisionName"].ToString());
-                                break;
-
-                            case "1":
-                                if (!reader.IsDBNull(6))
-                                {
-                                    testImages.Add(reader["ProgressiveVision"].ToString(), reader.GetStream(6).ToString());
-                                }
-                                break;
-                        }
-
-                        string key = (reader["ProgressiveGroup"].ToString() + ";" + reader["ProgressiveTest"].ToString());
-                        if (!result.ContainsKey(key))
-                        {
-                            result.Add(key, testImages);
-                        }
-                        else
-                        {
-                            result[key] = testImages;
-                        }
-                        
-                    }
-
+                    ErrorLogger.LogMessage("Bad Request " + fileName);
+                    return new HttpResponseMessage(HttpStatusCode.BadRequest);
                 }
 
+                if (!System.IO.File.Exists(path))
+                { 
+                    ErrorLogger.LogMessage("NotFound " + fileName);
+                    return new HttpResponseMessage(HttpStatusCode.NotFound);
+                }
+
+                var response = new HttpResponseMessage(HttpStatusCode.OK);
+
+                response.Content = new StreamContent(new FileStream(path, FileMode.Open, FileAccess.Read));
+
+                response.Content.Headers.ContentType =
+                    new System.Net.Http.Headers.MediaTypeHeaderValue("image/jpeg");
+
+                return response;
             }
             catch (Exception ex)
             {
                 ErrorLogger.LogException(ex);
+                return new HttpResponseMessage(HttpStatusCode.BadRequest);
             }
 
-            return Ok(result);
         }
-        
+
         private string Normalize(string key)
         {
             return key.Replace(" ", "").Replace("-", "");

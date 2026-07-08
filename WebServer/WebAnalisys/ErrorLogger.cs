@@ -69,5 +69,29 @@ namespace WebAnalisys
                 // Evita che un errore nel logger blocchi l'applicazione.
             }
         }
+        public static void LogMessage(string message)
+        {
+            try
+            {
+                string logFolder = System.Web.Hosting.HostingEnvironment.MapPath("~/Logs/");
+
+                if (!Directory.Exists(logFolder))
+                {
+                    Directory.CreateDirectory(logFolder);
+                }
+
+                string logFile = Path.Combine(logFolder, "errors-" + DateTime.Now.ToString("yyyyMMdd") + ".log");
+
+                lock (_lock)
+                {
+                    File.AppendAllText(logFile, message);
+                }
+            }
+            catch (Exception)
+            {
+
+            }
+
+        }
     }
 }

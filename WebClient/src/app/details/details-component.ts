@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
-import { AppConfig, tableinfo, StructUnitsInfo, functionsinfo, visionImges} from '../app.config.json';
+import { AppConfig, tableinfo, StructUnitsInfo, functionsinfo } from '../app.config.json';
 import { DialogContent } from '../dialog-component';
 import { MatDialog } from '@angular/material/dialog';
 import { AxesConfig, measuresinfo, tabledata } from '../chart-config';
@@ -45,7 +45,6 @@ background: any;
   queryhome: AppConfig["query"] = {} as any;
   querydetails: AppConfig["querydetails"] = {} as any;
   chartseries: AppConfig["chartseries"] = {} as any;
-  visionImages: visionImges = {};
 
   filtervalues: { [key: string]: any } = {};
   row: any;
@@ -60,6 +59,8 @@ background: any;
   };
   readonly numMAXPlots: number = 10;
   measuresinfo: measuresinfo[] = [];
+
+  imageError: boolean = false;
 
   ngOnInit() {
 
@@ -94,7 +95,6 @@ background: any;
           this.queryhome = config.query;
           this.querydetails = config.querydetails;
           this.chartseries = config.chartseries;
-          
           this.sendToBackend();
 
       },
@@ -120,8 +120,6 @@ background: any;
            throw new Error('Risposta backend non valida');
         }
 
-        this.subLoadVisionImages();
-
         this.detailsState.rowData = this.row;
         this.detailsState.unitsInfo = this.unitsInfo;
         this.detailsState.functionsInfo = this.functionsInfo;
@@ -139,28 +137,6 @@ background: any;
     });
 
     this.filtervalues['ID_Result'] = undefined;        
-  }
-
-  subLoadVisionImages() {
-      let parameters = {
-        ID_Result: this.row["ID_Result"]
-      }
-      
-      this.http.post(this.httpConfig.baseurl + '/query/loadvisionimages', parameters).subscribe({
-        next: (data: any) => {
-
-          this.visionImages = data;
-          if (typeof this.visionImages !== 'object' )
-          {
-            throw new Error('Vision images not valid.')
-          }
-          
-        },
-        error: (err) => {
-          this.showDialog(err.userMessage, "Error");
-          console.error("ERRORE BACKEND:", err);
-        }
-      });	
   }
 
   subLoadMeasuresInfo() {
@@ -435,13 +411,16 @@ background: any;
                       if (itemRow['V'] != undefined && itemRow['V'] != "") {
                           _numVisionFiles = Number(itemRow['V']);
                           for (let iVis: number = 1; iVis <= _numVisionFiles; iVis++) {
-                              if (itemRow["Vision" + iVis.toString()] !== "?") {
+                              if (itemRow['VisionType' + iVis.toString()] === "0") {
                                 this.tableInfo.description = "Descr. (File)";
                                 this.tableInfo.value = "Vision Test" + " " + itemRow['ProgressiveTest'] + " - Images " + iVis.toString() +  " (" + itemRow['VisionName' + iVis.toString()] + ")";
-                                this.detailsData.push({ description: this.tableInfo.description, value: this.tableInfo.value, bgColor: "#FFFFFF", textColor: "#0d0080"}) 
+                                this.detailsData.push({ description: this.tableInfo.description, value: this.tableInfo.value, bgColor: "#FFFFFF", textColor: "#0d0080"})
+                                
+                                this.imageError = false;
+                                let imagefile: string = this.httpConfig.baseurl + "/query/images/" + (itemRow['VisionName' + iVis.toString()]);
+                                this.detailsData.push({ description: "", value: imagefile, image: imagefile, bgColor: "#FFFFFF", textColor: "#0d0080"}) 
                               }
                           }
-                         
                       }
                       
                       break;
@@ -456,7 +435,11 @@ background: any;
       console.error("Errore durante la visualizzazione dei dettagli del test: " + err);
     }
   }
-  
+
+  onImageError(event: ErrorEvent, detail: any) {
+    console.error("Immagine non trovata:", detail.image);
+    this.imageError = true;
+  }
 
   ResultDescription(res: string): any {
     let result: any = "";

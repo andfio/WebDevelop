@@ -65,8 +65,21 @@
                         <tr (click)="onSelectRow(detail, 'Details')"
                             [class.selected]="detail === selectedRowDetails"
                             [bgColor]="detail.bgColor">
-                            <td class="desc-col">{{ detail.description }}</td>
-                            <td class="info-col">{{ detail.value }}</td>
+                            @if(detail.image == undefined) {
+                                <td class="desc-col">{{ detail.description }}</td>
+                                <td class="info-col">{{ detail.value }}</td>
+                            }
+                            @else {
+                                <td class="desc-col">{{ detail.description }}</td>
+                                <td class="info-col">
+                                    @if(imageError) {
+                                        <span style="color: red;">Image not found</span>
+                                    }
+                                    @else {
+                                    <img [src]="detail.image" width="400" height="400" (error)="onImageError($event, detail)">
+                                    }
+                                </td>
+                            }
                         </tr>
                     }
                 </tbody>
