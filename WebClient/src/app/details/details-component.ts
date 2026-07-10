@@ -13,6 +13,7 @@ import {MatMenuModule} from '@angular/material/menu';
 import {MatButtonModule} from '@angular/material/button';
 import {MatToolbarModule} from '@angular/material/toolbar';
 import {MatDividerModule} from '@angular/material/divider';
+import { DialogImage } from '../dialog-image-component';
 
 @Component({
   selector: 'app-details',
@@ -24,7 +25,7 @@ import {MatDividerModule} from '@angular/material/divider';
 export class DetailsdataComponent {
 background: any;
 
-  constructor(private router: Router, private http: HttpClient, private dialog: MatDialog, private chartDialog: MatDialog, private detailsState: DetailsStateService) {}
+  constructor(private router: Router, private http: HttpClient, private dialog: MatDialog, private chartDialog: MatDialog, private imageDialog: MatDialog, private detailsState: DetailsStateService) {}
   
   goBack() {
     setTimeout(() => {
@@ -441,6 +442,18 @@ background: any;
     this.imageError = true;
   }
 
+  openImageDialog(imageUrl: string) {
+    this.imageDialog.open(DialogImage, {
+      data: { imageUrl: imageUrl, httpConfig: this.httpConfig.baseurl}, 
+      disableClose: false,
+      hasBackdrop: true,
+      minWidth: '700px',
+      width: '700px',
+      minHeight: '700px',
+      height: '700px',
+    });
+  }
+      
   ResultDescription(res: string): any {
     let result: any = "";
     let itm: (string | number)[] = [];

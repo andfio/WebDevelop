@@ -1,0 +1,74 @@
+--------------------------------------------------
+Date: 2026-07-02 14:32:37
+Caller Method: Details
+Caller File: C:\Andrea Fiorentini\WebAnalisys\WebServer\WebAnalisys\QueryController.cs
+Caller Line: 382
+Error Method: System.Collections.Generic.Dictionary`2.get_Item
+Error File: 
+Error Line: 0
+Exception Type: System.Collections.Generic.KeyNotFoundException
+Message: La chiave specificata non era presente nel dizionario.
+Source: mscorlib
+StackTrace:
+   in System.Collections.Generic.Dictionary`2.get_Item(TKey key)
+   in WebAnalisys.Controllers.QueryController.Details(DetailsPayload payload) in C:\Andrea Fiorentini\WebAnalisys\WebServer\WebAnalisys\QueryController.cs:riga 281
+--------------------------------------------------
+Date: 2026-07-02 16:07:42
+Caller Method: Details
+Caller File: C:\Andrea Fiorentini\WebAnalisys\WebServer\WebAnalisys\QueryController.cs
+Caller Line: 378
+Error Method: System.Data.ProviderBase.FieldNameLookup.GetOrdinal
+Error File: 
+Error Line: 0
+Exception Type: System.IndexOutOfRangeException
+Message: VisionName
+Source: System.Data
+StackTrace:
+   in System.Data.ProviderBase.FieldNameLookup.GetOrdinal(String fieldName)
+   in System.Data.SqlClient.SqlDataReader.GetOrdinal(String name)
+   in System.Data.SqlClient.SqlDataReader.get_Item(String name)
+   in WebAnalisys.Controllers.QueryController.Details(DetailsPayload payload) in C:\Andrea Fiorentini\WebAnalisys\WebServer\WebAnalisys\QueryController.cs:riga 298
+--------------------------------------------------
+Date: 2026-07-02 16:09:37
+Caller Method: Details
+Caller File: C:\Andrea Fiorentini\WebAnalisys\WebServer\WebAnalisys\QueryController.cs
+Caller Line: 378
+Error Method: System.Data.ProviderBase.FieldNameLookup.GetOrdinal
+Error File: 
+Error Line: 0
+Exception Type: System.IndexOutOfRangeException
+Message: VisionName
+Source: System.Data
+StackTrace:
+   in System.Data.ProviderBase.FieldNameLookup.GetOrdinal(String fieldName)
+   in System.Data.SqlClient.SqlDataReader.GetOrdinal(String name)
+   in System.Data.SqlClient.SqlDataReader.get_Item(String name)
+   in WebAnalisys.Controllers.QueryController.Details(DetailsPayload payload)
+--------------------------------------------------
+Date: 2026-07-02 16:11:29
+Caller Method: Details
+Caller File: C:\Andrea Fiorentini\WebAnalisys\WebServer\WebAnalisys\QueryController.cs
+Caller Line: 378
+Error Method: System.Collections.Generic.Dictionary`2.get_Item
+Error File: 
+Error Line: 0
+Exception Type: System.Collections.Generic.KeyNotFoundException
+Message: La chiave specificata non era presente nel dizionario.
+Source: mscorlib
+StackTrace:
+   in System.Collections.Generic.Dictionary`2.get_Item(TKey key)
+   in WebAnalisys.Controllers.QueryController.Details(DetailsPayload payload)
+--------------------------------------------------
+Date: 2026-07-02 16:11:52
+Caller Method: Details
+Caller File: C:\Andrea Fiorentini\WebAnalisys\WebServer\WebAnalisys\QueryController.cs
+Caller Line: 378
+Error Method: System.Collections.Generic.Dictionary`2.get_Item
+Error File: 
+Error Line: 0
+Exception Type: System.Collections.Generic.KeyNotFoundException
+Message: La chiave specificata non era presente nel dizionario.
+Source: mscorlib
+StackTrace:
+   in System.Collections.Generic.Dictionary`2.get_Item(TKey key)
+   in WebAnalisys.Controllers.QueryController.Details(DetailsPayload payload)

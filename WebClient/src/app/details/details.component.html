@@ -76,7 +76,7 @@
                                         <span style="color: red;">Image not found</span>
                                     }
                                     @else {
-                                    <img [src]="detail.image" width="400" height="400" (error)="onImageError($event, detail)">
+                                    <img [src]="detail.image" width="400" height="400" (error)="onImageError($event, detail)" (click)="openImageDialog(detail.image)">
                                     }
                                 </td>
                             }

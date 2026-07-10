@@ -1,0 +1,21 @@
+<div class="root-content">
+    
+    <div class="image-content">
+        
+        <div class="image-wrapper">
+            <img
+                src="{{ imageConfig.imageUrl }}"
+                [style.transform]="'scale(' + zoomValue + ')'"
+                class="zoom-img"
+            />
+        </div>
+
+        <div class="buttons">
+            <button matIconButton (click)="subZoom('in')"><mat-icon>zoom_in</mat-icon></button>
+            <button matIconButton (click)="subZoom('out')"><mat-icon>zoom_out</mat-icon></button>
+            <button matIconButton (click)="subZoom('reset')"><mat-icon>restart_alt</mat-icon></button>
+            <button matIconButton (click)="subSaveImage()"><mat-icon>save</mat-icon></button>
+        </div>
+    </div>
+
+</div>
