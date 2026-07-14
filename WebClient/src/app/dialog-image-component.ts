@@ -6,6 +6,7 @@ import {
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { HttpClient } from '@angular/common/http';
+import { _ATTR_TO_PROP } from '@angular/compiler';
 
 interface ImageConfig {
   imageUrl: string;
@@ -28,14 +29,55 @@ export class DialogImage {
   }
 
   zoomValue: number = 1;
+  max_zoom: number = 3;
+  min_zoom: number = 1;
   imageConfig: any = {} 
 
-  // ngOnInit() {
- 
-  // }
+  subSaveImage(): void {
+    const imageUrl = this.imageConfig.imageUrl;
 
-  subSaveImage() {
+    this.http.get(imageUrl, { responseType: 'blob' }).subscribe({
+      next: (imageBlob: Blob) => {
+        const url = URL.createObjectURL(imageBlob);
+        const a = document.createElement('a');
 
+        a.href = url;
+        a.download = `Image-${new Date().toISOString().slice(0, 10)}.jpg`;
+        a.click();
+
+        URL.revokeObjectURL(url);
+      },
+      error: (error) => {
+        console.error('Error saving image:', error);
+      }
+    });
   }
+
+  subZoom(zoom: string): number {
+    switch(zoom) {
+      case 'in':
+        if ((this.zoomValue + 0.1) <= this.max_zoom)
+        {
+          this.zoomValue += 0.1;
+        }
+        break;
+      case 'out': 
+        if ((this.zoomValue - 0.1) <= this.min_zoom)
+        {
+          this.zoomValue = 1;
+        }
+        else
+        {
+          this.zoomValue -= 0.1;
+        }
+        break;
+      case 'reset':
+        this.zoomValue = 1;
+        break;
+    }
+    
+    return this.zoomValue;
+  }
+
 }
 
