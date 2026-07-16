@@ -33,6 +33,7 @@
             <button mat-raised-button matTooltip="Show Peaks" [disabled]="buttonpressed[buttonNames.ShowTestsExecution]" [style.background-color]="!buttonpressed[buttonNames.ShowPeaks] ? '#c0c0c0' : '#00ff00'" (click)="ShowPeaks(buttonNames.ShowPeaks)"><mat-icon>data_thresholding</mat-icon>Show Graph Peaks</button>
             <button mat-raised-button matTooltip="Show Constant Values" [disabled]="buttonpressed[buttonNames.ShowTestsExecution]" [style.background-color]="!buttonpressed[buttonNames.ShowConstantValues] ? '#c0c0c0' : '#00ff00'" (click)="ShowConstantValues(buttonNames.ShowConstantValues)"><mat-icon>legend_toggle</mat-icon>Show Constant Values</button>
             <button mat-raised-button matTooltip="Show Tests Execution" [style.background-color]="!buttonpressed[buttonNames.ShowTestsExecution] ? '#c0c0c0' : '#00ff00'" (click)="ShowTestsExecution(buttonNames.ShowTestsExecution)" ><mat-icon>bolt</mat-icon>Show Tests Execution</button>
+            <button mat-raised-button matTooltip="Show Tests Area" [style.background-color]="!buttonpressed[buttonNames.ShowTestsArea] ? '#c0c0c0' : '#00ff00'" (click)="ShowTestsArea(buttonNames.ShowTestsArea)" ><mat-icon>bar_chart</mat-icon>Show Tests Area</button>
           </div>  
         </mat-toolbar>
         <mat-divider/>
@@ -44,7 +45,7 @@
   <div class="chart-container">
   
     @if(blnShowGraph) {  
-      @if (!showTestsExecution) {
+      @if (showGraphMode === GraphMode.ShowGraph) {
         <div class = "chart-wrapper-container">
       
         <div class="CursorPoints">
@@ -300,9 +301,13 @@
       </div>
           
         </div>
-      } @else {
+      } @else if (showGraphMode === GraphMode.ShowTestsExecution) {
         <div class="chart-testsExecution-container">
             <tests-execution-chart></tests-execution-chart>
+        </div>
+      } @else if (showGraphMode === GraphMode.ShowTestsArea) {
+        <div class="chart-testsArea-container">
+            <tests-area-chart></tests-area-chart>
         </div>
       } 
     }

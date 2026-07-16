@@ -121,6 +121,20 @@ export interface tabledetails {
   endSequence: string;
 }
 
+export interface measuresData {
+  progressiveGroup: string;
+  testDescription: string;
+  testResult: string;
+  startStabTime: string;
+  endEventTime: string;
+  progressiveMeasure: string;
+  errorMeasure: string;
+  UM: string;
+  analogueValue: string;
+  minLimit: string;
+  maxLimit: string;
+}
+
 export  enum  buttonsChart  {
   Default = 'Default',
   LoadXYAxis = 'LoadXYAxis',
@@ -129,5 +143,12 @@ export  enum  buttonsChart  {
   ShowGrid = 'ShowGrid',
   ShowPeaks = 'ShowPeaks',
   ShowConstantValues = 'ShowConstantValues',
-  ShowTestsExecution = 'ShowTestsExecution'
+  ShowTestsExecution = 'ShowTestsExecution',
+  ShowTestsArea = 'ShowTestsArea'
+}
+
+export enum graphMode {
+  ShowGraph = 1,
+  ShowTestsExecution = 2,
+  ShowTestsArea = 3
 }

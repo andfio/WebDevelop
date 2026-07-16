@@ -5,7 +5,7 @@ import { HttpClient } from '@angular/common/http';
 import { AppConfig, tableinfo, StructUnitsInfo, functionsinfo } from '../app.config.json';
 import { DialogContent } from '../dialog-component';
 import { MatDialog } from '@angular/material/dialog';
-import { AxesConfig, measuresinfo, tabledata } from '../chart-config';
+import { AxesConfig, measuresinfo, tabledata, measuresData } from '../chart-config';
 import { ChartSettingsComponent } from '../chart-settings-component';
 import { DetailsStateService } from '../DetailsState.Service';
 import {MatIconModule} from '@angular/material/icon';
@@ -691,21 +691,29 @@ background: any;
       }
     }
 
+    this.detailsState.rowData = this.row;
+    this.detailsState.unitsInfo = this.unitsInfo;
+    this.detailsState.functionsInfo = this.functionsInfo;
+    this.detailsState.axesConfig = this.axesConfig; 
+
     let KeyResult = this.row["ID_Result"];
 
     let rootData: tabledata[] = this.subGetRootData();
     let detailsData: tabledata[] = this.subGetDetailsData();
+    let measuresData: measuresData[] = this.subGetMeasuresData();
 
     this.router.navigate(['/pagina-chart'] , { state: { 
                                                         KeyResult: KeyResult,
                                                         rootData: rootData, 
                                                         detailsFields: detailsData,
+                                                        measuresFields: measuresData,
                                                         headerInfos: this.columnsprintheader,
                                                         sequenceHeaders: this.columnsprintsequence, 
                                                         chartSeries: this.chartseries, 
                                                         axesConfig: this.axesConfig,
                                                         httpConfig: this.httpConfig } 
     });
+
   }
   
   subGetRootData(): tabledata[] {
@@ -777,6 +785,68 @@ background: any;
               if (itemValue.field !== "" && itemValue.name !== "") {
                 info.push({ name: itemValue.name, field: itemValue.field, value: itemValue.value, description: itemValue.description});
               }
+          }
+  
+          CurrProgressiveGroup = Number(testData['ProgressiveGroup']);  
+
+        }
+    }
+
+    return info;
+  }
+
+  subGetMeasuresData(): measuresData[] {
+    let info: measuresData[] = []; 
+
+    let d: any;
+    let CurrProgressiveGroup: number = 0;
+
+    for (let testData of this.results)
+    {
+        if (CurrProgressiveGroup !== Number(testData['ProgressiveGroup'])) {
+
+          let itemValue: measuresData = {} as measuresData; 
+
+          for (d of this.columnsdetails) {
+              
+              switch (d.field) {
+                case "ProgressiveGroup":
+                  itemValue.progressiveGroup = testData[d.field];
+                  break;
+                case "TestDescription":
+                  itemValue.testDescription = testData[d.field];
+                  break;
+                case "TestResult":
+                  itemValue.testResult = testData[d.field];
+                  break;
+                case "StartStabTime":
+                  itemValue.startStabTime = testData[d.field];
+                  break;
+                case "EndEventTime":
+                  itemValue.endEventTime = testData[d.field];
+                  break;
+              }
+
+          }
+
+          if (testData['M'] !== undefined && testData['M'] !== "") {
+
+            for (let m of this.columnsmeasuredetails) {
+              switch (m.field) {
+                case "UM":
+                  itemValue.UM = testData[m.field];  
+                  break;
+                case "LimitMin":
+                  itemValue.minLimit = testData[m.field];  
+                  break;
+                case "LimitMax":
+                  itemValue.maxLimit = testData[m.field];  
+                  break; 
+              }
+            }
+
+            info.push(itemValue);
+
           }
   
           CurrProgressiveGroup = Number(testData['ProgressiveGroup']);  

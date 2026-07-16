@@ -18,7 +18,7 @@ import {
   PointAnnotations
 } from "ng-apexcharts";
 import { NgApexchartsModule } from "ng-apexcharts";
-import { DataPoint, timeinfo, tablevalues } from "./chart-config";
+import { DataPoint, timeinfo, tablevalues, graphMode } from "./chart-config";
 import { DialogContent } from './dialog-component';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSliderModule } from '@angular/material/slider';
@@ -56,6 +56,9 @@ import {tabledata, tabledetails} from "./chart-config";
 //Tests Execution chart
 import {TestsExecutionChartComponent} from './testsExecution/tests-chart-component';
 import {TestsExecutionChartDataService} from "./testsExecution/tests-chart-service";
+// Tests Areas chart
+import { TestsAreaComponent } from "./testAreas/tests-area-component"
+import { TestsAreaService } from "./testAreas/tests-area-service"
 //goBack
 import { DetailsStateService } from './DetailsState.Service';
 
@@ -63,7 +66,7 @@ import { DetailsStateService } from './DetailsState.Service';
   selector: "app-chart",
   templateUrl: "./chart-component.html",
   styleUrls: ["./chart-component.css"],
-  imports: [NgApexchartsModule, MatSliderModule, FormsModule,MatDividerModule, MatSelectModule, MatFormFieldModule, MatIconModule, MatMenuModule, MatButtonModule, MatSlideToggleModule, MatTooltipModule, MatButtonToggleModule, MatToolbarModule, TestsExecutionChartComponent]
+  imports: [NgApexchartsModule, MatSliderModule, FormsModule,MatDividerModule, MatSelectModule, MatFormFieldModule, MatIconModule, MatMenuModule, MatButtonModule, MatSlideToggleModule, MatTooltipModule, MatButtonToggleModule, MatToolbarModule, TestsExecutionChartComponent, TestsAreaComponent]
 })
 export class ChartComponent {
 [x: string]: any;
@@ -86,7 +89,7 @@ export class ChartComponent {
   public legend: ApexLegend = {};
   public annotations: ApexAnnotations = {};
 
-  constructor(private dialog: MatDialog, private cd: ChangeDetectorRef, private http: HttpClient, private chartDialog: MatDialog, private router: Router, public testExecution: TestsExecutionChartDataService, private detailsState: DetailsStateService) { }
+  constructor(private dialog: MatDialog, private cd: ChangeDetectorRef, private http: HttpClient, private chartDialog: MatDialog, private router: Router, public testExecution: TestsExecutionChartDataService, private detailsState: DetailsStateService, public testsArea: TestsAreaService) { }
   
   chartData: ChartData = {
     MeasurID: [],
@@ -96,6 +99,7 @@ export class ChartComponent {
   rowData: any = {};
   rootfields: any[] = [];
   tableData: any[] = [];
+  measuresData: any[] = [];
   detailsRows: tabledetails[] = []; 
   headerInfos: any[] = [];
   sequenceHeaders: any[] = [];
@@ -120,6 +124,9 @@ export class ChartComponent {
 
   defaultMeasureIDs: number[] = [];
 
+  GraphMode = graphMode;
+  showGraphMode: any = this.GraphMode.ShowGraph;
+
   sleep = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
   
   ngOnInit() {
@@ -127,12 +134,14 @@ export class ChartComponent {
     this.rootfields = this.buildrootFields(history.state.rootData);
     this.tableData = this.buildtableData(history.state.rootData);
     this.detailsRows = this.buildDetailsRows(history.state.detailsFields);
+    this.measuresData = history.state.measuresFields;
     this.headerInfos = history.state.headerInfos;
     this.sequenceHeaders = history.state.sequenceHeaders;
     this.httpConfig = history.state.httpConfig;
     this.axesConfig = history.state.axesConfig;
 
     this.testExecution.detailsRows.set(this.buildDetailsChart(history.state.detailsFields));
+    this.testsArea.measuresData.set(this.measuresData);
 
     this.KeyResult = history.state.KeyResult;
     
@@ -1281,11 +1290,10 @@ export class ChartComponent {
     });
   }
   
-  showTestsExecution: boolean = false;
   ShowTestsExecution(button: string) {
     this.buttonpressed[button] = !this.buttonpressed[button];
-    this.showTestsExecution = this.buttonpressed[button];
-     this.subResetBtn([button]);
+    this.showGraphMode = (this.buttonpressed[button] ? this.GraphMode.ShowTestsExecution : this.GraphMode.ShowGraph)
+    this.subResetBtn([button]);
   }
 
   measureSelected: string = '';
@@ -1463,6 +1471,12 @@ export class ChartComponent {
       }
     });
     this.cd.detectChanges()
+  }
+
+  ShowTestsArea(button: string) {
+    this.buttonpressed[button] = !this.buttonpressed[button];
+    this.showGraphMode = (this.buttonpressed[button] ? this.GraphMode.ShowTestsArea : this.GraphMode.ShowGraph)
+    this.subResetBtn([button]);
   }
   
   subResetAxis()
