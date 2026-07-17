@@ -152,3 +152,9 @@ export enum graphMode {
   ShowTestsExecution = 2,
   ShowTestsArea = 3
 }
+
+export interface RectangleData {
+  x: [number, number];
+  y: [number, number];
+  name?: string;
+}

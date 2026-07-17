@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
@@ -27,7 +27,7 @@ import {
 } from '@angular/core';
 
 import { TestsAreaService } from "../testAreas/tests-area-service"
-import { measuresData } from "../chart-config"
+import { measuresData, RectangleData } from "../chart-config"
 
 @Component({
   selector: 'tests-area-chart',
@@ -38,8 +38,6 @@ import { measuresData } from "../chart-config"
 })
 export class TestsAreaComponent {
   constructor(private router: Router, private http: HttpClient, public testsArea: TestsAreaService) { }
-
-  @ViewChild('chartWrapper') chartWrapper!: ElementRef<HTMLElement>
 
   series: ApexAxisChartSeries = [];
   chart: ApexChart = {
@@ -69,23 +67,14 @@ export class TestsAreaComponent {
   }
 
   initChartData() {
-    this.series = [
-      {
-        name: 'measures',
-        data: this.measuresData.map(row => ({
-          x: [row.minLimit, row.maxLimit],
-          y: [Number(row.startStabTime), Number(row.endEventTime)]
-        }))
-      }
-    ];
+    this.series = this.CreateSeriesData();
     this.chart = {
-      type: 'rangeBar',
+      type: 'rangeArea',
       background: "#000000",
-      stacked: false,
       redrawOnParentResize: true,
       redrawOnWindowResize: true,
-      height: (this.chartWrapper?.nativeElement.clientHeight || 500),
-      width: '100%',
+      height: (document.querySelector('#chartWrapper')?.clientHeight ?? '500px'),
+      width: (document.querySelector('#chartWrapper')?.clientWidth ?? '100%'),
       zoom: {
         type: "xy",
         enabled: false,
@@ -112,6 +101,7 @@ export class TestsAreaComponent {
       bar: {
         horizontal: false,
         rangeBarOverlap: true,
+        columnWidth: '100%',
       }
     }
     this.legend = {
@@ -120,8 +110,8 @@ export class TestsAreaComponent {
     this.yaxis = [
       {
         seriesName: ['measures'],
-        min: Number(this.measuresData[0].startStabTime),
-        max: Number(this.measuresData[this.measuresData.length - 1].endEventTime),
+        min: Number(this.measuresData[0].minLimit),
+        max: Number(this.measuresData[this.measuresData.length - 1].maxLimit),
         tickAmount: 10,
         opposite: false,      
         axisTicks: {
@@ -140,7 +130,7 @@ export class TestsAreaComponent {
           }           
         },
         title: {
-          text: 'Time (s)',
+          text: 'Limits (min/max)',
           style: {
             color: "#FFFFFF"
           },  
@@ -150,8 +140,8 @@ export class TestsAreaComponent {
     this.xaxis = {
       type: "numeric",
       position: 'bottom',
-      min: Number(this.timeStamps[0]),
-      max: Number(this.timeStamps[this.timeStamps.length - 1]),
+      min: Number(this.measuresData[0].startStabTime) ,
+      max: Number(this.measuresData[this.measuresData.length - 1].endEventTime),
       tickAmount: 20,
       axisTicks: {
           show: true,
@@ -178,11 +168,32 @@ export class TestsAreaComponent {
         }
       },
       title: {  
-        text: "Limits (min/max)",
+        text: "Time (s)",
         style: {
           color: "#FFFFFF"
         }
       } 
     }    
+  }
+
+  CreateSeriesData(): ApexAxisChartSeries {
+    
+    let seriesData: RectangleData[] = [];
+    this.measuresData.forEach((measure: measuresData) => {
+      seriesData.push({
+        x: [Number(measure.startStabTime), Number(measure.endEventTime)],
+        y: [Number(measure.minLimit), Number(measure.maxLimit)],
+        name: measure.testDescription
+      });
+    });
+
+    return seriesData.map((r: RectangleData) => {
+      return {
+        name: r.name ?? "",
+        type: 'rangeArea',
+        data: [{x : r.x[0], y: [r.y[0], r.y[1]]}, 
+               {x : r.x[1], y: [r.y[0], r.y[1]]}]
+      };
+    });
   }
 }
