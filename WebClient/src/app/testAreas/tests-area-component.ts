@@ -95,7 +95,10 @@ export class TestsAreaComponent {
           reset: true,         
         },
         autoSelected: 'zoom',
-      }
+      },
+      animations: {
+        enabled: false
+      }   
     };
     this.plotOptions = {
       bar: {

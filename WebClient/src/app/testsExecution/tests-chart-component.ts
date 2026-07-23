@@ -124,10 +124,13 @@ export class TestsExecutionChartComponent implements AfterViewInit, OnDestroy {
       },
       events: {
         mounted: (chartContext: any) => {
-          requestAnimationFrame(() => this.fixOverflowingLabels(chartContext));
+          requestAnimationFrame(() => this.fixDataLabelsPosition(chartContext));
         },
         updated: (chartContext: any) => {
-          //requestAnimationFrame(() => this.fixOverflowingLabels(chartContext));  
+          requestAnimationFrame(() => this.fixDataLabelsPosition(chartContext));  
+        },
+        zoomed: (chartContext: any) => {
+          requestAnimationFrame(() => this.fixDataLabelsPosition(chartContext));  
         }          
       }
     };
@@ -140,11 +143,11 @@ export class TestsExecutionChartComponent implements AfterViewInit, OnDestroy {
     this.dataLabels = {
       enabled: true,
       textAnchor: 'start',
-      offsetX:  0,
-      offsetY: -14,
+      offsetX:  6,
+      offsetY: 2,
       formatter: (_val, opts) => {
         const row = this.detailsRows[opts.dataPointIndex];
-        return row.SequenceNumber + " - " + row.description;
+        return `${row.SequenceNumber} - ${row.description}`;
       },
       style: {
         fontSize: '8px',
@@ -182,14 +185,14 @@ export class TestsExecutionChartComponent implements AfterViewInit, OnDestroy {
           show: false
         }
       }
-    ];    
+    ];        
     this.xaxis = {
-      type: "numeric",
+      type: 'numeric',
       position: 'bottom',
       min: Number(this.detailsRows[0].startSequence),
       max: Number(this.detailsRows[this.detailsRows.length - 1].endSequence),
       decimalsInFloat: 2,      
-      tickAmount: 20,         
+      tickAmount: 40,         
       axisTicks: {
           show: true,
           borderType: 'solid',
@@ -208,12 +211,6 @@ export class TestsExecutionChartComponent implements AfterViewInit, OnDestroy {
       crosshairs: {
         show: true,
         width: 1
-      },
-      title: {  
-        text: "Time (s)",
-        style: {
-          color: "#FFFFFF"
-        }
       },
       labels: {  
         style: {
@@ -234,7 +231,7 @@ export class TestsExecutionChartComponent implements AfterViewInit, OnDestroy {
           </div>
         `;
       }
-    };  
+    };
   }
 
   subSetZoom () {
@@ -287,59 +284,84 @@ export class TestsExecutionChartComponent implements AfterViewInit, OnDestroy {
     });
   }  
 
-  private fixOverflowingLabels(chartContext: any): void {
-    const svgEl: SVGElement | null = chartContext?.el?.querySelector('svg');
-    if (!svgEl) return;
+  private fixDataLabelsPosition(chartContext: any): void {
+    const svg = chartContext?.el?.querySelector(
+      '.apexcharts-svg'
+    ) as SVGSVGElement | null;
 
-    const labels = svgEl.querySelectorAll<SVGTextElement>('.apexcharts-datalabels text');
-    if (labels.length === 0) return;
+    if (!svg) return;
 
-    const globals   = chartContext?.w?.globals;
-    const plotLeft  = globals?.translateX ?? 0;
-    const plotWidth = globals?.gridWidth  ?? svgEl.getBoundingClientRect().width;
-    const plotRight = plotLeft + plotWidth;
-    const marginPx  = 6;
-    const labelOffset = 27;
+    const bars = Array.from(
+      svg.querySelectorAll<SVGGraphicsElement>(
+        '.apexcharts-rangebar-area'
+      )
+    );
 
-    // Usa globals per supportare anche lo zoom
-    const minX =  Number(this.detailsRows[0].startSequence);
-    const maxX =  Number(this.detailsRows[this.detailsRows.length - 1].endSequence);
+    const labels = Array.from(
+      svg.querySelectorAll<SVGTextElement>(
+        '.apexcharts-datalabel'
+      )
+    );
 
-    labels.forEach((label, i) => {
-      const row = this.detailsRows[i];
-      if (!row) return;
+    const margin = 6;
 
-      const bbox = label.getBBox();
-      if (bbox.width === 0) return;     
+    labels.forEach((label, index) => {
+      const bar = bars[index];
 
-      // La label parte dall'inizio della barra (offsetX: 0)
-      const barStartPx = this.dataXToSvgPx(Number(row.startSequence), minX, maxX, plotLeft, plotWidth) - labelOffset;
-      const labelRight = barStartPx + bbox.width;
+      if (!bar) return;
 
-      if (labelRight > plotRight - marginPx) {
-        // Sborda a destra: ancora la label al bordo destro della plot area
-        const newX = plotRight - bbox.width - marginPx;
-        label.setAttribute('x', String(newX));
+      const barBox = bar.getBBox();
+      const labelBox = label.getBBox();
+
+      const barLeft = barBox.x;
+      const barRight = barBox.x + barBox.width;
+
+      /*
+      * Prima proviamo a mettere la label
+      * normalmente dopo la barra.
+      */
+      const normalX = barRight + margin;
+
+      /*
+      * Larghezza complessiva:
+      * barra + spazio + label.
+      */
+      const totalRight =
+        barRight + margin + labelBox.width;
+
+      /*
+      * Limite destro dell'area del grafico.
+      */
+      const plotWidth =
+        chartContext?.w?.globals?.gridWidth ??
+        svg.getBBox().width;
+
+      if (totalRight <= plotWidth) {
+        /*
+        * Entra a destra della barra:
+        *
+        * [ barra ] [ label ]
+        */
+        label.setAttribute('x', String(normalX));
       } else {
-        // Posizione corretta: allineata all'inizio della barra
-        label.setAttribute('x', String(barStartPx)); 
+        /*
+        * Non entra a destra:
+        *
+        * [ label ] [ barra ]
+        */
+        const beforeBarX =
+          barLeft - labelBox.width - margin;
+
+        label.setAttribute(
+          'x',
+          String(beforeBarX)
+        );
       }
     });
   }
 
-  private dataXToSvgPx(
-    xValue: number,
-    minX: number,
-    maxX: number,
-    plotLeft: number,
-    plotWidth: number
-  ): number {
-    if (maxX === minX) return plotLeft;
-    return plotLeft + ((xValue - minX) / (maxX - minX)) * plotWidth;
-  }
-
   getChartHeight(): number {
-    const rowHeight = 30;
+    const rowHeight = 10;
     const minHeight = this.chartWrapper?.nativeElement.clientHeight || this.fallbackChartHeight;
 
     return Math.max(minHeight, this.detailsRows.length * rowHeight);
